@@ -1155,7 +1155,7 @@ section {
 }
 /* Add Zoom Animation on Click from */
 
-/* Quick Service button Start*/
+/* Quick Service button Start
 .flash-button{
 	animation-name: flash;
 	animation-duration: 2s;
@@ -1163,7 +1163,7 @@ section {
 	animation-iteration-count: infinite;
 	Position: relative;
 	left: 10px;
-}
+} */
 
 @keyframes flash {  
     0% { opacity: 1.0; }
