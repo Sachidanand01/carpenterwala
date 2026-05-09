@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 
 const inter = Inter({
@@ -33,8 +34,8 @@ export default function RootLayout({ children }) {
               </span>
             </div>
             <div className="flex gap-4 items-center">
-              <a href="#" style={{ fontWeight: 500, opacity: 0.8 }}>Find a Pro</a>
-              <a href="#" style={{ fontWeight: 500, opacity: 0.8 }}>Services</a>
+              <Link href="/find-a-professional" style={{ fontWeight: 500, opacity: 0.8 }}>Find a Pro</Link>
+              <Link href="/services" style={{ fontWeight: 500, opacity: 0.8 }}>Services</Link>
               <a href="/pro/login" className="btn btn-primary" style={{ padding: "0.5rem 1rem" }}>
                 Pro Login
               </a>

@@ -67,7 +67,7 @@ export default async function ProProfile({ params }) {
             
             <h3 style={{ fontSize: "1.2rem", marginTop: "1.5rem", marginBottom: "1rem" }}>Skills</h3>
             <div className="flex gap-2" style={{ flexWrap: "wrap" }}>
-              {profile.skills.map((skill, i) => (
+              {(profile.skills || []).map((skill, i) => (
                 <span key={i} style={{ padding: "0.4rem 1rem", background: "var(--secondary)", borderRadius: "6px", fontSize: "0.85rem" }}>
                   {skill}
                 </span>
@@ -89,7 +89,7 @@ export default async function ProProfile({ params }) {
           <section className="glass" style={{ padding: "2rem" }}>
             <h2 style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>Reviews</h2>
             <div className="flex flex-col gap-4">
-              {profile.reviews.map(review => (
+              {(profile.reviews || []).map(review => (
                 <div key={review.id} style={{ padding: "1rem", background: "rgba(255,255,255,0.05)", borderRadius: "8px" }}>
                   <div className="flex items-center justify-between" style={{ marginBottom: "0.5rem" }}>
                     <span style={{ fontWeight: 600 }}>{review.author}</span>

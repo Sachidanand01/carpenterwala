@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="container flex flex-col justify-center" style={{ minHeight: "calc(100vh - 70px)" }}>
@@ -13,12 +15,12 @@ export default function Home() {
           </p>
           
           <div className="flex gap-4 justify-center">
-            <button className="btn btn-primary" style={{ fontSize: "1.1rem", padding: "1rem 2rem" }}>
+            <Link href="/find-a-professional" className="btn btn-primary" style={{ fontSize: "1.1rem", padding: "1rem 2rem" }}>
               Find a Professional
-            </button>
-            <button className="btn btn-secondary" style={{ fontSize: "1.1rem", padding: "1rem 2rem" }}>
+            </Link>
+            <Link href="/pro/login" className="btn btn-secondary" style={{ fontSize: "1.1rem", padding: "1rem 2rem" }}>
               Join as a Pro
-            </button>
+            </Link>
           </div>
         </div>
 
