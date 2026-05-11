@@ -139,6 +139,23 @@ h1, h2, h3, h4, h5, h6 {
   border-color: var(--primary);
 }
 
+.sticky-top {
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+}
+
+.toc-link {
+  font-size: 0.9rem;
+  opacity: 0.6;
+  text-decoration: none;
+  color: white;
+  transition: opacity 0.2s;
+}
+
+.toc-link:hover {
+  opacity: 1;
+}
+
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
