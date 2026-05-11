@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+import Footer from "@/components/Footer";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -28,11 +29,11 @@ export default function RootLayout({ children }) {
           borderTop: "none"
         }}>
           <div className="container flex items-center justify-between" style={{ height: "70px" }}>
-            <div className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
               <span className="text-gradient" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
                 Carpenterwala
               </span>
-            </div>
+            </Link>
             <div className="flex gap-4 items-center">
               <Link href="/find-a-professional" style={{ fontWeight: 500, opacity: 0.8 }}>Find a Pro</Link>
               <Link href="/services" style={{ fontWeight: 500, opacity: 0.8 }}>Services</Link>
@@ -45,6 +46,7 @@ export default function RootLayout({ children }) {
         <main style={{ paddingTop: "70px", minHeight: "100vh" }}>
           {children}
         </main>
+        <Footer />
       </body>
     </html>
   );
