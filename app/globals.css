@@ -134,7 +134,11 @@ h1, h2, h3, h4, h5, h6 {
 .delay-200 { animation-delay: 200ms; }
 .delay-300 { animation-delay: 300ms; }
 
-/* Footer */
+/* Footer */.glass:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary);
+}
+
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
@@ -163,7 +167,7 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 992px) {
   .footer-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr !important;
     gap: 2rem;
   }
 }
