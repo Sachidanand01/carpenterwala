@@ -77,6 +77,7 @@ export default function Footer() {
             <Link href="/privacy" style={{ opacity: 0.5, fontSize: "0.85rem" }}>Privacy Policy</Link>
             <Link href="/terms" style={{ opacity: 0.5, fontSize: "0.85rem" }}>Terms of Service</Link>
           </div>
+        </div>
       </div>
     </footer>
   );
