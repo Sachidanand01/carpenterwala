@@ -1,45 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-
-const BLOG_POSTS = [
-  {
-    slug: '5-essential-carpentry-tips',
-    title: '5 Essential Carpentry Tips for Every Homeowner',
-    excerpt: 'Maintenance is key to making your furniture last. Learn these simple yet effective carpentry tips to keep your home in top shape.',
-    category: 'Carpentry',
-    date: 'May 10, 2026',
-    readTime: '5 min read',
-    image: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=2069&auto=format&fit=crop'
-  },
-  {
-    slug: 'choosing-the-right-paint',
-    title: 'How to Choose the Perfect Paint for Your Living Room',
-    excerpt: 'Colors can change the mood of your home. Discover how to pick the right finish and shade for your space with our expert guide.',
-    category: 'Painting',
-    date: 'May 8, 2026',
-    readTime: '7 min read',
-    image: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?q=80&w=2031&auto=format&fit=crop'
-  },
-  {
-    slug: 'preventing-common-plumbing-issues',
-    title: 'Preventing Common Plumbing Issues: A Homeowner’s Guide',
-    excerpt: 'Leaks and clogs can be a nightmare. Learn how to identify early signs of plumbing problems and how to prevent them.',
-    category: 'Plumbing',
-    date: 'May 5, 2026',
-    readTime: '6 min read',
-    image: 'https://images.unsplash.com/photo-1504148455328-497c5efdf13d?q=80&w=2070&auto=format&fit=crop'
-  },
-  {
-    slug: 'smart-home-electrical-upgrades',
-    title: 'Top 5 Smart Home Electrical Upgrades for 2026',
-    excerpt: 'Make your home more efficient and secure with these must-have electrical upgrades, from smart switches to video doorbells.',
-    category: 'Electrical',
-    date: 'May 2, 2026',
-    readTime: '8 min read',
-    image: 'https://images.unsplash.com/photo-1558403194-611308249627?q=80&w=2070&auto=format&fit=crop'
-  }
-];
+import { BLOG_POSTS } from '@/lib/blog-data';
 
 export default function BlogLanding() {
   return (
