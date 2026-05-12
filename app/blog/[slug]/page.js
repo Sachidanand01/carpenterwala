@@ -93,6 +93,16 @@ export async function generateStaticParams() {
   }));
 }
 
+export async function generateMetadata({ params }) {
+  const post = BLOG_POSTS.find((p) => p.slug === params.slug);
+  if (!post) return { title: 'Post Not Found' };
+  
+  return {
+    title: `${post.title} | Carpenterwala Blog`,
+    description: post.excerpt,
+  };
+}
+
 export default function BlogPost({ params }) {
   const post = BLOG_POSTS.find((p) => p.slug === params.slug);
 
@@ -142,6 +152,24 @@ export default function BlogPost({ params }) {
       {/* Content Section */}
       <section className="container" style={{ padding: '6rem 0', display: 'flex', gap: '4rem', flexWrap: 'wrap' }}>
         <article style={{ flex: '2 1 600px', fontSize: '1.15rem', lineHeight: '1.8' }}>
+          <style dangerouslySetInnerHTML={{ __html: `
+            .blog-content h2 {
+              font-size: 2rem;
+              margin: 3rem 0 1.5rem;
+              color: var(--primary);
+            }
+            .blog-content p {
+              margin-bottom: 1.5rem;
+              opacity: 0.9;
+            }
+            .blog-content ul {
+              margin-bottom: 2rem;
+              padding-left: 1.5rem;
+            }
+            .blog-content li {
+              margin-bottom: 0.75rem;
+            }
+          `}} />
           <div dangerouslySetInnerHTML={{ __html: post.content }} className="blog-content" />
           
           <div style={{ 
@@ -162,10 +190,10 @@ export default function BlogPost({ params }) {
           <div className="glass" style={{ padding: '2rem', position: 'sticky', top: '100px' }}>
             <h3 style={{ marginBottom: '1.5rem' }}>Share this article</h3>
             <div style={{ display: 'flex', gap: '1rem', marginBottom: '3rem' }}>
-              <div className="social-icon">FB</div>
-              <div className="social-icon">TW</div>
-              <div className="social-icon">LN</div>
-              <div className="social-icon">WA</div>
+              <div className="social-icon" style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyCenter: 'center', fontSize: '0.8rem' }}>FB</div>
+              <div className="social-icon" style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyCenter: 'center', fontSize: '0.8rem' }}>TW</div>
+              <div className="social-icon" style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyCenter: 'center', fontSize: '0.8rem' }}>LN</div>
+              <div className="social-icon" style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyCenter: 'center', fontSize: '0.8rem' }}>WA</div>
             </div>
 
             <h3 style={{ marginBottom: '1.5rem' }}>Related Categories</h3>
@@ -195,25 +223,6 @@ export default function BlogPost({ params }) {
           <span>←</span> Back to Blog Listing
         </Link>
       </div>
-
-      <style jsx global>{`
-        .blog-content h2 {
-          font-size: 2rem;
-          margin: 3rem 0 1.5rem;
-          color: var(--primary);
-        }
-        .blog-content p {
-          margin-bottom: 1.5rem;
-          opacity: 0.9;
-        }
-        .blog-content ul {
-          margin-bottom: 2rem;
-          padding-left: 1.5rem;
-        }
-        .blog-content li {
-          margin-bottom: 0.75rem;
-        }
-      `}</style>
     </div>
   );
 }

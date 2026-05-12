@@ -1,9 +1,6 @@
-import Link from 'next/link';
+"use client";
 
-export const metadata = {
-  title: 'Home Improvement Blog | Expert Tips from Carpenterwala',
-  description: 'Expert advice on carpentry, painting, plumbing, and electrical work. Learn how to maintain and upgrade your home with our professional tips.',
-};
+import Link from 'next/link';
 
 const BLOG_POSTS = [
   {
