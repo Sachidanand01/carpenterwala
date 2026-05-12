@@ -6,8 +6,73 @@ export const metadata = {
 };
 
 export default function CarpentryPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Carpentry",
+    "provider": {
+      "@type": "Organization",
+      "name": "Carpenterwala"
+    },
+    "areaServed": {
+      "@type": "City",
+      "name": "Bangalore"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Carpentry Services",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Furniture Repair"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Custom Carpentry"
+          }
+        }
+      ]
+    }
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I get a quote for my carpentry work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can browse carpenter profiles, view their past work, and contact them directly through the platform to get an initial estimate."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you provide materials or should I buy them?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most of our professionals can either bring the necessary materials or work with materials you provide."
+        }
+      }
+    ]
+  };
+
   return (
     <div className="animate-fade-in">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       {/* Hero Section */}
       <section style={{
         position: 'relative',

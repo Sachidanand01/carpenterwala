@@ -1,15 +1,15 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Professional Plumbing Services | Carpenterwala',
-  description: 'Fast and reliable plumbing services in Bangalore. From leak repairs to full bathroom installations, our verified plumbers are here to help.',
+  title: 'Professional Electrical Services | Carpenterwala',
+  description: 'Certified electricians for your home and office in Bangalore. From wiring repairs to smart home installations, we ensure safety and quality.',
 };
 
-export default function PlumbingPage() {
+export default function ElectricalPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Service",
-    "serviceType": "Plumbing",
+    "serviceType": "Electrical",
     "provider": {
       "@type": "Organization",
       "name": "Carpenterwala"
@@ -20,13 +20,13 @@ export default function PlumbingPage() {
     },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "Plumbing Services",
+      "name": "Electrical Services",
       "itemListElement": [
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Leak Detection"
+            "name": "Wiring & Rewiring"
           }
         },
         {
@@ -46,18 +46,18 @@ export default function PlumbingPage() {
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "How much does it cost to fix a leaking tap?",
+        "name": "Why are my lights flickering frequently?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Minor repairs like tap leaks usually have a base service fee. The final cost depends on whether a simple washer replacement is needed or the entire faucet needs to be changed."
+          "text": "Flickering can be caused by loose wiring, voltage fluctuations, or an overloaded circuit. It's best to have an electrician check it immediately to prevent short circuits."
         }
       },
       {
         "@type": "Question",
-        "name": "Do you provide a warranty on plumbing repairs?",
+        "name": "Is it safe to use high-power appliances on normal sockets?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Most of our verified plumbers provide a 15-30 day warranty on their labor."
+          "text": "No, appliances like ACs, Geysers, and Microwaves should be used with 15A/16A power sockets and dedicated MCBs to prevent overheating of wires."
         }
       }
     ]
@@ -90,7 +90,7 @@ export default function PlumbingPage() {
           left: 0,
           width: '100%',
           height: '100%',
-          backgroundImage: 'url("https://images.unsplash.com/photo-1581244276894-8a3fb524cfdc?q=80&w=2070&auto=format&fit=crop")',
+          backgroundImage: 'url("https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           zIndex: -1,
@@ -107,13 +107,13 @@ export default function PlumbingPage() {
         
         <div className="container" style={{ textAlign: 'center' }}>
           <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
-            Expert <span className="text-gradient">Plumbing</span> Services
+            Expert <span className="text-gradient">Electrical</span> Services
           </h1>
           <p style={{ fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto 2rem', opacity: 0.9 }}>
-            Fast, reliable, and verified plumbing solutions for your home. From emergency leaks to new installations, we've got you covered.
+            Safety-first electrical solutions for your home. Our certified electricians handle everything from minor repairs to complete rewiring.
           </p>
-          <Link href="/find-a-professional?category=Plumber" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
-            Find a Plumber Nearby
+          <Link href="/find-a-professional?category=Electrician" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
+            Find an Electrician Nearby
           </Link>
         </div>
       </section>
@@ -121,47 +121,47 @@ export default function PlumbingPage() {
       {/* Services Grid */}
       <section className="container" style={{ marginBottom: '6rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Comprehensive Plumbing Solutions</h2>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Our Electrical Expertise</h2>
           <p style={{ opacity: 0.7, maxWidth: '600px', margin: '0 auto' }}>
-            Our verified plumbers are equipped to handle everything from minor drips to major pipeline overhauls.
+            We connect you with licensed professionals specialized in modern electrical systems and safety standards.
           </p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
           <div className="glass" style={{ padding: '2rem' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>💧</div>
-            <h3 style={{ marginBottom: '1rem' }}>Leak Detection & Repair</h3>
-            <p style={{ opacity: 0.8 }}>Protect your home from water damage. We use advanced tools to find hidden leaks in walls, floors, and ceilings and fix them permanently.</p>
+            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>⚡</div>
+            <h3 style={{ marginBottom: '1rem' }}>Wiring & Rewiring</h3>
+            <p style={{ opacity: 0.8 }}>Complete house wiring for new constructions or safe rewiring of old homes to handle modern appliance loads and prevent short circuits.</p>
           </div>
 
           <div className="glass" style={{ padding: '2rem' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🚿</div>
-            <h3 style={{ marginBottom: '1rem' }}>Fixture Installation</h3>
-            <p style={{ opacity: 0.8 }}>Expert installation of faucets, showers, toilets, and sinks. We ensure everything is perfectly aligned and 100% leak-proof.</p>
+            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>💡</div>
+            <h3 style={{ marginBottom: '1rem' }}>Lighting & Fixtures</h3>
+            <p style={{ opacity: 0.8 }}>Installation of decorative lights, chandeliers, LED strips, and outdoor lighting. We ensure perfect placement and secure mounting.</p>
           </div>
 
           <div className="glass" style={{ padding: '2rem' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🛁</div>
-            <h3 style={{ marginBottom: '1rem' }}>Bathroom Renovations</h3>
-            <p style={{ opacity: 0.8 }}>Complete plumbing support for bathroom upgrades, including pipe rerouting, vanity installation, and premium fixture setup.</p>
+            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🔌</div>
+            <h3 style={{ marginBottom: '1rem' }}>Socket & Switch Repairs</h3>
+            <p style={{ opacity: 0.8 }}>Fixing burnt sockets, loose switches, or upgrading to modern modular switchboards with surge protection.</p>
           </div>
 
           <div className="glass" style={{ padding: '2rem' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🔥</div>
-            <h3 style={{ marginBottom: '1rem' }}>Water Heater Services</h3>
-            <p style={{ opacity: 0.8 }}>Installation and maintenance of solar, gas, and electric water heaters. Get hot water whenever you need it.</p>
+            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📟</div>
+            <h3 style={{ marginBottom: '1rem' }}>Appliance Installation</h3>
+            <p style={{ opacity: 0.8 }}>Safe installation of heavy appliances like ACs, geysers, ovens, and chimneys with appropriate MCBs and earthing.</p>
           </div>
 
           <div className="glass" style={{ padding: '2rem' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🛢️</div>
-            <h3 style={{ marginBottom: '1rem' }}>Tank Cleaning & Repair</h3>
-            <p style={{ opacity: 0.8 }}>Professional cleaning of overhead and underground water tanks to ensure your family gets clean, safe water.</p>
+            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🛡️</div>
+            <h3 style={{ marginBottom: '1rem' }}>Safety Inspections</h3>
+            <p style={{ opacity: 0.8 }}>Thorough checking of earthing, MCBs, and wiring health to protect your family and expensive electronics from voltage fluctuations.</p>
           </div>
 
           <div className="glass" style={{ padding: '2rem' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🛠️</div>
-            <h3 style={{ marginBottom: '1rem' }}>Pipe Rerouting</h3>
-            <p style={{ opacity: 0.8 }}>Upgrading old, corroded pipes or rerouting plumbing lines for kitchen or bathroom extensions.</p>
+            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🏠</div>
+            <h3 style={{ marginBottom: '1rem' }}>Smart Home Setup</h3>
+            <p style={{ opacity: 0.8 }}>Installation of smart switches, video doorbells, and automated lighting systems for a truly modern living experience.</p>
           </div>
         </div>
       </section>
@@ -171,39 +171,39 @@ export default function PlumbingPage() {
         <div className="container">
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4rem', alignItems: 'center' }}>
             <div style={{ flex: '1 1 400px' }}>
-              <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>Why Choose <span className="text-gradient">Carpenterwala</span> Plumbers?</h2>
+              <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>Why Choose <span className="text-gradient">Carpenterwala</span> Electricians?</h2>
               <p style={{ fontSize: '1.1rem', opacity: 0.8, marginBottom: '2rem' }}>
-                Plumbing issues can be stressful. We ensure you get the best professionals who value quality and transparency.
+                Electricity is not something to take lightly. We ensure you get the most qualified professionals who prioritize your safety.
               </p>
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
                   <span style={{ color: 'var(--accent)', fontWeight: 'bold', fontSize: '1.2rem' }}>✓</span>
                   <div>
-                    <strong>Emergency Support:</strong> Our network includes professionals who can respond quickly to urgent leaks and bursts.
+                    <strong>Licensed Professionals:</strong> All our electricians are certified and have years of experience handling complex systems.
                   </div>
                 </li>
                 <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
                   <span style={{ color: 'var(--accent)', fontWeight: 'bold', fontSize: '1.2rem' }}>✓</span>
                   <div>
-                    <strong>Transparent Pricing:</strong> Clear, upfront estimates based on the scope of work. No hidden "emergency fees".
+                    <strong>Safety First Approach:</strong> We follow strict protocols including proper earthing checks and using the right gauge wires.
                   </div>
                 </li>
                 <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
                   <span style={{ color: 'var(--accent)', fontWeight: 'bold', fontSize: '1.2rem' }}>✓</span>
                   <div>
-                    <strong>Quality Spare Parts:</strong> We only use genuine, ISI-marked fittings and pipes for all repairs and installations.
+                    <strong>Emergency Troubleshooting:</strong> Quick response for power outages, sparking, or burning smells in your electrical system.
                   </div>
                 </li>
               </ul>
             </div>
             <div style={{ flex: '1 1 400px' }}>
               <div className="glass" style={{ padding: '2.5rem', borderLeft: '4px solid var(--primary)' }}>
-                <h3 style={{ marginBottom: '1rem' }}>Facing a Plumbing Emergency?</h3>
+                <h3 style={{ marginBottom: '1rem' }}>Need an Electrical Safety Audit?</h3>
                 <p style={{ marginBottom: '2rem', opacity: 0.8 }}>
-                  Don't let a small leak turn into a big disaster. Connect with a verified plumber in your area right now.
+                  Protect your home from potential fire hazards. Our experts can perform a comprehensive check of your entire electrical system.
                 </p>
-                <Link href="/find-a-professional?category=Plumber" className="btn btn-primary" style={{ width: '100%' }}>
-                  View Available Plumbers
+                <Link href="/find-a-professional?category=Electrician" className="btn btn-primary" style={{ width: '100%' }}>
+                  Book an Electrician Now
                 </Link>
               </div>
             </div>
@@ -213,24 +213,24 @@ export default function PlumbingPage() {
 
       {/* FAQ Snippet */}
       <section className="container" style={{ marginBottom: '8rem' }}>
-        <h2 style={{ fontSize: '2rem', marginBottom: '3rem', textAlign: 'center' }}>Plumbing FAQs</h2>
+        <h2 style={{ fontSize: '2rem', marginBottom: '3rem', textAlign: 'center' }}>Electrical FAQs</h2>
         <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <details style={{ cursor: 'pointer' }} className="glass">
-            <summary style={{ padding: '1.5rem', fontWeight: '600' }}>How much does it cost to fix a leaking tap?</summary>
+            <summary style={{ padding: '1.5rem', fontWeight: '600' }}>Why are my lights flickering frequently?</summary>
             <div style={{ padding: '0 1.5rem 1.5rem', opacity: 0.8 }}>
-              Minor repairs like tap leaks usually have a base service fee. The final cost depends on whether a simple washer replacement is needed or the entire faucet needs to be changed.
+              Flickering can be caused by loose wiring, voltage fluctuations, or an overloaded circuit. It's best to have an electrician check it immediately to prevent short circuits.
             </div>
           </details>
           <details style={{ cursor: 'pointer' }} className="glass">
-            <summary style={{ padding: '1.5rem', fontWeight: '600' }}>Do you provide a warranty on plumbing repairs?</summary>
+            <summary style={{ padding: '1.5rem', fontWeight: '600' }}>Is it safe to use high-power appliances on normal sockets?</summary>
             <div style={{ padding: '0 1.5rem 1.5rem', opacity: 0.8 }}>
-              Most of our verified plumbers provide a 15-30 day warranty on their labor. The parts used carry the manufacturer's warranty.
+              No, appliances like ACs, Geysers, and Microwaves should be used with 15A/16A power sockets and dedicated MCBs to prevent overheating of wires.
             </div>
           </details>
           <details style={{ cursor: 'pointer' }} className="glass">
-            <summary style={{ padding: '1.5rem', fontWeight: '600' }}>What should I do if a pipe bursts at night?</summary>
+            <summary style={{ padding: '1.5rem', fontWeight: '600' }}>How often should I check my home's earthing?</summary>
             <div style={{ padding: '0 1.5rem 1.5rem', opacity: 0.8 }}>
-              First, locate and turn off your home's main water valve. Then, use our platform to find an available plumber for emergency repairs.
+              We recommend an earthing check every 2-3 years, especially before the monsoon season, to ensure proper protection against electrical shocks.
             </div>
           </details>
         </div>

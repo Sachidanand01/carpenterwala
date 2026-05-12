@@ -7,8 +7,73 @@ export const metadata = {
 };
 
 export default function PaintingPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Painting",
+    "provider": {
+      "@type": "Organization",
+      "name": "Carpenterwala"
+    },
+    "areaServed": {
+      "@type": "City",
+      "name": "Bangalore"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Painting Services",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Interior Painting"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Exterior Painting"
+          }
+        }
+      ]
+    }
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How long does it take to paint a 2BHK house?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Typically, a full 2BHK interior painting project takes between 4 to 7 days, depending on the complexity and the number of coats required."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need to move the furniture myself?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our painters will assist in moving and covering your furniture with plastic sheets to protect them from paint splatters and dust."
+        }
+      }
+    ]
+  };
+
   return (
     <div className="animate-fade-in">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       {/* Hero Section */}
       <section style={{
         position: 'relative',

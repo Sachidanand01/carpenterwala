@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://carpenterwala.com/sitemap.xml
