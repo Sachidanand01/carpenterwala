@@ -9,7 +9,7 @@ export default function PrivacyPolicy() {
   return (
     <div className="container animate-fade-in" style={{ padding: "4rem 2rem", maxWidth: "900px" }}>
       <h1 className="text-gradient" style={{ fontSize: "3rem", marginBottom: "2rem" }}>Privacy Policy</h1>
-      
+
       <div className="glass" style={{ padding: "3rem", lineHeight: "1.8", color: "rgba(255,255,255,0.9)" }}>
         <p style={{ marginBottom: "2rem", fontSize: "1.1rem", opacity: 0.8 }}>
           <strong>Effective date: May 11, 2026</strong>
@@ -21,7 +21,7 @@ export default function PrivacyPolicy() {
             Welcome to <strong>Carpenterwala Marketplace</strong>.
           </p>
           <p>
-            Carpenterwala Marketplace (“us”, “we”, or “our”) operates <strong>https://carpenterwala.com</strong> (hereinafter referred to as “Service”). 
+            Carpenterwala Marketplace (“us”, “we”, or “our”) operates <strong>https://carpenterwala.com</strong> (hereinafter referred to as “Service”).
             Our Privacy Policy governs your visit to our website and explains how we collect, safeguard, and disclose information that results from your use of our Service.
           </p>
           <p>
@@ -73,7 +73,7 @@ export default function PrivacyPolicy() {
         <section style={{ marginBottom: "3rem" }}>
           <h2 style={{ fontSize: "1.75rem", marginBottom: "1rem", color: "var(--primary)" }}>5. Security of Data</h2>
           <p>
-            The security of your data is important to us but remember that no method of transmission over the Internet or method of electronic storage is 100% secure. 
+            The security of your data is important to us but remember that no method of transmission over the Internet or method of electronic storage is 100% secure.
             While we strive to use commercially acceptable means to protect your Personal Data, we cannot guarantee its absolute security.
           </p>
         </section>
@@ -81,8 +81,8 @@ export default function PrivacyPolicy() {
         <section style={{ marginBottom: "3rem" }}>
           <h2 style={{ fontSize: "1.75rem", marginBottom: "1rem", color: "var(--primary)" }}>6. Your Data Protection Rights</h2>
           <p>
-            We aim to take reasonable steps to allow you to correct, amend, delete, or limit the use of your Personal Data. 
-            If you wish to be informed what Personal Data we hold about you and if you want it to be removed from our systems, please email us at <strong>support@carpenterwala.com</strong>.
+            We aim to take reasonable steps to allow you to correct, amend, delete, or limit the use of your Personal Data.
+            If you wish to be informed what Personal Data we hold about you and if you want it to be removed from our systems, please email us at <strong>contact@carpenterwala.com</strong>.
           </p>
         </section>
 
@@ -90,7 +90,7 @@ export default function PrivacyPolicy() {
           <h2 style={{ fontSize: "1.75rem", marginBottom: "1rem", color: "var(--primary)" }}>7. Contact Us</h2>
           <p>If you have any questions about this Privacy Policy, please contact us:</p>
           <ul style={{ listStyle: "none", marginTop: "0.5rem" }}>
-            <li>By email: <strong>support@carpenterwala.com</strong></li>
+            <li>By email: <strong>contact@carpenterwala.com</strong></li>
             <li>By visiting this page on our website: <Link href="/contact" style={{ color: "var(--accent)" }}>Contact Us</Link></li>
           </ul>
         </section>

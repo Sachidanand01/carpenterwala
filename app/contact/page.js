@@ -21,7 +21,7 @@ export default function ContactUs() {
           <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>✉️</div>
           <h3 style={{ marginBottom: "0.5rem" }}>Email Us</h3>
           <p style={{ opacity: 0.7, marginBottom: "1.5rem", fontSize: "0.95rem" }}>Our team usually responds within 24 hours.</p>
-          <a href="mailto:support@carpenterwala.com" style={{ color: "var(--primary)", fontWeight: "bold" }}>support@carpenterwala.com</a>
+          <a href="mailto:contact@carpenterwala.com" style={{ color: "var(--primary)", fontWeight: "bold" }}>contact@carpenterwala.com</a>
         </div>
 
         <div className="glass" style={{ padding: "2.5rem", textAlign: "center" }}>
@@ -58,7 +58,7 @@ export default function ContactUs() {
                 }} />
               </div>
             </div>
-            
+
             <div className="flex flex-col gap-1">
               <label style={{ fontSize: "0.9rem", fontWeight: 500, opacity: 0.8 }}>Subject</label>
               <select style={{
@@ -95,7 +95,7 @@ export default function ContactUs() {
               </div>
             </div>
           </div>
-          
+
           <div className="glass" style={{ padding: "2rem", background: "linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(245, 158, 11, 0.1))" }}>
             <h4 style={{ marginBottom: "0.5rem" }}>Corporate Inquiries</h4>
             <p style={{ opacity: 0.8, fontSize: "0.9rem", marginBottom: "1rem" }}>Interested in a business partnership or bulk requirements?</p>
