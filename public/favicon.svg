@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Circle Background (Optional, keeping it clean for favicon) -->
+  <rect width="32" height="32" rx="6" fill="#0F172A" />
+  
+  <!-- Stylized C -->
+  <path d="M22 10.5C20.8 9.5 19 9 17 9C13 9 10 12 10 16C10 20 13 23 17 23C19 23 20.8 22.5 22 21.5" 
+        stroke="#FFFFFF" 
+        stroke-width="2.5" 
+        stroke-linecap="round" 
+        fill="none" />
+  
+  <!-- Hammer Head integrated into top of C -->
+  <path d="M21 7.5H25C25.5 7.5 26 8 26 8.5V11.5C26 12 25.5 12.5 25 12.5H21V7.5Z" fill="#F59E0B" />
+  <rect x="20" y="8" width="2" height="4" fill="#F59E0B" />
+</svg>

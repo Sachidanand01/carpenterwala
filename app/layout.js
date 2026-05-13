@@ -33,6 +33,11 @@ export const metadata = {
     description: "Find trusted and verified handymen near you.",
     images: ["/images/og-image.png"],
   },
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 };
 
 const jsonLd = {
