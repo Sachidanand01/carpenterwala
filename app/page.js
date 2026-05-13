@@ -7,14 +7,14 @@ export default function Home() {
         
         <div className="animate-fade-in" style={{ maxWidth: "800px" }}>
           <h1 style={{ fontSize: "4rem", marginBottom: "1.5rem", letterSpacing: "-0.02em" }}>
-            Your Trusted <br/>
+            Your Trusted <span className="desktop-only"><br/></span>
             <span className="text-gradient">Handyman Professionals</span>
           </h1>
           <p style={{ fontSize: "1.25rem", opacity: 0.8, marginBottom: "2rem" }}>
             Book verified carpenters, painters, and home improvement experts. Real reviews, transparent pricing, and guaranteed quality.
           </p>
           
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-4 justify-center flex-mobile-col">
             <Link href="/find-a-professional" className="btn btn-primary" style={{ fontSize: "1.1rem", padding: "1rem 2rem" }}>
               Find a Professional
             </Link>
