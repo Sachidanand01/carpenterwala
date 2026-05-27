@@ -1,9 +1,20 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function LeadCaptureModal({ proName, proId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState('idle'); // idle, loading, success
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && isOpen) {
+      const storedName = localStorage.getItem('customer_name');
+      const storedPhone = localStorage.getItem('customer_phone');
+      if (storedName) setName(storedName);
+      if (storedPhone) setPhone(storedPhone);
+    }
+  }, [isOpen]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,8 +26,8 @@ export default function LeadCaptureModal({ proName, proId }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           proId,
-          name: e.target.name.value,
-          phone: e.target.phone.value,
+          name,
+          phone,
           task: e.target.task.value,
         })
       });
@@ -80,15 +91,29 @@ export default function LeadCaptureModal({ proName, proId }) {
               <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-1">
                   <label style={{ fontSize: "0.9rem", fontWeight: 500 }}>Your Name</label>
-                  <input type="text" name="name" required style={{
-                    padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white"
-                  }} />
+                  <input 
+                    type="text" 
+                    name="name" 
+                    required 
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    style={{
+                      padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white"
+                    }} 
+                  />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label style={{ fontSize: "0.9rem", fontWeight: 500 }}>Your Phone Number</label>
-                  <input type="tel" name="phone" required style={{
-                    padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white"
-                  }} />
+                  <input 
+                    type="tel" 
+                    name="phone" 
+                    required 
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    style={{
+                      padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white"
+                    }} 
+                  />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label style={{ fontSize: "0.9rem", fontWeight: 500 }}>Task Description</label>
@@ -108,3 +133,4 @@ export default function LeadCaptureModal({ proName, proId }) {
     </>
   );
 }
+
