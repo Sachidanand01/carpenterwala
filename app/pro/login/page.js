@@ -4,11 +4,11 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function ProLogin() {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
-  const [step, setStep] = useState(1); // 1=details, 2=otp, 3=select-profile
+  const [step, setStep] = useState(1); // 1=email details, 2=otp verify, 3=select profile
   const [generatedOtp, setGeneratedOtp] = useState('');
+  const [isSimulated, setIsSimulated] = useState(false);
   const [otpSentAlert, setOtpSentAlert] = useState(false);
   const [matchedProfiles, setMatchedProfiles] = useState([]);
   const [error, setError] = useState('');
@@ -21,32 +21,60 @@ export default function ProLogin() {
     }
   }, [router]);
 
-  const handleSendOtp = (e) => {
+  const handleSendOtp = async (e) => {
     e.preventDefault();
-    if (!name.trim() || name.trim().length < 2) {
-      setError('Please enter your registered full name.'); return;
-    }
-    const cleanPhone = phone.trim().replace(/\s+/g, '');
-    if (!cleanPhone || cleanPhone.length < 10) {
-      setError('Please enter a valid 10-digit mobile number.'); return;
-    }
-    setError('');
-    setLoading(true);
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedOtp(code);
-    setTimeout(() => { setStep(2); setOtpSentAlert(true); setLoading(false); }, 800);
-  };
-
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    if (otp.trim() !== generatedOtp) {
-      setError('Invalid OTP. Please check the code shown in the SMS gateway banner.'); return;
+    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setError('Please enter a valid email address.'); return;
     }
     setError('');
     setLoading(true);
     try {
-      const res = await fetch(`/api/pro/auth?name=${encodeURIComponent(name.trim())}`);
+      const res = await fetch('/api/pro/otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'send', email: email.trim().toLowerCase() })
+      });
       const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Failed to send OTP.');
+        setLoading(false);
+        return;
+      }
+      setIsSimulated(data.simulated);
+      if (data.simulated && data.otp) {
+        setGeneratedOtp(data.otp);
+      } else {
+        setGeneratedOtp('');
+      }
+      setStep(2);
+      setOtpSentAlert(true);
+    } catch (err) {
+      setError('Connection error. Please check your internet connection and try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    if (otp.trim().length !== 6) {
+      setError('Please enter a 6-digit OTP.'); return;
+    }
+    setError('');
+    setLoading(true);
+    try {
+      const res = await fetch('/api/pro/otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'verify', email: email.trim().toLowerCase(), otp: otp.trim() })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Invalid OTP. Please check the code.');
+        setLoading(false);
+        return;
+      }
+      
       if (data.profiles && data.profiles.length === 1) {
         loginAsPro(data.profiles[0]);
       } else if (data.profiles && data.profiles.length > 1) {
@@ -54,11 +82,11 @@ export default function ProLogin() {
         setStep(3);
         setLoading(false);
       } else {
-        setError('No professional profile found with that name. Please contact support to get registered.');
+        setError('No professional profile found.');
         setLoading(false);
       }
-    } catch {
-      setError('Something went wrong. Please try again.');
+    } catch (err) {
+      setError('Verification failed. Please try again.');
       setLoading(false);
     }
   };
@@ -86,8 +114,8 @@ export default function ProLogin() {
     <div className="container flex items-center justify-center" style={{ minHeight: 'calc(100vh - 70px)', padding: '2rem 1rem' }}>
       <div style={{ width: '100%', maxWidth: '460px' }}>
 
-        {/* Simulated SMS Banner */}
-        {otpSentAlert && (
+        {/* Simulated/Real Email Banner */}
+        {otpSentAlert && isSimulated && (
           <div className="glass animate-fade-in" style={{
             padding: '1.25rem', marginBottom: '1.5rem',
             borderLeft: '4px solid var(--accent)', background: 'rgba(245,158,11,0.1)',
@@ -95,13 +123,33 @@ export default function ProLogin() {
             display: 'flex', flexDirection: 'column', gap: '0.4rem'
           }}>
             <div className="flex items-center gap-2">
-              <span style={{ fontSize: '1.2rem' }}>💬</span>
-              <span style={{ fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 700, letterSpacing: '0.06em' }}>SIMULATED SMS GATEWAY</span>
+              <span style={{ fontSize: '1.2rem' }}>✉️</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 700, letterSpacing: '0.06em' }}>SIMULATED EMAIL GATEWAY</span>
             </div>
             <div style={{ fontSize: '0.9rem' }}>
-              To: <strong>+91 {phone}</strong>
+              To: <strong>{email}</strong>
               <div style={{ marginTop: '0.3rem' }}>
-                Pro OTP: <strong style={{ color: 'var(--accent)', fontSize: '1.05rem', letterSpacing: '2px' }}>{generatedOtp}</strong>
+                Pro OTP Code: <strong style={{ color: 'var(--accent)', fontSize: '1.05rem', letterSpacing: '2px' }}>{generatedOtp}</strong>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {otpSentAlert && !isSimulated && (
+          <div className="glass animate-fade-in" style={{
+            padding: '1.25rem', marginBottom: '1.5rem',
+            borderLeft: '4px solid #10b981', background: 'rgba(16,185,129,0.1)',
+            border: '1px solid rgba(16,185,129,0.25)', borderLeftWidth: '4px', borderRadius: '12px',
+            display: 'flex', flexDirection: 'column', gap: '0.4rem'
+          }}>
+            <div className="flex items-center gap-2">
+              <span style={{ fontSize: '1.2rem' }}>📩</span>
+              <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 700, letterSpacing: '0.06em' }}>OTP EMAIL SENT</span>
+            </div>
+            <div style={{ fontSize: '0.9rem' }}>
+              Sent verification code to: <strong>{email}</strong>
+              <div style={{ marginTop: '0.3rem', fontSize: '0.8rem', opacity: 0.8 }}>
+                Check your inbox (and spam folder) for the 6-digit code.
               </div>
             </div>
           </div>
@@ -120,7 +168,7 @@ export default function ProLogin() {
             <h1 style={{ fontSize: '1.8rem', marginBottom: '0.4rem' }}>Pro Portal</h1>
             <p style={{ opacity: 0.7, fontSize: '0.9rem' }}>
               {step === 1 && 'Sign in to manage your leads & profile.'}
-              {step === 2 && `Enter the OTP sent to +91 ${phone}`}
+              {step === 2 && `Enter the OTP sent to ${email}`}
               {step === 3 && 'We found multiple profiles. Select yours.'}
             </p>
           </div>
@@ -145,32 +193,23 @@ export default function ProLogin() {
             }}>⚠️ {error}</div>
           )}
 
-          {/* Step 1: Name + Phone */}
+          {/* Step 1: Email Input */}
           {step === 1 && (
             <form className="flex flex-col gap-4" onSubmit={handleSendOtp}>
               <div className="flex flex-col gap-1">
-                <label style={{ fontSize: '0.9rem', fontWeight: 500, opacity: 0.9 }}>Registered Full Name</label>
-                <input type="text" placeholder="e.g. Ram Singh" required value={name}
-                  onChange={(e) => setName(e.target.value)} style={inputStyle} />
-                <span style={{ fontSize: '0.75rem', opacity: 0.55 }}>Enter your name exactly as it appears on your profile.</span>
-              </div>
-              <div className="flex flex-col gap-1">
-                <label style={{ fontSize: '0.9rem', fontWeight: 500, opacity: 0.9 }}>Mobile Number</label>
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <span style={{ position: 'absolute', left: '0.75rem', opacity: 0.6, fontWeight: 500 }}>+91</span>
-                  <input type="tel" placeholder="9876543210" required maxLength={10}
-                    value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
-                    style={{ ...inputStyle, paddingLeft: '2.75rem' }} />
-                </div>
+                <label style={{ fontSize: '0.9rem', fontWeight: 500, opacity: 0.9 }}>Registered Email Address</label>
+                <input type="email" placeholder="e.g. ram@example.com" required value={email}
+                  onChange={(e) => setEmail(e.target.value)} style={inputStyle} />
+                <span style={{ fontSize: '0.75rem', opacity: 0.55 }}>Enter the email address registered with your professional profile.</span>
               </div>
               <button type="submit" disabled={loading} className="btn btn-primary"
                 style={{ marginTop: '0.5rem', width: '100%' }}>
-                {loading ? 'Sending OTP…' : 'Send OTP →'}
+                {loading ? 'Sending OTP…' : 'Send Verification OTP →'}
               </button>
             </form>
           )}
 
-          {/* Step 2: OTP */}
+          {/* Step 2: OTP Input */}
           {step === 2 && (
             <form className="flex flex-col gap-4" onSubmit={handleVerifyOtp}>
               <div className="flex flex-col gap-1">
@@ -194,7 +233,7 @@ export default function ProLogin() {
             </form>
           )}
 
-          {/* Step 3: Multiple profile matches */}
+          {/* Step 3: Multiple profile matches (if any duplicate emails exist) */}
           {step === 3 && (
             <div className="flex flex-col gap-3">
               {matchedProfiles.map(pro => (

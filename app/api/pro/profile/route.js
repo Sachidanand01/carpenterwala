@@ -27,7 +27,7 @@ export async function GET(request) {
 export async function PUT(request) {
   try {
     const body = await request.json();
-    const { id, name, trade, location, about, skills, experience } = body;
+    const { id, name, trade, location, about, skills, experience, portfolio } = body;
 
     if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 });
 
