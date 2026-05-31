@@ -11,7 +11,9 @@ export async function GET(request) {
   try {
     const { data: profile, error } = await supabase
       .from('profiles')
-      .select(`id, slug, name, trade, experience, location, avatar, about, skills, portfolio, verified, created_at,
+      .select(`id, slug, name, email, trade, experience, location, avatar, about, skills, portfolio, verified, created_at,
+        phone, full_address, aadhaar_front, aadhaar_back, pan_front, pan_back, 
+        voter_driving_front, voter_driving_back, police_verification, onboarding_completed, onboarding_step,
         reviews ( id, author, rating, text, created_at )`)
       .eq('id', id)
       .single();
@@ -27,7 +29,11 @@ export async function GET(request) {
 export async function PUT(request) {
   try {
     const body = await request.json();
-    const { id, name, trade, location, about, skills, experience, portfolio } = body;
+    const { 
+      id, name, trade, location, about, skills, experience, portfolio, avatar,
+      phone, full_address, aadhaar_front, aadhaar_back, pan_front, pan_back, 
+      voter_driving_front, voter_driving_back, police_verification, onboarding_completed, onboarding_step
+    } = body;
 
     if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 });
 
@@ -36,6 +42,7 @@ export async function PUT(request) {
     if (trade !== undefined) updateData.trade = trade;
     if (location !== undefined) updateData.location = location;
     if (about !== undefined) updateData.about = about;
+    if (avatar !== undefined) updateData.avatar = avatar;
     if (experience !== undefined) updateData.experience = experience;
     if (skills !== undefined) {
       updateData.skills = Array.isArray(skills)
@@ -46,6 +53,19 @@ export async function PUT(request) {
       updateData.portfolio = Array.isArray(portfolio) ? portfolio : [];
     }
 
+    // Onboarding fields
+    if (phone !== undefined) updateData.phone = phone;
+    if (full_address !== undefined) updateData.full_address = full_address;
+    if (aadhaar_front !== undefined) updateData.aadhaar_front = aadhaar_front;
+    if (aadhaar_back !== undefined) updateData.aadhaar_back = aadhaar_back;
+    if (pan_front !== undefined) updateData.pan_front = pan_front;
+    if (pan_back !== undefined) updateData.pan_back = pan_back;
+    if (voter_driving_front !== undefined) updateData.voter_driving_front = voter_driving_front;
+    if (voter_driving_back !== undefined) updateData.voter_driving_back = voter_driving_back;
+    if (police_verification !== undefined) updateData.police_verification = police_verification;
+    if (onboarding_completed !== undefined) updateData.onboarding_completed = onboarding_completed;
+    if (onboarding_step !== undefined) updateData.onboarding_step = onboarding_step;
+
     const { error } = await supabase.from('profiles').update(updateData).eq('id', id);
     if (error) throw error;
     return NextResponse.json({ success: true });
@@ -53,3 +73,4 @@ export async function PUT(request) {
     return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 });
   }
 }
+

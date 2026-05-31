@@ -48,7 +48,10 @@ function DirectoryContent() {
 
   useEffect(() => {
     async function loadDirectory() {
-      const { data, error } = await supabase.from("profiles").select("*");
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("verified", true);
       if (error) {
         console.error("Error loading profiles", error);
       } else {
