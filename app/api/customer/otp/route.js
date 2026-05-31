@@ -34,7 +34,8 @@ export async function POST(request) {
       // Try sending with Resend if API Key is configured
       if (process.env.RESEND_API_KEY) {
         try {
-          await resend.emails.send({
+          console.log(`[Resend] Attempting to send customer OTP email using verified custom domain from: onboarding@carpenterwala.com`);
+          let emailResponse = await resend.emails.send({
             from: 'Carpenterwala <onboarding@carpenterwala.com>',
             to: cleanEmail,
             subject: 'Your Carpenterwala Verification Code',
@@ -52,7 +53,7 @@ export async function POST(request) {
                 <p style="font-size: 0.9rem; color: #666666;">This code is valid for 10 minutes. If you did not request this login, you can safely ignore this email.</p>
                 
                 <div style="margin-top: 25px; padding: 12px; background-color: #fffbeb; border: 1px solid #fef3c7; border-radius: 6px; color: #b45309; font-size: 0.85rem;">
-                  <strong>⚠️ Important Notice:</strong> This is an automated notification. Please do not reply directly to this email address (onboarding@carpenterwala.com) as replies are sent to an unmonitored mailbox and will not be received.
+                  <strong>⚠️ Important Notice:</strong> This is an automated notification. Please do not reply directly to this email address as replies are sent to an unmonitored mailbox and will not be received.
                 </div>
 
                 <hr style="border: 0; border-top: 1px solid #eeeeee; margin: 20px 0;" />
@@ -60,9 +61,48 @@ export async function POST(request) {
               </div>
             `
           });
+
+          // Check if custom domain email failed due to unverified domains
+          if (emailResponse.error) {
+            console.warn(`[Resend] Custom domain sending failed: ${emailResponse.error.message}. Falling back to default sandbox domain onboarding@resend.dev...`);
+            
+            emailResponse = await resend.emails.send({
+              from: 'Carpenterwala <onboarding@resend.dev>',
+              to: cleanEmail,
+              subject: 'Your Carpenterwala Verification Code',
+              html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 12px; background-color: #ffffff; color: #333333;">
+                  <div style="text-align: center; margin-bottom: 20px;">
+                    <span style="font-size: 40px;">🔑</span>
+                    <h1 style="color: #2563eb; margin: 10px 0 0 0; font-size: 24px;">Carpenterwala Customer Portal</h1>
+                  </div>
+                  <p>Hello,</p>
+                  <p>Use the following verification code to secure your account and proceed with your request on Carpenterwala:</p>
+                  <div style="text-align: center; margin: 30px 0; padding: 15px; background-color: #f3f4f6; border-radius: 8px;">
+                    <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #1e3a8a;">${generatedCode}</span>
+                  </div>
+                  <p style="font-size: 0.9rem; color: #666666;">This code is valid for 10 minutes. If you did not request this login, you can safely ignore this email.</p>
+                  
+                  <div style="margin-top: 25px; padding: 12px; background-color: #fffbeb; border: 1px solid #fef3c7; border-radius: 6px; color: #b45309; font-size: 0.85rem;">
+                    <strong>⚠️ Important Notice:</strong> This is an automated notification. Please do not reply directly to this email address as replies are sent to an unmonitored mailbox and will not be received.
+                  </div>
+
+                  <hr style="border: 0; border-top: 1px solid #eeeeee; margin: 20px 0;" />
+                  <p style="font-size: 0.8rem; color: #999999; text-align: center;">Carpenterwala.com · Bangalore, India</p>
+                </div>
+              `
+            });
+          }
+
+          if (emailResponse.error) {
+            throw new Error(emailResponse.error.message || 'Resend API returned an error');
+          }
+
           sentRealEmail = true;
+          console.log(`[Resend] OTP successfully dispatched to ${cleanEmail}`);
         } catch (e) {
           emailError = e.message || 'Resend delivery failed';
+          console.error(`[Resend Error] Failed to deliver OTP:`, emailError);
         }
       }
 
