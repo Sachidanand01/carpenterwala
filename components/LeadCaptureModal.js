@@ -15,6 +15,7 @@ export default function LeadCaptureModal({ proName, proId }) {
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [generatedOtp, setGeneratedOtp] = useState('');
+  const [isSimulatedOtp, setIsSimulatedOtp] = useState(false);
   const [fetchedCustomer, setFetchedCustomer] = useState(null);
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
@@ -37,6 +38,7 @@ export default function LeadCaptureModal({ proName, proId }) {
     setView('form');
     setOtp('');
     setGeneratedOtp('');
+    setIsSimulatedOtp(false);
     setAuthError('');
     setAuthLoading(false);
     setFetchedCustomer(null);
@@ -151,9 +153,22 @@ export default function LeadCaptureModal({ proName, proId }) {
         // Save existing user info for later local storage persistence
         setFetchedCustomer(checkData.customer);
 
-        // Generate simulated OTP code for Email Login
-        const code = Math.floor(100000 + Math.random() * 900000).toString();
-        setGeneratedOtp(code);
+        // Call backend OTP API to send OTP to registered email
+        const otpRes = await fetch('/api/customer/otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'send', email: cleanEmail })
+        });
+        const otpData = await otpRes.json();
+
+        if (!otpRes.ok) {
+          setAuthError(otpData.error || 'Failed to dispatch verification code. Please try again.');
+          setAuthLoading(false);
+          return;
+        }
+
+        setGeneratedOtp(otpData.otp || '');
+        setIsSimulatedOtp(otpData.simulated);
         setAuthLoading(false);
         setView('login_otp');
       } else {
@@ -169,9 +184,22 @@ export default function LeadCaptureModal({ proName, proId }) {
           return;
         }
 
-        // Phone is safe to register, generate simulated SMS OTP code
-        const code = Math.floor(100000 + Math.random() * 900000).toString();
-        setGeneratedOtp(code);
+        // Phone is safe to register, let's send backend OTP to their email for verification!
+        const otpRes = await fetch('/api/customer/otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'send', email: cleanEmail })
+        });
+        const otpData = await otpRes.json();
+
+        if (!otpRes.ok) {
+          setAuthError(otpData.error || 'Failed to dispatch verification code. Please try again.');
+          setAuthLoading(false);
+          return;
+        }
+
+        setGeneratedOtp(otpData.otp || '');
+        setIsSimulatedOtp(otpData.simulated);
         setAuthLoading(false);
         setView('register_otp');
       }
@@ -186,16 +214,29 @@ export default function LeadCaptureModal({ proName, proId }) {
   const handleOtpVerifySubmit = async (e) => {
     e.preventDefault();
     setAuthError('');
-
-    if (otp.trim() !== generatedOtp) {
-      setAuthError('Invalid OTP code. Please enter the exact 6-digit code displayed in the Simulated Gateway banner.');
-      return;
-    }
-
     setAuthLoading(true);
 
     try {
       const cleanPhone = phone.trim().replace(/\D/g, '');
+      const cleanEmail = email.trim().toLowerCase();
+
+      // Call backend to verify OTP securely
+      const verifyRes = await fetch('/api/customer/otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'verify',
+          email: cleanEmail,
+          otp: otp.trim()
+        })
+      });
+      const verifyData = await verifyRes.json();
+
+      if (!verifyRes.ok) {
+        setAuthError(verifyData.error || 'Invalid OTP code. Please verify the code sent to your email.');
+        setAuthLoading(false);
+        return;
+      }
 
       if (view === 'login_otp') {
         // Log in: save existing fetched customer info
@@ -217,7 +258,7 @@ export default function LeadCaptureModal({ proName, proId }) {
           body: JSON.stringify({
             name: name.trim(),
             phone: cleanPhone,
-            email: email.trim()
+            email: cleanEmail
           })
         });
 
@@ -416,27 +457,44 @@ export default function LeadCaptureModal({ proName, proId }) {
                 {/* 3. SIMULATED LOGIN / REGISTER OTP VERIFICATION */}
                 {(view === 'login_otp' || view === 'register_otp') && (
                   <>
-                    {/* Simulated Gateway Banner */}
+                    {/* Simulated / Real Gateway Banner */}
                     <div className="glass animate-fade-in" style={{
-                      padding: "1.25rem", borderLeft: "4px solid var(--accent)", background: "rgba(245, 158, 11, 0.12)",
-                      borderRadius: "12px", marginBottom: "1.5rem", display: "flex", flexDirection: "column", gap: "0.5rem",
-                      boxShadow: "0 12px 40px rgba(245, 158, 11, 0.15)", border: "1px solid rgba(245, 158, 11, 0.2)", borderLeftWidth: "4px"
+                      padding: "1.25rem",
+                      borderLeft: "4px solid var(--accent)",
+                      background: isSimulatedOtp ? "rgba(245, 158, 11, 0.12)" : "rgba(16, 185, 129, 0.12)",
+                      borderRadius: "12px",
+                      marginBottom: "1.5rem",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "0.5rem",
+                      boxShadow: isSimulatedOtp ? "0 12px 40px rgba(245, 158, 11, 0.15)" : "0 12px 40px rgba(16, 185, 129, 0.15)",
+                      border: isSimulatedOtp ? "1px solid rgba(245, 158, 11, 0.2)" : "1px solid rgba(16, 185, 129, 0.2)",
+                      borderLeftWidth: "4px",
+                      borderLeftColor: isSimulatedOtp ? "var(--accent)" : "#10b981"
                     }}>
                       <div className="flex items-center gap-2">
-                        <span style={{ fontSize: "1.25rem" }}>{view === 'login_otp' ? '✉️' : '💬'}</span>
-                        <span style={{ fontSize: "0.8rem", opacity: 0.95, color: "var(--accent)", fontWeight: 700, letterSpacing: "0.06em" }}>
-                          {view === 'login_otp' ? 'SIMULATED EMAIL GATEWAY' : 'SIMULATED SMS GATEWAY'}
+                        <span style={{ fontSize: "1.25rem" }}>{isSimulatedOtp ? '✉️' : '🚀'}</span>
+                        <span style={{ 
+                          fontSize: "0.8rem", 
+                          opacity: 0.95, 
+                          color: isSimulatedOtp ? "var(--accent)" : "#10b981", 
+                          fontWeight: 700, 
+                          letterSpacing: "0.06em" 
+                        }}>
+                          {isSimulatedOtp ? 'SIMULATED EMAIL GATEWAY' : 'REAL-TIME OTP ROUTING'}
                         </span>
                       </div>
                       <div style={{ fontSize: "0.9rem", color: "white" }}>
-                        {view === 'login_otp' ? (
-                          <div>To: <strong>{email.trim()}</strong></div>
+                        <div>To: <strong>{email.trim()}</strong></div>
+                        {isSimulatedOtp ? (
+                          <div style={{ marginTop: "0.35rem", fontSize: "0.95rem" }}>
+                            Your OTP to verify on Carpenterwala is <strong style={{ color: "var(--accent)", fontSize: "1.1rem", letterSpacing: "1px" }}>{generatedOtp}</strong>
+                          </div>
                         ) : (
-                          <div>To: <strong>+91 {formatPhoneNumber(phone)}</strong></div>
+                          <div style={{ marginTop: "0.35rem", fontSize: "0.9rem", opacity: 0.9 }}>
+                            A secure 6-digit OTP code has been successfully dispatched to your email address. Please check your inbox (and spam folder) to complete your verification.
+                          </div>
                         )}
-                        <div style={{ marginTop: "0.35rem", fontSize: "0.95rem" }}>
-                          Your OTP to verify on Carpenterwala is <strong style={{ color: "var(--accent)", fontSize: "1.1rem", letterSpacing: "1px" }}>{generatedOtp}</strong>
-                        </div>
                       </div>
                     </div>
 
@@ -446,7 +504,7 @@ export default function LeadCaptureModal({ proName, proId }) {
                     <p style={{ opacity: 0.8, marginBottom: "1.5rem", fontSize: "0.9rem" }}>
                       {view === 'login_otp' 
                         ? `Welcome back, ${fetchedCustomer?.name || 'Customer'}! Enter the OTP sent to your email to confirm your booking.`
-                        : `We are setting up your account using details: Name: ${name.trim()}, Phone: +91 ${phone.trim()}. Verify phone OTP to complete booking.`
+                        : `We are setting up your account using details: Name: ${name.trim()}, Phone: +91 ${phone.trim()}. Enter the OTP sent to your email to complete booking.`
                       }
                     </p>
 

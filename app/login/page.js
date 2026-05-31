@@ -11,8 +11,10 @@ export default function CustomerLogin() {
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState(1); // 1 = details, 2 = OTP verification
   const [generatedOtp, setGeneratedOtp] = useState('');
+  const [isSimulatedOtp, setIsSimulatedOtp] = useState(false);
   const [otpSentAlert, setOtpSentAlert] = useState(false);
   const [error, setError] = useState('');
+  const [infoMessage, setInfoMessage] = useState('');
   const [loading, setLoading] = useState(false);
   
   // Track existing customer details fetched on successful login-check
@@ -39,6 +41,7 @@ export default function CustomerLogin() {
   const handleSendOtp = async (e) => {
     e.preventDefault();
     setError('');
+    setInfoMessage('');
     
     if (activeTab === 'login') {
       // Validation 1: Email format must meet standard structure
@@ -56,7 +59,9 @@ export default function CustomerLogin() {
         const checkData = await checkRes.json();
 
         if (!checkRes.ok || !checkData.registered) {
-          setError('This email address is not registered yet. Please click the "Create Account" tab to sign up!');
+          // Switch to register tab automatically
+          setActiveTab('register');
+          setInfoMessage('We couldn\'t find an account with that email address, so we\'ve switched you to the "Create Account" tab! Please fill in your name and Indian mobile number to register.');
           setLoading(false);
           return;
         }
@@ -125,28 +130,57 @@ export default function CustomerLogin() {
       }
     }
 
-    // Generate a mock 6-digit OTP
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedOtp(code);
-    
-    // Simulate OTP dispatch delay
-    setTimeout(() => {
+    // Call customer OTP API to trigger real email OTP in production or simulated OTP banner
+    try {
+      const otpRes = await fetch('/api/customer/otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'send', email: email.trim().toLowerCase() })
+      });
+      const otpData = await otpRes.json();
+
+      if (!otpRes.ok) {
+        setError(otpData.error || 'Failed to dispatch verification code. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      setGeneratedOtp(otpData.otp || '');
+      setIsSimulatedOtp(otpData.simulated);
       setStep(2);
       setOtpSentAlert(true);
       setLoading(false);
-    }, 700);
+    } catch (err) {
+      console.error("OTP dispatch failed:", err);
+      setError('Failed to connect to the authentication server. Please try again.');
+      setLoading(false);
+    }
   };
 
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
-    if (otp.trim() !== generatedOtp) {
-      setError('Invalid OTP code. Please enter the exact 6-digit code displayed in the Simulated Gateway banner.');
-      return;
-    }
     setError('');
     setLoading(true);
 
     try {
+      // Call backend to verify the OTP securely
+      const verifyRes = await fetch('/api/customer/otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'verify',
+          email: email.trim().toLowerCase(),
+          otp: otp.trim()
+        })
+      });
+      const verifyData = await verifyRes.json();
+
+      if (!verifyRes.ok) {
+        setError(verifyData.error || 'Invalid OTP code. Please verify the code sent to your email.');
+        setLoading(false);
+        return;
+      }
+
       if (activeTab === 'register') {
         // Call register API to write to Supabase
         const regRes = await fetch('/api/customer/register', {
@@ -198,6 +232,8 @@ export default function CustomerLogin() {
     setGeneratedOtp('');
     setOtpSentAlert(false);
     setError('');
+    setInfoMessage('');
+    setIsSimulatedOtp(false);
     setFetchedCustomer(null);
   };
 
@@ -210,36 +246,45 @@ export default function CustomerLogin() {
     <div className="container flex items-center justify-center" style={{ minHeight: "calc(100vh - 70px)", padding: "2.5rem 1rem" }}>
       <div style={{ width: "100%", maxWidth: "450px" }}>
         
-        {/* Premium Simulated OTP Gateway Banner (Contextual for Email/SMS) */}
+        {/* Premium Simulated / Real OTP Gateway Banner */}
         {otpSentAlert && (
           <div className="glass animate-fade-in" style={{
             padding: "1.25rem",
             borderLeft: "4px solid var(--accent)",
-            background: "rgba(245, 158, 11, 0.12)",
+            background: isSimulatedOtp ? "rgba(245, 158, 11, 0.12)" : "rgba(16, 185, 129, 0.12)",
             borderRadius: "12px",
             marginBottom: "1.5rem",
             display: "flex",
             flexDirection: "column",
             gap: "0.5rem",
-            boxShadow: "0 12px 40px rgba(245, 158, 11, 0.15)",
-            border: "1px solid rgba(245, 158, 11, 0.2)",
-            borderLeftWidth: "4px"
+            boxShadow: isSimulatedOtp ? "0 12px 40px rgba(245, 158, 11, 0.15)" : "0 12px 40px rgba(16, 185, 129, 0.15)",
+            border: isSimulatedOtp ? "1px solid rgba(245, 158, 11, 0.2)" : "1px solid rgba(16, 185, 129, 0.2)",
+            borderLeftWidth: "4px",
+            borderLeftColor: isSimulatedOtp ? "var(--accent)" : "#10b981"
           }}>
             <div className="flex items-center gap-2">
-              <span style={{ fontSize: "1.25rem" }}>{activeTab === 'login' ? '✉️' : '💬'}</span>
-              <span style={{ fontSize: "0.8rem", opacity: 0.95, color: "var(--accent)", fontWeight: 700, letterSpacing: "0.06em" }}>
-                {activeTab === 'login' ? 'SIMULATED EMAIL GATEWAY' : 'SIMULATED SMS GATEWAY'}
+              <span style={{ fontSize: "1.25rem" }}>{isSimulatedOtp ? '✉️' : '🚀'}</span>
+              <span style={{ 
+                fontSize: "0.8rem", 
+                opacity: 0.95, 
+                color: isSimulatedOtp ? "var(--accent)" : "#10b981", 
+                fontWeight: 700, 
+                letterSpacing: "0.06em" 
+              }}>
+                {isSimulatedOtp ? 'SIMULATED EMAIL GATEWAY' : 'REAL-TIME OTP ROUTING'}
               </span>
             </div>
             <div style={{ fontSize: "0.9rem", color: "white" }}>
-              {activeTab === 'login' ? (
-                <div>To: <strong>{email.trim()}</strong></div>
+              <div>To: <strong>{email.trim()}</strong></div>
+              {isSimulatedOtp ? (
+                <div style={{ marginTop: "0.35rem", fontSize: "0.95rem" }}>
+                  Your OTP to log in to Carpenterwala is <strong style={{ color: "var(--accent)", fontSize: "1.1rem", letterSpacing: "1px" }}>{generatedOtp}</strong>
+                </div>
               ) : (
-                <div>To: <strong>+91 {formatPhoneNumber(phone)}</strong></div>
+                <div style={{ marginTop: "0.35rem", fontSize: "0.9rem", opacity: 0.9 }}>
+                  A secure 6-digit OTP code has been successfully dispatched to your email address. Please check your inbox (and spam folder) to complete your verification.
+                </div>
               )}
-              <div style={{ marginTop: "0.35rem", fontSize: "0.95rem" }}>
-                Your OTP to log in to Carpenterwala is <strong style={{ color: "var(--accent)", fontSize: "1.1rem", letterSpacing: "1px" }}>{generatedOtp}</strong>
-              </div>
             </div>
           </div>
         )}
@@ -250,7 +295,7 @@ export default function CustomerLogin() {
             Customer Portal
           </h1>
           <p style={{ textAlign: "center", opacity: 0.8, marginBottom: "2rem", fontSize: "0.92rem" }}>
-            {step === 1 ? 'Access your dashboard or create a new account.' : activeTab === 'login' ? 'Verify your email address to continue.' : 'Verify your mobile number to continue.'}
+            {step === 1 ? 'Access your dashboard or create a new account.' : 'Verify your email address to continue.'}
           </p>
 
           {/* Form Tabs Switcher (Only visible in Step 1) */}
@@ -265,7 +310,7 @@ export default function CustomerLogin() {
             }}>
               <button 
                 type="button"
-                onClick={() => { setActiveTab('login'); setError(''); }}
+                onClick={() => { setActiveTab('login'); setError(''); setInfoMessage(''); }}
                 style={{
                   flex: 1,
                   padding: "0.6rem",
@@ -283,7 +328,7 @@ export default function CustomerLogin() {
               </button>
               <button 
                 type="button"
-                onClick={() => { setActiveTab('register'); setError(''); }}
+                onClick={() => { setActiveTab('register'); setError(''); setInfoMessage(''); }}
                 style={{
                   flex: 1,
                   padding: "0.6rem",
@@ -313,6 +358,20 @@ export default function CustomerLogin() {
               marginBottom: "1.5rem"
             }}>
               ⚠️ {error}
+            </div>
+          )}
+
+          {infoMessage && (
+            <div style={{
+              background: "rgba(59, 130, 246, 0.12)",
+              border: "1px solid rgba(59, 130, 246, 0.25)",
+              color: "#60a5fa",
+              padding: "0.75rem 1rem",
+              borderRadius: "8px",
+              fontSize: "0.88rem",
+              marginBottom: "1.5rem"
+            }}>
+              ℹ️ {infoMessage}
             </div>
           )}
 
@@ -423,7 +482,7 @@ export default function CustomerLogin() {
                     onClick={resetFlow}
                     style={{ background: "none", border: "none", color: "var(--primary)", fontSize: "0.8rem", cursor: "pointer", fontWeight: 700 }}
                   >
-                    {activeTab === 'login' ? 'Edit Email' : 'Edit Phone'}
+                    Edit Email
                   </button>
                 </div>
                 <input 
