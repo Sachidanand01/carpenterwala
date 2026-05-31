@@ -4,8 +4,11 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY || '');
 
-// In-memory OTP storage for development/simulated mode.
-const otpStore = new Map();
+// Prevent dynamic module hot-reload from clearing the OTP map in development
+if (!global.proOtpStore) {
+  global.proOtpStore = new Map();
+}
+const otpStore = global.proOtpStore;
 
 export async function POST(request) {
   try {
@@ -50,10 +53,8 @@ export async function POST(request) {
       // Try sending with Resend if API Key is configured
       if (process.env.RESEND_API_KEY) {
         try {
-          // Free tier onboarding limit: Resend only allows sending to the address you signed up with (e.g. contact@carpenterwala.com)
-          // unless you verify a custom domain. We will attempt sending and catch errors gracefully.
           await resend.emails.send({
-            from: 'Carpenterwala Pro <onboarding@resend.dev>',
+            from: 'Carpenterwala Pro <onboarding@carpenterwala.com>',
             to: cleanEmail,
             subject: 'Your Carpenterwala Pro Verification Code',
             html: `
@@ -68,6 +69,11 @@ export async function POST(request) {
                   <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #1e3a8a;">${generatedCode}</span>
                 </div>
                 <p style="font-size: 0.9rem; color: #666666;">This code is valid for 10 minutes. If you did not request this login, you can safely ignore this email.</p>
+                
+                <div style="margin-top: 25px; padding: 12px; background-color: #fffbeb; border: 1px solid #fef3c7; border-radius: 6px; color: #b45309; font-size: 0.85rem;">
+                  <strong>⚠️ Important Notice:</strong> This is an automated notification. Please do not reply directly to this email address (onboarding@carpenterwala.com) as replies are sent to an unmonitored mailbox and will not be received.
+                </div>
+
                 <hr style="border: 0; border-top: 1px solid #eeeeee; margin: 20px 0;" />
                 <p style="font-size: 0.8rem; color: #999999; text-align: center;">Carpenterwala.com · Bangalore, India</p>
               </div>

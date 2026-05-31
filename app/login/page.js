@@ -263,7 +263,7 @@ export default function CustomerLogin() {
             borderLeftColor: isSimulatedOtp ? "var(--accent)" : "#10b981"
           }}>
             <div className="flex items-center gap-2">
-              <span style={{ fontSize: "1.25rem" }}>{isSimulatedOtp ? '✉️' : '🚀'}</span>
+              <span style={{ fontSize: "1.25rem" }}>✉️</span>
               <span style={{ 
                 fontSize: "0.8rem", 
                 opacity: 0.95, 
@@ -271,7 +271,7 @@ export default function CustomerLogin() {
                 fontWeight: 700, 
                 letterSpacing: "0.06em" 
               }}>
-                {isSimulatedOtp ? 'SIMULATED EMAIL GATEWAY' : 'REAL-TIME OTP ROUTING'}
+                {isSimulatedOtp ? 'SIMULATED EMAIL GATEWAY' : 'OTP sent to your entered emailID'}
               </span>
             </div>
             <div style={{ fontSize: "0.9rem", color: "white" }}>
