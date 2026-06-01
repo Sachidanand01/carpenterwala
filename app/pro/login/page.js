@@ -9,6 +9,7 @@ export default function ProLogin() {
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState(1); // 1 = input details, 2 = otp verify, 3 = select profile (signin only)
   const [generatedOtp, setGeneratedOtp] = useState('');
+  const [otpToken, setOtpToken] = useState('');
   const [isSimulated, setIsSimulated] = useState(false);
   const [otpSentAlert, setOtpSentAlert] = useState(false);
   const [matchedProfiles, setMatchedProfiles] = useState([]);
@@ -56,6 +57,9 @@ export default function ProLogin() {
       } else {
         setGeneratedOtp('');
       }
+      if (data.otpToken) {
+        setOtpToken(data.otpToken);
+      }
       setStep(2);
       setOtpSentAlert(true);
     } catch (err) {
@@ -77,7 +81,7 @@ export default function ProLogin() {
       const res = await fetch('/api/pro/otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'verify', email: email.trim().toLowerCase(), otp: otp.trim() })
+        body: JSON.stringify({ action: 'verify', email: email.trim().toLowerCase(), otp: otp.trim(), otpToken })
       });
       const data = await res.json();
       if (!res.ok) {
@@ -145,6 +149,9 @@ export default function ProLogin() {
       } else {
         setGeneratedOtp('');
       }
+      if (data.otpToken) {
+        setOtpToken(data.otpToken);
+      }
       setStep(2);
       setOtpSentAlert(true);
     } catch (err) {
@@ -169,7 +176,8 @@ export default function ProLogin() {
         body: JSON.stringify({
           action: 'register_verify',
           email: regEmail.trim().toLowerCase(),
-          otp: otp.trim()
+          otp: otp.trim(),
+          otpToken
         })
       });
       const data = await res.json();
@@ -201,7 +209,7 @@ export default function ProLogin() {
   };
 
   const resetFlow = () => {
-    setStep(1); setOtp(''); setGeneratedOtp('');
+    setStep(1); setOtp(''); setGeneratedOtp(''); setOtpToken('');
     setOtpSentAlert(false); setMatchedProfiles([]); setError('');
   };
 

@@ -1,18 +1,13 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { encryptToken, decryptToken } from '@/lib/crypto';
 
 const resend = new Resend(process.env.RESEND_API_KEY || '');
-
-// Prevent dynamic module hot-reload from clearing the OTP map in development
-if (!global.customerOtpStore) {
-  global.customerOtpStore = new Map();
-}
-const otpStore = global.customerOtpStore;
 
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { action, email, otp } = body;
+    const { action, email, otp, otpToken } = body;
 
     const cleanEmail = email?.trim().toLowerCase();
 
@@ -25,8 +20,14 @@ export async function POST(request) {
       const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
       const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes validity
 
-      // Store OTP
-      otpStore.set(cleanEmail, { code: generatedCode, expiresAt });
+      // Generate secure, stateless token for customer OTP
+      const tokenPayload = {
+        type: 'customer_otp',
+        email: cleanEmail,
+        code: generatedCode,
+        expiresAt
+      };
+      const otpTokenStr = encryptToken(tokenPayload);
 
       let sentRealEmail = false;
       let emailError = null;
@@ -114,6 +115,7 @@ export async function POST(request) {
         success: true,
         simulated: !sentRealEmail,
         otp: !sentRealEmail ? generatedCode : null, // Send the code to frontend ONLY for simulation fallback
+        otpToken: otpTokenStr,
         message: sentRealEmail 
           ? 'OTP sent to your email address.' 
           : 'OTP generated (Simulated Gateway due to sandbox mode).'
@@ -126,23 +128,23 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Please enter a 6-digit OTP.' }, { status: 400 });
       }
 
-      const storedOtp = otpStore.get(cleanEmail);
-
-      if (!storedOtp) {
-        return NextResponse.json({ error: 'No OTP requested for this email address.' }, { status: 400 });
+      if (!otpToken) {
+        return NextResponse.json({ error: 'Verification session has expired. Please request a new OTP.' }, { status: 400 });
       }
 
-      if (Date.now() > storedOtp.expiresAt) {
-        otpStore.delete(cleanEmail);
+      const decrypted = decryptToken(otpToken);
+
+      if (!decrypted || decrypted.type !== 'customer_otp' || decrypted.email !== cleanEmail) {
+        return NextResponse.json({ error: 'Invalid verification session. Please request a new OTP.' }, { status: 400 });
+      }
+
+      if (Date.now() > decrypted.expiresAt) {
         return NextResponse.json({ error: 'OTP has expired. Please request a new one.' }, { status: 400 });
       }
 
-      if (storedOtp.code !== otp.trim()) {
+      if (decrypted.code !== otp.trim()) {
         return NextResponse.json({ error: 'Invalid OTP. Please try again.' }, { status: 400 });
       }
-
-      // OTP Verified! Remove it from store.
-      otpStore.delete(cleanEmail);
 
       return NextResponse.json({
         success: true,

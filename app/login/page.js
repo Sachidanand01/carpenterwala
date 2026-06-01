@@ -11,6 +11,7 @@ export default function CustomerLogin() {
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState(1); // 1 = details, 2 = OTP verification
   const [generatedOtp, setGeneratedOtp] = useState('');
+  const [otpToken, setOtpToken] = useState('');
   const [isSimulatedOtp, setIsSimulatedOtp] = useState(false);
   const [otpSentAlert, setOtpSentAlert] = useState(false);
   const [error, setError] = useState('');
@@ -146,6 +147,9 @@ export default function CustomerLogin() {
       }
 
       setGeneratedOtp(otpData.otp || '');
+      if (otpData.otpToken) {
+        setOtpToken(otpData.otpToken);
+      }
       setIsSimulatedOtp(otpData.simulated);
       setStep(2);
       setOtpSentAlert(true);
@@ -170,7 +174,8 @@ export default function CustomerLogin() {
         body: JSON.stringify({
           action: 'verify',
           email: email.trim().toLowerCase(),
-          otp: otp.trim()
+          otp: otp.trim(),
+          otpToken
         })
       });
       const verifyData = await verifyRes.json();
@@ -230,6 +235,7 @@ export default function CustomerLogin() {
     setStep(1);
     setOtp('');
     setGeneratedOtp('');
+    setOtpToken('');
     setOtpSentAlert(false);
     setError('');
     setInfoMessage('');
