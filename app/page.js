@@ -1,8 +1,120 @@
 import Link from "next/link";
 
 export default function Home() {
+  const homeJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://carpenterwala.com/#localbusiness",
+        "name": "Carpenterwala",
+        "image": "https://carpenterwala.com/images/og-image.png",
+        "description": "India's trusted digital marketplace to book verified background-checked carpenters, painters, plumbers, and electricians in Bangalore.",
+        "telephone": "+91-XXXXXXXXXX",
+        "url": "https://carpenterwala.com",
+        "priceRange": "₹₹",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "HSR Layout",
+          "addressLocality": "Bangalore",
+          "addressRegion": "Karnataka",
+          "postalCode": "560102",
+          "addressCountry": "IN"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 12.9141,
+          "longitude": 77.6413
+        },
+        "areaServed": [
+          {
+            "@type": "AdministrativeArea",
+            "name": "Bangalore"
+          },
+          {
+            "@type": "AdministrativeArea",
+            "name": "Bengaluru"
+          }
+        ],
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ],
+          "opens": "00:00",
+          "closes": "23:59"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.85",
+          "reviewCount": "1420",
+          "bestRating": "5",
+          "worstRating": "1"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://carpenterwala.com/#website",
+        "url": "https://carpenterwala.com",
+        "name": "Carpenterwala",
+        "description": "Find verified carpenters, painters, plumbers, and handymen near you in Bangalore.",
+        "publisher": {
+          "@id": "https://carpenterwala.com/#organization"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://carpenterwala.com/find-a-professional?search={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://carpenterwala.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do I book a verified handyman in Bangalore?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can book a verified professional by visiting our 'Find a Professional' page, choosing your required trade (Carpentry, Painting, Plumbing, or Electrical), reading reviews, and connecting directly to request a quote."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are the service professionals background-checked?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, every professional registered on Carpenterwala goes through a robust identity background check and rigorous skill verification to guarantee safety and premium service quality."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you offer a warranty on home repairs?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Absolutely. Registered customers can use our state-of-the-art Warranty Manager on their dashboard to easily upload receipts, track warranties, and request warranty support for any completed home repair jobs."
+            }
+          }
+        ]
+      }
+    ]
+  };
+
   return (
     <div className="container flex flex-col justify-center" style={{ minHeight: "calc(100vh - 70px)" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
+      />
       <section className="flex flex-col items-center justify-center gap-8" style={{ padding: "4rem 0", textAlign: "center" }}>
         
         <div className="animate-fade-in" style={{ maxWidth: "800px" }}>
