@@ -105,8 +105,27 @@ function FAQItem({ question, answer }) {
 export default function FAQPage() {
   const [activeCategory, setActiveCategory] = useState("General");
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.flatMap(cat => 
+      cat.questions.map(faq => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.a
+        }
+      }))
+    )
+  };
+
   return (
     <div className="container animate-fade-in" style={{ padding: "4rem 2rem" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <div style={{ textAlign: "center", marginBottom: "4rem" }}>
         <h1 className="text-gradient" style={{ fontSize: "3.5rem", marginBottom: "1rem" }}>Frequently Asked Questions</h1>
         <p style={{ opacity: 0.8, fontSize: "1.2rem", maxWidth: "700px", margin: "0 auto" }}>
