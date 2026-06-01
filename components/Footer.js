@@ -73,7 +73,8 @@ export default function Footer() {
           <p style={{ opacity: 0.5, fontSize: "0.85rem" }}>
             © {new Date().getFullYear()} Carpenterwala Marketplace. All rights reserved.
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-4" style={{ flexWrap: "wrap" }}>
+            <Link href="/sitemap" style={{ opacity: 0.5, fontSize: "0.85rem" }}>Sitemap</Link>
             <Link href="/privacy" style={{ opacity: 0.5, fontSize: "0.85rem" }}>Privacy Policy</Link>
             <Link href="/terms" style={{ opacity: 0.5, fontSize: "0.85rem" }}>Terms of Service</Link>
           </div>
