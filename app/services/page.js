@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 // Hardcoded initial service catalog
 const SERVICES_DATA = [
@@ -127,7 +128,11 @@ export default function ServicesPage() {
   }, [page, sortedServices]);
 
   return (
-    <div className="container" style={{ padding: "4rem 0" }}>
+    <div className="container" style={{ padding: "2rem 0 4rem 0" }}>
+      <Breadcrumbs items={[
+        { name: "Home", url: "/" },
+        { name: "Services", url: "/services" }
+      ]} />
       <div style={{ textAlign: "center", marginBottom: "3rem" }}>
         <h1 style={{ fontSize: "3rem", marginBottom: "1rem" }}>Our Services</h1>
         <p style={{ fontSize: "1.2rem", opacity: 0.8, maxWidth: "600px", margin: "0 auto" }}>

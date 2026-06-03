@@ -1,13 +1,18 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export default function AboutPage() {
   return (
     <div className="animate-fade-in">
       {/* Hero Section */}
-      <section style={{ padding: "6rem 0", background: "radial-gradient(circle at top left, rgba(245, 158, 11, 0.1), transparent)" }}>
+      <section style={{ padding: "4rem 0", background: "radial-gradient(circle at top left, rgba(245, 158, 11, 0.1), transparent)" }}>
         <div className="container">
+          <Breadcrumbs items={[
+            { name: "Home", url: "/" },
+            { name: "About Us", url: "/about" }
+          ]} />
           <div style={{ 
             display: "grid", 
             gridTemplateColumns: "1fr 1fr", 

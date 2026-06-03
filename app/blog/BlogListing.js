@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { BLOG_POSTS } from '@/lib/blog-data';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 const slugify = (cat) => cat.toLowerCase().replace(/\s+/g, '-');
 
@@ -19,15 +20,28 @@ export default function BlogListing({ selectedCategorySlug = 'all' }) {
     ? BLOG_POSTS 
     : BLOG_POSTS.filter(post => post.category === activeCategory);
 
+  const breadcrumbItems = [
+    { name: "Home", url: "/" }
+  ];
+  if (activeCategory === 'All') {
+    breadcrumbItems.push({ name: "Blog", url: "/blog" });
+  } else {
+    breadcrumbItems.push({ name: "Blog", url: "/blog" });
+    breadcrumbItems.push({ name: activeCategory, url: `/blog/category/${selectedCategorySlug}` });
+  }
+
   return (
     <div className="animate-fade-in" style={{ paddingBottom: '8rem' }}>
       {/* Blog Hero */}
       <section className="glass" style={{ 
-        padding: '8rem 0 6rem', 
+        padding: '2rem 0 6rem', 
         marginBottom: '4rem',
         background: 'linear-gradient(135deg, rgba(var(--primary-rgb), 0.1) 0%, transparent 100%)',
         borderBottom: '1px solid var(--glass-border)'
       }}>
+        <div className="container" style={{ textAlign: 'left', marginBottom: '2rem', paddingLeft: '2rem' }}>
+          <Breadcrumbs items={breadcrumbItems} />
+        </div>
         <div className="container" style={{ textAlign: 'center' }}>
           <h1 style={{ fontSize: '4rem', marginBottom: '1.5rem', fontWeight: '800' }}>
             {activeCategory === 'All' ? 'Expert Insights & Guides' : `${activeCategory} Insights`}

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
   title: "Privacy Policy | Carpenterwala",
@@ -7,7 +8,11 @@ export const metadata = {
 
 export default function PrivacyPolicy() {
   return (
-    <div className="container animate-fade-in" style={{ padding: "4rem 2rem", maxWidth: "900px" }}>
+    <div className="container animate-fade-in" style={{ padding: "2rem 2rem 4rem 2rem", maxWidth: "900px" }}>
+      <Breadcrumbs items={[
+        { name: "Home", url: "/" },
+        { name: "Privacy Policy", url: "/privacy" }
+      ]} />
       <h1 className="text-gradient" style={{ fontSize: "3rem", marginBottom: "2rem" }}>Privacy Policy</h1>
 
       <div className="glass" style={{ padding: "3rem", lineHeight: "1.8", color: "rgba(255,255,255,0.9)" }}>

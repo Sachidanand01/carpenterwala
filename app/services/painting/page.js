@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import ColorVisualizer from '@/components/ColorVisualizer';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
   title: 'Professional Painting Services | Carpenterwala',
@@ -66,6 +67,13 @@ export default function PaintingPage() {
 
   return (
     <div className="animate-fade-in">
+      <div className="container" style={{ padding: "1rem 2rem 0 2rem", marginBottom: "-1.5rem", position: "relative", zIndex: 10 }}>
+        <Breadcrumbs items={[
+          { name: "Home", url: "/" },
+          { name: "Services", url: "/services" },
+          { name: "Painting", url: "/services/painting" }
+        ]} />
+      </div>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

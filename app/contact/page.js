@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
   title: "Contact Us | Carpenterwala",
@@ -7,7 +8,11 @@ export const metadata = {
 
 export default function ContactUs() {
   return (
-    <div className="container animate-fade-in" style={{ padding: "4rem 2rem" }}>
+    <div className="container animate-fade-in" style={{ padding: "2rem 2rem 4rem 2rem" }}>
+      <Breadcrumbs items={[
+        { name: "Home", url: "/" },
+        { name: "Contact Us", url: "/contact" }
+      ]} />
       <div style={{ textAlign: "center", marginBottom: "4rem" }}>
         <h1 className="text-gradient" style={{ fontSize: "3.5rem", marginBottom: "1rem" }}>Contact Us</h1>
         <p style={{ opacity: 0.8, fontSize: "1.2rem", maxWidth: "600px", margin: "0 auto" }}>

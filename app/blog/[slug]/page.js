@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { BLOG_POSTS } from '@/lib/blog-data';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 const slugify = (cat) => cat.toLowerCase().replace(/\s+/g, '-');
 
@@ -33,8 +34,18 @@ export default async function BlogPost({ params }) {
     );
   }
 
+  const breadcrumbItems = [
+    { name: "Home", url: "/" },
+    { name: "Blog", url: "/blog" },
+    { name: post.category, url: `/blog/category/${slugify(post.category)}` },
+    { name: post.title, url: `/blog/${post.slug}` }
+  ];
+
   return (
     <div className="animate-fade-in">
+      <div className="container" style={{ padding: "1.5rem 2rem 0 2rem", marginBottom: "-1.5rem", position: "relative", zIndex: 10 }}>
+        <Breadcrumbs items={breadcrumbItems} />
+      </div>
       {/* Blog Hero */}
       <section style={{ height: '50vh', position: 'relative', overflow: 'hidden' }}>
         <img src={post.image} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />

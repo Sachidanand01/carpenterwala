@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
   title: "Terms and Conditions | Carpenterwala",
@@ -18,7 +19,11 @@ const sections = [
 
 export default function TermsPage() {
   return (
-    <div className="container animate-fade-in" style={{ padding: "4rem 2rem" }}>
+    <div className="container animate-fade-in" style={{ padding: "2rem 2rem 4rem 2rem" }}>
+      <Breadcrumbs items={[
+        { name: "Home", url: "/" },
+        { name: "Terms & Conditions", url: "/terms" }
+      ]} />
       <div style={{ marginBottom: "4rem" }}>
         <h1 className="text-gradient" style={{ fontSize: "3rem", marginBottom: "1rem" }}>Terms & Conditions</h1>
         <p style={{ opacity: 0.7 }}>Last updated: May 2026</p>

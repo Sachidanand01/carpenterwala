@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import VerifiedBadge from "@/components/VerifiedBadge";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 // Helper for distance calculation
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
@@ -145,7 +146,11 @@ function DirectoryContent() {
   }, [allProfiles, category, maxDistance, selectedLanguages, sortBy, userLocation]);
 
   return (
-    <div className="container" style={{ padding: "3rem 0" }}>
+    <div className="container" style={{ padding: "2rem 0 4rem 0" }}>
+      <Breadcrumbs items={[
+        { name: "Home", url: "/" },
+        { name: "Find a Professional", url: "/find-a-professional" }
+      ]} />
       <div style={{ marginBottom: "2rem", textAlign: "center" }}>
         <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>Find a Professional</h1>
         <p style={{ opacity: 0.8, fontSize: "1.1rem" }}>

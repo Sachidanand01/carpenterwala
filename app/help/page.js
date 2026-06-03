@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
   title: "Help Center | Carpenterwala",
@@ -16,7 +17,11 @@ export default function HelpPage() {
   ];
 
   return (
-    <div className="container animate-fade-in" style={{ padding: "4rem 2rem" }}>
+    <div className="container animate-fade-in" style={{ padding: "2rem 2rem 4rem 2rem" }}>
+      <Breadcrumbs items={[
+        { name: "Home", url: "/" },
+        { name: "Help Center", url: "/help" }
+      ]} />
       {/* Hero Section */}
       <div className="glass" style={{ 
         padding: "5rem 2rem", 

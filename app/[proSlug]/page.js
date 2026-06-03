@@ -2,6 +2,7 @@ import { getProfileBySlug } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 import VerifiedBadge from '@/components/VerifiedBadge';
 import LeadCaptureModal from '@/components/LeadCaptureModal';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export async function generateMetadata({ params }) {
   const { proSlug } = await params;
@@ -23,7 +24,12 @@ export default async function ProProfile({ params }) {
   }
 
   return (
-    <div className="container" style={{ padding: "3rem 2rem" }}>
+    <div className="container" style={{ padding: "2rem 2rem 4rem 2rem" }}>
+      <Breadcrumbs items={[
+        { name: "Home", url: "/" },
+        { name: "Find a Professional", url: "/find-a-professional" },
+        { name: profile.name, url: `/${profile.slug}` }
+      ]} />
       <div className="flex gap-8" style={{ flexWrap: "wrap" }}>
         
         {/* Left Column: Profile Card */}

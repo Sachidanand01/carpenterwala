@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
   title: 'Professional Plumbing Services | Carpenterwala',
@@ -65,6 +66,13 @@ export default function PlumbingPage() {
 
   return (
     <div className="animate-fade-in">
+      <div className="container" style={{ padding: "1rem 2rem 0 2rem", marginBottom: "-1.5rem", position: "relative", zIndex: 10 }}>
+        <Breadcrumbs items={[
+          { name: "Home", url: "/" },
+          { name: "Services", url: "/services" },
+          { name: "Plumbing", url: "/services/plumbing" }
+        ]} />
+      </div>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

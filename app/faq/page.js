@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 const faqs = [
   {
@@ -121,7 +122,11 @@ export default function FAQPage() {
   };
 
   return (
-    <div className="container animate-fade-in" style={{ padding: "4rem 2rem" }}>
+    <div className="container animate-fade-in" style={{ padding: "2rem 2rem 4rem 2rem" }}>
+      <Breadcrumbs items={[
+        { name: "Home", url: "/" },
+        { name: "FAQ", url: "/faq" }
+      ]} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
