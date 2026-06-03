@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { BLOG_POSTS } from '@/lib/blog-data';
 
+const slugify = (cat) => cat.toLowerCase().replace(/\s+/g, '-');
+
 export async function generateStaticParams() {
   return BLOG_POSTS.map((post) => ({
     slug: post.slug,
@@ -45,17 +47,23 @@ export default async function BlogPost({ params }) {
           background: 'linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.9))' 
         }}></div>
         <div className="container" style={{ position: 'absolute', bottom: '4rem', left: '50%', transform: 'translateX(-50%)', width: '100%' }}>
-          <div style={{ 
-            backgroundColor: 'var(--primary)', 
-            display: 'inline-block', 
-            padding: '0.3rem 1rem', 
-            borderRadius: '20px', 
-            fontSize: '0.9rem', 
-            fontWeight: 'bold',
-            marginBottom: '1.5rem'
-          }}>
+          <Link 
+            href={`/blog/category/${slugify(post.category)}`}
+            className="category-badge-link"
+            style={{ 
+              backgroundColor: 'var(--primary)', 
+              display: 'inline-block', 
+              padding: '0.3rem 1rem', 
+              borderRadius: '20px', 
+              fontSize: '0.9rem', 
+              fontWeight: 'bold',
+              marginBottom: '1.5rem',
+              textDecoration: 'none',
+              color: 'white'
+            }}
+          >
             {post.category}
-          </div>
+          </Link>
           <h1 style={{ fontSize: '3.5rem', lineHeight: '1.2', maxWidth: '900px' }}>{post.title}</h1>
           <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem', opacity: 0.8 }}>
             <span>By <strong>Carpenterwala Experts</strong></span>
@@ -84,6 +92,23 @@ export default async function BlogPost({ params }) {
             }
             .blog-content li {
               margin-bottom: 0.75rem;
+            }
+            .category-link {
+              transition: all 0.3s ease;
+              text-decoration: none;
+              color: inherit;
+            }
+            .category-link:hover {
+              background-color: var(--primary) !important;
+              color: white !important;
+              transform: translateY(-2px);
+            }
+            .category-badge-link {
+              transition: all 0.3s ease;
+            }
+            .category-badge-link:hover {
+              transform: scale(1.05);
+              filter: brightness(1.1);
             }
           `}} />
           <div dangerouslySetInnerHTML={{ __html: post.content }} className="blog-content" />
@@ -114,10 +139,11 @@ export default async function BlogPost({ params }) {
 
             <h3 style={{ marginBottom: '1.5rem' }}>Related Categories</h3>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {['Carpentry', 'Painting', 'Plumbing', 'Electrical', 'Maintenance'].map(cat => (
+              {Array.from(new Set(BLOG_POSTS.map(p => p.category))).map(cat => (
                 <Link 
                   key={cat} 
-                  href={`/services/${cat.toLowerCase()}`}
+                  href={`/blog/category/${slugify(cat)}`}
+                  className="category-link"
                   style={{ 
                     padding: '0.4rem 1rem', 
                     backgroundColor: 'rgba(255,255,255,0.1)', 

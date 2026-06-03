@@ -41,5 +41,15 @@ export default function sitemap() {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...services, ...blogPosts];
+  // 4. Dynamic Blog categories
+  const categories = Array.from(new Set(BLOG_POSTS.map((post) => post.category)));
+  const blogCategories = categories.map((cat) => ({
+    url: `${baseUrl}/blog/category/${cat.toLowerCase().replace(/\s+/g, '-')}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...services, ...blogPosts, ...blogCategories];
 }
+
