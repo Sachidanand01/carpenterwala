@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import ProGuidedTour from '@/components/ProGuidedTour';
 
 const TABS = [
   { id: 'overview', label: '📊 Overview' },
@@ -67,6 +68,7 @@ export default function ProDashboard() {
   const [onboardError, setOnboardError] = useState('');
   const [savingStep, setSavingStep] = useState(false);
   const [uploadingField, setUploadingField] = useState(null);
+  const [tourActive, setTourActive] = useState(false);
 
   useEffect(() => {
     const id = localStorage.getItem('pro_id');
@@ -78,6 +80,16 @@ export default function ProDashboard() {
     });
     fetchData(id);
   }, [router]);
+
+  // Auto-start guided tour if profile is loaded and onboarding not completed
+  useEffect(() => {
+    if (profile && !profile.onboarding_completed) {
+      const dismissed = localStorage.getItem('pro_tour_dismissed');
+      if (!dismissed) {
+        setTourActive(true);
+      }
+    }
+  }, [profile]);
 
   const fetchData = async (id) => {
     setLoadingProfile(true);
@@ -364,6 +376,13 @@ export default function ProDashboard() {
 
     return (
       <div style={{ minHeight: 'calc(100vh - 70px)', padding: '3rem 0' }}>
+        {/* Guided Tour Walkthrough Overlay */}
+        <ProGuidedTour
+          onboardStep={onboardStep}
+          isActive={tourActive}
+          setIsActive={setTourActive}
+        />
+
         <div className="container" style={{ maxWidth: '780px' }}>
           
           {/* Header */}
@@ -374,7 +393,25 @@ export default function ProDashboard() {
               </div>
               <h1 style={{ fontSize: '1.8rem', fontWeight: 800, marginTop: '0.25rem' }}>Complete Your Professional Profile</h1>
             </div>
-            <button onClick={handleLogout} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>Sign Out</button>
+            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+              <button
+                onClick={() => setTourActive(true)}
+                className="btn btn-secondary"
+                style={{
+                  padding: '0.5rem 1rem',
+                  fontSize: '0.85rem',
+                  borderColor: 'var(--accent)',
+                  color: 'var(--accent)',
+                  fontWeight: 600,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem'
+                }}
+              >
+                📖 Guide / मदद
+              </button>
+              <button onClick={handleLogout} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>Sign Out</button>
+            </div>
           </div>
 
           {/* Progress Indicators */}
@@ -437,32 +474,32 @@ export default function ProDashboard() {
                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                   <div className="flex flex-col gap-1" style={{ flex: 1, minWidth: '240px' }}>
                     <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>Mobile Number (Mandatory for Contact)</label>
-                    <input type="tel" maxLength={10} placeholder="e.g. 9876543210" value={onboardForm.phone}
+                    <input id="tour-phone" type="tel" maxLength={10} placeholder="e.g. 9876543210" value={onboardForm.phone}
                       onChange={e => setOnboardForm({ ...onboardForm, phone: e.target.value.replace(/\D/g, '') })} style={inputStyle} />
                   </div>
                   <div className="flex flex-col gap-1" style={{ flex: 1, minWidth: '240px' }}>
                     <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>Years of Experience</label>
-                    <input type="text" placeholder="e.g. 5 Years" value={onboardForm.experience}
+                    <input id="tour-experience" type="text" placeholder="e.g. 5 Years" value={onboardForm.experience}
                       onChange={e => setOnboardForm({ ...onboardForm, experience: e.target.value })} style={inputStyle} />
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>Full Address (Current Location for Booking Ranges)</label>
-                  <textarea rows={2} placeholder="Enter your full home or office address..." value={onboardForm.full_address}
+                  <textarea id="tour-address" rows={2} placeholder="Enter your full home or office address..." value={onboardForm.full_address}
                     onChange={e => setOnboardForm({ ...onboardForm, full_address: e.target.value })} style={{ ...inputStyle, resize: 'vertical' }} />
                   <span style={{ fontSize: '0.75rem', opacity: 0.5 }}>This remains strictly private and is never shown in your public listing.</span>
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>About Me / Description</label>
-                  <textarea rows={3} placeholder="Tell customers about your skills, specialties, and why they should hire you..." value={onboardForm.about}
+                  <textarea id="tour-about" rows={3} placeholder="Tell customers about your skills, specialties, and why they should hire you..." value={onboardForm.about}
                     onChange={e => setOnboardForm({ ...onboardForm, about: e.target.value })} style={{ ...inputStyle, resize: 'vertical' }} />
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>Skills & Specialties <span style={{ opacity: 0.55 }}>(comma-separated)</span></label>
-                  <input type="text" placeholder="e.g. Sofa Repairs, Modular Kitchens, Wooden Polish" value={onboardForm.skills}
+                  <input id="tour-skills" type="text" placeholder="e.g. Sofa Repairs, Modular Kitchens, Wooden Polish" value={onboardForm.skills}
                     onChange={e => setOnboardForm({ ...onboardForm, skills: e.target.value })} style={inputStyle} />
                 </div>
               </div>
@@ -485,7 +522,7 @@ export default function ProDashboard() {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
                     
                     {/* Aadhaar Front */}
-                    <div style={{
+                    <div id="tour-aadhaar-front" style={{
                       padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
                       borderRadius: '12px', textAlign: 'center', position: 'relative'
                     }}>
@@ -510,7 +547,7 @@ export default function ProDashboard() {
                     </div>
 
                     {/* Aadhaar Back */}
-                    <div style={{
+                    <div id="tour-aadhaar-back" style={{
                       padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
                       borderRadius: '12px', textAlign: 'center', position: 'relative'
                     }}>
@@ -543,7 +580,7 @@ export default function ProDashboard() {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
                     
                     {/* PAN Front */}
-                    <div style={{
+                    <div id="tour-pan-front" style={{
                       padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
                       borderRadius: '12px', textAlign: 'center', position: 'relative'
                     }}>
@@ -568,7 +605,7 @@ export default function ProDashboard() {
                     </div>
 
                     {/* PAN Back (Optional) */}
-                    <div style={{
+                    <div id="tour-pan-back" style={{
                       padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
                       borderRadius: '12px', textAlign: 'center', opacity: onboardForm.pan_back ? 1 : 0.7
                     }}>
@@ -610,7 +647,7 @@ export default function ProDashboard() {
                 </div>
 
                 {/* Profile Photo */}
-                <div style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: '12px' }}>
+                <div id="tour-avatar" style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', borderRadius: '12px' }}>
                   <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     <div style={{
                       width: '90px', height: '90px', borderRadius: '50%',
@@ -648,7 +685,7 @@ export default function ProDashboard() {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
                     
                     {/* Voter Front */}
-                    <div style={{
+                    <div id="tour-voter-front" style={{
                       padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
                       borderRadius: '12px', textAlign: 'center'
                     }}>
@@ -673,7 +710,7 @@ export default function ProDashboard() {
                     </div>
 
                     {/* Voter Back */}
-                    <div style={{
+                    <div id="tour-voter-back" style={{
                       padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
                       borderRadius: '12px', textAlign: 'center', opacity: onboardForm.voter_driving_back ? 1 : 0.7
                     }}>
@@ -703,7 +740,7 @@ export default function ProDashboard() {
                 {/* Police Verification copy */}
                 <div>
                   <h3 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>2. Official Police Verification Copy (Mandatory)</h3>
-                  <div style={{
+                  <div id="tour-police" style={{
                     padding: '1.5rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
                     borderRadius: '12px', textAlign: 'center'
                   }}>
@@ -742,7 +779,7 @@ export default function ProDashboard() {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', padding: '1.25rem', borderRadius: '12px' }}>
+                <div id="tour-summary" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', padding: '1.25rem', borderRadius: '12px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.04)', paddingBottom: '0.4rem' }}>
                     <span style={{ opacity: 0.6, fontSize: '0.88rem' }}>Name</span>
                     <span style={{ fontWeight: 600, fontSize: '0.88rem' }}>{displayName}</span>
@@ -807,11 +844,11 @@ export default function ProDashboard() {
               )}
 
               {onboardStep < 4 ? (
-                <button onClick={handleNextStep} disabled={savingStep} className="btn btn-primary" style={{ padding: '0.7rem 1.8rem' }}>
+                <button id="tour-next-btn" onClick={handleNextStep} disabled={savingStep} className="btn btn-primary" style={{ padding: '0.7rem 1.8rem' }}>
                   {savingStep ? 'Saving Progress…' : 'Next Step →'}
                 </button>
               ) : (
-                <button onClick={handleCompleteOnboarding} disabled={savingStep} className="btn btn-primary" style={{
+                <button id="tour-submit" onClick={handleCompleteOnboarding} disabled={savingStep} className="btn btn-primary" style={{
                   padding: '0.7rem 2.2rem', background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none',
                   boxShadow: '0 4px 15px rgba(16,185,129,0.3)'
                 }}>
