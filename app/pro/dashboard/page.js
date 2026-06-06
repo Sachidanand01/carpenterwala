@@ -28,7 +28,7 @@ function StatCard({ label, value, sub, color }) {
 function Stars({ rating }) {
   return (
     <span>
-      {[1,2,3,4,5].map(i => (
+      {[1, 2, 3, 4, 5].map(i => (
         <span key={i} style={{ color: i <= rating ? '#f59e0b' : 'rgba(255,255,255,0.2)', fontSize: '0.9rem' }}>★</span>
       ))}
     </span>
@@ -103,7 +103,7 @@ export default function ProDashboard() {
       if (profData.profile) {
         setProfile(profData.profile);
         setPortfolio(profData.profile.portfolio || []);
-        
+
         // Populate standard form
         setForm({
           name: profData.profile.name || '',
@@ -144,7 +144,7 @@ export default function ProDashboard() {
   };
 
   const handleLogout = () => {
-    ['pro_id','pro_slug','pro_name','pro_trade'].forEach(k => localStorage.removeItem(k));
+    ['pro_id', 'pro_slug', 'pro_name', 'pro_trade'].forEach(k => localStorage.removeItem(k));
     window.dispatchEvent(new Event('pro-login-changed'));
     router.push('/pro/login');
   };
@@ -205,7 +205,7 @@ export default function ProDashboard() {
           const max_width = 600; // Keep image compact & responsive
           let width = img.width;
           let height = img.height;
-          
+
           if (width > height) {
             if (width > max_width) {
               height *= max_width / width;
@@ -217,12 +217,12 @@ export default function ProDashboard() {
               height = max_width;
             }
           }
-          
+
           canvas.width = width;
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
-          
+
           // Compress JPEG with 0.6 quality for minimal payload overhead (avg ~40KB)
           const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
           resolve(dataUrl);
@@ -267,7 +267,7 @@ export default function ProDashboard() {
       if (completionStatus) {
         payload.onboarding_completed = true;
       }
-      
+
       const res = await fetch('/api/pro/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -384,7 +384,7 @@ export default function ProDashboard() {
         />
 
         <div className="container" style={{ maxWidth: '780px' }}>
-          
+
           {/* Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
@@ -459,7 +459,7 @@ export default function ProDashboard() {
 
           {/* Form Wizard Step Card */}
           <div className="glass animate-fade-in" style={{ padding: '2.5rem', borderRadius: '20px', boxShadow: '0 8px 40px rgba(0,0,0,0.3)' }}>
-            
+
             {/* STEP 1: CONTACT INFO & BIO */}
             {onboardStep === 1 && (
               <div className="flex flex-col gap-4">
@@ -485,7 +485,7 @@ export default function ProDashboard() {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>Full Address (Current Location for Booking Ranges)</label>
+                  <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>Full Address with Zipcode (Current Location for Booking Ranges)</label>
                   <textarea id="tour-address" rows={2} placeholder="Enter your full home or office address..." value={onboardForm.full_address}
                     onChange={e => setOnboardForm({ ...onboardForm, full_address: e.target.value })} style={{ ...inputStyle, resize: 'vertical' }} />
                   <span style={{ fontSize: '0.75rem', opacity: 0.5 }}>This remains strictly private and is never shown in your public listing.</span>
@@ -520,7 +520,7 @@ export default function ProDashboard() {
                 <div>
                   <h3 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>1. Aadhaar Card Scan</h3>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
-                    
+
                     {/* Aadhaar Front */}
                     <div id="tour-aadhaar-front" style={{
                       padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
@@ -529,7 +529,7 @@ export default function ProDashboard() {
                       <div style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>📇</div>
                       <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>Aadhaar Front Side</div>
                       <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.2rem', marginBottom: '0.75rem' }}>Upload clear picture scan</div>
-                      
+
                       {onboardForm.aadhaar_front ? (
                         <div className="flex flex-col items-center gap-2">
                           <img src={onboardForm.aadhaar_front} style={{ width: '100%', maxHeight: '110px', objectFit: 'contain', borderRadius: '6px' }} />
@@ -554,7 +554,7 @@ export default function ProDashboard() {
                       <div style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>📇</div>
                       <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>Aadhaar Back Side</div>
                       <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.2rem', marginBottom: '0.75rem' }}>Upload address page scan</div>
-                      
+
                       {onboardForm.aadhaar_back ? (
                         <div className="flex flex-col items-center gap-2">
                           <img src={onboardForm.aadhaar_back} style={{ width: '100%', maxHeight: '110px', objectFit: 'contain', borderRadius: '6px' }} />
@@ -578,7 +578,7 @@ export default function ProDashboard() {
                 <div>
                   <h3 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>2. PAN Card Scan</h3>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
-                    
+
                     {/* PAN Front */}
                     <div id="tour-pan-front" style={{
                       padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
@@ -587,7 +587,7 @@ export default function ProDashboard() {
                       <div style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>💳</div>
                       <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>PAN Front Side</div>
                       <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.2rem', marginBottom: '0.75rem' }}>Upload details front scan</div>
-                      
+
                       {onboardForm.pan_front ? (
                         <div className="flex flex-col items-center gap-2">
                           <img src={onboardForm.pan_front} style={{ width: '100%', maxHeight: '110px', objectFit: 'contain', borderRadius: '6px' }} />
@@ -612,7 +612,7 @@ export default function ProDashboard() {
                       <div style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>💳</div>
                       <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>PAN Back Side <span style={{ fontSize: '0.75rem', opacity: 0.6 }}>(Optional)</span></div>
                       <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.2rem', marginBottom: '0.75rem' }}>Upload signature back scan</div>
-                      
+
                       {onboardForm.pan_back ? (
                         <div className="flex flex-col items-center gap-2">
                           <img src={onboardForm.pan_back} style={{ width: '100%', maxHeight: '110px', objectFit: 'contain', borderRadius: '6px' }} />
@@ -664,7 +664,7 @@ export default function ProDashboard() {
                     <div style={{ flex: 1 }}>
                       <h3 style={{ fontSize: '0.95rem', fontWeight: 700 }}>Clear Public Profile Photo (Mandatory)</h3>
                       <p style={{ opacity: 0.55, fontSize: '0.78rem', marginTop: '0.15rem', marginBottom: '0.6rem' }}>This image is displayed to Bengaluru customers on your public profile page.</p>
-                      
+
                       {onboardForm.avatar ? (
                         <button onClick={() => setOnboardForm(prev => ({ ...prev, avatar: '' }))} className="btn btn-secondary" style={{ padding: '0.35rem 0.75rem', fontSize: '0.78rem' }}>
                           Change Profile Photo
@@ -683,7 +683,7 @@ export default function ProDashboard() {
                 <div>
                   <h3 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>1. Voter ID or Driving License</h3>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
-                    
+
                     {/* Voter Front */}
                     <div id="tour-voter-front" style={{
                       padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
@@ -692,7 +692,7 @@ export default function ProDashboard() {
                       <div style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>🪪</div>
                       <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>Front Side Scan</div>
                       <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.2rem', marginBottom: '0.75rem' }}>Upload details front scan</div>
-                      
+
                       {onboardForm.voter_driving_front ? (
                         <div className="flex flex-col items-center gap-2">
                           <img src={onboardForm.voter_driving_front} style={{ width: '100%', maxHeight: '110px', objectFit: 'contain', borderRadius: '6px' }} />
@@ -717,7 +717,7 @@ export default function ProDashboard() {
                       <div style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>🪪</div>
                       <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>Back Side Scan <span style={{ fontSize: '0.75rem', opacity: 0.6 }}>(Optional)</span></div>
                       <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.2rem', marginBottom: '0.75rem' }}>Upload address back scan</div>
-                      
+
                       {onboardForm.voter_driving_back ? (
                         <div className="flex flex-col items-center gap-2">
                           <img src={onboardForm.voter_driving_back} style={{ width: '100%', maxHeight: '110px', objectFit: 'contain', borderRadius: '6px' }} />
@@ -747,7 +747,7 @@ export default function ProDashboard() {
                     <div style={{ fontSize: '1.8rem', marginBottom: '0.4rem' }}>👮‍♂️</div>
                     <div style={{ fontSize: '0.9rem', fontWeight: 600 }}>Police Verification Certificate Scan</div>
                     <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.2rem', marginBottom: '0.75rem' }}>Upload certificate image (PNG/JPG)</div>
-                    
+
                     {onboardForm.police_verification ? (
                       <div className="flex flex-col items-center gap-2">
                         <img src={onboardForm.police_verification} style={{ width: '100%', maxHeight: '140px', objectFit: 'contain', borderRadius: '6px' }} />
@@ -931,7 +931,7 @@ export default function ProDashboard() {
         {/* ── OVERVIEW TAB ── */}
         {tab === 'overview' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            
+
             {/* Pending Verification Notice */}
             {!profile?.verified && (
               <div className="glass" style={{
@@ -1057,32 +1057,32 @@ export default function ProDashboard() {
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                 <div className="flex flex-col gap-1" style={{ flex: 1, minWidth: '200px' }}>
                   <label style={{ fontSize: '0.88rem', fontWeight: 500, opacity: 0.8 }}>Full Name</label>
-                  <input type="text" value={form.name} onChange={e => setForm({...form, name: e.target.value})} style={inputStyle} />
+                  <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} style={inputStyle} />
                 </div>
                 <div className="flex flex-col gap-1" style={{ flex: 1, minWidth: '200px' }}>
                   <label style={{ fontSize: '0.88rem', fontWeight: 500, opacity: 0.8 }}>Trade / Profession</label>
-                  <input type="text" value={form.trade} onChange={e => setForm({...form, trade: e.target.value})} style={inputStyle} />
+                  <input type="text" value={form.trade} onChange={e => setForm({ ...form, trade: e.target.value })} style={inputStyle} />
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                 <div className="flex flex-col gap-1" style={{ flex: 1, minWidth: '200px' }}>
                   <label style={{ fontSize: '0.88rem', fontWeight: 500, opacity: 0.8 }}>Years of Experience</label>
-                  <input type="text" placeholder="e.g. 8 Years" value={form.experience} onChange={e => setForm({...form, experience: e.target.value})} style={inputStyle} />
+                  <input type="text" placeholder="e.g. 8 Years" value={form.experience} onChange={e => setForm({ ...form, experience: e.target.value })} style={inputStyle} />
                 </div>
                 <div className="flex flex-col gap-1" style={{ flex: 1, minWidth: '200px' }}>
                   <label style={{ fontSize: '0.88rem', fontWeight: 500, opacity: 0.8 }}>Service Area / Location</label>
-                  <input type="text" placeholder="e.g. Indiranagar, Bangalore" value={form.location} onChange={e => setForm({...form, location: e.target.value})} style={inputStyle} />
+                  <input type="text" placeholder="e.g. Indiranagar, Bangalore" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} style={inputStyle} />
                 </div>
               </div>
               <div className="flex flex-col gap-1">
                 <label style={{ fontSize: '0.88rem', fontWeight: 500, opacity: 0.8 }}>About Me</label>
-                <textarea rows={4} value={form.about} onChange={e => setForm({...form, about: e.target.value})}
+                <textarea rows={4} value={form.about} onChange={e => setForm({ ...form, about: e.target.value })}
                   style={{ ...inputStyle, resize: 'vertical' }} />
               </div>
               <div className="flex flex-col gap-1">
                 <label style={{ fontSize: '0.88rem', fontWeight: 500, opacity: 0.8 }}>Skills <span style={{ opacity: 0.5 }}>(comma separated)</span></label>
                 <input type="text" placeholder="e.g. Interior Painting, Wall Texture, Waterproofing"
-                  value={form.skills} onChange={e => setForm({...form, skills: e.target.value})} style={inputStyle} />
+                  value={form.skills} onChange={e => setForm({ ...form, skills: e.target.value })} style={inputStyle} />
               </div>
               <div style={{ paddingTop: '0.75rem', borderTop: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <button type="submit" className="btn btn-primary" disabled={saveStatus === 'saving'}>

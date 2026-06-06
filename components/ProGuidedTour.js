@@ -72,12 +72,12 @@ const TOUR_DATA = {
       target: "tour-skills",
       title: {
         en: "🔨 Skills & Specialties",
-        hi: "🔨 हुनर और कौशल",
+        hi: "🔨 कौशल",
         ka: "🔨 ಕೌಶಲ್ಯಗಳು ಮತ್ತು ಪರಿಣತಿಗಳು"
       },
       desc: {
         en: "Write your skills separated by commas. (e.g., Sofa repairs, Modular kitchen, Wooden polish)",
-        hi: "कोमा (,) लगाकर अपने हुनर लिखें। (जैसे: सोफा रिपेयर, मॉडलर किचन, पॉलिश)",
+        hi: "कोमा (,) लगाकर अपने कौशल लिखें। (जैसे: सोफा रिपेयर, मॉडलर किचन, पॉलिश)",
         ka: "ನಿಮ್ಮ ಕೌಶಲ್ಯಗಳನ್ನು ಅರ್ಧವಿರಾಮಚಿಹ್ನೆಯಿಂದ (,) ಬೇರ್ಪಡಿಸಿ ಬರೆಯಿರಿ. (ಉದಾಹರಣೆಗೆ: ಸೋಫಾ ರಿಪೇರಿ, ಮಾಡ್ಯುಲರ್ ಅಡುಗೆಮನೆ, ವುಡನ್ ಪಾಲಿಶ್)"
       }
     },
@@ -294,7 +294,7 @@ export default function ProGuidedTour({ onboardStep, onComplete, isActive, setIs
     if (el) {
       // Scroll target into center view if needed
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      
+
       // Calculate coordinates after scroll/layout settling
       setTimeout(() => {
         const rect = el.getBoundingClientRect();
