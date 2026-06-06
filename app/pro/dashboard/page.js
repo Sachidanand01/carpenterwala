@@ -113,6 +113,7 @@ export default function ProDashboard() {
           about: profData.profile.about || '',
           skills: Array.isArray(profData.profile.skills) ? profData.profile.skills.join(', ') : '',
           accepting_leads: profData.profile.accepting_leads !== false,
+          pending_avatar: profData.profile.pending_avatar || null,
         });
 
         // Populate onboarding wizard form
@@ -179,6 +180,30 @@ export default function ProDashboard() {
   };
 
   const handleRemovePhoto = (url) => setPortfolio(prev => prev.filter(p => p !== url));
+
+  const handleProfileAvatarChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file (PNG, JPG, JPEG).');
+      return;
+    }
+
+    setUploadingField('pending_avatar');
+    try {
+      const base64 = await compressImage(file);
+      setForm(prev => ({ ...prev, pending_avatar: base64 }));
+    } catch (err) {
+      alert('Failed to process image.');
+    } finally {
+      setUploadingField(null);
+    }
+  };
+
+  const handleClearPendingAvatar = () => {
+    setForm(prev => ({ ...prev, pending_avatar: null }));
+  };
 
   const handleSavePortfolio = async () => {
     setPortfolioStatus('saving');
@@ -1055,6 +1080,65 @@ export default function ProDashboard() {
               Changes will appear on your public listing at <Link href={`/${proInfo?.slug}`} style={{ color: 'var(--primary)' }}>carpenterwala.com/{proInfo?.slug}</Link>
             </p>
             <form className="flex flex-col gap-4" onSubmit={handleSaveProfile}>
+              
+              {/* Profile Image Update Section */}
+              <div className="glass" style={{ padding: '1.5rem', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap', border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.01)' }}>
+                <div style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '50%', border: '2px solid var(--primary)', overflow: 'hidden', background: 'rgba(255,255,255,0.05)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {profile?.avatar ? (
+                    <img src={profile.avatar} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Avatar" />
+                  ) : (
+                    <span style={{ fontSize: '2rem', opacity: 0.6 }}>👤</span>
+                  )}
+                </div>
+                <div style={{ flex: 1, minWidth: '200px' }}>
+                  <h3 style={{ fontSize: '0.95rem', fontWeight: 700, margin: 0 }}>Profile Picture</h3>
+                  <p style={{ opacity: 0.6, fontSize: '0.8rem', margin: '0.2rem 0 0.5rem 0', lineHeight: '1.3' }}>
+                    Choose a new photo. It will update on your public page once administrators approve it.
+                  </p>
+                  
+                  <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                    <label className="btn btn-secondary" style={{ padding: '0.4rem 0.9rem', fontSize: '0.8rem', cursor: 'pointer', display: 'inline-block' }}>
+                      {uploadingField === 'pending_avatar' ? 'Processing…' : '📷 Select Photo'}
+                      <input type="file" accept="image/*" onChange={handleProfileAvatarChange} style={{ display: 'none' }} />
+                    </label>
+                    
+                    {form.pending_avatar && (
+                      <button 
+                        type="button" 
+                        onClick={handleClearPendingAvatar} 
+                        className="btn btn-secondary" 
+                        style={{ padding: '0.4rem 0.9rem', fontSize: '0.8rem', borderColor: 'var(--accent)', color: 'var(--accent)', background: 'rgba(245,158,11,0.05)' }}
+                      >
+                        Cancel Update
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Preview of pending avatar */}
+                {form.pending_avatar && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderLeft: '1px solid var(--glass-border)', paddingLeft: '1.5rem' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ width: '60px', height: '60px', borderRadius: '50%', border: '2.5px dashed var(--accent)', overflow: 'hidden', margin: '0 auto 0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <img src={form.pending_avatar} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Pending" />
+                      </div>
+                      <span style={{ fontSize: '0.72rem', color: 'var(--accent)', fontWeight: 700 }}>New Upload (Unsaved)</span>
+                    </div>
+                  </div>
+                )}
+                
+                {profile?.pending_avatar && !form.pending_avatar && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderLeft: '1px solid var(--glass-border)', paddingLeft: '1.5rem' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ width: '60px', height: '60px', borderRadius: '50%', border: '2.5px dashed #f59e0b', overflow: 'hidden', margin: '0 auto 0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <img src={profile.pending_avatar} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Pending" />
+                      </div>
+                      <span style={{ fontSize: '0.72rem', color: '#f59e0b', fontWeight: 700 }}>Under Review ⏳</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                 <div className="flex flex-col gap-1" style={{ flex: 1, minWidth: '200px' }}>
                   <label style={{ fontSize: '0.88rem', fontWeight: 500, opacity: 0.8 }}>Full Name</label>

@@ -123,21 +123,30 @@ export default function AdminDashboardClient() {
 
       const result = await response.json();
       if (response.ok && result.success) {
+        let msg = '';
+        if (action === 'verify') msg = 'Professional successfully verified & approved ✓';
+        else if (action === 'reject') msg = 'Professional rejected & reverted to onboarding';
+        else if (action === 'approve_avatar') msg = 'Profile image approved successfully ✓';
+        else if (action === 'reject_avatar') msg = 'Profile image update request rejected';
+
         setActionStatus({
           type: 'success',
-          message: `Professional successfully ${action === 'verify' ? 'verified & approved ✓' : 'rejected & reverted'}.`
+          message: msg
         });
         
         // Refresh local data using our secure token
         await fetchData(adminToken);
 
-        // If the review modal is open, update the selected profile or close it
+        // If the review modal is open, update the selected profile state locally
         if (selectedPro && selectedPro.id === proId) {
-          const updatedPro = profiles.find(p => p.id === proId);
-          if (updatedPro) {
-            setSelectedPro({ ...updatedPro, verified: action === 'verify', onboarding_completed: action === 'verify' });
-          } else {
-            setSelectedPro(null);
+          if (action === 'verify') {
+            setSelectedPro(prev => ({ ...prev, verified: true, onboarding_completed: true }));
+          } else if (action === 'reject') {
+            setSelectedPro(prev => ({ ...prev, verified: false, onboarding_completed: false, onboarding_step: 1 }));
+          } else if (action === 'approve_avatar') {
+            setSelectedPro(prev => ({ ...prev, avatar: prev.pending_avatar, pending_avatar: null }));
+          } else if (action === 'reject_avatar') {
+            setSelectedPro(prev => ({ ...prev, pending_avatar: null }));
           }
         }
         
@@ -157,7 +166,7 @@ export default function AdminDashboardClient() {
   const totalLeads = leads.length;
   const totalProfiles = profiles.length;
   const verifiedProfilesCount = profiles.filter(p => p.verified).length;
-  const pendingProfiles = profiles.filter(p => p.onboarding_completed && !p.verified);
+  const pendingProfiles = profiles.filter(p => (p.onboarding_completed && !p.verified) || !!p.pending_avatar);
   const pendingProfilesCount = pendingProfiles.length;
 
   // Calculate top demand trade dynamically
@@ -602,9 +611,16 @@ export default function AdminDashboardClient() {
                         {pro.created_at ? new Date(pro.created_at).toLocaleDateString(undefined, { dateStyle: 'medium' }) : '—'}
                       </td>
                       <td style={{ padding: '1rem' }}>
-                        <span style={{ background: 'rgba(59,130,246,0.15)', color: '#60a5fa', fontSize: '0.75rem', padding: '0.2rem 0.6rem', borderRadius: '20px', fontWeight: 600 }}>
-                          🏁 Step 4 Completed
-                        </span>
+                        {pro.pending_avatar && (
+                          <span style={{ background: 'rgba(245,158,11,0.15)', color: 'var(--accent)', fontSize: '0.75rem', padding: '0.2rem 0.6rem', borderRadius: '20px', fontWeight: 600, marginRight: '0.5rem', display: 'inline-block' }}>
+                            📷 Photo Change
+                          </span>
+                        )}
+                        {pro.onboarding_completed && !pro.verified && (
+                          <span style={{ background: 'rgba(59,130,246,0.15)', color: '#60a5fa', fontSize: '0.75rem', padding: '0.2rem 0.6rem', borderRadius: '20px', fontWeight: 600, display: 'inline-block' }}>
+                            🏁 Document Audit
+                          </span>
+                        )}
                       </td>
                       <td style={{ padding: '1rem', textAlign: 'right' }}>
                         <button
@@ -854,6 +870,78 @@ export default function AdminDashboardClient() {
                     </div>
                   </div>
                 </div>
+
+                {/* Pending Profile Image Change Section */}
+                {selectedPro.pending_avatar && (
+                  <div className="glass animate-fade-in" style={{
+                    padding: '1.25rem',
+                    border: '1.5px dashed var(--accent)',
+                    borderRadius: '14px',
+                    background: 'rgba(245,158,11,0.04)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.75rem',
+                    marginTop: '0.5rem'
+                  }}>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                      <div style={{ 
+                        width: '60px', 
+                        height: '60px', 
+                        borderRadius: '50%', 
+                        border: '2px solid var(--accent)', 
+                        overflow: 'hidden', 
+                        flexShrink: 0, 
+                        cursor: 'zoom-in',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: 'rgba(255,255,255,0.05)'
+                      }} onClick={() => setZoomedImage({ title: 'Pending Profile Image Update', url: selectedPro.pending_avatar })}>
+                        <img src={selectedPro.pending_avatar} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Pending Avatar" />
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <h4 style={{ fontSize: '0.85rem', fontWeight: 800, margin: 0, color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                          <span>📷</span> Photo Update Requested
+                        </h4>
+                        <p style={{ opacity: 0.7, fontSize: '0.75rem', margin: '0.15rem 0 0 0', lineHeight: 1.3 }}>
+                          Review and approve/reject the professional's request to change their public profile photo.
+                        </p>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.25rem' }}>
+                      <button
+                        disabled={processingId !== null}
+                        onClick={() => handleVerifyAction(selectedPro.id, 'approve_avatar')}
+                        className="btn btn-primary"
+                        style={{
+                          flex: 1,
+                          padding: '0.45rem',
+                          fontSize: '0.78rem',
+                          background: 'linear-gradient(135deg, #10b981, #059669)',
+                          border: 'none',
+                          boxShadow: 'none'
+                        }}
+                      >
+                        ✓ Approve Photo
+                      </button>
+                      <button
+                        disabled={processingId !== null}
+                        onClick={() => handleVerifyAction(selectedPro.id, 'reject_avatar')}
+                        className="btn btn-secondary"
+                        style={{
+                          flex: 1,
+                          padding: '0.45rem',
+                          fontSize: '0.78rem',
+                          borderColor: 'rgba(239,68,68,0.4)',
+                          color: '#f87171',
+                          background: 'rgba(239,68,68,0.05)'
+                        }}
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', padding: '1.25rem', borderRadius: '14px' }}>
                   <div style={{ display: 'flex', justifyBetween: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.04)', paddingBottom: '0.5rem' }}>

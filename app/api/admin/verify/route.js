@@ -40,8 +40,32 @@ export async function POST(request) {
         onboarding_completed: false, // Reverts them to onboarding wizard
         onboarding_step: 1 // Start from beginning to correct details
       };
+    } else if (action === 'approve_avatar') {
+      // Fetch the profile to get the pending_avatar
+      const { data: profile, error: getErr } = await supabase
+        .from('profiles')
+        .select('pending_avatar')
+        .eq('id', proId)
+        .single();
+      
+      if (getErr || !profile) {
+        return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+      }
+      
+      if (!profile.pending_avatar) {
+        return NextResponse.json({ error: 'No pending photo update found to approve' }, { status: 400 });
+      }
+
+      updateData = {
+        avatar: profile.pending_avatar,
+        pending_avatar: null
+      };
+    } else if (action === 'reject_avatar') {
+      updateData = {
+        pending_avatar: null
+      };
     } else {
-      return NextResponse.json({ error: 'Invalid action. Must be "verify" or "reject"' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid action. Must be "verify", "reject", "approve_avatar", or "reject_avatar"' }, { status: 400 });
     }
 
     const { error } = await supabase
