@@ -13,7 +13,7 @@ export async function GET(request) {
       .from('profiles')
       .select(`id, slug, name, email, trade, experience, location, avatar, about, skills, portfolio, verified, created_at,
         phone, full_address, aadhaar_front, aadhaar_back, pan_front, pan_back, 
-        voter_driving_front, voter_driving_back, police_verification, onboarding_completed, onboarding_step,
+        voter_driving_front, voter_driving_back, police_verification, onboarding_completed, onboarding_step, accepting_leads,
         reviews ( id, author, rating, text, created_at )`)
       .eq('id', id)
       .single();
@@ -32,7 +32,7 @@ export async function PUT(request) {
     const { 
       id, name, trade, location, about, skills, experience, portfolio, avatar,
       phone, full_address, aadhaar_front, aadhaar_back, pan_front, pan_back, 
-      voter_driving_front, voter_driving_back, police_verification, onboarding_completed, onboarding_step
+      voter_driving_front, voter_driving_back, police_verification, onboarding_completed, onboarding_step, accepting_leads
     } = body;
 
     if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 });
@@ -65,6 +65,7 @@ export async function PUT(request) {
     if (police_verification !== undefined) updateData.police_verification = police_verification;
     if (onboarding_completed !== undefined) updateData.onboarding_completed = onboarding_completed;
     if (onboarding_step !== undefined) updateData.onboarding_step = onboarding_step;
+    if (accepting_leads !== undefined) updateData.accepting_leads = accepting_leads;
 
     const { error } = await supabase.from('profiles').update(updateData).eq('id', id);
     if (error) throw error;

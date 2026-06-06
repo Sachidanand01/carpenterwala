@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-export default function LeadCaptureModal({ proName, proId }) {
+export default function LeadCaptureModal({ proName, proId, acceptingLeads = true }) {
   const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState('idle'); // idle, loading, success
   
@@ -290,13 +290,23 @@ export default function LeadCaptureModal({ proName, proId }) {
 
   return (
     <>
-      <button 
-        onClick={() => setIsOpen(true)}
-        className="btn btn-primary" 
-        style={{ width: "100%", padding: "0.85rem" }}
-      >
-        Request Quote
-      </button>
+      {!acceptingLeads ? (
+        <button 
+          disabled
+          className="btn btn-secondary" 
+          style={{ width: "100%", padding: "0.85rem", cursor: "not-allowed", opacity: 0.6 }}
+        >
+          Not Accepting Bookings
+        </button>
+      ) : (
+        <button 
+          onClick={() => setIsOpen(true)}
+          className="btn btn-primary" 
+          style={{ width: "100%", padding: "0.85rem" }}
+        >
+          Request Quote
+        </button>
+      )}
 
       {isOpen && (
         <div style={{

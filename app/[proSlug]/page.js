@@ -58,9 +58,15 @@ export default async function ProProfile({ params }) {
                 <span style={{ opacity: 0.7 }}>Location</span>
                 <span style={{ fontWeight: 600 }}>{profile.location}</span>
               </div>
+              <div className="flex justify-between">
+                <span style={{ opacity: 0.7 }}>Accepting Bookings</span>
+                <span style={{ fontWeight: 600, color: profile.accepting_leads !== false ? '#34d399' : '#f87171' }}>
+                  {profile.accepting_leads !== false ? 'Yes' : 'No'}
+                </span>
+              </div>
             </div>
 
-            <LeadCaptureModal proName={profile.name} proId={profile.id} />
+            <LeadCaptureModal proName={profile.name} proId={profile.id} acceptingLeads={profile.accepting_leads !== false} />
           </div>
         </div>
 

@@ -112,6 +112,7 @@ export default function ProDashboard() {
           location: profData.profile.location || '',
           about: profData.profile.about || '',
           skills: Array.isArray(profData.profile.skills) ? profData.profile.skills.join(', ') : '',
+          accepting_leads: profData.profile.accepting_leads !== false,
         });
 
         // Populate onboarding wizard form
@@ -1084,6 +1085,64 @@ export default function ProDashboard() {
                 <input type="text" placeholder="e.g. Interior Painting, Wall Texture, Waterproofing"
                   value={form.skills} onChange={e => setForm({ ...form, skills: e.target.value })} style={inputStyle} />
               </div>
+              
+              <div className="glass" style={{ 
+                padding: '1.25rem', 
+                borderRadius: '12px', 
+                border: '1px solid var(--glass-border)', 
+                background: 'rgba(255,255,255,0.02)',
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between', 
+                flexWrap: 'wrap', 
+                gap: '1rem', 
+                marginTop: '0.5rem',
+                marginBottom: '0.5rem'
+              }}>
+                <div style={{ flex: '1', minWidth: '200px' }}>
+                  <h3 style={{ fontSize: '0.95rem', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span>📢</span> Accepting New Leads & Bookings
+                  </h3>
+                  <p style={{ opacity: 0.6, fontSize: '0.8rem', margin: '0.25rem 0 0 0', lineHeight: '1.4' }}>
+                    Turn this off to temporarily pause receiving quote requests and job bookings from customers.
+                  </p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <span style={{ 
+                    fontSize: '0.88rem', 
+                    fontWeight: 700, 
+                    color: form.accepting_leads !== false ? '#34d399' : '#f87171',
+                    background: form.accepting_leads !== false ? 'rgba(52,211,153,0.1)' : 'rgba(248,113,113,0.1)',
+                    padding: '0.25rem 0.75rem',
+                    borderRadius: '20px',
+                    transition: 'all 0.3s'
+                  }}>
+                    {form.accepting_leads !== false ? 'Accepting Leads' : 'Not Accepting'}
+                  </span>
+                  <label style={{ position: 'relative', display: 'inline-block', width: '52px', height: '28px', cursor: 'pointer' }}>
+                    <input 
+                      type="checkbox" 
+                      checked={form.accepting_leads !== false} 
+                      onChange={e => setForm({ ...form, accepting_leads: e.target.checked })}
+                      style={{ opacity: 0, width: 0, height: 0 }}
+                    />
+                    <span style={{
+                      position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                      backgroundColor: form.accepting_leads !== false ? 'var(--primary)' : 'rgba(255,255,255,0.08)',
+                      transition: '0.3s', borderRadius: '34px',
+                      border: '1px solid var(--glass-border)'
+                    }}>
+                      <span style={{
+                        position: 'absolute', height: '20px', width: '20px', 
+                        left: form.accepting_leads !== false ? '26px' : '4px', bottom: '3px',
+                        backgroundColor: 'white', transition: '0.3s', borderRadius: '50%',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                      }} />
+                    </span>
+                  </label>
+                </div>
+              </div>
+              
               <div style={{ paddingTop: '0.75rem', borderTop: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <button type="submit" className="btn btn-primary" disabled={saveStatus === 'saving'}>
                   {saveStatus === 'saving' ? 'Saving…' : 'Save Changes'}
