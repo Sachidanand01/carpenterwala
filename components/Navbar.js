@@ -88,6 +88,23 @@ export default function Navbar() {
             <span></span>
           </button>
         </div>
+        <div className="marquee-container">
+          <div className="marquee-track">
+            <div className="marquee-item">
+              <span>🔒 <strong>100% Free Platform:</strong> Carpenterwala is a pure facilitator. We charge <strong>0% fees/commissions</strong> from both Customers and Service Professionals.</span>
+            </div>
+            <div className="marquee-item">
+              <span>🤝 <strong>Direct Connection:</strong> Deal directly, pay directly. <strong>No hidden platform costs</strong> or service charges!</span>
+            </div>
+            {/* Duplicate for seamless infinite loop */}
+            <div className="marquee-item">
+              <span>🔒 <strong>100% Free Platform:</strong> Carpenterwala is a pure facilitator. We charge <strong>0% fees/commissions</strong> from both Customers and Service Professionals.</span>
+            </div>
+            <div className="marquee-item">
+              <span>🤝 <strong>Direct Connection:</strong> Deal directly, pay directly. <strong>No hidden platform costs</strong> or service charges!</span>
+            </div>
+          </div>
+        </div>
       </nav>
 
       {/* Mobile Menu Overlay */}

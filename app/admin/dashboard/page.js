@@ -184,7 +184,7 @@ export default function AdminDashboardClient() {
   // Loading indicator for background syncs
   if (loading && adminToken) {
     return (
-      <div className="container flex items-center justify-center" style={{ minHeight: 'calc(100vh - 70px)' }}>
+      <div className="container flex items-center justify-center" style={{ minHeight: 'calc(100vh - var(--navbar-height))' }}>
         <div style={{ textAlign: 'center', opacity: 0.7 }}>
           <div style={{ fontSize: '2.5rem', marginBottom: '1rem', animation: 'spin 2s linear infinite' }}>⚙️</div>
           <p style={{ fontWeight: 600, letterSpacing: '0.05em' }}>Loading Admin Panel data…</p>
@@ -196,7 +196,7 @@ export default function AdminDashboardClient() {
   // RENDER ADMIN LOGIN GATE (Secured Screen)
   if (!adminToken) {
     return (
-      <div className="container flex items-center justify-center" style={{ minHeight: 'calc(100vh - 70px)', padding: '2rem' }}>
+      <div className="container flex items-center justify-center" style={{ minHeight: 'calc(100vh - var(--navbar-height))', padding: '2rem' }}>
         <div className="glass flex-col animate-fade-in" style={{
           maxWidth: '440px',
           width: '100%',

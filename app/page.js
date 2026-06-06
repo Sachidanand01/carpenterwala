@@ -110,7 +110,7 @@ export default function Home() {
   };
 
   return (
-    <div className="container flex flex-col justify-center" style={{ minHeight: "calc(100vh - 70px)" }}>
+    <div className="container flex flex-col justify-center" style={{ minHeight: "calc(100vh - var(--navbar-height))" }}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}

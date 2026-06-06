@@ -249,7 +249,7 @@ export default function CustomerLogin() {
   };
 
   return (
-    <div className="container flex items-center justify-center" style={{ minHeight: "calc(100vh - 70px)", padding: "2.5rem 1rem" }}>
+    <div className="container flex items-center justify-center" style={{ minHeight: "calc(100vh - var(--navbar-height))", padding: "2.5rem 1rem" }}>
       <div style={{ width: "100%", maxWidth: "450px" }}>
         
         {/* Premium Simulated / Real OTP Gateway Banner */}

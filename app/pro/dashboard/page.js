@@ -351,7 +351,7 @@ export default function ProDashboard() {
   };
 
   if (loadingProfile) return (
-    <div className="container flex items-center justify-center" style={{ minHeight: 'calc(100vh - 70px)' }}>
+    <div className="container flex items-center justify-center" style={{ minHeight: 'calc(100vh - var(--navbar-height))' }}>
       <div style={{ textAlign: 'center', opacity: 0.7 }}>
         <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⚙️</div>
         <p>Loading your dashboard…</p>
@@ -375,7 +375,7 @@ export default function ProDashboard() {
     const currentPercent = Math.round(((onboardStep - 1) / 3) * 100);
 
     return (
-      <div style={{ minHeight: 'calc(100vh - 70px)', padding: '3rem 0' }}>
+      <div style={{ minHeight: 'calc(100vh - var(--navbar-height))', padding: '3rem 0' }}>
         {/* Guided Tour Walkthrough Overlay */}
         <ProGuidedTour
           onboardStep={onboardStep}
@@ -865,7 +865,7 @@ export default function ProDashboard() {
 
   // ── STANDARD PRO DASHBOARD Experience ──
   return (
-    <div style={{ minHeight: 'calc(100vh - 70px)', padding: '2rem 0' }}>
+    <div style={{ minHeight: 'calc(100vh - var(--navbar-height))', padding: '2rem 0' }}>
       <div className="container">
 
         {/* Top header */}

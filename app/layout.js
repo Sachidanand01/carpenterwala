@@ -70,7 +70,7 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <Navbar />
-        <main style={{ paddingTop: "70px", minHeight: "100vh" }}>
+        <main style={{ paddingTop: "var(--navbar-height)", minHeight: "100vh" }}>
           {children}
         </main>
         <Footer />
