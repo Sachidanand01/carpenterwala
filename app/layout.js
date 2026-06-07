@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import Footer from "@/components/Footer";
@@ -7,6 +7,13 @@ import Navbar from "@/components/Navbar";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata = {
@@ -64,7 +71,7 @@ const jsonLd = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
+      <body className={`${inter.variable} ${outfit.variable} antialiased`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
