@@ -2,8 +2,9 @@ import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
-  title: 'Professional Electrical Services | Carpenterwala',
-  description: 'Certified electricians for your home and office in Bangalore. From wiring repairs to smart home installations, we ensure safety and quality.',
+  title: 'Professional Electrician Services | Carpenterwala',
+  description: 'Certified electricians for your home and office in Bangalore. Book trusted electrician services near me for wiring, repairs, and installations.',
+  keywords: ['electrician services', 'electrician near me', 'hire electrician India', 'electrical repairs'],
   alternates: {
     canonical: 'https://carpenterwala.com/services/electrical',
   },
@@ -118,10 +119,10 @@ export default function ElectricalPage() {
         
         <div className="container" style={{ textAlign: 'center' }}>
           <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
-            Expert <span className="text-gradient">Electrical</span> Services
+            Professional <span className="text-gradient">Electrician Services</span>
           </h1>
           <p style={{ fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto 2rem', opacity: 0.9 }}>
-            Safety-first electrical solutions for your home. Our certified electricians handle everything from minor repairs to complete rewiring.
+            Safety-first home and commercial electrician services. Our certified electrical professionals handle everything from minor socket repairs to full house rewiring.
           </p>
           <Link href="/find-a-professional?category=Electrician" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
             Find an Electrician Nearby
