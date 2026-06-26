@@ -220,7 +220,7 @@ function DirectoryContent() {
           </div>
 
           {/* Languages */}
-          <div>
+          <div style={{ marginBottom: "1.5rem" }}>
             <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>Languages Spoken</label>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               {ALL_LANGUAGES.map(lang => (
@@ -234,6 +234,16 @@ function DirectoryContent() {
                 </label>
               ))}
             </div>
+          </div>
+
+          {/* Safety & Fraud Guide Card */}
+          <div style={{ marginTop: "2rem", paddingTop: "1.5rem", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+            <h4 style={{ fontSize: "1.05rem", color: "var(--primary)", marginBottom: "0.75rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+              🛡️ Avoid Carpenter Fraud
+            </h4>
+            <p style={{ fontSize: "0.85rem", opacity: 0.8, lineHeight: "1.5" }}>
+              Want to avoid a fake handyman or <strong>carpenter fraud in India</strong>? Make sure to hire only background-checked, verified professionals. Carpenterwala physically verifies all tradesmen identity records, certifications, and customer reviews before approval.
+            </p>
           </div>
         </aside>
 

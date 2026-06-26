@@ -126,10 +126,10 @@ export default function Home() {
         <div className="animate-fade-in" style={{ maxWidth: "800px" }}>
           <h1 style={{ fontSize: "4rem", marginBottom: "1.5rem", letterSpacing: "-0.02em" }}>
             Your Trusted <span className="desktop-only"><br/></span>
-            <span className="text-gradient">Handyman Professionals</span>
+            <span className="text-gradient">Handyman & Home Services App</span>
           </h1>
           <p style={{ fontSize: "1.25rem", opacity: 0.8, marginBottom: "2rem" }}>
-            Book verified carpenters, painters, and home improvement experts. Real reviews, transparent pricing, and guaranteed quality.
+            One of the best handyman apps in India to hire verified carpenters, painters, plumbers, and electricians near you. Experience the premium home services app in India with real reviews and transparent pricing.
           </p>
           
           <div className="flex gap-4 justify-center flex-mobile-col">
@@ -159,6 +159,39 @@ export default function Home() {
               <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>⚡</div>
               <h3 style={{ fontSize: "1.25rem" }}>Instant Contact</h3>
               <p style={{ opacity: 0.7 }}>Connect directly with professionals securely through our platform to get quotes fast.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="glass animate-fade-in delay-300" style={{ width: "100%", padding: "2.5rem", marginTop: "3rem", textAlign: "left" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "2.5rem", alignItems: "center" }}>
+            <div style={{ flex: "1 1 350px" }}>
+              <span style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "2px", color: "var(--primary)", fontWeight: "bold" }}>Flat Possession Solutions</span>
+              <h2 style={{ fontSize: "2.25rem", marginTop: "0.5rem", marginBottom: "1rem" }}>Carpenterwala for New Flat Owners</h2>
+              <p style={{ opacity: 0.85, lineHeight: "1.8", marginBottom: "1.5rem" }}>
+                Just got possession of your new apartment in India? Hiring the right carpenter for a new flat can be stressful. From custom wardrobes to modular kitchens, our vetted professionals take care of your complete <strong>home setup after possession</strong>. Get high-quality finishes, transparent material logs, and robust safety guarantees.
+              </p>
+              <Link href="/find-a-professional?category=Carpenter" className="btn btn-primary">
+                Get Carpenter for New Flat
+              </Link>
+            </div>
+            <div style={{ flex: "1 1 300px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+              <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.05)" }}>
+                <h4 style={{ color: "var(--accent)", marginBottom: "0.5rem" }}>Modular Fitting</h4>
+                <p style={{ fontSize: "0.85rem", opacity: 0.7 }}>Perfect assembly of pre-fabricated kitchen and wardrobe panels.</p>
+              </div>
+              <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.05)" }}>
+                <h4 style={{ color: "var(--accent)", marginBottom: "0.5rem" }}>Teak Woodwork</h4>
+                <p style={{ fontSize: "0.85rem", opacity: 0.7 }}>Bespoke, high-end woodwork crafted custom on-site by Indian experts.</p>
+              </div>
+              <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.05)" }}>
+                <h4 style={{ color: "var(--accent)", marginBottom: "0.5rem" }}>Wall Panelings</h4>
+                <p style={{ fontSize: "0.85rem", opacity: 0.7 }}>Modern wood laminates, fluted panels, and television backdrops.</p>
+              </div>
+              <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.05)" }}>
+                <h4 style={{ color: "var(--accent)", marginBottom: "0.5rem" }}>Hassle-Free</h4>
+                <p style={{ fontSize: "0.85rem", opacity: 0.7 }}>Complete project milestones with transparent billing guarantees.</p>
+              </div>
             </div>
           </div>
         </div>

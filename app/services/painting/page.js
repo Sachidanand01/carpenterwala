@@ -3,8 +3,9 @@ import ColorVisualizer from '@/components/ColorVisualizer';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
-  title: 'Professional Painting Services | Carpenterwala',
-  description: 'Transform your home with expert interior and exterior painting services in Bangalore. Verified professional painters for a flawless finish.',
+  title: 'Professional Painting Services | Home Painting Cost Guide',
+  description: 'Find verified painting services in Bangalore. Check painter charges per sq ft and estimate home painting cost in India with our guide.',
+  keywords: ['home painting cost guide india', 'home painting cost India', 'painter charges per sq ft', 'interior painting tips indian homes', 'best paint for Indian homes'],
   alternates: {
     canonical: 'https://carpenterwala.com/services/painting',
   },
@@ -147,14 +148,14 @@ export default function PaintingPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
           <div className="glass" style={{ padding: '2rem' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🏠</div>
-            <h3 style={{ marginBottom: '1rem' }}>Interior Wall Painting</h3>
-            <p style={{ opacity: 0.8 }}>Transform your rooms with precision painting. We handle everything from surface preparation to the final coat, ensuring smooth, vibrant walls.</p>
+            <h3 style={{ marginBottom: '1rem' }}>Painter for Home Interior</h3>
+            <p style={{ opacity: 0.8 }}>Transform your rooms with premium interior wall painting. Hire a skilled painter for home interior design updates, surface prep, and a flawless paint coating.</p>
           </div>
 
           <div className="glass" style={{ padding: '2rem' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🏢</div>
-            <h3 style={{ marginBottom: '1rem' }}>Exterior House Painting</h3>
-            <p style={{ opacity: 0.8 }}>Protect your home from the elements with high-quality exterior paints and weather-resistant coatings that last for years.</p>
+            <h3 style={{ marginBottom: '1rem' }}>Painter for Exterior Work</h3>
+            <p style={{ opacity: 0.8 }}>Protect your home from the elements. Hire a vetted painter for exterior work, including crack-filling, prime coats, and durable weather-proof wall coatings.</p>
           </div>
 
           <div className="glass" style={{ padding: '2rem' }}>
@@ -179,6 +180,43 @@ export default function PaintingPage() {
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🏗️</div>
             <h3 style={{ marginBottom: '1rem' }}>Commercial Painting</h3>
             <p style={{ opacity: 0.8 }}>Scalable painting solutions for offices, showrooms, and commercial buildings with minimal disruption to your business.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Home Painting Cost Guide India */}
+      <section className="container" style={{ marginBottom: '6rem' }}>
+        <div className="glass" style={{ padding: '3rem' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem', textAlign: 'center' }}>Home Painting Cost Guide India</h2>
+          <p style={{ opacity: 0.8, textAlign: 'center', maxWidth: '700px', margin: '0 auto 2.5rem' }}>
+            Estimating your home painting cost in India depends on multiple factors like size, paint type, and surface condition. Explore typical painter charges per sq ft to budget your project.
+          </p>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <h3 style={{ fontSize: '1.25rem', color: 'var(--primary)', marginBottom: '1rem' }}>1. Fresh Wall Painting Charges</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8, marginBottom: '1rem' }}>Best for new walls requiring putty, primer, and double top coats.</p>
+              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--accent)' }}>₹18 – ₹35 / sq ft</div>
+              <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>Includes 2 coats of putty, 1 coat of primer, 2 coats of paint.</span>
+            </div>
+            
+            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <h3 style={{ fontSize: '1.25rem', color: 'var(--primary)', marginBottom: '1rem' }}>2. Wall Repainting Charges</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8, marginBottom: '1rem' }}>Ideal for touch-ups or colour changes on walls in good condition.</p>
+              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--accent)' }}>₹12 – ₹24 / sq ft</div>
+              <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>Includes minor sanding, primer patch, and 2 coats of top-tier paint.</span>
+            </div>
+
+            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <h3 style={{ fontSize: '1.25rem', color: 'var(--primary)', marginBottom: '1rem' }}>3. Texture & Accent Wall Painting</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8, marginBottom: '1rem' }}>Customized designs, metallic shades, or premium patterns.</p>
+              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--accent)' }}>₹80 – ₹200 / sq ft</div>
+              <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>Price varies depending on material and pattern complexity.</span>
+            </div>
+          </div>
+          
+          <div style={{ marginTop: '2.5rem', padding: '1.5rem', borderRadius: '8px', border: '1px dashed rgba(255, 255, 255, 0.2)', textAlign: 'center', fontSize: '0.95rem' }}>
+            💡 <strong>Pro Tip:</strong> Exterior house painting charges typically range from <strong>₹15 to ₹40 per sq ft</strong>, including scaffolding, high-pressure cleaning, and weather-proof coats.
           </div>
         </div>
       </section>

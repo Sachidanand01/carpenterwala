@@ -2,8 +2,19 @@ import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
-  title: 'Professional Carpentry Services | Carpenterwala',
-  description: 'Find expert carpenters for furniture repair, custom woodwork, and home renovations in Bangalore. Verified professionals at your doorstep.',
+  title: 'Professional Carpentry Services | Find Trusted Carpenters',
+  description: 'Looking for verified carpenters in India? Find trusted local carpenters near me for furniture repair, home renovation, custom carpentry, and office fit-out.',
+  keywords: [
+    'how to find trusted carpenter', 
+    'trusted carpenter near me', 
+    'verified carpenter india', 
+    'hire carpenter for office fit-out', 
+    'office carpenter India', 
+    'commercial carpentry work',
+    'Carpenter Services in Bangalore',
+    'Carpenter in Mumbai',
+    'Best Carpenter in Delhi'
+  ],
   alternates: {
     canonical: 'https://carpenterwala.com/services/carpentry',
   },
@@ -170,9 +181,56 @@ export default function CarpentryPage() {
           </div>
 
           <div className="glass" style={{ padding: '2rem' }}>
+            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🏢</div>
+            <h3 style={{ marginBottom: '1rem' }}>Office Fit-Out & Commercial Carpentry</h3>
+            <p style={{ opacity: 0.8 }}>Professional commercial carpentry work in India. From customized office partitions to desk installations, we connect you with expert office carpenters.</p>
+          </div>
+
+          <div className="glass" style={{ padding: '2rem' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🏠</div>
             <h3 style={{ marginBottom: '1rem' }}>Full Home Renovations</h3>
             <p style={{ opacity: 0.8 }}>Complete carpentry support for your home renovation projects, working seamlessly with architects and designers.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Serving Major Cities Across India */}
+      <section style={{ backgroundColor: 'rgba(30, 41, 59, 0.2)', padding: '5rem 0', marginBottom: '6rem' }}>
+        <div className="container">
+          <h2 style={{ fontSize: '2.25rem', marginBottom: '1rem', textAlign: 'center' }}>Serving Major Cities Across India</h2>
+          <p style={{ opacity: 0.8, textAlign: 'center', maxWidth: '600px', margin: '0 auto 3rem' }}>
+            Get connected with top-rated carpentry professionals in your local area. We match you with the right experts based on your specific city.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+            <div className="glass" style={{ padding: '2rem', borderLeft: '4px solid var(--primary)' }}>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>📍 Bangalore</h3>
+              <p style={{ opacity: 0.8, fontSize: '0.95rem', marginBottom: '1.5rem' }}>
+                Hire verified professionals for premium <strong>Carpenter Services in Bangalore</strong>. Covering HSR Layout, Whitefield, Indiranagar, Koramangala, and more.
+              </p>
+              <Link href="/find-a-professional?category=Carpenter&location=Bangalore" style={{ color: 'var(--primary)', fontWeight: 'bold', textDecoration: 'none' }}>
+                Find Carpenters in Bangalore →
+              </Link>
+            </div>
+
+            <div className="glass" style={{ padding: '2rem', borderLeft: '4px solid var(--primary)' }}>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>📍 Mumbai</h3>
+              <p style={{ opacity: 0.8, fontSize: '0.95rem', marginBottom: '1.5rem' }}>
+                Find a reliable and certified <strong>Carpenter in Mumbai</strong> for custom woodwork, furniture repairs, and apartment interior fittings.
+              </p>
+              <Link href="/find-a-professional?category=Carpenter&location=Mumbai" style={{ color: 'var(--primary)', fontWeight: 'bold', textDecoration: 'none' }}>
+                Find Carpenters in Mumbai →
+              </Link>
+            </div>
+
+            <div className="glass" style={{ padding: '2rem', borderLeft: '4px solid var(--primary)' }}>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>📍 Delhi NCR</h3>
+              <p style={{ opacity: 0.8, fontSize: '0.95rem', marginBottom: '1.5rem' }}>
+                Connect with the <strong>Best Carpenter in Delhi</strong> for home renovations, custom wardrobes, and commercial office fit-outs.
+              </p>
+              <Link href="/find-a-professional?category=Carpenter&location=Delhi" style={{ color: 'var(--primary)', fontWeight: 'bold', textDecoration: 'none' }}>
+                Find Carpenters in Delhi →
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -217,6 +275,32 @@ export default function CarpentryPage() {
                   View All Carpenters
                 </Link>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Informational Guide Section: How to Find Trusted Carpenter */}
+      <section className="container" style={{ marginBottom: '6rem' }}>
+        <div className="glass" style={{ padding: '3rem' }}>
+          <h2 style={{ fontSize: '2rem', marginBottom: '1.5rem', color: 'var(--primary)' }}>
+            How to Find a Trusted Carpenter Near You in India
+          </h2>
+          <p style={{ opacity: 0.9, lineHeight: '1.8', marginBottom: '1.5rem' }}>
+            Finding a reliable carpenter in India can be a challenge. With countless local options, it is critical to know how to filter the experts from the amateurs. Whether you need a simple hinge adjustment or full home woodwork, follow these three steps:
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '2rem', marginTop: '2rem' }}>
+            <div>
+              <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--accent)' }}>1. Verify Credentials</h4>
+              <p style={{ opacity: 0.8, fontSize: '0.95rem' }}>Always look for verified carpenters in India. Verify background checks, identity records, and past customer reviews before allowing anyone into your home.</p>
+            </div>
+            <div>
+              <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--accent)' }}>2. Review Past Portfolios</h4>
+              <p style={{ opacity: 0.8, fontSize: '0.95rem' }}>Check actual photos of completed carpentry projects rather than generic online catalog designs. Trusted carpenters gladly showcase their real wood craftsmanship.</p>
+            </div>
+            <div>
+              <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--accent)' }}>3. Request Detailed Quotes</h4>
+              <p style={{ opacity: 0.8, fontSize: '0.95rem' }}>Ask for itemized billing. Clear expectations on cost of materials vs. labour charges will help prevent surprise expenses or disputes.</p>
             </div>
           </div>
         </div>
