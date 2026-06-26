@@ -15,9 +15,49 @@ export async function generateMetadata({ params }) {
   const post = BLOG_POSTS.find((p) => p.slug === slug);
   if (!post) return { title: 'Post Not Found' };
   
+  const siteUrl = 'https://carpenterwala.com';
+  const canonicalUrl = `${siteUrl}/blog/${post.slug}`;
+  const pageTitle = `${post.title} | Carpenterwala Blog`;
+  const pageDescription = post.excerpt;
+
+  const baseKeywords = ['carpenter blog', 'home improvement tips', 'Bangalore', 'handyman tips', 'furniture maintenance'];
+  const postKeywords = [
+    post.category,
+    ...post.title.toLowerCase().replace(/[^a-zA-Z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 3)
+  ];
+  const keywords = Array.from(new Set([...baseKeywords, ...postKeywords]));
+
   return {
-    title: `${post.title} | Carpenterwala Blog`,
-    description: post.excerpt,
+    title: pageTitle,
+    description: pageDescription,
+    keywords,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: pageTitle,
+      description: pageDescription,
+      url: canonicalUrl,
+      siteName: 'Carpenterwala',
+      images: [
+        {
+          url: post.image,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        }
+      ],
+      locale: 'en_US',
+      type: 'article',
+      publishedTime: new Date(post.date || '2026-05-01').toISOString(),
+      authors: ['Carpenterwala Experts'],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: pageTitle,
+      description: pageDescription,
+      images: [post.image],
+    },
   };
 }
 

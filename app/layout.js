@@ -18,6 +18,7 @@ const outfit = Outfit({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://carpenterwala.com"),
   title: "Carpenterwala | Professional Handyman Marketplace",
   description: "Find trusted and verified carpenters, painters, and handymen near you. Book services easily with transparent pricing and real reviews.",
   keywords: ["carpenter bangalore", "painter bangalore", "plumber bangalore", "electrician bangalore", "handyman services", "home repair"],

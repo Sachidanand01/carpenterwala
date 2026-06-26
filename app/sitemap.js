@@ -1,6 +1,7 @@
 import { BLOG_POSTS } from '@/lib/blog-data';
+import { supabase } from '@/lib/supabase';
 
-export default function sitemap() {
+export default async function sitemap() {
   const baseUrl = 'https://carpenterwala.com';
 
   // 1. Core static pages
@@ -50,6 +51,24 @@ export default function sitemap() {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...services, ...blogPosts, ...blogCategories];
+  // 5. Dynamic Professional Profiles
+  let profileRoutes = [];
+  try {
+    const { data: profiles, error } = await supabase
+      .from('profiles')
+      .select('slug, created_at');
+    if (!error && profiles) {
+      profileRoutes = profiles.map((profile) => ({
+        url: `${baseUrl}/${profile.slug}`,
+        lastModified: profile.created_at ? new Date(profile.created_at) : new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.8,
+      }));
+    }
+  } catch (err) {
+    console.error("Error fetching profiles for sitemap:", err);
+  }
+
+  return [...staticPages, ...services, ...blogPosts, ...blogCategories, ...profileRoutes];
 }
 

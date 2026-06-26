@@ -9,9 +9,49 @@ export async function generateMetadata({ params }) {
   const profile = await getProfileBySlug(proSlug);
   if (!profile) return { title: 'Not Found' };
   
+  const siteUrl = 'https://carpenterwala.com';
+  const canonicalUrl = `${siteUrl}/${profile.slug}`;
+  const pageTitle = `${profile.name} - Verified ${profile.trade} in ${profile.location} | Carpenterwala`;
+  const pageDescription = `Hire ${profile.name}, a verified ${profile.trade} in ${profile.location} with ${profile.experience} of experience. Specializing in ${profile.skills ? profile.skills.slice(0, 3).join(', ') : ''}. Book now on Carpenterwala.`;
+  
+  const baseKeywords = ['carpenter', 'home services', 'handyman', 'Bangalore', 'verified professionals'];
+  const profileKeywords = [
+    profile.name,
+    profile.trade,
+    profile.location,
+    ...(profile.skills || [])
+  ];
+  const keywords = Array.from(new Set([...baseKeywords, ...profileKeywords]));
+
   return {
-    title: `${profile.name} - ${profile.trade} | Carpenterwala`,
-    description: profile.about,
+    title: pageTitle,
+    description: pageDescription,
+    keywords,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: pageTitle,
+      description: pageDescription,
+      url: canonicalUrl,
+      siteName: 'Carpenterwala',
+      images: [
+        {
+          url: `${siteUrl}/images/about-us-hero.png`,
+          width: 1200,
+          height: 630,
+          alt: 'Carpenterwala Professional Services',
+        }
+      ],
+      locale: 'en_US',
+      type: 'profile',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: pageTitle,
+      description: pageDescription,
+      images: [`${siteUrl}/images/about-us-hero.png`],
+    },
   };
 }
 
