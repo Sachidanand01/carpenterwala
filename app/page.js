@@ -1,5 +1,11 @@
 import Link from "next/link";
 
+export const metadata = {
+  alternates: {
+    canonical: 'https://carpenterwala.com',
+  },
+};
+
 export default function Home() {
   const homeJsonLd = {
     "@context": "https://schema.org",

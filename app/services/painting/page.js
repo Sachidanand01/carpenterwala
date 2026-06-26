@@ -5,6 +5,9 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 export const metadata = {
   title: 'Professional Painting Services | Carpenterwala',
   description: 'Transform your home with expert interior and exterior painting services in Bangalore. Verified professional painters for a flawless finish.',
+  alternates: {
+    canonical: 'https://carpenterwala.com/services/painting',
+  },
 };
 
 export default function PaintingPage() {

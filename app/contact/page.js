@@ -4,6 +4,9 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 export const metadata = {
   title: "Contact Us | Carpenterwala",
   description: "Get in touch with Carpenterwala for any queries, support, or feedback. We are here to help you with your home improvement needs.",
+  alternates: {
+    canonical: 'https://carpenterwala.com/contact',
+  },
 };
 
 export default function ContactUs() {

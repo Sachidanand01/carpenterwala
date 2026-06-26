@@ -4,6 +4,9 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 export const metadata = {
   title: 'Professional Electrical Services | Carpenterwala',
   description: 'Certified electricians for your home and office in Bangalore. From wiring repairs to smart home installations, we ensure safety and quality.',
+  alternates: {
+    canonical: 'https://carpenterwala.com/services/electrical',
+  },
 };
 
 export default function ElectricalPage() {

@@ -4,6 +4,9 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 export const metadata = {
   title: "Help Center | Carpenterwala",
   description: "Find answers, get support, and learn how to get the most out of Carpenterwala.",
+  alternates: {
+    canonical: 'https://carpenterwala.com/help',
+  },
 };
 
 export default function HelpPage() {

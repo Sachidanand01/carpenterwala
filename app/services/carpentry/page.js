@@ -4,6 +4,9 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 export const metadata = {
   title: 'Professional Carpentry Services | Carpenterwala',
   description: 'Find expert carpenters for furniture repair, custom woodwork, and home renovations in Bangalore. Verified professionals at your doorstep.',
+  alternates: {
+    canonical: 'https://carpenterwala.com/services/carpentry',
+  },
 };
 
 export default function CarpentryPage() {

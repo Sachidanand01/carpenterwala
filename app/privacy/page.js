@@ -4,6 +4,9 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 export const metadata = {
   title: "Privacy Policy | Carpenterwala",
   description: "Learn how Carpenterwala collects, safeguards, and uses your information.",
+  alternates: {
+    canonical: 'https://carpenterwala.com/privacy',
+  },
 };
 
 export default function PrivacyPolicy() {

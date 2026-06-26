@@ -18,9 +18,15 @@ export async function generateMetadata({ params }) {
     (cat) => slugify(cat) === category.toLowerCase()
   ) || 'Category';
 
+  const siteUrl = 'https://carpenterwala.com';
+  const canonicalUrl = `${siteUrl}/blog/category/${category.toLowerCase()}`;
+
   return {
     title: `${activeCategory} Blogs | Expert Handyman Tips | Carpenterwala`,
     description: `Browse professional handymen guides, tutorials, and articles on ${activeCategory.toLowerCase()} in Bangalore from Carpenterwala.`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
   };
 }
 

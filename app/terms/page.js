@@ -4,6 +4,9 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 export const metadata = {
   title: "Terms and Conditions | Carpenterwala",
   description: "Read the terms and conditions for using the Carpenterwala platform. Our policies ensure a safe and reliable experience for both customers and professionals.",
+  alternates: {
+    canonical: 'https://carpenterwala.com/terms',
+  },
 };
 
 const sections = [

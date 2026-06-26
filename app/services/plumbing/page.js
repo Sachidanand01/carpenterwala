@@ -4,6 +4,9 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 export const metadata = {
   title: 'Professional Plumbing Services | Carpenterwala',
   description: 'Fast and reliable plumbing services in Bangalore. From leak repairs to full bathroom installations, our verified plumbers are here to help.',
+  alternates: {
+    canonical: 'https://carpenterwala.com/services/plumbing',
+  },
 };
 
 export default function PlumbingPage() {
