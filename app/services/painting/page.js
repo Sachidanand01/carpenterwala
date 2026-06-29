@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import ColorVisualizer from '@/components/ColorVisualizer';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import AdSenseContainer from '@/components/AdSenseContainer';
 
 export const metadata = {
   title: 'Professional Painting Services | Home Painting Cost Guide',
@@ -289,6 +290,16 @@ export default function PaintingPage() {
             </div>
           </details>
         </div>
+      </section>
+
+      {/* Bottom AdSense Banner */}
+      <section className="container" style={{ marginBottom: '6rem' }}>
+        <AdSenseContainer 
+          slot="5678901234" 
+          format="auto" 
+          responsive="true" 
+          style={{ minHeight: '250px' }} 
+        />
       </section>
     </div>
   );

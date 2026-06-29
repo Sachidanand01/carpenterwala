@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import AdSenseContainer from '@/components/AdSenseContainer';
 
 export const metadata = {
   title: 'Professional Carpentry Services | Find Trusted Carpenters',
@@ -329,6 +330,16 @@ export default function CarpentryPage() {
             </div>
           </details>
         </div>
+      </section>
+
+      {/* Bottom AdSense Banner */}
+      <section className="container" style={{ marginBottom: '6rem' }}>
+        <AdSenseContainer 
+          slot="4567890123" 
+          format="auto" 
+          responsive="true" 
+          style={{ minHeight: '250px' }} 
+        />
       </section>
     </div>
   );

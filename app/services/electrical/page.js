@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import AdSenseContainer from '@/components/AdSenseContainer';
 
 export const metadata = {
   title: 'Professional Electrician Services | Carpenterwala',
@@ -246,6 +247,16 @@ export default function ElectricalPage() {
             </div>
           </details>
         </div>
+      </section>
+
+      {/* Bottom AdSense Banner */}
+      <section className="container" style={{ marginBottom: '6rem' }}>
+        <AdSenseContainer 
+          slot="6789012345" 
+          format="auto" 
+          responsive="true" 
+          style={{ minHeight: '250px' }} 
+        />
       </section>
     </div>
   );

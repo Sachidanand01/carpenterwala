@@ -111,6 +111,15 @@ export default function RootLayout({ children }) {
         </noscript>
         {/* End Meta Pixel Code */}
 
+        {/* Google AdSense Script */}
+        <Script
+          id="adsense-global"
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || 'ca-pub-1234567890123456'}`}
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+
         <Navbar />
         <main style={{ paddingTop: "var(--navbar-height)", minHeight: "100vh" }}>
           {children}

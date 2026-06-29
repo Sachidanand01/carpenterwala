@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { BLOG_POSTS } from '@/lib/blog-data';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import AdSenseContainer from '@/components/AdSenseContainer';
 
 const slugify = (cat) => cat.toLowerCase().replace(/\s+/g, '-');
 
@@ -164,6 +165,14 @@ export default async function BlogPost({ params }) {
           `}} />
           <div dangerouslySetInnerHTML={{ __html: post.content }} className="blog-content" />
           
+          {/* Bottom Content Native Ad */}
+          <AdSenseContainer 
+            slot="2345678901" 
+            format="fluid" 
+            responsive="true" 
+            style={{ margin: '3rem 0', minHeight: '280px' }}
+          />
+          
           <div style={{ 
             marginTop: '4rem', 
             padding: '2rem', 
@@ -206,6 +215,13 @@ export default async function BlogPost({ params }) {
                 </Link>
               ))}
             </div>
+
+            {/* Sidebar Display Ad */}
+            <AdSenseContainer 
+              slot="3456789012" 
+              format="auto" 
+              style={{ marginTop: '3rem', minHeight: '300px' }} 
+            />
           </div>
         </aside>
       </section>
