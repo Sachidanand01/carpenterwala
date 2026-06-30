@@ -111,6 +111,20 @@ export default function ContactUs() {
           </div>
         </div>
       </div>
+
+      {/* Search Engine Information Block */}
+      <div className="glass" style={{ padding: "3rem", marginTop: "4rem", lineHeight: "1.7", opacity: 0.9 }}>
+        <h2 style={{ marginBottom: "1.5rem" }}>Our Service Commitment & Regional Operations</h2>
+        <p style={{ marginBottom: "1.2rem" }}>
+          At Carpenterwala, we are dedicated to providing the highest standards of customer care. When you <strong>contact Carpenterwala</strong>, your request is routed directly to our centralized support team in Bangalore. We specialize in matching homeowners with vetted professionals for custom carpentry, interior painting, household plumbing, and electrical installations.
+        </p>
+        <p style={{ marginBottom: "1.2rem" }}>
+          Need to report a booking issue, request an estimate for a large-scale commercial project, or ask about our partner program? Our local team handles standard support tickets within 24 hours. For businesses looking to establish regional partnerships, our corporate office provides bespoke service contracts tailored to real estate managers and office fit-outs.
+        </p>
+        <p>
+          We physically verify all our local service providers, ensuring that every professional is vetted for both skill and safety. Reach out to our team today to get your home renovation projects started with peace of mind.
+        </p>
+      </div>
     </div>
   );
 }

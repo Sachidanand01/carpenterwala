@@ -206,6 +206,19 @@ export default function ServicesPage() {
           Loading more services...
         </div>
       )}
+      {/* Search Engine Information Block */}
+      <div className="glass" style={{ padding: "3rem", marginTop: "4rem", lineHeight: "1.7", opacity: 0.9 }}>
+        <h2 style={{ marginBottom: "1.5rem" }}>Professional Handyman Services in Bangalore</h2>
+        <p style={{ marginBottom: "1.2rem" }}>
+          Welcome to Carpenterwala, your ultimate destination for high-quality, verified <strong>professional handyman services Bangalore</strong>. We offer an extensive selection of home maintenance and repair categories, matching you with local, background-checked pros. Our specialties include custom carpentry, wall painting, electrical upgrades, pipe repairs, AC services, deep cleaning, and metal welding.
+        </p>
+        <p style={{ marginBottom: "1.2rem" }}>
+          Why trust our platform? Finding <strong>trusted local home repairs</strong> can be risky. That is why we run physical verification checks on every contractor, examining their skills, reference feedback, and licensing credentials. We also offer automated matching based on your location, helping you discover top-rated professionals nearby.
+        </p>
+        <p>
+          Whether you need a minor leakage repair or a complete bedroom layout refurbishment, our platform helps you browse profiles, check rates, and book instantly. Explore our full catalog of services above to get started.
+        </p>
+      </div>
     </div>
   );
 }

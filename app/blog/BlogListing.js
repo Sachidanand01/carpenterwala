@@ -6,6 +6,39 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 
 const slugify = (cat) => cat.toLowerCase().replace(/\s+/g, '-');
 
+const CATEGORY_DESCRIPTIONS = {
+  all: `
+    <h2 style="margin-bottom: 1.5rem;">Explore Expert Home Improvement Guides</h2>
+    <p style="margin-bottom: 1.2rem; opacity: 0.85;">Welcome to the Carpenterwala blog, your premium source for step-by-step tutorials, home repair guides, and trade insights in Bangalore. From simple DIY cabinet repairs to large-scale house painting and rewiring projects, our verified professionals share their industry expertise to help you maintain a safe, beautiful, and efficient home.</p>
+    <p style="opacity: 0.85;">Whether you are looking to understand modular kitchen materials, plan bedroom wall painting colors, or avoid common repair service scams, our articles provide detailed checklists and practical tips. Browse our categories above to find the exact help you need today.</p>
+  `,
+  carpentry: `
+    <h2 style="margin-bottom: 1.5rem;">Professional Carpentry Guides & Woodwork Tips</h2>
+    <p style="margin-bottom: 1.2rem; opacity: 0.85;">Explore our custom woodworking articles covering wardrobe ergonomics, structural furniture design, termite prevention, and door installations. Our master carpenters share insights into selecting durable materials like BWR plywood vs MDF and selecting the right finishes (laminate vs PU polish) for Indian households.</p>
+    <p style="opacity: 0.85;">Maintaining high-quality teak wood furniture requires consistent care. Use our monthly checklists to identify structural damage, prevent moisture warping during monsoons, and keep your home's custom woodwork in top-tier shape for generations.</p>
+  `,
+  painting: `
+    <h2 style="margin-bottom: 1.5rem;">Expert Painting Guides, Color Selection, & Exterior Waterproofing</h2>
+    <p style="margin-bottom: 1.2rem; opacity: 0.85;">Your home’s walls define its visual appeal and protect its structure. Read our professional guides on picking the best paint colors for bedrooms, managing external dampness during the Bangalore monsoons, and applying anti-algae elastomeric coatings.</p>
+    <p style="opacity: 0.85;">We also cover modern paint choices like zero-VOC and low-VOC emulsions that protect your family’s respiratory health and improve indoor air quality. Get tips on how to prepare metal window grills before applying red-oxide rust-proofing primers.</p>
+  `,
+  plumbing: `
+    <h2 style="margin-bottom: 1.5rem;">Plumber Repair Guides & Water Management Solutions</h2>
+    <p style="margin-bottom: 1.2rem; opacity: 0.85;">Plumbing issues can cause massive structural damages if left unaddressed. Learn how to locate your home’s main water shut-off valve, execute temporary emergency pipe repairs during burst events, and check water meters for silent leaks.</p>
+    <p style="opacity: 0.85;">We also specialize in resolving Bangalore-specific hard water challenges. Learn about ion-exchange softeners, magnetic descalers, and compact tap filters to lower TDS levels, protect bathroom geysers, and safeguard your skin.</p>
+  `,
+  electrical: `
+    <h2 style="margin-bottom: 1.5rem;">Home Electrical Safety, Rewiring Guides, & Smart Upgrades</h2>
+    <p style="margin-bottom: 1.2rem; opacity: 0.85;">Electricity is the heartbeat of the modern home, but safety must always come first. Read our comprehensive guides on understanding the difference between MCBs (Miniature Circuit Breakers) and ELCBs (Earth Leakage Circuit Breakers) to protect your appliances and family.</p>
+    <p style="opacity: 0.85;">Identify the warning signs of deteriorating 90s copper/aluminum wiring, plan complete home rewiring projects, and prepare your distribution panel for hybrid solar energy integration. Keep your home secure and energy-efficient with our expert checklists.</p>
+  `,
+  maintenance: `
+    <h2 style="margin-bottom: 1.5rem;">Seasonal Home Maintenance Checklists & Contractor Vetting</h2>
+    <p style="margin-bottom: 1.2rem; opacity: 0.85;">Prevention is always more cost-effective than emergency repair. Follow our year-round Bangalore home maintenance checklist, detailing roof waterproofing tasks in April, false ceiling repair guides, and prep work before the festive Diwali season.</p>
+    <p style="opacity: 0.85;">We also provide practical tips on how to vet local handymen, listing the top screening questions to ask potential contractors about service warranties and material grades before you commit to booking.</p>
+  `
+};
+
 export default function BlogListing({ selectedCategorySlug = 'all' }) {
   // Dynamically extract categories from all posts
   const categoriesFromPosts = Array.from(new Set(BLOG_POSTS.map(post => post.category)));
@@ -162,6 +195,13 @@ export default function BlogListing({ selectedCategorySlug = 'all' }) {
             </Link>
           </div>
         )}
+
+        {/* Category Description Block */}
+        <div 
+          className="glass" 
+          style={{ padding: '3rem', marginTop: '5rem', lineHeight: '1.7', opacity: 0.9 }}
+          dangerouslySetInnerHTML={{ __html: CATEGORY_DESCRIPTIONS[selectedCategorySlug.toLowerCase()] || CATEGORY_DESCRIPTIONS['all'] }} 
+        />
       </div>
 
       <style jsx>{`

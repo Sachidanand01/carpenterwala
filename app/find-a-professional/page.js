@@ -310,6 +310,19 @@ function DirectoryContent() {
               ))}
             </div>
           )}
+          {/* Search Engine Information Block */}
+          <div className="glass" style={{ padding: "3rem", marginTop: "4rem", lineHeight: "1.7", opacity: 0.9 }}>
+            <h2 style={{ marginBottom: "1.5rem" }}>How to Find a Professional Handyman in Bangalore</h2>
+            <p style={{ marginBottom: "1.2rem" }}>
+              Finding a reliable service provider for your home can be challenging. Whether you need to <strong>find a professional</strong> for custom woodwork, hiring a verified painter in Bangalore, or locating a trusted electrician, Carpenterwala makes the process simple and transparent. Our directory lists verified tradesmen across various categories.
+            </p>
+            <p style={{ marginBottom: "1.2rem" }}>
+              Every handyman on our platform has been background-checked and physically verified. This helps you avoid common service issues and <strong>carpenter fraud in India</strong>. You can filter profiles by category, proximity (distance in km from your location), and languages spoken (including Kannada, Hindi, English, Tamil, and Telugu).
+            </p>
+            <p style={{ marginBottom: "1.2rem" }}>
+              When looking to <strong>hire verified carpenter</strong> or repair services, check out their profile ratings, customer reviews, and project portfolios. If you have any questions or require custom assistance, feel free to visit our Help Center or contact our support team.
+            </p>
+          </div>
         </div>
 
       </div>

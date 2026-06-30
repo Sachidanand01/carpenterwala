@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /pro/dashboard
+Disallow: /admin
 
 Sitemap: https://carpenterwala.com/sitemap.xml
+

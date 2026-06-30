@@ -101,6 +101,20 @@ export default function HelpPage() {
           </div>
         </div>
       </div>
+
+      {/* Search Engine Information Block */}
+      <div className="glass" style={{ padding: "3rem", marginTop: "4rem", lineHeight: "1.7", opacity: 0.9 }}>
+        <h2 style={{ marginBottom: "1.5rem" }}>Carpenterwala Help Center & Booking Assistance</h2>
+        <p style={{ marginBottom: "1.2rem" }}>
+          Welcome to the <strong>Carpenterwala help center</strong>, your comprehensive resource for getting the most out of our booking platform. Whether you are a homeowner seeking immediate booking assistance in Bangalore or a skilled tradesperson wanting to grow your freelance business, we have got you covered.
+        </p>
+        <p style={{ marginBottom: "1.2rem" }}>
+          Our mission is to bridge the gap between quality-conscious customers and background-verified professionals. Through our helper guides, step-by-step onboarding walkthroughs, and responsive <strong>handyman support service</strong>, we ensure a seamless and safe home improvement experience. 
+        </p>
+        <p>
+          Need urgent help rescheduling a job, verifying a service receipt, or understanding our 100% satisfaction guarantee? Our dedicated support staff operates daily. For custom queries or dispute resolution, submit a request via our contact form or reference the detailed FAQ library.
+        </p>
+      </div>
     </div>
   );
 }

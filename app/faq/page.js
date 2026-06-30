@@ -14,6 +14,10 @@ const faqs = [
       {
         q: "Is Carpenterwala available in my city?",
         a: "We currently operate exclusively in Bangalore. We are planning to expand to other major metro cities across India soon. Stay tuned for updates!"
+      },
+      {
+        q: "Are there any service charges or hidden fees when booking a professional?",
+        a: "No, Carpenterwala does not charge any hidden fees to homeowners. The price you agree upon with the professional is what you pay. We charge our service professionals a small lead fee or commission for matches, ensuring the pricing remains fully transparent and direct for our customers."
       }
     ]
   },
@@ -27,6 +31,10 @@ const faqs = [
       {
         q: "Do I need to provide tools or materials?",
         a: "Our professionals bring their own specialized tools to every job. For materials (like wood, paint, or spare parts), you can either provide them yourself or ask the pro to procure them for you at an additional cost."
+      },
+      {
+        q: "Can I request custom-designed furniture or large-scale renovations?",
+        a: "Yes, our carpenters, painters, and electrical professionals are highly skilled in large-scale residential and commercial renovations. When posting a job, you can upload design references, blueprints, or detail-oriented requirements to ensure you get matched with professionals who have specialized experience in custom work."
       }
     ]
   },
@@ -40,6 +48,10 @@ const faqs = [
       {
         q: "How do I book a professional?",
         a: "Simply browse our 'Find a Pro' section, select the category you need, and view profiles of top-rated professionals near you. You can request a quote directly from their profile page."
+      },
+      {
+        q: "What should I do if the professional doesn't show up on time?",
+        a: "If a professional is delayed, you can contact them directly using the contact details provided in your booking dashboard. If you are unable to reach them, contact our handyman support team immediately. We will coordinate with the professional or arrange a replacement pro at no extra cost to ensure your work is not delayed."
       }
     ]
   },
@@ -53,6 +65,10 @@ const faqs = [
       {
         q: "Is it safe to pay through the platform?",
         a: "Yes, we use industry-standard encryption for all transactions. Paying through the platform also ensures that your booking is covered by our service guarantees."
+      },
+      {
+        q: "What is your refund and booking cancellation policy?",
+        a: "You can cancel any scheduled service booking free of charge up to 2 hours before the scheduled time. If a booking is cancelled after that period, a small convenience fee may be charged to compensate the professional for travel. If you have paid through the platform and are eligible for a refund, it will be credited to your account within 5-7 business days."
       }
     ]
   }
