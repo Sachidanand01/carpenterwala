@@ -35,7 +35,7 @@ export default function TermsPage() {
       <div className="footer-grid" style={{ gridTemplateColumns: "1fr 3fr", gap: "4rem", alignItems: "start" }}>
         {/* Sidebar Navigation */}
         <div className="glass sticky-top" style={{ padding: "1.5rem", position: "sticky", top: "2rem" }}>
-          <h4 style={{ marginBottom: "1.5rem", fontSize: "1rem", color: "var(--primary)" }}>TABLE OF CONTENTS</h4>
+          <h2 style={{ marginBottom: "1.5rem", fontSize: "1rem", color: "var(--primary)", fontWeight: "bold" }}>TABLE OF CONTENTS</h2>
           <nav className="flex flex-col gap-3">
             {sections.map(section => (
               <a 

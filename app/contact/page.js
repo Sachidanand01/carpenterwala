@@ -27,21 +27,21 @@ export default function ContactUs() {
         {/* Support Cards */}
         <div className="glass" style={{ padding: "2.5rem", textAlign: "center" }}>
           <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>✉️</div>
-          <h3 style={{ marginBottom: "0.5rem" }}>Email Us</h3>
+          <h2 style={{ marginBottom: "0.5rem", fontSize: "1.5rem" }}>Email Us</h2>
           <p style={{ opacity: 0.7, marginBottom: "1.5rem", fontSize: "0.95rem" }}>Our team usually responds within 24 hours.</p>
           <a href="mailto:contact@carpenterwala.com" style={{ color: "var(--primary)", fontWeight: "bold" }}>contact@carpenterwala.com</a>
         </div>
 
         <div className="glass" style={{ padding: "2.5rem", textAlign: "center" }}>
           <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>🏢</div>
-          <h3 style={{ marginBottom: "0.5rem" }}>Head Office</h3>
+          <h2 style={{ marginBottom: "0.5rem", fontSize: "1.5rem" }}>Head Office</h2>
           <p style={{ opacity: 0.7, marginBottom: "1.5rem", fontSize: "0.95rem" }}>Visit us for corporate inquiries.</p>
           <p style={{ fontSize: "0.9rem" }}>Promenade Road, Bangalore, KA</p>
         </div>
 
         <div className="glass" style={{ padding: "2.5rem", textAlign: "center" }}>
           <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>❓</div>
-          <h3 style={{ marginBottom: "0.5rem" }}>Help Center</h3>
+          <h2 style={{ marginBottom: "0.5rem", fontSize: "1.5rem" }}>Help Center</h2>
           <p style={{ opacity: 0.7, marginBottom: "1.5rem", fontSize: "0.95rem" }}>Find answers in our extensive FAQ.</p>
           <Link href="/faq" className="btn btn-secondary" style={{ padding: "0.5rem 1.5rem" }}>Go to FAQ</Link>
         </div>
@@ -95,17 +95,17 @@ export default function ContactUs() {
         {/* Office Info */}
         <div className="flex flex-col gap-8">
           <div>
-            <h3 style={{ marginBottom: "1.5rem" }}>Our Regional Offices</h3>
+            <h2 style={{ marginBottom: "1.5rem", fontSize: "1.5rem" }}>Our Regional Offices</h2>
             <div className="flex flex-col gap-6">
               <div className="glass" style={{ padding: "1.5rem" }}>
-                <h4 style={{ color: "var(--primary)", marginBottom: "0.25rem" }}>Bangalore (Head Office)</h4>
+                <h3 style={{ color: "var(--primary)", marginBottom: "0.25rem", fontSize: "1.1rem" }}>Bangalore (Head Office)</h3>
                 <p style={{ opacity: 0.7, fontSize: "0.9rem" }}>#40 Promenade Road, Milwaukee Building, Bangalore, Karnataka.</p>
               </div>
             </div>
           </div>
 
           <div className="glass" style={{ padding: "2rem", background: "linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(245, 158, 11, 0.1))" }}>
-            <h4 style={{ marginBottom: "0.5rem" }}>Corporate Inquiries</h4>
+            <h3 style={{ marginBottom: "0.5rem", fontSize: "1.1rem" }}>Corporate Inquiries</h3>
             <p style={{ opacity: 0.8, fontSize: "0.9rem", marginBottom: "1rem" }}>Interested in a business partnership or bulk requirements?</p>
             <a href="mailto:corporate@carpenterwala.com" className="text-gradient" style={{ fontWeight: "bold" }}>corporate@carpenterwala.com</a>
           </div>

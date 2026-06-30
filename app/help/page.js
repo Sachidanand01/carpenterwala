@@ -56,7 +56,7 @@ export default function HelpPage() {
         {categories.map((cat, idx) => (
           <div key={idx} className="glass" style={{ padding: "2.5rem", transition: "transform 0.3s ease", cursor: "pointer" }}>
             <div style={{ fontSize: "2.5rem", marginBottom: "1.5rem" }}>{cat.icon}</div>
-            <h3 style={{ marginBottom: "0.75rem" }}>{cat.title}</h3>
+            <h2 style={{ marginBottom: "0.75rem", fontSize: "1.5rem" }}>{cat.title}</h2>
             <p style={{ opacity: 0.7, fontSize: "0.95rem", lineHeight: "1.5" }}>{cat.desc}</p>
           </div>
         ))}
@@ -90,7 +90,7 @@ export default function HelpPage() {
 
         <div className="flex flex-col gap-6">
           <div className="glass" style={{ padding: "2rem", textAlign: "center", background: "rgba(59, 130, 246, 0.1)" }}>
-            <h3 style={{ marginBottom: "1rem" }}>Still stuck?</h3>
+            <h2 style={{ marginBottom: "1rem", fontSize: "1.5rem" }}>Still stuck?</h2>
             <p style={{ opacity: 0.8, fontSize: "0.9rem", marginBottom: "2rem" }}>
               Our support team is available 9am - 8pm for any urgent queries.
             </p>
