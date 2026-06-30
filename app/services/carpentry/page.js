@@ -292,15 +292,15 @@ export default function CarpentryPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '2rem', marginTop: '2rem' }}>
             <div>
-              <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--accent)' }}>1. Verify Credentials</h4>
+              <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--accent)', fontWeight: 'bold' }}>1. Verify Credentials</h3>
               <p style={{ opacity: 0.8, fontSize: '0.95rem' }}>Always look for verified carpenters in India. Verify background checks, identity records, and past customer reviews before allowing anyone into your home.</p>
             </div>
             <div>
-              <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--accent)' }}>2. Review Past Portfolios</h4>
+              <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--accent)', fontWeight: 'bold' }}>2. Review Past Portfolios</h3>
               <p style={{ opacity: 0.8, fontSize: '0.95rem' }}>Check actual photos of completed carpentry projects rather than generic online catalog designs. Trusted carpenters gladly showcase their real wood craftsmanship.</p>
             </div>
             <div>
-              <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--accent)' }}>3. Request Detailed Quotes</h4>
+              <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--accent)', fontWeight: 'bold' }}>3. Request Detailed Quotes</h3>
               <p style={{ opacity: 0.8, fontSize: '0.95rem' }}>Ask for itemized billing. Clear expectations on cost of materials vs. labour charges will help prevent surprise expenses or disputes.</p>
             </div>
           </div>

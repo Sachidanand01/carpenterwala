@@ -177,19 +177,19 @@ export default function Home() {
             </div>
             <div style={{ flex: "1 1 300px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
               <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <h4 style={{ color: "var(--accent)", marginBottom: "0.5rem" }}>Modular Fitting</h4>
+                <h3 style={{ color: "var(--accent)", marginBottom: "0.5rem", fontSize: "1.1rem" }}>Modular Fitting</h3>
                 <p style={{ fontSize: "0.85rem", opacity: 0.7 }}>Perfect assembly of pre-fabricated kitchen and wardrobe panels.</p>
               </div>
               <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <h4 style={{ color: "var(--accent)", marginBottom: "0.5rem" }}>Teak Woodwork</h4>
+                <h3 style={{ color: "var(--accent)", marginBottom: "0.5rem", fontSize: "1.1rem" }}>Teak Woodwork</h3>
                 <p style={{ fontSize: "0.85rem", opacity: 0.7 }}>Bespoke, high-end woodwork crafted custom on-site by Indian experts.</p>
               </div>
               <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <h4 style={{ color: "var(--accent)", marginBottom: "0.5rem" }}>Wall Panelings</h4>
+                <h3 style={{ color: "var(--accent)", marginBottom: "0.5rem", fontSize: "1.1rem" }}>Wall Panelings</h3>
                 <p style={{ fontSize: "0.85rem", opacity: 0.7 }}>Modern wood laminates, fluted panels, and television backdrops.</p>
               </div>
               <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <h4 style={{ color: "var(--accent)", marginBottom: "0.5rem" }}>Hassle-Free</h4>
+                <h3 style={{ color: "var(--accent)", marginBottom: "0.5rem", fontSize: "1.1rem" }}>Hassle-Free</h3>
                 <p style={{ fontSize: "0.85rem", opacity: 0.7 }}>Complete project milestones with transparent billing guarantees.</p>
               </div>
             </div>
