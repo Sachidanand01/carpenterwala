@@ -53,6 +53,9 @@ export async function generateMetadata({ searchParams }) {
       description,
       images: [ogImage],
     },
+    alternates: {
+      canonical: (lang === 'hi' || lang === 'kn') ? `https://carpenterwala.com/pro/login?lang=${lang}` : 'https://carpenterwala.com/pro/login',
+    },
   };
 }
 

@@ -5,6 +5,9 @@ export const metadata = {
   title: 'Sitemap | Carpenterwala Handyman Marketplace',
   description: 'Navigate easily through the Carpenterwala Professional Handyman Marketplace. Find verified carpenters, painters, plumbers, electricians, and home maintenance tips in Bangalore.',
   keywords: ['carpenterwala sitemap', 'handyman site directory', 'home service pages', 'bangalore contractor links'],
+  alternates: {
+    canonical: 'https://carpenterwala.com/sitemap',
+  },
 };
 
 export default function SitemapPage() {

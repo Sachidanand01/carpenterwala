@@ -142,19 +142,7 @@ function DirectoryContent() {
   }, [allProfiles, category, maxDistance, selectedLanguages, sortBy, userLocation]);
 
   return (
-    <div className="container" style={{ padding: "2rem 0 4rem 0" }}>
-      <Breadcrumbs items={[
-        { name: "Home", url: "/" },
-        { name: "Find a Professional", url: "/find-a-professional" }
-      ]} />
-      <div style={{ marginBottom: "2rem", textAlign: "center" }}>
-        <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>Find a Professional</h1>
-        <p style={{ opacity: 0.8, fontSize: "1.1rem" }}>
-          Browse our verified handymen. Filter by trade, location, and languages.
-        </p>
-      </div>
-
-      <div className="flex gap-8" style={{ alignItems: "flex-start", flexWrap: "wrap" }}>
+    <div className="flex gap-8" style={{ alignItems: "flex-start", flexWrap: "wrap" }}>
         
         {/* SIDEBAR FILTERS */}
         <aside className="glass" style={{ width: "100%", maxWidth: "300px", padding: "1.5rem" }}>
@@ -322,14 +310,26 @@ function DirectoryContent() {
         </div>
 
       </div>
-    </div>
   );
 }
 
 export default function DirectoryClient() {
   return (
-    <Suspense fallback={<div style={{ padding: "5rem", textAlign: "center" }}>Loading Directory...</div>}>
-      <DirectoryContent />
-    </Suspense>
+    <div className="container" style={{ padding: "2rem 0 4rem 0" }}>
+      <Breadcrumbs items={[
+        { name: "Home", url: "/" },
+        { name: "Find a Professional", url: "/find-a-professional" }
+      ]} />
+      <div style={{ marginBottom: "2rem", textAlign: "center" }}>
+        <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>Find a Professional</h1>
+        <p style={{ opacity: 0.8, fontSize: "1.1rem" }}>
+          Browse our verified handymen. Filter by trade, location, and languages.
+        </p>
+      </div>
+
+      <Suspense fallback={<div style={{ padding: "5rem", textAlign: "center" }}>Loading Directory...</div>}>
+        <DirectoryContent />
+      </Suspense>
+    </div>
   );
 }

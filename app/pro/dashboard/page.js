@@ -380,7 +380,7 @@ export default function ProDashboard() {
     <div className="container flex items-center justify-center" style={{ minHeight: 'calc(100vh - var(--navbar-height))' }}>
       <div style={{ textAlign: 'center', opacity: 0.7 }}>
         <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⚙️</div>
-        <p>Loading your dashboard…</p>
+        <h1 style={{ fontSize: '1.2rem', fontWeight: 600, marginTop: '1rem' }}>Loading your dashboard…</h1>
       </div>
     </div>
   );
