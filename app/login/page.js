@@ -303,6 +303,9 @@ export default function CustomerLogin() {
           <p style={{ textAlign: "center", opacity: 0.8, marginBottom: "2rem", fontSize: "0.92rem" }}>
             {step === 1 ? 'Access your dashboard or create a new account.' : 'Verify your email address to continue.'}
           </p>
+          <h2 style={{ fontSize: "1.1rem", fontWeight: 700, margin: "-1rem 0 1.5rem 0", textAlign: "center", color: "var(--accent)" }}>
+            {activeTab === 'login' ? 'Registered Customer Access' : 'New Customer Registration'}
+          </h2>
 
           {/* Form Tabs Switcher (Only visible in Step 1) */}
           {step === 1 && (

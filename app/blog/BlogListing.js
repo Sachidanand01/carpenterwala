@@ -130,6 +130,9 @@ export default function BlogListing({ selectedCategorySlug = 'all' }) {
       </div>
 
       <div className="container">
+        <h2 style={{ fontSize: '2rem', marginBottom: '2.5rem', fontWeight: '800', color: 'var(--primary)' }}>
+          {activeCategory === 'All' ? 'Latest Handyman Articles' : `Latest ${activeCategory} Guides`}
+        </h2>
         <div style={{ 
           display: 'grid', 
           gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', 

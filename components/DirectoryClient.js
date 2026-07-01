@@ -322,6 +322,7 @@ export default function DirectoryClient() {
       ]} />
       <div style={{ marginBottom: "2rem", textAlign: "center" }}>
         <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>Find a Professional</h1>
+        <h2 style={{ display: 'none' }}>Verified Local Handyman Directory in Bangalore</h2>
         <p style={{ opacity: 0.8, fontSize: "1.1rem" }}>
           Browse our verified handymen. Filter by trade, location, and languages.
         </p>

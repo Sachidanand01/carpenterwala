@@ -381,6 +381,7 @@ export default function ProDashboard() {
       <div style={{ textAlign: 'center', opacity: 0.7 }}>
         <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⚙️</div>
         <h1 style={{ fontSize: '1.2rem', fontWeight: 600, marginTop: '1rem' }}>Loading your dashboard…</h1>
+        <h2 style={{ display: 'none' }}>Professional Handyman Management Workspace</h2>
       </div>
     </div>
   );

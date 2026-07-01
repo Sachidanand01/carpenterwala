@@ -287,6 +287,9 @@ export default function ProLogin() {
               {step === 2 && `Enter the OTP sent to ${activeEmail}`}
               {step === 3 && 'We found multiple profiles. Select yours.'}
             </p>
+            <h2 style={{ fontSize: "1rem", fontWeight: 700, margin: "0.5rem 0 1.5rem 0", textAlign: "center", color: "var(--accent)" }}>
+              {isRegister ? 'New Professional Registration' : 'Verified Handyman Login'}
+            </h2>
           </div>
 
           {/* Tabs */}
