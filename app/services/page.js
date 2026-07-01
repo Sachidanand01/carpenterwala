@@ -210,10 +210,10 @@ export default function ServicesPage() {
       <div className="glass" style={{ padding: "3rem", marginTop: "4rem", lineHeight: "1.7", opacity: 0.9 }}>
         <h2 style={{ marginBottom: "1.5rem" }}>Professional Handyman Services in Bangalore</h2>
         <p style={{ marginBottom: "1.2rem" }}>
-          Welcome to Carpenterwala, your go-to place for finding reliable, verified home repair help in Bangalore. We connect you with local, background-checked professionals for almost any job. Whether you need a skilled carpenter, painter, electrician, plumber, welder, or AC technician, we have you covered.
+          Welcome to Carpenterwala, your go-to place for high-quality, verified <strong>professional handyman services Bangalore</strong>. We connect you with local, background-checked professionals for almost any job. Whether you need a skilled carpenter, painter, electrician, plumber, welder, or AC technician, we have you covered.
         </p>
         <p style={{ marginBottom: "1.2rem" }}>
-          Why choose us? We know that finding a trusted handyman can be hard and stressful. That is why we personally check every professional on our platform. We check their IDs, verify their skills, and make sure they have great reviews. We also look at your location to match you with top-rated pros right in your neighborhood.
+          Why choose us? Finding <strong>trusted local home repairs</strong> can be hard and stressful. That is why we personally check every professional on our platform. We check their IDs, verify their skills, and make sure they have great reviews. We also look at your location to match you with top-rated pros right in your neighborhood.
         </p>
         <p>
           From fixing a small leaking pipe to redesigning your whole room, we help you check rates, read customer reviews, and book instantly. Take a look at our services above to find the perfect professional today.
