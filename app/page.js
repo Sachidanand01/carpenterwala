@@ -171,7 +171,7 @@ export default function Home() {
               <span style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "2px", color: "var(--primary)", fontWeight: "bold" }}>Flat Possession Solutions</span>
               <h2 style={{ fontSize: "2.25rem", marginTop: "0.5rem", marginBottom: "1rem" }}>Carpenterwala for New Flat Owners</h2>
               <p style={{ opacity: 0.85, lineHeight: "1.8", marginBottom: "1.5rem" }}>
-                Just got possession of your new apartment in India? Hiring the right carpenter for a new flat can be stressful. From custom wardrobes to modular kitchens, our vetted professionals take care of your complete <strong>home setup after possession</strong>. Get high-quality finishes, transparent material logs, and robust safety guarantees.
+                Just got the keys to your new apartment? Finding a reliable carpenter to set up your new home can be stressful. From custom wardrobes to modular kitchens, our verified professionals make setting up your new flat easy. We handle all the woodwork with clear pricing, quality materials, and a complete safety guarantee.
               </p>
               <Link href="/find-a-professional?category=Carpenter" className="btn btn-primary">
                 Get Carpenter for New Flat

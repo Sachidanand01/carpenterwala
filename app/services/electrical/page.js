@@ -123,7 +123,7 @@ export default function ElectricalPage() {
             Professional <span className="text-gradient">Electrician Services</span>
           </h1>
           <p style={{ fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto 2rem', opacity: 0.9 }}>
-            Safety-first home and commercial electrician services. Our certified electrical professionals handle everything from minor socket repairs to full house rewiring.
+            Safe and reliable electrical help for your home or business. Our verified local electricians in Bangalore can handle any job—from fixing a simple loose switch to rewiring your entire house.
           </p>
           <Link href="/find-a-professional?category=Electrician" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
             Find an Electrician Nearby
@@ -144,37 +144,37 @@ export default function ElectricalPage() {
           <div className="glass" style={{ padding: '2rem' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>⚡</div>
             <h3 style={{ marginBottom: '1rem' }}>Wiring & Rewiring</h3>
-            <p style={{ opacity: 0.8 }}>Complete house wiring for new constructions or safe rewiring of old homes to handle modern appliance loads and prevent short circuits.</p>
+            <p style={{ opacity: 0.8 }}>We help wire new houses or replace old, unsafe wiring so your home can easily run modern appliances without the risk of short circuits.</p>
           </div>
 
           <div className="glass" style={{ padding: '2rem' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>💡</div>
             <h3 style={{ marginBottom: '1rem' }}>Lighting & Fixtures</h3>
-            <p style={{ opacity: 0.8 }}>Installation of decorative lights, chandeliers, LED strips, and outdoor lighting. We ensure perfect placement and secure mounting.</p>
+            <p style={{ opacity: 0.8 }}>Hang decorative lights, ceiling fans, or chandeliers safely. We make sure all your fixtures are securely mounted and look great.</p>
           </div>
 
           <div className="glass" style={{ padding: '2rem' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🔌</div>
             <h3 style={{ marginBottom: '1rem' }}>Socket & Switch Repairs</h3>
-            <p style={{ opacity: 0.8 }}>Fixing burnt sockets, loose switches, or upgrading to modern modular switchboards with surge protection.</p>
+            <p style={{ opacity: 0.8 }}>Replace burnt sockets, fix loose switches, or install new switchboards with built-in surge protection to keep your devices safe.</p>
           </div>
 
           <div className="glass" style={{ padding: '2rem' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📟</div>
             <h3 style={{ marginBottom: '1rem' }}>Appliance Installation</h3>
-            <p style={{ opacity: 0.8 }}>Safe installation of heavy appliances like ACs, geysers, ovens, and chimneys with appropriate MCBs and earthing.</p>
+            <p style={{ opacity: 0.8 }}>Get help installing heavy appliances like ACs, water geysers, or chimneys. We set up dedicated power switches to keep them running safely.</p>
           </div>
 
           <div className="glass" style={{ padding: '2rem' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🛡️</div>
             <h3 style={{ marginBottom: '1rem' }}>Safety Inspections</h3>
-            <p style={{ opacity: 0.8 }}>Thorough checking of earthing, MCBs, and wiring health to protect your family and expensive electronics from voltage fluctuations.</p>
+            <p style={{ opacity: 0.8 }}>We check your home's safety switches, earthing, and wires. This keeps your family safe and protects your electronics from power spikes.</p>
           </div>
 
           <div className="glass" style={{ padding: '2rem' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🏠</div>
             <h3 style={{ marginBottom: '1rem' }}>Smart Home Setup</h3>
-            <p style={{ opacity: 0.8 }}>Installation of smart switches, video doorbells, and automated lighting systems for a truly modern living experience.</p>
+            <p style={{ opacity: 0.8 }}>Set up smart switches, smart doorbells, or automated lights to control your home easily from your phone.</p>
           </div>
         </div>
       </section>

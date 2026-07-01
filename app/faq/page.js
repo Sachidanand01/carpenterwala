@@ -9,15 +9,15 @@ const faqs = [
     questions: [
       {
         q: "What is Carpenterwala?",
-        a: "Carpenterwala is India's premier marketplace for finding trusted and verified home service professionals, including carpenters, painters, plumbers, and electricians. We connect homeowners with skilled pros who are background-checked and rated by the community."
+        a: "Carpenterwala is an easy-to-use site to find trusted local handymen in Bangalore. We connect you directly with verified carpenters, painters, plumbers, and electricians who are background-checked and rated by real customers."
       },
       {
         q: "Is Carpenterwala available in my city?",
-        a: "We currently operate exclusively in Bangalore. We are planning to expand to other major metro cities across India soon. Stay tuned for updates!"
+        a: "Right now, we only operate in Bangalore. We plan to expand to other major cities across India very soon. We will share updates as we grow!"
       },
       {
         q: "Are there any service charges or hidden fees when booking a professional?",
-        a: "No, Carpenterwala does not charge any hidden fees to homeowners. The price you agree upon with the professional is what you pay. We charge our service professionals a small lead fee or commission for matches, ensuring the pricing remains fully transparent and direct for our customers."
+        a: "No hidden fees at all! The price you agree on with your professional is exactly what you pay. We charge our service professionals a small fee for matching them with you. This keeps pricing clean, direct, and transparent for you."
       }
     ]
   },
@@ -26,15 +26,15 @@ const faqs = [
     questions: [
       {
         q: "What kind of services can I book?",
-        a: "You can book a wide range of services including furniture assembly, repair, custom carpentry, interior/exterior painting, plumbing fixes, and electrical installations. Each category has specialized professionals to ensure high-quality work."
+        a: "You can book almost any home repair! This includes assembling furniture, fixing wooden items, custom woodwork, painting inside or outside your house, plumbing repairs, and electrical work."
       },
       {
         q: "Do I need to provide tools or materials?",
-        a: "Our professionals bring their own specialized tools to every job. For materials (like wood, paint, or spare parts), you can either provide them yourself or ask the pro to procure them for you at an additional cost."
+        a: "Our pros bring all the special tools needed for the job. For materials like wood, paint, or pipes, you can buy them yourself or pay the pro to buy them for you."
       },
       {
         q: "Can I request custom-designed furniture or large-scale renovations?",
-        a: "Yes, our carpenters, painters, and electrical professionals are highly skilled in large-scale residential and commercial renovations. When posting a job, you can upload design references, blueprints, or detail-oriented requirements to ensure you get matched with professionals who have specialized experience in custom work."
+        a: "Yes! Our pros handle both small home repairs and large renovations. When you list a job, you can upload photos, designs, or details. This helps us match you with the right pro who has the exact skills for your project."
       }
     ]
   },
@@ -43,15 +43,15 @@ const faqs = [
     questions: [
       {
         q: "How are the professionals verified?",
-        a: "Every professional on Carpenterwala goes through a multi-step verification process, including identity checks, skill assessments, and background verification. We only list pros who meet our high standards of quality and reliability."
+        a: "We check every professional on our platform. This includes checking their ID cards, verifying their skills, and running background checks. We only list pros who are reliable, safe, and do high-quality work."
       },
       {
         q: "How do I book a professional?",
-        a: "Simply browse our 'Find a Pro' section, select the category you need, and view profiles of top-rated professionals near you. You can request a quote directly from their profile page."
+        a: "It is simple! Browse our 'Find a Pro' section, pick the service you need, and view nearby pro profiles. You can ask for a price quote directly from their page."
       },
       {
         q: "What should I do if the professional doesn't show up on time?",
-        a: "If a professional is delayed, you can contact them directly using the contact details provided in your booking dashboard. If you are unable to reach them, contact our handyman support team immediately. We will coordinate with the professional or arrange a replacement pro at no extra cost to ensure your work is not delayed."
+        a: "If your pro is running late, you can call them directly using their number in your dashboard. If you can't reach them, just call our help support team. We will contact them for you or send a replacement pro quickly so your job gets done."
       }
     ]
   },
@@ -60,15 +60,15 @@ const faqs = [
     questions: [
       {
         q: "How is the pricing determined?",
-        a: "Pricing depends on the scope of work. Many pros offer competitive hourly rates, while larger projects like custom carpentry are priced based on the specific requirements. You can discuss and finalize the quote directly with the professional."
+        a: "Pricing depends on the job size. Many pros charge simple hourly rates, while larger projects like custom carpentry are priced based on the work details. You can talk and agree on a price directly with your pro."
       },
       {
         q: "Is it safe to pay through the platform?",
-        a: "Yes, we use industry-standard encryption for all transactions. Paying through the platform also ensures that your booking is covered by our service guarantees."
+        a: "Yes! We use safe, industry-standard systems to handle your payments securely. Paying online also covers your booking under our service guarantee."
       },
       {
         q: "What is your refund and booking cancellation policy?",
-        a: "You can cancel any scheduled service booking free of charge up to 2 hours before the scheduled time. If a booking is cancelled after that period, a small convenience fee may be charged to compensate the professional for travel. If you have paid through the platform and are eligible for a refund, it will be credited to your account within 5-7 business days."
+        a: "You can cancel your booking for free up to 2 hours before the scheduled time. If you cancel later than that, we may charge a small fee to help cover the pro's travel cost. If you are due a refund, it will show up in your account in 5 to 7 working days."
       }
     ]
   }
