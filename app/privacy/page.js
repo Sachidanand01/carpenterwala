@@ -24,7 +24,7 @@ export default function PrivacyPolicy() {
         </p>
 
         <section style={{ marginBottom: "3rem" }}>
-          <h2 style={{ fontSize: "1.75rem", marginBottom: "1rem", color: "var(--primary)" }}>1. Introduction</h2>
+          <h2 style={{ fontSize: "1.75rem", marginBottom: "1rem", color: "var(--primary)" }}>1. Introduction to Privacy Policy</h2>
           <p>
             Welcome to <strong>Carpenterwala Marketplace</strong>.
           </p>
@@ -95,7 +95,7 @@ export default function PrivacyPolicy() {
         </section>
 
         <section>
-          <h2 style={{ fontSize: "1.75rem", marginBottom: "1rem", color: "var(--primary)" }}>7. Contact Us</h2>
+          <h2 style={{ fontSize: "1.75rem", marginBottom: "1rem", color: "var(--primary)" }}>7. Privacy Contact Details</h2>
           <p>If you have any questions about this Privacy Policy, please contact us:</p>
           <ul style={{ listStyle: "none", marginTop: "0.5rem" }}>
             <li>By email: <strong>contact@carpenterwala.com</strong></li>
