@@ -18,7 +18,25 @@ export async function generateMetadata({ params }) {
   
   const siteUrl = 'https://carpenterwala.com';
   const canonicalUrl = `${siteUrl}/blog/${post.slug}`;
-  const pageTitle = `${post.title} | Carpenterwala Blog`;
+  let cleanTitle = post.title;
+  if (cleanTitle.includes(':')) {
+    cleanTitle = cleanTitle.split(':')[0].trim();
+  }
+  if (cleanTitle === "The Ultimate Guide to Termite Prevention in Bangalore Homes") {
+    cleanTitle = "Termite Prevention Guide for Bangalore";
+  } else if (cleanTitle === "The Ultimate Diwali Home Renovation Checklist for a Festive Makeover") {
+    cleanTitle = "Diwali Home Renovation Checklist";
+  } else if (cleanTitle === "The Annual Bangalore Home Maintenance Checklist") {
+    cleanTitle = "Bangalore Home Maintenance Checklist";
+  } else if (cleanTitle === "How to Choose the Perfect Paint for Your Living Room") {
+    cleanTitle = "Choose the Perfect Living Room Paint";
+  } else if (cleanTitle === "5 Essential Carpentry Tips for Every Homeowner") {
+    cleanTitle = "5 Essential Home Carpentry Tips";
+  } else if (cleanTitle === "Top 5 Smart Home Electrical Upgrades for 2026") {
+    cleanTitle = "5 Smart Home Electrical Upgrades";
+  }
+  
+  const pageTitle = `${cleanTitle} | Carpenterwala`;
   const pageDescription = post.excerpt;
 
   const baseKeywords = ['carpenter blog', 'home improvement tips', 'Bangalore', 'handyman tips', 'furniture maintenance'];
