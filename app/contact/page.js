@@ -29,7 +29,9 @@ export default function ContactUs() {
           <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>✉️</div>
           <h2 style={{ marginBottom: "0.5rem", fontSize: "1.5rem" }}>Email Us</h2>
           <p style={{ opacity: 0.7, marginBottom: "1.5rem", fontSize: "0.95rem" }}>Our team usually responds within 24 hours.</p>
+          <span dangerouslySetInnerHTML={{ __html: '<!--email_off-->' }} />
           <a href="mailto:contact@carpenterwala.com" style={{ color: "var(--primary)", fontWeight: "bold" }}>contact@carpenterwala.com</a>
+          <span dangerouslySetInnerHTML={{ __html: '<!--/email_off-->' }} />
         </div>
 
         <div className="glass" style={{ padding: "2.5rem", textAlign: "center" }}>
@@ -107,7 +109,9 @@ export default function ContactUs() {
           <div className="glass" style={{ padding: "2rem", background: "linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(245, 158, 11, 0.1))" }}>
             <h3 style={{ marginBottom: "0.5rem", fontSize: "1.1rem" }}>Corporate Inquiries</h3>
             <p style={{ opacity: 0.8, fontSize: "0.9rem", marginBottom: "1rem" }}>Interested in a business partnership or bulk requirements?</p>
+            <span dangerouslySetInnerHTML={{ __html: '<!--email_off-->' }} />
             <a href="mailto:corporate@carpenterwala.com" className="text-gradient" style={{ fontWeight: "bold" }}>corporate@carpenterwala.com</a>
+            <span dangerouslySetInnerHTML={{ __html: '<!--/email_off-->' }} />
           </div>
         </div>
       </div>
