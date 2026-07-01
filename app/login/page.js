@@ -3,6 +3,96 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
+function PromoVideo({ src, icon, title, description }) {
+  const [videoError, setVideoError] = useState(false);
+  
+  return (
+    <div className="glass animate-fade-in" style={{
+      width: '100%',
+      height: '420px',
+      borderRadius: '16px',
+      overflow: 'hidden',
+      position: 'relative',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      border: '1px solid var(--glass-border)',
+      background: 'rgba(255,255,255,0.02)',
+      boxShadow: '0 8px 30px rgba(0, 0, 0, 0.2)'
+    }}>
+      {!videoError ? (
+        <video
+          src={src}
+          autoPlay
+          muted
+          loop
+          playsInline
+          onError={() => setVideoError(true)}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            opacity: 0.85
+          }}
+        />
+      ) : null}
+      
+      <div style={{
+        position: 'relative',
+        zIndex: 1,
+        textAlign: 'center',
+        padding: '1.5rem',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: videoError ? 'transparent' : 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0) 100%)',
+        color: 'white',
+        width: '100%'
+      }}>
+        {videoError && (
+          <div style={{
+            width: '50px',
+            height: '50px',
+            borderRadius: '55%',
+            background: 'rgba(255,255,255,0.1)',
+            border: '1px solid rgba(255,255,255,0.3)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '1.2rem',
+            marginBottom: '1rem',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
+          }}>
+            ▶️
+          </div>
+        )}
+        <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem' }}>{icon}</span>
+        <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 0.5rem 0', color: 'var(--accent)' }}>{title}</h3>
+        <p style={{ fontSize: '0.8rem', opacity: 0.75, margin: 0, lineHeight: '1.4' }}>{description}</p>
+        
+        {!videoError && (
+          <span style={{
+            position: 'absolute',
+            bottom: '1rem',
+            fontSize: '0.7rem',
+            opacity: 0.5,
+            letterSpacing: '1px',
+            textTransform: 'uppercase'
+          }}>
+            📺 Video Preview
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function CustomerLogin() {
   const [activeTab, setActiveTab] = useState('login'); // 'login' or 'register'
   const [name, setName] = useState('');
@@ -250,193 +340,188 @@ export default function CustomerLogin() {
 
   return (
     <div className="container flex items-center justify-center" style={{ minHeight: "calc(100vh - var(--navbar-height))", padding: "2.5rem 1rem" }}>
-      <div style={{ width: "100%", maxWidth: "450px" }}>
-        
-        {/* Premium Simulated / Real OTP Gateway Banner */}
-        {otpSentAlert && (
-          <div className="glass animate-fade-in" style={{
-            padding: "1.25rem",
-            borderLeft: "4px solid var(--accent)",
-            background: isSimulatedOtp ? "rgba(245, 158, 11, 0.12)" : "rgba(16, 185, 129, 0.12)",
-            borderRadius: "12px",
-            marginBottom: "1.5rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.5rem",
-            boxShadow: isSimulatedOtp ? "0 12px 40px rgba(245, 158, 11, 0.15)" : "0 12px 40px rgba(16, 185, 129, 0.15)",
-            border: isSimulatedOtp ? "1px solid rgba(245, 158, 11, 0.2)" : "1px solid rgba(16, 185, 129, 0.2)",
-            borderLeftWidth: "4px",
-            borderLeftColor: isSimulatedOtp ? "var(--accent)" : "#10b981"
-          }}>
-            <div className="flex items-center gap-2">
-              <span style={{ fontSize: "1.25rem" }}>✉️</span>
-              <span style={{ 
-                fontSize: "0.8rem", 
-                opacity: 0.95, 
-                color: isSimulatedOtp ? "var(--accent)" : "#10b981", 
-                fontWeight: 700, 
-                letterSpacing: "0.06em" 
-              }}>
-                {isSimulatedOtp ? 'SIMULATED EMAIL GATEWAY' : 'OTP sent to your entered emailID'}
-              </span>
-            </div>
-            <div style={{ fontSize: "0.9rem", color: "white" }}>
-              <div>To: <strong>{email.trim()}</strong></div>
-              {isSimulatedOtp ? (
-                <div style={{ marginTop: "0.35rem", fontSize: "0.95rem" }}>
-                  Your OTP to log in to Carpenterwala is <strong style={{ color: "var(--accent)", fontSize: "1.1rem", letterSpacing: "1px" }}>{generatedOtp}</strong>
-                </div>
-              ) : (
-                <div style={{ marginTop: "0.35rem", fontSize: "0.9rem", opacity: 0.9 }}>
-                  A secure 6-digit OTP code has been successfully dispatched to your email address. Please check your inbox (and spam folder) to complete your verification.
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+      <style dangerouslySetInnerHTML={{__html: `
+        .customer-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 2rem;
+          width: 100%;
+          max-width: 1100px;
+        }
+        .promo-sidebar {
+          display: none;
+          flex-direction: column;
+          width: 280px;
+          flex-shrink: 0;
+        }
+        @media (min-width: 1024px) {
+          .customer-wrapper {
+            flex-direction: row;
+          }
+          .promo-sidebar {
+            display: flex;
+          }
+        }
+      `}} />
+      <div className="customer-wrapper">
 
-        <div className="glass animate-fade-in" style={{ padding: "2.5rem", width: "100%", borderRadius: "16px", boxShadow: "0 12px 45px rgba(0,0,0,0.35)" }}>
+        {/* Left Promo Column: Warranty Tracker */}
+        <div className="promo-sidebar">
+          <PromoVideo 
+            src="/videos/customer-warranty.mp4" 
+            icon="🛡️" 
+            title="Warranty Vault" 
+            description="Snap your receipt and register your device warranties. Track remaining coverage in one safe dashboard." 
+          />
+        </div>
+
+        {/* Center Portal Column */}
+        <div style={{ width: "100%", maxWidth: "450px", flexShrink: 0 }}>
           
-          <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", textAlign: "center", fontWeight: 800 }}>
-            Customer Portal
-          </h1>
-          <p style={{ textAlign: "center", opacity: 0.8, marginBottom: "2rem", fontSize: "0.92rem" }}>
-            {step === 1 ? 'Access your dashboard or create a new account.' : 'Verify your email address to continue.'}
-          </p>
-          <h2 style={{ fontSize: "1.1rem", fontWeight: 700, margin: "-1rem 0 1.5rem 0", textAlign: "center", color: "var(--accent)" }}>
-            {activeTab === 'login' ? 'Registered Customer Access' : 'New Customer Registration'}
-          </h2>
-
-          {/* Form Tabs Switcher (Only visible in Step 1) */}
-          {step === 1 && (
-            <div style={{
+          {/* Premium Simulated / Real OTP Gateway Banner */}
+          {otpSentAlert && (
+            <div className="glass animate-fade-in" style={{
+              padding: "1.25rem",
+              borderLeft: "4px solid var(--accent)",
+              background: isSimulatedOtp ? "rgba(245, 158, 11, 0.12)" : "rgba(16, 185, 129, 0.12)",
+              borderRadius: "12px",
+              marginBottom: "1.5rem",
               display: "flex",
-              background: "rgba(255, 255, 255, 0.04)",
-              borderRadius: "10px",
-              padding: "0.3rem",
-              marginBottom: "1.75rem",
-              border: "1px solid var(--glass-border)"
+              flexDirection: "column",
+              gap: "0.5rem",
+              boxShadow: isSimulatedOtp ? "0 12px 40px rgba(245, 158, 11, 0.15)" : "0 12px 40px rgba(16, 185, 129, 0.15)",
+              border: isSimulatedOtp ? "1px solid rgba(245, 158, 11, 0.2)" : "1px solid rgba(16, 185, 129, 0.2)",
+              borderLeftWidth: "4px",
+              borderLeftColor: isSimulatedOtp ? "var(--accent)" : "#10b981"
             }}>
-              <button 
-                type="button"
-                onClick={() => { setActiveTab('login'); setError(''); setInfoMessage(''); }}
-                style={{
-                  flex: 1,
-                  padding: "0.6rem",
-                  borderRadius: "7px",
-                  border: "none",
-                  fontWeight: 600,
-                  fontSize: "0.88rem",
-                  cursor: "pointer",
-                  transition: "all 0.25s ease",
-                  background: activeTab === 'login' ? 'var(--primary)' : 'transparent',
-                  color: activeTab === 'login' ? 'white' : 'rgba(255, 255, 255, 0.65)'
-                }}
-              >
-                🔑 Log In
-              </button>
-              <button 
-                type="button"
-                onClick={() => { setActiveTab('register'); setError(''); setInfoMessage(''); }}
-                style={{
-                  flex: 1,
-                  padding: "0.6rem",
-                  borderRadius: "7px",
-                  border: "none",
-                  fontWeight: 600,
-                  fontSize: "0.88rem",
-                  cursor: "pointer",
-                  transition: "all 0.25s ease",
-                  background: activeTab === 'register' ? 'var(--primary)' : 'transparent',
-                  color: activeTab === 'register' ? 'white' : 'rgba(255, 255, 255, 0.65)'
-                }}
-              >
-                ✨ Create Account
-              </button>
-            </div>
-          )}
-
-          {error && (
-            <div style={{
-              background: "rgba(239, 68, 68, 0.12)",
-              border: "1px solid rgba(239, 68, 68, 0.25)",
-              color: "#f87171",
-              padding: "0.75rem 1rem",
-              borderRadius: "8px",
-              fontSize: "0.88rem",
-              marginBottom: "1.5rem"
-            }}>
-              ⚠️ {error}
-            </div>
-          )}
-
-          {infoMessage && (
-            <div style={{
-              background: "rgba(59, 130, 246, 0.12)",
-              border: "1px solid rgba(59, 130, 246, 0.25)",
-              color: "#60a5fa",
-              padding: "0.75rem 1rem",
-              borderRadius: "8px",
-              fontSize: "0.88rem",
-              marginBottom: "1.5rem"
-            }}>
-              ℹ️ {infoMessage}
-            </div>
-          )}
-
-          {step === 1 ? (
-            <form className="flex flex-col gap-4" onSubmit={handleSendOtp}>
-              
-              {/* Login Email Field */}
-              {activeTab === 'login' && (
-                <div className="flex flex-col gap-1">
-                  <label style={{ fontSize: "0.88rem", fontWeight: 600, opacity: 0.9 }}>Email Address</label>
-                  <input 
-                    type="email" 
-                    placeholder="e.g. amit@example.com" 
-                    required 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    style={{
-                      padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white", fontSize: "0.95rem"
-                    }} 
-                  />
-                </div>
-              )}
-
-              {/* Account Creation Fields */}
-              {activeTab === 'register' && (
-                <>
-                  <div className="flex flex-col gap-1">
-                    <div className="flex justify-between items-center">
-                      <label style={{ fontSize: "0.88rem", fontWeight: 600, opacity: 0.9 }}>Your Name</label>
-                      <span style={{ 
-                        fontSize: "0.75rem", 
-                        opacity: name.length > 16 ? 1 : 0.6,
-                        color: name.length > 16 ? "#f87171" : "inherit",
-                        fontWeight: name.length > 0 ? 600 : 400
-                      }}>
-                        {name.length}/16 chars
-                      </span>
-                    </div>
-                    <input 
-                      type="text" 
-                      placeholder="e.g. Sachin Tendulkar" 
-                      required 
-                      maxLength={16}
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      style={{
-                        padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white", fontSize: "0.95rem"
-                      }} 
-                    />
+              <div className="flex items-center gap-2">
+                <span style={{ fontSize: "1.25rem" }}>✉️</span>
+                <span style={{ 
+                  fontSize: "0.8rem", 
+                  opacity: 0.95, 
+                  color: isSimulatedOtp ? "var(--accent)" : "#10b981", 
+                  fontWeight: 700, 
+                  letterSpacing: "0.06em" 
+                }}>
+                  {isSimulatedOtp ? 'SIMULATED EMAIL GATEWAY' : 'OTP sent to your entered emailID'}
+                </span>
+              </div>
+              <div style={{ fontSize: "0.9rem", color: "white" }}>
+                <div>To: <strong>{email.trim()}</strong></div>
+                {isSimulatedOtp ? (
+                  <div style={{ marginTop: "0.35rem", fontSize: "0.95rem" }}>
+                    Your OTP to log in to Carpenterwala is <strong style={{ color: "var(--accent)", fontSize: "1.1rem", letterSpacing: "1px" }}>{generatedOtp}</strong>
                   </div>
+                ) : (
+                  <div style={{ marginTop: "0.35rem", fontSize: "0.9rem", opacity: 0.9 }}>
+                    A secure 6-digit OTP code has been successfully dispatched to your email address. Please check your inbox (and spam folder) to complete your verification.
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
+          <div className="glass animate-fade-in" style={{ padding: "2.5rem", width: "100%", borderRadius: "16px", boxShadow: "0 12px 45px rgba(0,0,0,0.35)" }}>
+            
+            <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", textAlign: "center", fontWeight: 800 }}>
+              Customer Portal
+            </h1>
+            <p style={{ textAlign: "center", opacity: 0.8, marginBottom: "2rem", fontSize: "0.92rem" }}>
+              {step === 1 ? 'Access your dashboard or create a new account.' : 'Verify your email address to continue.'}
+            </p>
+            <h2 style={{ fontSize: "1.1rem", fontWeight: 700, margin: "-1rem 0 1.5rem 0", textAlign: "center", color: "var(--accent)" }}>
+              {activeTab === 'login' ? 'Registered Customer Access' : 'New Customer Registration'}
+            </h2>
+
+            {/* Form Tabs Switcher (Only visible in Step 1) */}
+            {step === 1 && (
+              <div style={{
+                display: "flex",
+                background: "rgba(255, 255, 255, 0.04)",
+                borderRadius: "10px",
+                padding: "0.3rem",
+                marginBottom: "1.75rem",
+                border: "1px solid var(--glass-border)"
+              }}>
+                <button 
+                  type="button"
+                  onClick={() => { setActiveTab('login'); setError(''); setInfoMessage(''); }}
+                  style={{
+                    flex: 1,
+                    padding: "0.6rem",
+                    borderRadius: "7px",
+                    border: "none",
+                    fontWeight: 600,
+                    fontSize: "0.88rem",
+                    cursor: "pointer",
+                    transition: "all 0.25s ease",
+                    background: activeTab === 'login' ? 'var(--primary)' : 'transparent',
+                    color: activeTab === 'login' ? 'white' : 'rgba(255, 255, 255, 0.65)'
+                  }}
+                >
+                  🔑 Log In
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => { setActiveTab('register'); setError(''); setInfoMessage(''); }}
+                  style={{
+                    flex: 1,
+                    padding: "0.6rem",
+                    borderRadius: "7px",
+                    border: "none",
+                    fontWeight: 600,
+                    fontSize: "0.88rem",
+                    cursor: "pointer",
+                    transition: "all 0.25s ease",
+                    background: activeTab === 'register' ? 'var(--primary)' : 'transparent',
+                    color: activeTab === 'register' ? 'white' : 'rgba(255, 255, 255, 0.65)'
+                  }}
+                >
+                  ✨ Create Account
+                </button>
+              </div>
+            )}
+
+            {error && (
+              <div style={{
+                background: "rgba(239, 68, 68, 0.12)",
+                border: "1px solid rgba(239, 68, 68, 0.25)",
+                color: "#f87171",
+                padding: "0.75rem 1rem",
+                borderRadius: "8px",
+                fontSize: "0.88rem",
+                marginBottom: "1.5rem"
+              }}>
+                ⚠️ {error}
+              </div>
+            )}
+
+            {infoMessage && (
+              <div style={{
+                background: "rgba(59, 130, 246, 0.12)",
+                border: "1px solid rgba(59, 130, 246, 0.25)",
+                color: "#60a5fa",
+                padding: "0.75rem 1rem",
+                borderRadius: "8px",
+                fontSize: "0.88rem",
+                marginBottom: "1.5rem"
+              }}>
+                ℹ️ {infoMessage}
+              </div>
+            )}
+
+            {step === 1 ? (
+              <form className="flex flex-col gap-4" onSubmit={handleSendOtp}>
+                
+                {/* Login Email Field */}
+                {activeTab === 'login' && (
                   <div className="flex flex-col gap-1">
                     <label style={{ fontSize: "0.88rem", fontWeight: 600, opacity: 0.9 }}>Email Address</label>
                     <input 
                       type="email" 
-                      placeholder="sachin@example.com" 
+                      placeholder="e.g. amit@example.com" 
                       required 
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -445,96 +530,151 @@ export default function CustomerLogin() {
                       }} 
                     />
                   </div>
+                )}
 
-                  {/* Mobile Number (Registration Only) */}
-                  <div className="flex flex-col gap-1">
-                    <label style={{ fontSize: "0.88rem", fontWeight: 600, opacity: 0.9 }}>Indian Mobile Number</label>
-                    <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-                      <span style={{
-                        position: "absolute", left: "0.75rem", opacity: 0.7, fontSize: "0.95rem", fontWeight: 600
-                      }}>+91</span>
+                {/* Account Creation Fields */}
+                {activeTab === 'register' && (
+                  <>
+                    <div className="flex flex-col gap-1">
+                      <div className="flex justify-between items-center">
+                        <label style={{ fontSize: "0.88rem", fontWeight: 600, opacity: 0.9 }}>Your Name</label>
+                        <span style={{ 
+                          fontSize: "0.75rem", 
+                          opacity: name.length > 16 ? 1 : 0.6,
+                          color: name.length > 16 ? "#f87171" : "inherit",
+                          fontWeight: name.length > 0 ? 600 : 400
+                        }}>
+                          {name.length}/16 chars
+                        </span>
+                      </div>
                       <input 
-                        type="tel" 
-                        placeholder="9876543210" 
+                        type="text" 
+                        placeholder="e.g. Sachin Tendulkar" 
                         required 
-                        maxLength={10}
-                        value={phone}
-                        onChange={(e) => handlePhoneChange(e.target.value)}
+                        maxLength={16}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         style={{
-                          padding: "0.75rem 0.75rem 0.75rem 2.6rem", width: "100%", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white", fontSize: "0.95rem", letterSpacing: "0.5px"
+                          padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white", fontSize: "0.95rem"
                         }} 
                       />
                     </div>
-                    <span style={{ fontSize: "0.75rem", opacity: 0.55, marginTop: "0.15rem" }}>
-                      Only Indian 10-digit mobile numbers are supported.
-                    </span>
+
+                    <div className="flex flex-col gap-1">
+                      <label style={{ fontSize: "0.88rem", fontWeight: 600, opacity: 0.9 }}>Email Address</label>
+                      <input 
+                        type="email" 
+                        placeholder="sachin@example.com" 
+                        required 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        style={{
+                          padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white", fontSize: "0.95rem"
+                        }} 
+                      />
+                    </div>
+
+                    {/* Mobile Number (Registration Only) */}
+                    <div className="flex flex-col gap-1">
+                      <label style={{ fontSize: "0.88rem", fontWeight: 600, opacity: 0.9 }}>Indian Mobile Number</label>
+                      <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+                        <span style={{
+                          position: "absolute", left: "0.75rem", opacity: 0.7, fontSize: "0.95rem", fontWeight: 600
+                        }}>+91</span>
+                        <input 
+                          type="tel" 
+                          placeholder="9876543210" 
+                          required 
+                          maxLength={10}
+                          value={phone}
+                          onChange={(e) => handlePhoneChange(e.target.value)}
+                          style={{
+                            padding: "0.75rem 0.75rem 0.75rem 2.6rem", width: "100%", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white", fontSize: "0.95rem", letterSpacing: "0.5px"
+                          }} 
+                        />
+                      </div>
+                      <span style={{ fontSize: "0.75rem", opacity: 0.55, marginTop: "0.15rem" }}>
+                        Only Indian 10-digit mobile numbers are supported.
+                      </span>
+                    </div>
+                  </>
+                )}
+
+                <button 
+                  type="submit" 
+                  disabled={loading} 
+                  className="btn btn-primary" 
+                  style={{ marginTop: "1rem", width: "100%", padding: "0.8rem", fontSize: "0.95rem" }}
+                >
+                  {loading ? 'Processing...' : activeTab === 'register' ? 'Register & Send OTP' : 'Send OTP'}
+                </button>
+              </form>
+            ) : (
+              <form className="flex flex-col gap-4" onSubmit={handleVerifyOtp}>
+                <div className="flex flex-col gap-1">
+                  <div className="flex justify-between items-center">
+                    <label style={{ fontSize: "0.9rem", fontWeight: 600, opacity: 0.9 }}>Enter 6-Digit OTP</label>
+                    <button 
+                      type="button" 
+                      onClick={resetFlow}
+                      style={{ background: "none", border: "none", color: "var(--primary)", fontSize: "0.8rem", cursor: "pointer", fontWeight: 700 }}
+                    >
+                      Edit Email
+                    </button>
                   </div>
-                </>
-              )}
-
-              <button 
-                type="submit" 
-                disabled={loading} 
-                className="btn btn-primary" 
-                style={{ marginTop: "1rem", width: "100%", padding: "0.8rem", fontSize: "0.95rem" }}
-              >
-                {loading ? 'Processing...' : activeTab === 'register' ? 'Register & Send OTP' : 'Send OTP'}
-              </button>
-            </form>
-          ) : (
-            <form className="flex flex-col gap-4" onSubmit={handleVerifyOtp}>
-              <div className="flex flex-col gap-1">
-                <div className="flex justify-between items-center">
-                  <label style={{ fontSize: "0.9rem", fontWeight: 600, opacity: 0.9 }}>Enter 6-Digit OTP</label>
-                  <button 
-                    type="button" 
-                    onClick={resetFlow}
-                    style={{ background: "none", border: "none", color: "var(--primary)", fontSize: "0.8rem", cursor: "pointer", fontWeight: 700 }}
-                  >
-                    Edit Email
-                  </button>
+                  <input 
+                    type="text" 
+                    placeholder="e.g. 123456" 
+                    required 
+                    maxLength={6}
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                    style={{
+                      padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white", fontSize: "1.15rem", textAlign: "center", letterSpacing: "5px", fontWeight: "bold"
+                    }} 
+                  />
                 </div>
-                <input 
-                  type="text" 
-                  placeholder="e.g. 123456" 
-                  required 
-                  maxLength={6}
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                  style={{
-                    padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white", fontSize: "1.15rem", textAlign: "center", letterSpacing: "5px", fontWeight: "bold"
-                  }} 
-                />
-              </div>
 
-              <button 
-                type="submit" 
-                disabled={loading} 
-                className="btn btn-primary" 
-                style={{ marginTop: "1rem", width: "100%", padding: "0.8rem" }}
-              >
-                {loading ? 'Verifying...' : 'Verify & Log In'}
-              </button>
+                <button 
+                  type="submit" 
+                  disabled={loading} 
+                  className="btn btn-primary" 
+                  style={{ marginTop: "1rem", width: "100%", padding: "0.8rem" }}
+                >
+                  {loading ? 'Verifying...' : 'Verify & Log In'}
+                </button>
 
-              <button 
-                type="button" 
-                onClick={resetFlow} 
-                className="btn btn-secondary" 
-                style={{ width: "100%", padding: "0.8rem" }}
-              >
-                Cancel
-              </button>
-            </form>
-          )}
+                <button 
+                  type="button" 
+                  onClick={resetFlow} 
+                  className="btn btn-secondary" 
+                  style={{ width: "100%", padding: "0.8rem" }}
+                >
+                  Cancel
+                </button>
+              </form>
+            )}
 
-          <div style={{ marginTop: "2rem", textAlign: "center", fontSize: "0.9rem", opacity: 0.8 }}>
-            Are you a handyman professional?{' '}
-            <Link href="/pro/login" style={{ color: "var(--primary)", fontWeight: 600 }}>
-              Pro Portal
-            </Link>
+            <div style={{ marginTop: "2rem", textAlign: "center", fontSize: "0.9rem", opacity: 0.8 }}>
+              Are you a handyman professional?{' '}
+              <Link href="/pro/login" style={{ color: "var(--primary)", fontWeight: 600 }}>
+                Pro Portal
+              </Link>
+            </div>
+
           </div>
-
         </div>
+
+        {/* Right Promo Column: Find Genuine Carpenter */}
+        <div className="promo-sidebar">
+          <PromoVideo 
+            src="/videos/customer-find-carpenter.mp4" 
+            icon="🤝" 
+            title="Direct Connection" 
+            description="Find and contact local, verified carpenters directly. 0% middleman commission, transparent pricing." 
+          />
+        </div>
+
       </div>
     </div>
   );
