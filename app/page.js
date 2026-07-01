@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 export const metadata = {
+  title: "Carpenterwala | Professional Handyman Marketplace in Bangalore",
+  description: "India's trusted digital marketplace to book verified background-checked carpenters, painters, plumbers, and electricians in Bangalore.",
   alternates: {
     canonical: 'https://carpenterwala.com',
   },
