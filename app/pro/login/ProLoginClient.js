@@ -2,8 +2,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { translations } from './translations';
 
-export default function ProLogin() {
+export default function ProLogin({ lang }) {
+  const [currentLang, setCurrentLang] = useState(lang || 'en');
   const [isRegister, setIsRegister] = useState(false); // false = signin, true = register
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
@@ -25,17 +27,57 @@ export default function ProLogin() {
 
   const router = useRouter();
 
+  const updateUrlParam = (newLang) => {
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('lang', newLang);
+      window.history.replaceState({}, '', url.pathname + url.search);
+    }
+  };
+
+  useEffect(() => {
+    if (lang) {
+      localStorage.setItem('pro_lang', lang);
+      setCurrentLang(lang);
+      return;
+    }
+
+    const savedLang = localStorage.getItem('pro_lang');
+    if (savedLang && ['en', 'hi', 'kn', 'ta', 'te'].includes(savedLang)) {
+      setCurrentLang(savedLang);
+      updateUrlParam(savedLang);
+      return;
+    }
+
+    if (typeof navigator !== 'undefined') {
+      const browserLangs = navigator.languages || [navigator.language];
+      for (const bLang of browserLangs) {
+        const primary = bLang.split('-')[0].toLowerCase();
+        if (['hi', 'kn', 'ta', 'te'].includes(primary)) {
+          setCurrentLang(primary);
+          localStorage.setItem('pro_lang', primary);
+          updateUrlParam(primary);
+          return;
+        }
+      }
+    }
+
+    setCurrentLang('en');
+  }, [lang]);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (localStorage.getItem('pro_id')) router.push('/pro/dashboard');
     }
   }, [router]);
 
+  const t = translations[currentLang] || translations.en;
+
   // Handle Login OTP Send
   const handleSendOtp = async (e) => {
     e.preventDefault();
     if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setError('Please enter a valid email address.'); return;
+      setError(t.error_valid_email); return;
     }
     setError('');
     setLoading(true);
@@ -73,7 +115,7 @@ export default function ProLogin() {
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     if (otp.trim().length !== 6) {
-      setError('Please enter a 6-digit OTP.'); return;
+      setError(t.error_otp_digits); return;
     }
     setError('');
     setLoading(true);
@@ -110,16 +152,16 @@ export default function ProLogin() {
   const handleRegisterSend = async (e) => {
     e.preventDefault();
     if (!regName.trim() || regName.trim().length < 2) {
-      setError('Name must be at least 2 characters.'); return;
+      setError(t.error_name_length); return;
     }
     if (!regEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(regEmail.trim())) {
-      setError('Please enter a valid email address.'); return;
+      setError(t.error_valid_email); return;
     }
     if (!regPhone.trim() || !/^[6-9]\d{9}$/.test(regPhone.trim())) {
-      setError('Please enter a valid 10-digit mobile number starting with 6-9.'); return;
+      setError(t.error_phone_format); return;
     }
     if (!regLocation.trim() || regLocation.trim().length < 3) {
-      setError('Please enter a valid location.'); return;
+      setError(t.error_location_length); return;
     }
 
     setError('');
@@ -165,7 +207,7 @@ export default function ProLogin() {
   const handleRegisterVerify = async (e) => {
     e.preventDefault();
     if (otp.trim().length !== 6) {
-      setError('Please enter a 6-digit OTP.'); return;
+      setError(t.error_otp_digits); return;
     }
     setError('');
     setLoading(true);
@@ -240,12 +282,12 @@ export default function ProLogin() {
           }}>
             <div className="flex items-center gap-2">
               <span style={{ fontSize: '1.2rem' }}>✉️</span>
-              <span style={{ fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 700, letterSpacing: '0.06em' }}>SIMULATED EMAIL GATEWAY</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 700, letterSpacing: '0.06em' }}>{t.banner_simulated_title}</span>
             </div>
             <div style={{ fontSize: '0.9rem' }}>
-              To: <strong>{activeEmail}</strong>
+              {t.banner_to} <strong>{activeEmail}</strong>
               <div style={{ marginTop: '0.3rem' }}>
-                Pro OTP Code: <strong style={{ color: 'var(--accent)', fontSize: '1.05rem', letterSpacing: '2px' }}>{generatedOtp}</strong>
+                {t.banner_code} <strong style={{ color: 'var(--accent)', fontSize: '1.05rem', letterSpacing: '2px' }}>{generatedOtp}</strong>
               </div>
             </div>
           </div>
@@ -260,12 +302,12 @@ export default function ProLogin() {
           }}>
             <div className="flex items-center gap-2">
               <span style={{ fontSize: '1.2rem' }}>📩</span>
-              <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 700, letterSpacing: '0.06em' }}>OTP EMAIL SENT</span>
+              <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 700, letterSpacing: '0.06em' }}>{t.banner_otp_sent_title}</span>
             </div>
             <div style={{ fontSize: '0.9rem' }}>
-              Sent verification code to: <strong>{activeEmail}</strong>
+              {t.banner_otp_sent_msg} <strong>{activeEmail}</strong>
               <div style={{ marginTop: '0.3rem', fontSize: '0.8rem', opacity: 0.8 }}>
-                Check your inbox (and spam folder) for the 6-digit code.
+                {t.banner_otp_sent_help}
               </div>
             </div>
           </div>
@@ -281,14 +323,66 @@ export default function ProLogin() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: '1.6rem', boxShadow: '0 4px 20px rgba(59,130,246,0.4)'
             }}>🔧</div>
-            <h1 style={{ fontSize: '1.8rem', marginBottom: '0.4rem' }}>Pro Portal</h1>
+            <h1 style={{ fontSize: '1.8rem', marginBottom: '0.4rem' }}>{t.title}</h1>
             <p style={{ opacity: 0.7, fontSize: '0.9rem' }}>
-              {step === 1 && (isRegister ? 'Register as a professional & start onboarding.' : 'Sign in to manage your leads & profile.')}
-              {step === 2 && `Enter the OTP sent to ${activeEmail}`}
-              {step === 3 && 'We found multiple profiles. Select yours.'}
+              {step === 1 && (isRegister ? t.subtitle_register : t.subtitle_signin)}
+              {step === 2 && `${t.subtitle_otp} ${activeEmail}`}
+              {step === 3 && t.subtitle_multiple}
             </p>
-            <h2 style={{ fontSize: "1rem", fontWeight: 700, margin: "0.5rem 0 1.5rem 0", textAlign: "center", color: "var(--accent)" }}>
-              {isRegister ? 'New Professional Registration' : 'Verified Handyman Login'}
+          </div>
+
+          {/* Language Selector */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            gap: '0.35rem',
+            margin: '0 auto 1.5rem',
+            padding: '0.35rem',
+            background: 'rgba(255,255,255,0.03)',
+            borderRadius: '10px',
+            border: '1px solid var(--glass-border)',
+            maxWidth: '100%'
+          }}>
+            {[
+              { code: 'en', label: 'English' },
+              { code: 'kn', label: 'ಕನ್ನಡ' },
+              { code: 'hi', label: 'हिंदी' },
+              { code: 'ta', label: 'தமிழ்' },
+              { code: 'te', label: 'తెలుగు' }
+            ].map((l) => {
+              const isActive = currentLang === l.code;
+              return (
+                <button
+                  key={l.code}
+                  type="button"
+                  onClick={() => {
+                    setCurrentLang(l.code);
+                    localStorage.setItem('pro_lang', l.code);
+                    updateUrlParam(l.code);
+                  }}
+                  style={{
+                    padding: '0.35rem 0.7rem',
+                    borderRadius: '6px',
+                    border: isActive ? '1px solid var(--primary)' : '1px solid transparent',
+                    background: isActive ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
+                    color: isActive ? 'white' : 'rgba(255, 255, 255, 0.6)',
+                    fontSize: '0.8rem',
+                    fontWeight: isActive ? 600 : 400,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    outline: 'none'
+                  }}
+                >
+                  {l.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+            <h2 style={{ fontSize: "1rem", fontWeight: 700, margin: "0", color: "var(--accent)" }}>
+              {isRegister ? t.subheading_register : t.subheading_login}
             </h2>
           </div>
 
@@ -303,13 +397,13 @@ export default function ProLogin() {
                 fontWeight: 600, fontSize: '0.88rem', transition: 'all 0.2s',
                 background: !isRegister ? 'var(--primary)' : 'transparent',
                 color: !isRegister ? 'white' : 'rgba(255,255,255,0.6)'
-              }}>🔑 Sign In</button>
+              }}>{t.tab_signin}</button>
               <button onClick={() => toggleTab(true)} style={{
                 flex: 1, padding: '0.6rem', border: 'none', borderRadius: '8px', cursor: 'pointer',
                 fontWeight: 600, fontSize: '0.88rem', transition: 'all 0.2s',
                 background: isRegister ? 'var(--primary)' : 'transparent',
                 color: isRegister ? 'white' : 'rgba(255,255,255,0.6)'
-              }}>✨ Join as Pro</button>
+              }}>{t.tab_join}</button>
             </div>
           )}
 
@@ -326,14 +420,14 @@ export default function ProLogin() {
           {step === 1 && !isRegister && (
             <form className="flex flex-col gap-4" onSubmit={handleSendOtp}>
               <div className="flex flex-col gap-1">
-                <label style={{ fontSize: '0.9rem', fontWeight: 500, opacity: 0.9 }}>Registered Email Address</label>
-                <input type="email" placeholder="e.g. ram@example.com" required value={email}
+                <label style={{ fontSize: '0.9rem', fontWeight: 500, opacity: 0.9 }}>{t.label_email}</label>
+                <input type="email" placeholder={t.placeholder_email} required value={email}
                   onChange={(e) => setEmail(e.target.value)} style={inputStyle} />
-                <span style={{ fontSize: '0.75rem', opacity: 0.55 }}>Enter the email registered with your professional profile.</span>
+                <span style={{ fontSize: '0.75rem', opacity: 0.55 }}>{t.help_email}</span>
               </div>
               <button type="submit" disabled={loading} className="btn btn-primary"
                 style={{ marginTop: '0.5rem', width: '100%' }}>
-                {loading ? 'Sending OTP…' : 'Send Verification OTP →'}
+                {loading ? t.btn_sending_otp : t.btn_send_otp}
               </button>
             </form>
           )}
@@ -342,39 +436,39 @@ export default function ProLogin() {
           {step === 1 && isRegister && (
             <form className="flex flex-col gap-3" onSubmit={handleRegisterSend}>
               <div className="flex flex-col gap-1">
-                <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>Full Name</label>
-                <input type="text" placeholder="e.g. Ram Singh" required value={regName}
+                <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_name}</label>
+                <input type="text" placeholder={t.placeholder_name} required value={regName}
                   onChange={(e) => setRegName(e.target.value)} style={inputStyle} />
               </div>
               <div className="flex flex-col gap-1">
-                <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>Email Address (For Secure Login)</label>
-                <input type="email" placeholder="e.g. ram@example.com" required value={regEmail}
+                <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_reg_email}</label>
+                <input type="email" placeholder={t.placeholder_email} required value={regEmail}
                   onChange={(e) => setRegEmail(e.target.value)} style={inputStyle} />
               </div>
               <div className="flex flex-col gap-1">
-                <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>Mobile Number (For Customer Contact)</label>
-                <input type="tel" placeholder="e.g. 9876543210" required maxLength={10} value={regPhone}
+                <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_phone}</label>
+                <input type="tel" placeholder={t.placeholder_phone} required maxLength={10} value={regPhone}
                   onChange={(e) => setRegPhone(e.target.value.replace(/\D/g, ''))} style={inputStyle} />
               </div>
               <div style={{ display: 'flex', gap: '0.75rem' }}>
                 <div className="flex flex-col gap-1" style={{ flex: 1 }}>
-                  <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>Trade</label>
+                  <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_trade}</label>
                   <select value={regTrade} onChange={(e) => setRegTrade(e.target.value)} style={inputStyle}>
-                    <option value="Carpenter">Carpenter</option>
-                    <option value="Painter">Painter</option>
-                    <option value="Electrician">Electrician</option>
-                    <option value="Plumber">Plumber</option>
+                    <option value="Carpenter">{t.trades.Carpenter}</option>
+                    <option value="Painter">{t.trades.Painter}</option>
+                    <option value="Electrician">{t.trades.Electrician}</option>
+                    <option value="Plumber">{t.trades.Plumber}</option>
                   </select>
                 </div>
                 <div className="flex flex-col gap-1" style={{ flex: 1.2 }}>
-                  <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>Location / City</label>
-                  <input type="text" placeholder="e.g. Indiranagar, Bangalore" required value={regLocation}
+                  <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_location}</label>
+                  <input type="text" placeholder={t.placeholder_location} required value={regLocation}
                     onChange={(e) => setRegLocation(e.target.value)} style={inputStyle} />
                 </div>
               </div>
               <button type="submit" disabled={loading} className="btn btn-primary"
                 style={{ marginTop: '0.75rem', width: '100%' }}>
-                {loading ? 'Sending OTP…' : 'Register & Verify Email →'}
+                {loading ? t.btn_sending_otp : t.btn_register_verify}
               </button>
             </form>
           )}
@@ -384,10 +478,10 @@ export default function ProLogin() {
             <form className="flex flex-col gap-4" onSubmit={isRegister ? handleRegisterVerify : handleVerifyOtp}>
               <div className="flex flex-col gap-1">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <label style={{ fontSize: '0.9rem', fontWeight: 500, opacity: 0.9 }}>Enter 6-Digit OTP</label>
+                  <label style={{ fontSize: '0.9rem', fontWeight: 500, opacity: 0.9 }}>{t.label_enter_otp}</label>
                   <button type="button" onClick={resetFlow}
                     style={{ background: 'none', border: 'none', color: 'var(--primary)', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 600 }}>
-                    Edit Details
+                    {t.btn_edit_details}
                   </button>
                 </div>
                 <input type="text" placeholder="• • • • • •" required maxLength={6}
@@ -395,10 +489,10 @@ export default function ProLogin() {
                   style={{ ...inputStyle, textAlign: 'center', fontSize: '1.5rem', letterSpacing: '8px', fontWeight: 'bold' }} />
               </div>
               <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%' }}>
-                {loading ? 'Verifying…' : 'Verify & Log In'}
+                {loading ? t.btn_verifying : t.btn_verify_login}
               </button>
               <button type="button" onClick={resetFlow} className="btn btn-secondary" style={{ width: '100%' }}>
-                Cancel
+                {t.btn_cancel}
               </button>
             </form>
           )}
@@ -425,21 +519,21 @@ export default function ProLogin() {
                   </div>
                   <div>
                     <div style={{ fontWeight: 600 }}>{pro.name}</div>
-                    <div style={{ fontSize: '0.85rem', opacity: 0.65 }}>{pro.trade} · {pro.location}</div>
+                    <div style={{ fontSize: '0.85rem', opacity: 0.65 }}>{(t.trades[pro.trade] || pro.trade)} · {pro.location}</div>
                   </div>
                   {pro.verified && <span style={{ marginLeft: 'auto', color: '#34d399', fontSize: '0.8rem', fontWeight: 600 }}>✓ Verified</span>}
                 </button>
               ))}
               <button onClick={resetFlow} className="btn btn-secondary" style={{ width: '100%', marginTop: '0.5rem' }}>
-                Not me — go back
+                {t.btn_not_me}
               </button>
             </div>
           )}
 
           {/* Footer link */}
           <div style={{ marginTop: '2rem', textAlign: 'center', fontSize: '0.88rem', opacity: 0.7 }}>
-            Looking for customer login?{' '}
-            <Link href="/login" style={{ color: 'var(--primary)', fontWeight: 600 }}>My Account</Link>
+            {t.footer_text}{' '}
+            <Link href="/login" style={{ color: 'var(--primary)', fontWeight: 600 }}>{t.footer_link}</Link>
           </div>
         </div>
       </div>
