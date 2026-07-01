@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "How It Works | Carpenterwala",
+  title: "How It Works - Handyman Booking Process | Carpenterwala",
   description: "Learn how easy it is to find, book, and review verified professionals on Carpenterwala.",
   alternates: {
     canonical: 'https://carpenterwala.com/how-it-works',

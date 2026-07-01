@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
-  title: "Help Center | Carpenterwala",
+  title: "Help Center & Handyman Support Service | Carpenterwala",
   description: "Find answers, get support, and learn how to get the most out of Carpenterwala.",
   alternates: {
     canonical: 'https://carpenterwala.com/help',
