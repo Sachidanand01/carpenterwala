@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Carpenterwala | Professional Handyman Marketplace in Bangalore",
+  title: "Carpenterwala | Professional Handyman Marketplace",
   description: "India's trusted digital marketplace to book verified background-checked carpenters, painters, plumbers, and electricians in Bangalore.",
   alternates: {
     canonical: 'https://carpenterwala.com',
@@ -124,16 +124,16 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
       />
       <section className="flex flex-col items-center justify-center gap-8" style={{ padding: "4rem 0", textAlign: "center" }}>
-        
+
         <div className="animate-fade-in" style={{ maxWidth: "800px" }}>
           <h1 style={{ fontSize: "4rem", marginBottom: "1.5rem", letterSpacing: "-0.02em" }}>
-            Your Trusted <span className="desktop-only"><br/></span>
+            Your Trusted <span className="desktop-only"><br /></span>
             <span className="text-gradient">Handyman & Home Services App</span>
           </h1>
           <p style={{ fontSize: "1.25rem", opacity: 0.8, marginBottom: "2rem" }}>
             One of the best handyman apps in India to hire verified carpenters, painters, plumbers, and electricians near you. Experience the premium home services app in India with real reviews and transparent pricing.
           </p>
-          
+
           <div className="flex gap-4 justify-center flex-mobile-col">
             <Link href="/find-a-professional" className="btn btn-primary" style={{ fontSize: "1.1rem", padding: "1rem 2rem" }}>
               Find a Professional
