@@ -178,7 +178,7 @@ export default async function BlogPost({ params }) {
       </div>
       {/* Blog Hero */}
       <section style={{ height: '50vh', position: 'relative', overflow: 'hidden' }}>
-        <img src={post.image} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <img src={post.image} alt={post.title} width={1200} height={600} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         <div style={{ 
           position: 'absolute', 
           top: 0, 
@@ -259,6 +259,8 @@ export default async function BlogPost({ params }) {
             <img 
               src={author.avatar} 
               alt={author.name} 
+              width={80}
+              height={80}
               style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary)' }} 
             />
             <div style={{ flex: 1, minWidth: '240px' }}>

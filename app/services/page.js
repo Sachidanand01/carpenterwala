@@ -162,6 +162,8 @@ export default function ServicesPage() {
                   <img 
                     src={service.image} 
                     alt={service.name} 
+                    width={400}
+                    height={200}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }} 
                   />
                   {isTopPopular && (

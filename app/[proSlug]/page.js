@@ -158,6 +158,8 @@ export default async function ProProfile({ params }) {
             <img 
               src={profile.avatar} 
               alt={profile.name} 
+              width={120}
+              height={120}
               style={{ width: "120px", height: "120px", borderRadius: "50%", objectFit: "cover", marginBottom: "1rem", border: "4px solid var(--primary)" }}
             />
             <h1 style={{ fontSize: "1.75rem", marginBottom: "0.5rem" }}>{profile.name}</h1>
@@ -212,7 +214,7 @@ export default async function ProProfile({ params }) {
               <h2 style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>Portfolio</h2>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "1rem" }}>
                 {profile.portfolio.map((img, i) => (
-                  <img key={i} src={img} alt={`Work by ${profile.name}`} style={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: "8px" }} />
+                  <img key={i} src={img} alt={`Work by ${profile.name}`} width={300} height={200} style={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: "8px" }} />
                 ))}
               </div>
             </section>

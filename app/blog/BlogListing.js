@@ -150,7 +150,7 @@ export default function BlogListing({ selectedCategorySlug = 'all' }) {
                 cursor: 'pointer'
               }}>
                 <div style={{ height: '240px', overflow: 'hidden', position: 'relative' }}>
-                  <img src={post.image} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s ease' }} className="card-image" />
+                  <img src={post.image} alt={post.title} width={400} height={240} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s ease' }} className="card-image" />
                   <div style={{ 
                     position: 'absolute', 
                     top: '1.5rem', 

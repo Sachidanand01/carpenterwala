@@ -250,7 +250,7 @@ function DirectoryContent() {
                     
                     <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
                       {pro.avatar ? (
-                        <img src={pro.avatar} alt={pro.name} style={{ width: "60px", height: "60px", borderRadius: "50%", objectFit: "cover" }} />
+                        <img src={pro.avatar} alt={pro.name} width={60} height={60} style={{ width: "60px", height: "60px", borderRadius: "50%", objectFit: "cover" }} />
                       ) : (
                         <div style={{ width: "60px", height: "60px", borderRadius: "50%", backgroundColor: "rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                           {pro.name[0]}
