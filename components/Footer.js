@@ -23,8 +23,8 @@ export default function Footer() {
             </p>
             <div className="social-links" style={{ display: "flex", gap: "1rem", marginTop: "1.5rem" }}>
               {/* Social icons could go here */}
-              <a href="https://www.facebook.com/pro.carpenterwala" className="social-icon">FB</a>
-              <a href="#" className="social-icon">IG</a>
+              {/* <a href="https://www.facebook.com/pro.carpenterwala" className="social-icon">FB</a>
+              <a href="#" className="social-icon">IG</a> */}
             </div>
           </div>
 
