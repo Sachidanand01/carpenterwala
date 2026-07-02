@@ -198,6 +198,31 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Localized FAQ & Coverage Block */}
+        <div className="glass animate-fade-in delay-400" style={{ width: "100%", padding: "3rem", marginTop: "3rem", textAlign: "left", lineHeight: "1.7" }}>
+          <h2 style={{ fontSize: "2rem", marginBottom: "1.5rem" }}>Professional Handyman App in Bangalore: Frequently Asked Questions</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2rem" }}>
+            <div>
+              <h3 style={{ fontSize: "1.2rem", color: "var(--primary)", marginBottom: "0.5rem" }}>How does the Carpenterwala handyman app match me with local pros?</h3>
+              <p style={{ opacity: 0.8, fontSize: "0.95rem" }}>
+                Our <strong>handyman app in India</strong> utilizes geolocation routing to find verified carpenters, painters, plumbers, and electricians near your specific neighborhood in Bangalore. Whether you are in HSR Layout, Indiranagar, Whitefield, or Koramangala, the platform showcases the closest available service professionals to minimize travel time and ensure speedy dispatch.
+              </p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: "1.2rem", color: "var(--primary)", marginBottom: "0.5rem" }}>What makes this the premium home services app in India?</h3>
+              <p style={{ opacity: 0.8, fontSize: "0.95rem" }}>
+                Unlike other platforms that charge hefty commissions, Carpenterwala is a <strong>100% free platform</strong> charging 0% fees from both customers and service professionals. You connect directly with verified experts, review their real portfolios, check actual reviews, and negotiate rates directly. There are no hidden fees or inflated service margins.
+              </p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: "1.2rem", color: "var(--primary)", marginBottom: "0.5rem" }}>Which areas of Bangalore do your background-checked pros cover?</h3>
+              <p style={{ opacity: 0.8, fontSize: "0.95rem" }}>
+                Our network covers all zones of Bangalore, including Bangalore South (Jayanagar, JP Nagar, HSR Layout), Bangalore East (Whitefield, Marathahalli, Bellandur), Bangalore Central (Koramangala, Indiranagar, MG Road), and Bangalore North (Hebbal, Thanisandra, Yelahanka). Every professional undergoes strict Aadhaar identity verification and skills assessment before onboarding.
+              </p>
+            </div>
+          </div>
+        </div>
+
       </section>
     </div>
   );

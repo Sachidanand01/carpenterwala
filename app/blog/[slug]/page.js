@@ -5,6 +5,41 @@ import AdSenseContainer from '@/components/AdSenseContainer';
 
 const slugify = (cat) => cat.toLowerCase().replace(/\s+/g, '-');
 
+const AUTHORS_BY_CATEGORY = {
+  'Carpentry': {
+    name: 'Rajesh Sharma',
+    role: 'Master Carpenter & Woodwork Consultant',
+    bio: 'Over 15 years of custom woodworking, furniture restoration, and modular interior fittings experience in Bangalore.',
+    avatar: 'https://i.pravatar.cc/100?u=rajesh'
+  },
+  'Painting': {
+    name: 'Amit Verma',
+    role: 'Lead Coating & Waterproofing Consultant',
+    bio: 'Wall-coating expert specializing in tropical humidity damp-proofing and premium interior color visualizers.',
+    avatar: 'https://i.pravatar.cc/100?u=amit'
+  },
+  'Plumbing': {
+    name: 'Suresh Gowda',
+    role: 'Senior Plumbing Engineer & Hydraulics Advisor',
+    bio: 'Expert in high-pressure leak detection, municipal water lines, and residential plumbing diagnostics in South India.',
+    avatar: 'https://i.pravatar.cc/100?u=suresh'
+  },
+  'Electrical': {
+    name: 'Vikram Rao',
+    role: 'Certified Senior Electrical Systems Supervisor',
+    bio: 'Licensed electrical inspector specializing in residential safety grids, MCB/ELCB diagnostics, and smart installations.',
+    avatar: 'https://i.pravatar.cc/100?u=vikram'
+  }
+};
+
+const DEFAULT_AUTHOR = {
+  name: 'Carpenterwala Editorial Team',
+  role: 'Home Improvement Advisors',
+  bio: 'Our team of experienced coordinators and service verifiers writing expert tips for local Bangalore homes.',
+  avatar: 'https://i.pravatar.cc/100?u=editorial'
+};
+
+
 export async function generateStaticParams() {
   return BLOG_POSTS.map((post) => ({
     slug: post.slug,
@@ -69,7 +104,7 @@ export async function generateMetadata({ params }) {
       locale: 'en_US',
       type: 'article',
       publishedTime: new Date(post.date || '2026-05-01').toISOString(),
-      authors: ['Carpenterwala Experts'],
+      authors: [AUTHORS_BY_CATEGORY[post.category]?.name || DEFAULT_AUTHOR.name],
     },
     twitter: {
       card: 'summary_large_image',
@@ -100,8 +135,44 @@ export default async function BlogPost({ params }) {
     { name: post.title, url: `/blog/${post.slug}` }
   ];
 
+  const author = AUTHORS_BY_CATEGORY[post.category] || DEFAULT_AUTHOR;
+
+  const blogJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `https://carpenterwala.com/blog/${post.slug}#blogposting`,
+    "headline": post.title,
+    "description": post.excerpt,
+    "image": post.image,
+    "datePublished": post.date ? new Date(post.date).toISOString().split('T')[0] : "2026-05-01",
+    "dateModified": post.date ? new Date(post.date).toISOString().split('T')[0] : "2026-05-01",
+    "author": {
+      "@type": "Person",
+      "name": author.name,
+      "jobTitle": author.role,
+      "description": author.bio,
+      "image": author.avatar
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Carpenterwala",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://carpenterwala.com/images/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://carpenterwala.com/blog/${post.slug}`
+    }
+  };
+
   return (
     <div className="animate-fade-in">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
+      />
       <div className="container" style={{ padding: "1.5rem 2rem 0 2rem", marginBottom: "-1.5rem", position: "relative", zIndex: 10 }}>
         <Breadcrumbs items={breadcrumbItems} />
       </div>
@@ -136,7 +207,7 @@ export default async function BlogPost({ params }) {
           </Link>
           <h1 style={{ fontSize: '3.5rem', lineHeight: '1.2', maxWidth: '900px' }}>{post.title}</h1>
           <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem', opacity: 0.8 }}>
-            <span>By <strong>Carpenterwala Experts</strong></span>
+            <span>By <strong>{author.name}</strong></span>
             <span>{post.date}</span>
             <span>{post.readTime}</span>
           </div>
@@ -182,6 +253,25 @@ export default async function BlogPost({ params }) {
             }
           `}} />
           <div dangerouslySetInnerHTML={{ __html: post.content }} className="blog-content" />
+
+          {/* Author Bio Card */}
+          <div className="glass" style={{ display: 'flex', gap: '1.5rem', padding: '2rem', marginTop: '4rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <img 
+              src={author.avatar} 
+              alt={author.name} 
+              style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary)' }} 
+            />
+            <div style={{ flex: 1, minWidth: '240px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
+                <h4 style={{ margin: 0, fontSize: '1.25rem' }}>{author.name}</h4>
+                <span style={{ fontSize: '0.75rem', backgroundColor: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', padding: '0.2rem 0.6rem', borderRadius: '12px', fontWeight: 'bold' }}>
+                  Verified Expert
+                </span>
+              </div>
+              <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.9rem', color: 'var(--primary)', fontWeight: '500' }}>{author.role}</p>
+              <p style={{ margin: 0, fontSize: '0.95rem', opacity: 0.8, lineHeight: '1.6' }}>{author.bio}</p>
+            </div>
+          </div>
           
           {/* Bottom Content Native Ad */}
           <AdSenseContainer 

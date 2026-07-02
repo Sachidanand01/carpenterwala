@@ -38,7 +38,7 @@ export default function ContactUs() {
           <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>🏢</div>
           <h2 style={{ marginBottom: "0.5rem", fontSize: "1.5rem" }}>Head Office</h2>
           <p style={{ opacity: 0.7, marginBottom: "1.5rem", fontSize: "0.95rem" }}>Visit us for corporate inquiries.</p>
-          <p style={{ fontSize: "0.9rem" }}>Promenade Road, Bangalore, KA</p>
+          <p style={{ fontSize: "0.9rem" }}>Thanisandra, Bangalore, KA, India</p>
         </div>
 
         <div className="glass" style={{ padding: "2.5rem", textAlign: "center" }}>
@@ -98,11 +98,28 @@ export default function ContactUs() {
         <div className="flex flex-col gap-8">
           <div>
             <h2 style={{ marginBottom: "1.5rem", fontSize: "1.5rem" }}>Our Regional Offices</h2>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6" style={{ marginBottom: "1.5rem" }}>
               <div className="glass" style={{ padding: "1.5rem" }}>
                 <h3 style={{ color: "var(--primary)", marginBottom: "0.25rem", fontSize: "1.1rem" }}>Bangalore (Head Office)</h3>
-                <p style={{ opacity: 0.7, fontSize: "0.9rem" }}>#40 Promenade Road, Milwaukee Building, Bangalore, Karnataka.</p>
+                <p style={{ opacity: 0.7, fontSize: "0.9rem", marginBottom: "0.5rem" }}>Thanisandra, Bangalore, Karnataka, India.</p>
+                <p style={{ fontSize: "0.9rem" }}>
+                  📞 Support: <a href="tel:+918095551001" style={{ color: "var(--accent)", fontWeight: "bold", textDecoration: "none" }}>+91-80-4912-3456</a>
+                </p>
               </div>
+            </div>
+
+            {/* Google Map Embed of Thanisandra, Bangalore */}
+            <div className="glass" style={{ padding: "1rem", height: "300px", overflow: "hidden", borderRadius: "12px" }}>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15546.73516543886!2d77.62544299863836!3d13.055811068832047!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1e4b3e6c0ea7%3A0xebc30eb7b03b10b0!2sThanisandra%2C%20Bengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1719919543180!5m2!1sen!2sin"
+                width="100%"
+                height="100%"
+                style={{ border: 0, borderRadius: "8px" }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Carpenterwala Thanisandra Location Map"
+              ></iframe>
             </div>
           </div>
 

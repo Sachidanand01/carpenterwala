@@ -63,8 +63,88 @@ export default async function ProProfile({ params }) {
     notFound();
   }
 
+  // Map trade to Schema.org LocalBusiness sub-types
+  let schemaType = "ProfessionalService";
+  if (profile.trade === "Plumber") {
+    schemaType = "Plumber";
+  } else if (profile.trade === "Electrician") {
+    schemaType = "Electrician";
+  } else if (profile.trade === "Painter") {
+    schemaType = "HousePainter";
+  } else if (profile.trade === "Carpenter") {
+    schemaType = "HomeAndConstructionBusiness";
+  }
+
+  // Construct coordinates if available
+  const geo = (profile.latitude && profile.longitude) ? {
+    "@type": "GeoCoordinates",
+    "latitude": profile.latitude,
+    "longitude": profile.longitude
+  } : null;
+
+  // Construct aggregate rating if reviews exist
+  const aggregateRating = (profile.reviews && profile.reviews.length > 0) ? {
+    "@type": "AggregateRating",
+    "ratingValue": profile.average_rating ? profile.average_rating.toFixed(2) : (profile.reviews.reduce((sum, r) => sum + r.rating, 0) / profile.reviews.length).toFixed(2),
+    "reviewCount": profile.reviews.length.toString(),
+    "bestRating": "5",
+    "worstRating": "1"
+  } : null;
+
+  // Construct reviews array
+  const reviewsSchema = (profile.reviews || []).map(r => ({
+    "@type": "Review",
+    "author": {
+      "@type": "Person",
+      "name": r.author
+    },
+    "datePublished": r.created_at ? new Date(r.created_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+    "reviewBody": r.text || "",
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": r.rating.toString(),
+      "bestRating": "5",
+      "worstRating": "1"
+    }
+  }));
+
+  const proJsonLd = {
+    "@context": "https://schema.org",
+    "@type": schemaType,
+    "@id": `https://carpenterwala.com/${profile.slug}#localbusiness`,
+    "name": profile.name,
+    "image": profile.avatar || "https://carpenterwala.com/images/default-avatar.png",
+    "description": profile.about || `Verified ${profile.trade} in ${profile.location} with ${profile.experience} of experience.`,
+    "telephone": profile.phone || "+91-XXXXXXXXXX",
+    "url": `https://carpenterwala.com/${profile.slug}`,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": profile.full_address || profile.location || "HSR Layout",
+      "addressLocality": "Bangalore",
+      "addressRegion": "Karnataka",
+      "postalCode": "560102",
+      "addressCountry": "IN"
+    },
+    "priceRange": "₹₹",
+    "areaServed": [
+      {
+        "@type": "AdministrativeArea",
+        "name": "Bangalore"
+      }
+    ],
+    "knowsLanguage": profile.languages || ["English", "Hindi"]
+  };
+
+  if (geo) proJsonLd.geo = geo;
+  if (aggregateRating) proJsonLd.aggregateRating = aggregateRating;
+  if (reviewsSchema.length > 0) proJsonLd.review = reviewsSchema;
+
   return (
     <div className="container" style={{ padding: "2rem 2rem 4rem 2rem" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(proJsonLd) }}
+      />
       <Breadcrumbs items={[
         { name: "Home", url: "/" },
         { name: "Find a Professional", url: "/find-a-professional" },

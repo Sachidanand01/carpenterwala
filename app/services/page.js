@@ -24,10 +24,11 @@ const SERVICES_DATA = [
 const BATCH_SIZE = 4;
 
 export default function ServicesPage() {
-  const [sortedServices, setSortedServices] = useState([]);
-  const [displayedServices, setDisplayedServices] = useState([]);
+  const initialServices = SERVICES_DATA.map(s => ({ ...s, proCount: 0 }));
+  const [sortedServices, setSortedServices] = useState(initialServices);
+  const [displayedServices, setDisplayedServices] = useState(initialServices.slice(0, BATCH_SIZE));
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [locationState, setLocationState] = useState("Prompting..."); // Prompting, Allowed, Denied
   
   const loaderRef = useRef(null);
