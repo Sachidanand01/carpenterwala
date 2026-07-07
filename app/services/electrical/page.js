@@ -131,6 +131,14 @@ export default function ElectricalPage() {
         </div>
       </section>
 
+      {/* Overview Section (Citable Answer Block for AI SEO) */}
+      <section className="container animate-fade-in" style={{ marginBottom: '4rem', maxWidth: '800px', textAlign: 'center', padding: '0 2rem' }}>
+        <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>What are Professional Electrician Services?</h2>
+        <p style={{ fontSize: '1.1rem', lineHeight: '1.8', opacity: 0.85 }}>
+          Professional electrician services provide safe installations, rewiring, circuit repairs, and appliance fittings. Our marketplace lets you hire certified, background-checked local electricians near you. From simple troubleshooting tasks to complete commercial electrical installations, find trusted professionals serving residential and commercial properties in Bangalore.
+        </p>
+      </section>
+
       {/* Services Grid */}
       <section className="container" style={{ marginBottom: '6rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>

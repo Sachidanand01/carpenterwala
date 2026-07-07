@@ -1,0 +1,30 @@
+# Carpenterwala
+
+> India's trusted digital marketplace to book verified, background-checked handymen in Bangalore and all over India.
+
+## Core Services
+- [Carpentry Services](https://carpenterwala.com/services/carpentry): Custom woodwork, modular kitchen setup, furniture repairs, and office fit-outs in Bangalore and all over India.
+- [Painting Services](https://carpenterwala.com/services/painting): Interior/exterior painting, color consultancy, and wall repair guide in Bangalore and all over India.
+- [Plumbing Services](https://carpenterwala.com/services/plumbing): Leak repairs, piping, and bathroom installations in Bangalore and all over India.
+- [Electrical Services](https://carpenterwala.com/services/electrical): Residential wiring, light installations, and switch repairs in Bangalore and all over India.
+- [Appliance Repair Services](https://carpenterwala.com/services/appliance-repair): Appliance repair services in Bangalore and all over India.
+- [Cleaning Services](https://carpenterwala.com/services/cleaning): Cleaning services in Bangalore and all over India.
+- [Pest Control Services](https://carpenterwala.com/services/pest-control): Pest control services in Bangalore and all over India.
+- [AC Services](https://carpenterwala.com/services/ac-services): AC services in Bangalore and all over India.
+- [Water Tank Cleaning Services](https://carpenterwala.com/services/water-tank-cleaning): Water tank cleaning services in Bangalore and all over India.
+- [Water Purifier Services](https://carpenterwala.com/services/water-purifier): Water purifier services in Bangalore and all over India.
+- [Home Automation Services](https://carpenterwala.com/services/home-automation): Home automation services in Bangalore and all over India.
+- [Intercom Services](https://carpenterwala.com/services/intercom): Intercom services in Bangalore and all over India.
+- [CCTV Installation Services](https://carpenterwala.com/services/cctv-installation): CCTV installation services in Bangalore and all over India.
+- [Computer Services](https://carpenterwala.com/services/computer-services): Computer services in Bangalore and all over India.
+- [Home Loan Services](https://carpenterwala.com/services/home-loan): Home loan services in Bangalore and all over India.
+- [Home Insurance Services](https://carpenterwala.com/services/home-insurance): Home insurance services in Bangalore and all over India.
+
+## Verification & Trust
+- Background Checks: 100% of professionals undergo identity background checks and skill verification.
+- Warranty Manager: Customers can manage home repair warranties via their dashboard.
+
+## Useful Links
+- [FAQ](https://carpenterwala.com/faq): Answers to booking, verification, and warranty questions.
+- [Find a Professional](https://carpenterwala.com/find-a-professional): Browse profiles, read reviews, and request quotes.
+- [Sitemap](https://carpenterwala.com/sitemap): Visual directory of service regions and profiles.

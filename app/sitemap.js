@@ -4,27 +4,59 @@ import { supabase } from '@/lib/supabase';
 export default async function sitemap() {
   const baseUrl = 'https://carpenterwala.com';
 
-  // 1. Core static pages
-  const staticPages = [
-    '',
-    '/about',
-    '/faq',
-    '/find-a-professional',
-    '/help',
-    '/how-it-works',
-    '/login',
-    '/privacy',
-    '/pro/login',
+  // 1. Core static pages grouped by search value and updates frequency
+  const homepage = [{
+    url: `${baseUrl}`,
+    lastModified: new Date(),
+    changeFrequency: 'daily',
+    priority: 1.0,
+  }];
+
+  const highPriorityPages = [
     '/services',
-    '/terms',
-    '/contact',
+    '/find-a-professional',
     '/blog',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
-    changeFrequency: route === '' || route === '/blog' ? 'daily' : 'weekly',
-    priority: route === '' ? 1.0 : route === '/services' || route === '/find-a-professional' ? 0.9 : 0.7,
+    changeFrequency: 'daily',
+    priority: 0.9,
   }));
+
+  const midPriorityPages = [
+    '/about',
+    '/faq',
+    '/help',
+    '/how-it-works',
+    '/contact',
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.7,
+  }));
+
+  const authPages = [
+    '/login',
+    '/pro/login',
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.5,
+  }));
+
+  const legalPages = [
+    '/privacy',
+    '/terms',
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.3,
+  }));
+
+  const staticPages = [...homepage, ...highPriorityPages, ...midPriorityPages, ...authPages, ...legalPages];
 
   // 2. Service pages
   const services = ['carpentry', 'painting', 'plumbing', 'electrical'].map((service) => ({
@@ -61,7 +93,7 @@ export default async function sitemap() {
       profileRoutes = profiles.map((profile) => ({
         url: `${baseUrl}/${profile.slug}`,
         lastModified: profile.created_at ? new Date(profile.created_at) : new Date(),
-        changeFrequency: 'weekly',
+        changeFrequency: 'daily',
         priority: 0.8,
       }));
     }

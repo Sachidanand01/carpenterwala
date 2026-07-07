@@ -131,6 +131,14 @@ export default function PlumbingPage() {
         </div>
       </section>
 
+      {/* Overview Section (Citable Answer Block for AI SEO) */}
+      <section className="container animate-fade-in" style={{ marginBottom: '4rem', maxWidth: '800px', textAlign: 'center', padding: '0 2rem' }}>
+        <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>What are Professional Plumbing Services?</h2>
+        <p style={{ fontSize: '1.1rem', lineHeight: '1.8', opacity: 0.85 }}>
+          Professional plumbing services provide immediate support for home leak repairs, pipe installations, tap replacements, and bathroom fittings. Booking verified plumbers through our marketplace ensures high-quality plumbing work, transparent pricing lists, and safety guarantees for apartments, residential societies, and commercial business offices in Bangalore.
+        </p>
+      </section>
+
       {/* Services Grid */}
       <section className="container" style={{ marginBottom: '6rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>

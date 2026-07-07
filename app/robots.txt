@@ -3,5 +3,24 @@ Allow: /
 Disallow: /pro/dashboard
 Disallow: /admin
 
+# Allow AI search crawlers and generative bots
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 Sitemap: https://carpenterwala.com/sitemap.xml
 

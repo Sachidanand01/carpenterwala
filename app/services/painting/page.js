@@ -132,6 +132,14 @@ export default function PaintingPage() {
         </div>
       </section>
 
+      {/* Overview Section (Citable Answer Block for AI SEO) */}
+      <section className="container animate-fade-in" style={{ marginBottom: '4rem', maxWidth: '800px', textAlign: 'center', padding: '0 2rem' }}>
+        <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>What are Professional Painting Services?</h2>
+        <p style={{ fontSize: '1.1rem', lineHeight: '1.8', opacity: 0.85 }}>
+          Professional painting services deliver high-quality interior and exterior wall finishes, customized color consultations, and thorough surface preparation. Verified painters on our handyman marketplace ensure accurate sq ft estimation and use premium weather-resistant paints to protect and beautify homes or offices throughout Bangalore.
+        </p>
+      </section>
+
       {/* Color Visualizer Section */}
       <section className="container" style={{ marginBottom: '6rem' }}>
         <ColorVisualizer />
