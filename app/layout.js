@@ -120,6 +120,21 @@ export default function RootLayout({ children }) {
           strategy="afterInteractive"
         />
 
+        {/* Google Tag (gtag.js) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-RNKCPYB155"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-RNKCPYB155');
+          `}
+        </Script>
+
         <Navbar />
         <main style={{ paddingTop: "var(--navbar-height)", minHeight: "100vh" }}>
           {children}
