@@ -13,11 +13,11 @@ export default function HowItWorks() {
             { name: "Home", url: "/" },
             { name: "How it Works", url: "/how-it-works" }
           ]} />
-          <div style={{ 
-            display: "grid", 
-            gridTemplateColumns: "1fr 1fr", 
-            gap: "4rem", 
-            alignItems: "center" 
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "4rem",
+            alignItems: "center"
           }}>
             <div>
               <h1 className="text-gradient" style={{ fontSize: "4rem", marginBottom: "1.5rem", lineHeight: "1.1" }}>
@@ -33,9 +33,9 @@ export default function HowItWorks() {
             </div>
             <div className="glass" style={{ padding: "1rem", position: "relative", overflow: "hidden" }}>
               <div style={{ position: "relative", width: "100%", height: "500px", borderRadius: "12px", overflow: "hidden" }}>
-                <Image 
-                  src="/images/how-it-works-hero.png" 
-                  alt="Carpenterwala Marketplace" 
+                <Image
+                  src="/images/how-it-works-hero.png"
+                  alt="Carpenterwala Marketplace"
                   fill
                   style={{ objectFit: "cover" }}
                   priority
@@ -73,12 +73,12 @@ export default function HowItWorks() {
               }
             ].map((item, idx) => (
               <div key={idx} className="glass" style={{ padding: "2.5rem", height: "100%" }}>
-                <div style={{ 
-                  fontSize: "3rem", 
-                  fontWeight: "900", 
-                  opacity: 0.1, 
-                  marginBottom: "-1rem", 
-                  color: "var(--primary)" 
+                <div style={{
+                  fontSize: "3rem",
+                  fontWeight: "900",
+                  opacity: 0.1,
+                  marginBottom: "-1rem",
+                  color: "var(--primary)"
                 }}>
                   {item.step}
                 </div>
@@ -117,12 +117,12 @@ export default function HowItWorks() {
               }
             ].map((item, idx) => (
               <div key={idx} className="glass" style={{ padding: "2.5rem", height: "100%", borderLeft: "4px solid var(--accent)" }}>
-                <div style={{ 
-                  fontSize: "3rem", 
-                  fontWeight: "900", 
-                  opacity: 0.1, 
-                  marginBottom: "-1rem", 
-                  color: "var(--accent)" 
+                <div style={{
+                  fontSize: "3rem",
+                  fontWeight: "900",
+                  opacity: 0.1,
+                  marginBottom: "-1rem",
+                  color: "var(--accent)"
                 }}>
                   {item.step}
                 </div>
@@ -144,7 +144,7 @@ export default function HowItWorks() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "3rem" }}>
             {[
               { title: "Verified Pros", desc: "Every professional undergoes a multi-step background and skill verification process." },
-              { title: "Secure Payments", desc: "Your money is safe with us until the work is completed to your satisfaction." },
+              // { title: "Secure Payments", desc: "Your money is safe with us until the work is completed to your satisfaction." },
               { title: "Local Expertise", desc: "Deeply rooted in Bangalore, we understand the specific needs of local homeowners." },
               { title: "24/7 Support", desc: "Our dedicated support team is always here to help you with any queries or issues." }
             ].map((item, idx) => (
@@ -160,10 +160,10 @@ export default function HowItWorks() {
       {/* CTA Section */}
       <section style={{ padding: "8rem 0" }}>
         <div className="container">
-          <div className="glass" style={{ 
-            padding: "4rem", 
-            textAlign: "center", 
-            background: "linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(245, 158, 11, 0.2))" 
+          <div className="glass" style={{
+            padding: "4rem",
+            textAlign: "center",
+            background: "linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(245, 158, 11, 0.2))"
           }}>
             <h2 style={{ fontSize: "3rem", marginBottom: "1.5rem" }}>Ready to get started?</h2>
             <p style={{ fontSize: "1.2rem", opacity: 0.8, marginBottom: "2.5rem", maxWidth: "600px", margin: "0 auto 2.5rem auto" }}>
