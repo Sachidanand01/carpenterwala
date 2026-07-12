@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
+import DripCalculator from '@/components/DripCalculator';
 
 export const metadata = {
   title: 'Professional Plumbing Services | Carpenterwala',
@@ -185,6 +186,11 @@ export default function PlumbingPage() {
             <p style={{ opacity: 0.8 }}>Upgrading old, corroded pipes or rerouting plumbing lines for kitchen or bathroom extensions.</p>
           </div>
         </div>
+      </section>
+
+      {/* Indian Drip Calculator Section */}
+      <section className="container">
+        <DripCalculator />
       </section>
 
       {/* Why Us Section */}
