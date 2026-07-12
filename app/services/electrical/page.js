@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
+import ElectricityCalculator from '@/components/ElectricityCalculator';
 
 export const metadata = {
   title: 'Professional Electrician Services | Carpenterwala',
@@ -185,6 +186,11 @@ export default function ElectricalPage() {
             <p style={{ opacity: 0.8 }}>Set up smart switches, smart doorbells, or automated lights to control your home easily from your phone.</p>
           </div>
         </div>
+      </section>
+
+      {/* Electricity Wastage Calculator Section */}
+      <section className="container">
+        <ElectricityCalculator />
       </section>
 
       {/* Why Us Section */}
