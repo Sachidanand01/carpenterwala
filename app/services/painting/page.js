@@ -2,6 +2,7 @@ import Link from 'next/link';
 import ColorVisualizer from '@/components/ColorVisualizer';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
+import PaintCalculator from '@/components/PaintCalculator';
 
 export const metadata = {
   title: 'Professional Painting Services | Home Painting Cost Guide',
@@ -191,6 +192,11 @@ export default function PaintingPage() {
             <p style={{ opacity: 0.8 }}>Scalable painting solutions for offices, showrooms, and commercial buildings with minimal disruption to your business.</p>
           </div>
         </div>
+      </section>
+
+      {/* Paint & Material Estimator Section */}
+      <section className="container">
+        <PaintCalculator />
       </section>
 
       {/* Home Painting Cost Guide India */}
