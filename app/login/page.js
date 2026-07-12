@@ -1,6 +1,6 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 function PromoVideo({ src, icon, title, description }) {
@@ -93,7 +93,7 @@ function PromoVideo({ src, icon, title, description }) {
   );
 }
 
-export default function CustomerLogin() {
+function CustomerLoginContent() {
   const [activeTab, setActiveTab] = useState('login'); // 'login' or 'register'
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -112,16 +112,18 @@ export default function CustomerLogin() {
   const [fetchedCustomer, setFetchedCustomer] = useState(null);
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect');
 
   useEffect(() => {
-    // If already logged in, redirect to bookings page
+    // If already logged in, redirect to bookings page or target redirect
     if (typeof window !== 'undefined') {
       const storedPhone = localStorage.getItem('customer_phone');
       if (storedPhone) {
-        router.push('/bookings');
+        router.push(redirect || '/bookings');
       }
     }
-  }, [router]);
+  }, [router, redirect]);
 
   // Clean phone input and allow only digits
   const handlePhoneChange = (val) => {
@@ -302,7 +304,7 @@ export default function CustomerLogin() {
           localStorage.setItem('customer_name', regData.customer.name);
           localStorage.setItem('customer_email', regData.customer.email);
           window.dispatchEvent(new Event('customer-login-changed'));
-          router.push('/bookings');
+          router.push(redirect || '/bookings');
         }
       } else {
         // activeTab === 'login' - save fetched customer details
@@ -311,7 +313,7 @@ export default function CustomerLogin() {
           localStorage.setItem('customer_name', fetchedCustomer.name);
           localStorage.setItem('customer_email', fetchedCustomer.email);
           window.dispatchEvent(new Event('customer-login-changed'));
-          router.push('/bookings');
+          router.push(redirect || '/bookings');
         }
       }
     } catch (err) {
@@ -677,5 +679,20 @@ export default function CustomerLogin() {
 
       </div>
     </div>
+  );
+}
+
+export default function CustomerLogin() {
+  return (
+    <Suspense fallback={
+      <div className="container flex items-center justify-center" style={{ minHeight: "calc(100vh - var(--navbar-height))", padding: "2.5rem 1rem" }}>
+        <div className="glass" style={{ padding: "2.5rem", width: "100%", maxWidth: "450px", borderRadius: "16px", textAlign: "center" }}>
+          <h1 style={{ fontSize: "2rem", marginBottom: "1rem" }}>Loading...</h1>
+          <p style={{ opacity: 0.8 }}>Please wait while we load the Customer Portal.</p>
+        </div>
+      </div>
+    }>
+      <CustomerLoginContent />
+    </Suspense>
   );
 }

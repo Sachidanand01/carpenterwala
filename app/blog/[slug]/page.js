@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { BLOG_POSTS } from '@/lib/blog-data';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
+import BlogComments from '@/components/BlogComments';
 
 const slugify = (cat) => cat.toLowerCase().replace(/\s+/g, '-');
 
@@ -337,10 +338,15 @@ export default async function BlogPost({ params }) {
       </section>
 
       {/* Back to Blog */}
-      <div className="container" style={{ paddingBottom: '6rem' }}>
+      <div className="container" style={{ paddingBottom: '2rem' }}>
         <Link href="/blog" style={{ opacity: 0.6, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <span>←</span> Back to Blog Listing
         </Link>
+      </div>
+
+      {/* Blog Comments Section */}
+      <div className="container" style={{ paddingBottom: '6rem' }}>
+        <BlogComments blogSlug={post.slug} />
       </div>
     </div>
   );
