@@ -123,12 +123,10 @@ export default function RootLayout({ children }) {
         {/* End Meta Pixel Code */}
 
         {/* Google AdSense Script */}
-        <Script
-          id="adsense-global"
+        <script
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || 'ca-pub-9262530414302185'}`}
           crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
 
         {/* Google Tag (gtag.js) */}
