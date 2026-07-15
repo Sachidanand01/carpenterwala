@@ -10,7 +10,7 @@ export default function AdSenseContainer({
   className = "" 
 }) {
   const [mounted, setMounted] = useState(false);
-  const publisherId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || "ca-pub-1234567890123456";
+  const publisherId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || "ca-pub-9262530414302185";
 
   useEffect(() => {
     setMounted(true);
