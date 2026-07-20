@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import AffiliateToolsWidget from '@/components/AffiliateToolsWidget';
 
 export default function DripCalculator() {
   const calcJsonLd = {
@@ -357,6 +358,9 @@ export default function DripCalculator() {
           </div>
 
         </div>
+
+        {/* Quick-Commerce & E-Commerce Tools Affiliate Widget */}
+        <AffiliateToolsWidget category="plumbing" />
 
         {/* Call to action */}
         <div style={{

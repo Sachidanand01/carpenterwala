@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import AffiliateToolsWidget from '@/components/AffiliateToolsWidget';
 
 export default function PaintCalculator() {
   const calcJsonLd = {
@@ -611,6 +612,9 @@ export default function PaintCalculator() {
             </div>
           </div>
         </div>
+
+        {/* Quick-Commerce & E-Commerce Tools Affiliate Widget */}
+        <AffiliateToolsWidget category="painting" />
 
         {/* Call to action */}
         <div style={{

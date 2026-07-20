@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import AffiliateToolsWidget from '@/components/AffiliateToolsWidget';
 
 export default function ElectricityCalculator() {
   const calcJsonLd = {
@@ -396,6 +397,9 @@ export default function ElectricityCalculator() {
           </div>
 
         </div>
+
+        {/* Quick-Commerce & E-Commerce Tools Affiliate Widget */}
+        <AffiliateToolsWidget category="electrical" />
 
         {/* Call to action */}
         <div style={{
