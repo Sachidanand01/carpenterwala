@@ -93,7 +93,7 @@ const POLICE_VERIFICATION_DATA = {
       hi: 'तमिलनाडु पुलिस पोर्टल पर जाएं → वेरिफिकेशन सर्विसेज चुनें → जॉब वेरिफिकेशन फॉर्म भरें → सर्टिफिकेट पाएं।',
       kn: 'ತಮಿಳುನಾಡು ಪೊಲೀಸ್ ಸಿಟಿಜನ್ ಪೋರ್ಟಲ್‌ಗೆ ಭೇಟಿ ನೀಡಿ → ಪರಿಶೀಲನೆ ಸೇವೆಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ.',
       ta: 'தமிழ்நாடு காவல் துறை குடிமக்கள் போர்ட்டலுக்குச் செல்லவும் → சரிபார்ப்பு சேவைகள் → ஆவணங்களைப் பதிவேற்றவும்.',
-      te: 'తమిళనాడు పోలీస్ పోర్టల్‌ను సందర్శించి జాబ్ వెరిఫికేషన్ ఎంచుకోండి.'
+      te: 'తమిళనాడు పోలీస్ పోర్టల్‌ను సందర్శించి జాబ్ వెరిఫικేషన్ ఎంచుకోండి.'
     }
   },
   ts: {
@@ -115,201 +115,201 @@ const POLICE_VERIFICATION_DATA = {
 const STEPS_DATA = {
   1: {
     title: {
-      en: 'Step 1: Email Address & Email OTP Login',
-      hi: 'चरण 1: ईमेल आईडी और ईमेल (Email) OTP से लॉगिन',
-      kn: 'ಹಂತ 1: ಇಮೇಲ್ ವಿಳಾಸ ಮತ್ತು ಇಮೇಲ್ OTP ಲಾಗಿನ್',
-      ta: 'படி 1: மின்னஞ்சல் முகவரி மற்றும் மின்னஞ்சல் OTP உள்நுழைவு',
-      te: 'దశ 1: ఈమెయిల్ అడ్రస్ & ఈమెయిల్ OTP లాగిన్'
+      en: 'Step 1: Service Pro Email & Email OTP Signup',
+      hi: 'चरण 1: सर्विस प्रो ईमेल आईडी और ईमेल (Email) OTP से फ्री साइनअप',
+      kn: 'ಹಂತ 1: ಸರ್ವಿಸ್ ಪ್ರೋ ಇಮೇಲ್ ಮತ್ತು ಇಮೇಲ್ OTP ಲಾಗಿನ್',
+      ta: 'படி 1: சேவை புரோ மின்னஞ்சல் மற்றும் மின்னஞ்சல் OTP பதிவு',
+      te: 'దశ 1: సర్వీస్ ప్రో ఈమెయిల్ & ఈమెయిల్ OTP సైన్ అప్'
     },
     subtitle: {
-      en: 'Quick 10-second signup via Email OTP verification',
-      hi: 'ईमेल पर आए OTP से सिर्फ 10 सेकंड में आसान रजिस्ट्रेशन',
-      kn: 'ಇಮೇಲ್ OTP ಮೂಲಕ ಕೇವಲ 10 ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಸುಲಭ ಲಾಗಿನ್',
-      ta: 'மின்னஞ்சல் OTP மூலம் 10 வினாடிகளில் பதிவு செய்யுங்கள்',
-      te: 'ఈమెయిల్ OTP ద్వారా 10 సెకన్లలో వేగవంతమైన సైన్ అప్'
+      en: 'Free registration for Carpenters, Painters, Electricians, Plumbers & Handymen',
+      hi: 'कारपेंटर, पेंटर, इलेक्ट्रिशियन, प्लंबर और तकनीशियनों के लिए 100% फ्री रजिस्ट्रेशन',
+      kn: 'ಕಾರ್ಪೆಂಟರ್, ಪೇಂಟರ್, ಎಲೆಕ್ಟ್ರಿಷಿಯನ್, ಪ್ಲಂಬರ್‌ಗಳಿಗೆ ಉಚಿತ ನೋಂದಣಿ',
+      ta: 'கார்பெண்டர், பெயிண்டர், எலக்ட்ரீஷியன், பிளம்பர்களுக்கு இலவச பதிவு',
+      te: 'కార్పెంటర్, పెయింటర్, ఎలక్ట్రీషియన్, ప్లంబర్ల కోసం ఉచిత రిజిస్ట్రేషన్'
     },
     mockup: {
-      header: 'Carpenterwala Partner App',
+      header: 'Carpenterwala Service Pro App',
       screenTitle: 'Professional Registration',
       elements: [
-        { label: 'Email Address', value: 'artisan@gmail.com', type: 'input' },
+        { label: 'Email Address', value: 'servicepro@gmail.com', type: 'input' },
         { label: 'Phone Number', value: '+91 98765 43210', type: 'input' },
-        { label: 'Enter Email OTP Code', value: '7 • 4 • 2 • 9 • 1 • 8', type: 'otp' },
+        { label: 'Enter 6-Digit Email OTP', value: '8 • 3 • 1 • 9 • 5 • 2', type: 'otp' },
         { label: 'Verify & Continue', value: 'VERIFY EMAIL OTP ➔', type: 'button' }
       ],
-      badge: '100% Free Email Signup'
+      badge: '100% Free Service Pro Signup'
     },
     details: {
-      en: 'Enter your Email Address and Phone Number on carpenterwala.com/pro/login. You will receive a 6-digit Verification OTP code directly in your Email inbox. Simply enter the Email OTP code to verify and proceed!',
-      hi: 'carpenterwala.com/pro/login पर अपना ईमेल आईडी और मोबाइल नंबर दर्ज करें। आपके ईमेल इनबॉक्स पर 6 अंकों का वेरिफिकेशन OTP कोड आएगा। बस ईमेल OTP दर्ज करके आगे बढ़ें!',
-      kn: 'carpenterwala.com/pro/login ನಲ್ಲಿ ನಿಮ್ಮ ಇಮೇಲ್ ವಿಳಾಸ ಮತ್ತು ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ. ನಿಮ್ಮ ಇಮೇಲ್‌ಗೆ 6-ಅಂಕಿಯ ಪರಿಶೀಲನಾ OTP ಕೋಡ್ ಬರುತ್ತದೆ. ಇಮೇಲ್ OTP ನಮೂದಿಸಿ ಮುಂದುವರಿಯಿರಿ.',
-      ta: 'carpenterwala.com/pro/login இல் உங்கள் மின்னஞ்சல் முகவரியை உள்ளிடவும். உங்கள் மின்னஞ்சலுக்கு 6 இலக்க OTP குறியீடு வரும்.',
-      te: 'carpenterwala.com/pro/login లో మీ ఈమెయిల్ అడ్రస్ నమోదు చేయండి. మీ ఈమెయిల్‌కు 6 అంకెల OTP కోడ్ వస్తుంది. ఈమెయిల్ OTP ఎంటర్ చేసి కొనసాగండి.'
+      en: 'Enter your Email Address and Mobile Number on carpenterwala.com/pro/login. You will receive a 6-digit Verification OTP code directly in your Email inbox. Free for all trade technicians!',
+      hi: 'carpenterwala.com/pro/login पर अपना ईमेल आईडी और मोबाइल नंबर दर्ज करें। आपके ईमेल इनबॉक्स पर 6 अंकों का वेरिफिकेशन OTP कोड आएगा। सभी ट्रेड तकनीशियनों के लिए 100% फ्री!',
+      kn: 'carpenterwala.com/pro/login ನಲ್ಲಿ ನಿಮ್ಮ ಇಮೇಲ್ ಮತ್ತು ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ. 6-ಅಂಕಿಯ OTP ಪಡೆಯಿರಿ. ಎಲ್ಲಾ ಟ್ರೇಡ್ ವೃತ್ತಿಪರರಿಗೆ ಉಚಿತ!',
+      ta: 'carpenterwala.com/pro/login இல் உங்கள் மின்னஞ்சல் மற்றும் மொபைல் எண்ணை உள்ளிட்டு 6 இலக்க OTP பெறவும்.',
+      te: 'carpenterwala.com/pro/login లో మీ ఈమెయిల్ మరియు మొబైల్ సంఖ్య నమోదు చేసి 6 అంకెల OTP పొందండి.'
     }
   },
   2: {
     title: {
-      en: 'Step 2: Experience & Specialty Skills',
-      hi: 'चरण 2: अनुभव और काम का हुनर चुनें',
-      kn: 'ಹಂತ 2: ಅನುಭವ ಮತ್ತು ಕೌಶಲ್ಯಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ',
-      ta: 'படி 2: அனுபவம் மற்றும் கைவினைத் திறன்கள்',
-      te: 'దశ 2: అనుభవం & నైపుణ్యాల ఎంపిక'
+      en: 'Step 2: Select Service Trade & Specialty Skills',
+      hi: 'चरण 2: अपना सर्विस ट्रेड (Carpentry, Painting, Electrical, Plumbing) चुनें',
+      kn: 'ಹಂತ 2: ಸೇವಾ ವೃತ್ತಿ ಮತ್ತು ಕೌಶಲ್ಯಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ',
+      ta: 'படி 2: உங்கள் சேவை தொழில் மற்றும் திறன்கள்',
+      te: 'దశ 2: మీ సర్వీస్ ట్రేడ్ & నైపుణ్యాల ఎంపಿಕ'
     },
     subtitle: {
-      en: 'Tell customers what you specialize in to get matching leads',
-      hi: 'अपनी खासियत दर्ज करें ताकि आपको सही काम के ऑर्डर मिल सकें',
-      kn: 'ನಿಮಗೆ ಸೂಕ್ತವಾದ ಕೆಲಸದ ಲೀಡ್‌ಗಳನ್ನು ಪಡೆಯಲು ನಿಮ್ಮ ಕೌಶಲ್ಯಗಳನ್ನು ನಮೂದಿಸಿ',
-      ta: 'சரியான வேலை ஆர்டர்களைப் பெற உங்கள் திறன்களைத் தேர்ந்தெடுக்கவும்',
-      te: 'సరైన వర్క్ ఆర్డర్‌లను పొందడానికి మీ నైపుణ్యాలను ఎంచుకోండి'
+      en: 'Choose your trade: Carpenter, Painter, Electrician, Plumber, or Handyman',
+      hi: 'अपना काम चुनें: कारपेंटर, पेंटर, इलेक्ट्रिशियन, प्लंबर या हैंड्रीमैन',
+      kn: 'ನಿಮ್ಮ ವೃತ್ತಿ ಆಯ್ಕೆಮಾಡಿ: ಕಾರ್ಪೆಂಟರ್, ಪೇಂಟರ್, ಎಲೆಕ್ಟ್ರಿಷಿಯನ್, ಪ್ಲಂಬರ್',
+      ta: 'உங்கள் தொழிலைத் தேர்ந்தெடுக்கவும்: கார்பெண்டர், பெயிண்டர், எலக்ட்ரீஷியன், பிளம்பர்',
+      te: 'మీ రంగాన్ని ఎంచుకోండి: కార్పెంటర్, పెయింటర్, ఎలక్ట్రీషియన్, ప్లంబర్'
     },
     mockup: {
-      header: 'Skill & Experience Profile',
-      screenTitle: 'Select Your Expertise',
+      header: 'Trade & Skill Profile',
+      screenTitle: 'Select Primary Service Category',
       elements: [
-        { label: 'Years of Experience', value: '7 Years Experience', type: 'select' },
-        { label: 'Specialties', value: '✓ Modular Kitchen  ✓ Wardrobe  ✓ Door Locks', type: 'tags' },
+        { label: 'Primary Trade', value: '✓ Carpentry / Painting / Electrical', type: 'select' },
+        { label: 'Years of Experience', value: '5+ Years Experience', type: 'select' },
         { label: 'Save & Next', value: 'SAVE & CONTINUE ➔', type: 'button' }
       ],
-      badge: 'High Match Leads'
+      badge: 'All Service Trades Allowed'
     },
     details: {
-      en: 'Select your total work experience (e.g. 5 Years, 10 Years) and choose your specific carpentry skills: Modular kitchen fitting, wardrobe assembly, door lock repair, furniture polishing, or sofa repair.',
-      hi: 'अपना कुल काम का अनुभव (जैसे 5 साल, 10 साल) दर्ज करें और अपनी खासियतें चुनें: मॉडुलर किचन, अलमारी फिटिंग, डोर लॉक रिपेयर, फर्नीचर पॉलिश या सोफा मरम्मत।',
-      kn: 'ನಿಮ್ಮ ಒಟ್ಟು ಕೆಲಸದ ಅನುಭವ ಮತ್ತು ಕೌಶಲ್ಯಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ: ಮಾಡ್ಯುಲರ್ ಕಿಚನ್, ವಾರ್ಡ್ರೋಬ್ ಫಿಟ್ಟಿಂಗ್, ಡೋರ್ ಲಾಕ್ ರಿಪೇರಿ, ಫರ್ನಿಚರ್ ಪಾಲಿಶ್.',
-      ta: 'உங்கள் பணி அனுபவம் மற்றும் திறன்களைத் தேர்ந்தெடுக்கவும்: மாடுலர் கிச்சன், வார்ட்ரோப் பொருத்துதல், கதவு பூட்டு பழுது.',
-      te: 'మీ పని అనుభవం మరియు నైపుణ్యాలను ఎంచుకోండి: మోడ్యులర్ కిచెన్, వార్డ్‌రోబ్ ఫిట్టింగ్, డోర్ లాక్ రిపేర్.'
+      en: 'Select your primary trade category (Carpentry, Painting, Electrical, Plumbing, Appliance Repair, or Handyman services), enter your work experience, and list your specialty skills.',
+      hi: 'अपनी मुख्य ट्रेड श्रेणी (कारपेंटरी, पेंटिंग, इलेक्ट्रिकल, प्लंबिंग, उपकरण मरम्मत, या हैंड्रीमैन सेवाएं) चुनें, अपना अनुभव और खास हुनर दर्ज करें।',
+      kn: 'ನಿಮ್ಮ ಮುಖ್ಯ ಸೇವಾ ವರ್ಗವನ್ನು ಆಯ್ಕೆಮಾಡಿ (ಕಾರ್ಪೆಂಟ್ರಿ, ಪೇಂಟಿಂಗ್, ಎಲೆಕ್ಟ್ರಿಕಲ್, ಪ್ಲಂಬಿಂಗ್) ಮತ್ತು ನಿಮ್ಮ ಅನುಭವವನ್ನು ನಮೂದಿಸಿ.',
+      ta: 'உங்கள் முதன்மை சேவை வகையைத் தேர்ந்தெடுக்கவும் (கார்பெண்டரி, பெயிண்டிங், எலக்ட்ரிக்கல், பிளம்பிங்).',
+      te: 'మీ ప్రధాన సర్వీస్ కేటగిరీని ఎంచుకోండి (కార్పెంట్రీ, పెయింటింగ్, ఎలక్ట్రికల్, ప్లంబింగ్).'
     }
   },
   3: {
     title: {
-      en: 'Step 3: Work City & Area Radius',
-      hi: 'चरण 3: अपना शहर और कार्य क्षेत्र (Area) चुनें',
-      kn: 'ಹಂತ 3: ನಿಮ್ಮ ನಗರ ಮತ್ತು ಕೆಲಸದ ಪ್ರದೇಶ ಆಯ್ಕೆಮಾಡಿ',
-      ta: 'படி 3: உங்கள் நகரம் மற்றும் பணி மண்டலம்',
-      te: 'దశ 3: మీ నగరం & పని ప్రాంతం'
+      en: 'Step 3: Service City & Local Area Hubs',
+      hi: 'चरण 3: अपना शहर और सेवा क्षेत्र (Service Hub) चुनें',
+      kn: 'ಹಂತ 3: ಸೇವಾ ನಗರ ಮತ್ತು ಸ್ಥಳೀಯ ಪ್ರದೇಶಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ',
+      ta: 'படி 3: சேவை நகரம் மற்றும் உள்ளூர் மண்டலம்',
+      te: 'దశ 3: సర్వీస్ నగరం & ప్రాంతాలు'
     },
     subtitle: {
-      en: 'Get work orders directly in your current metro city',
-      hi: 'अपने नजदीकी इलाकों में direct ग्राहक बुकिंग पाएं',
-      kn: 'ನಿಮ್ಮ ಹತ್ತಿರದ ಪ್ರದೇಶಗಳಲ್ಲಿ ನೇರ ಗ್ರಾಹಕ ಬುಕ್ಕಿಂಗ್ ಪಡೆಯಿರಿ',
-      ta: 'உங்கள் அருகிலுள்ள பகுதிகளில் நேரடி வாடிக்கையாளர் ஆர்டர்களைப் பெறுங்கள்',
-      te: 'మీ దగ్గరలోని ప్రాంతాలలో నేరుగా కస్టమర్ ఆర్డర్‌లను పొందండి'
+      en: 'Get direct customer job inquiries in your local operating city',
+      hi: 'अपने शहर और आसपास के इलाकों में direct ग्राहक कॉल और ऑर्डर पाएं',
+      kn: 'ನಿಮ್ಮ ಸ್ಥಳೀಯ ನಗರ ಮತ್ತು ಪ್ರದೇಶಗಳಲ್ಲಿ ನೇರ ಗ್ರಾಹಕ ಕರೆಗಳನ್ನು ಪಡೆಯಿರಿ',
+      ta: 'உங்கள் உள்ளூர் நகரத்தில் நேரடி வாடிக்கையாளர் அழைப்புகளைப் பெறுங்கள்',
+      te: 'మీ స్థానిక నగరంలో నేరుగా కస్టమರ್ ఫోన్ కాల్స్ పొందండి'
     },
     mockup: {
       header: 'Location & Service Radius',
-      screenTitle: 'Select Service City',
+      screenTitle: 'Select Operational City',
       elements: [
-        { label: 'City', value: 'Bangalore (Bengaluru)', type: 'select' },
-        { label: 'Active Hubs', value: '✓ Whitefield  ✓ Koramangala  ✓ HSR Layout  ✓ Thanisandra', type: 'tags' },
-        { label: 'Travel Radius', value: 'Within 15 km Radius', type: 'select' }
+        { label: 'Operational City', value: 'Bangalore / Delhi / Mumbai / Pune', type: 'select' },
+        { label: 'Active Service Hubs', value: '✓ Koramangala  ✓ Whitefield  ✓ HSR Layout', type: 'tags' },
+        { label: 'Service Radius', value: 'Within 15 km Radius', type: 'select' }
       ],
-      badge: 'Local Customer Leads'
+      badge: 'Direct Customer Calls'
     },
     details: {
-      en: 'Whether you migrated to Bangalore, Delhi NCR, Mumbai, Pune, or Chennai, select your current operational metro city and local hubs (e.g. Koramangala, Whitefield, Indiranagar, HSR Layout).',
-      hi: 'चाहे आप बैंगलोर, दिल्ली एनसीआर, मुंबई, पुणे या चेन्नई में काम कर रहे हों, अपना वर्तमान शहर और पास के इलाके (जैसे कोरमंगला, व्हाइटफील्ड, एचएसआर लेआउट) चुनें।',
-      kn: 'ನೀವು ಬೆಂಗಳೂರು, ದೆಹಲಿ, ಮುಂಬೈ, ಪುಣೆ ಅಥವಾ ಚೆನ್ನೈನಲ್ಲಿದ್ದರೆ, ನಿಮ್ಮ ಪ್ರಸ್ತುತ ನಗರ ಮತ್ತು ಹತ್ತಿರದ ಪ್ರದೇಶಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ.',
-      ta: 'நீங்கள் பெங்களூரு, டெல்லி, மும்பை, பூனே அல்லது சென்னையில் இருந்தால், உங்கள் தற்போதைய நகரத்தைத் தேர்ந்தெடுக்கவும்.',
-      te: 'మీరు బెంగళూరు, ఢిల్లీ, ముంబై, పూణే లేదా చెన్నైలో ఉంటే, మీ ప్రస్తుత నగరాన్ని ఎంచుకోండి.'
+      en: 'Select your operational city (Bangalore, Delhi NCR, Mumbai, Pune, Chennai, Hyderabad, etc.) and choose the specific neighborhoods where you want to receive direct customer work inquiries.',
+      hi: 'अपना कार्य शहर (बैंगलोर, दिल्ली एनसीआर, मुंबई, पुणे, चेन्नई, हैदराबाद आदि) और वे इलाके चुनें जहाँ आप सीधे ग्राहकों से काम पाना चाहते हैं।',
+      kn: 'ನಿಮ್ಮ ಕೆಲಸದ ನಗರ ಮತ್ತು ಪ್ರದೇಶಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ (ಬೆಂಗಳೂರು, ದೆಹಲಿ, ಮುಂಬೈ, ಪುಣೆ, ಚೆನ್ನೈ).',
+      ta: 'உங்கள் பணி நகரம் மற்றும் பகுதிகளைத் தேர்ந்தெடுக்கவும் (பெங்களூரு, டெல்லி, மும்பை, சென்னை).',
+      te: 'మీ పని నగరం మరియు ప్రాంతాలను ఎంచుకోండి (బెంగళూరు, ఢిల్లీ, ముంబై, చెన్నై).'
     }
   },
   4: {
     title: {
-      en: 'Step 4: KYC Document Verification',
+      en: 'Step 4: KYC Identity Verification',
       hi: 'चरण 4: पहचान पत्र (KYC) अपलोड करें',
-      kn: 'ಹಂತ 4: ಆಧಾರ್ ಮತ್ತು ಪ್ಯಾನ್ ಕಾರ್ಡ್ ಅಪ್‌ಲೋಡ್',
-      ta: 'படி 4: அடையாள ஆவணங்கள் பதிவேற்றம்',
+      kn: 'ಹಂತ 4: ಆಧಾರ್ ಮತ್ತು ಪ್ಯಾನ್ ಕಾರ್ಡ್ ಪರಿಶೀಲನೆ',
+      ta: 'படி 4: அடையாள ஆவணங்கள் சரிபார்ப்பு',
       te: 'దశ 4: గురింపు కార్డుల (KYC) అప్‌లోడ్'
     },
     subtitle: {
-      en: 'Earn customer trust with Aadhaar & PAN verification',
+      en: 'Upload Aadhaar & PAN Card to earn the "Verified Pro" badge',
       hi: 'आधार और पैन कार्ड से Verified Badge पाएं और ग्राहकों का भरोसा जीतें',
       kn: 'ಆಧಾರ್ ಮತ್ತು ಪ್ಯಾನ್ ಕಾರ್ಡ್‌ನಿಂದ ಪರಿಶೀಲಿಸಿದ ಬ್ಯಾಡ್ಜ್ ಪಡೆಯಿರಿ',
       ta: 'ஆதார் மற்றும் பேன் கார்டு மூலம் சரிபார்க்கப்பட்ட பேட்ஜ் பெறுங்கள்',
-      te: 'ఆధార్ మరియు పాన్ కార్డ్‌తో వెరిఫైడ్ బ్యాడ్జ్ పొందండి'
+      te: 'ఆధార్ మరియు పాన్ కార్డ్‌తో వెరిఫైడ్ బ్యాಡ್జ్ పొందండి'
     },
     mockup: {
-      header: 'KYC Document Verification',
+      header: 'KYC Identity Verification',
       screenTitle: 'Identity Verification',
       elements: [
         { label: 'Aadhaar Card Front', value: '✓ aadhaar_front.jpg Uploaded', type: 'uploaded' },
         { label: 'Aadhaar Card Back', value: '✓ aadhaar_back.jpg Uploaded', type: 'uploaded' },
         { label: 'PAN Card / Voter ID', value: '✓ pan_card.jpg Uploaded', type: 'uploaded' }
       ],
-      badge: 'Verified Professional'
+      badge: 'Verified Service Pro'
     },
     details: {
-      en: 'Upload clear photos of your Aadhaar card (front and back) along with your PAN Card or Voter ID. Your documents are completely secure and used only for safety verification.',
-      hi: 'अपने आधार कार्ड (आगे और पीछे का हिस्सा) और पैन कार्ड की साफ़ तस्वीरें अपलोड करें। आपके दस्तावेज पूरी तरह से सुरक्षित रहते हैं और केवल सत्यापन के लिए उपयोग किए जाते हैं।',
-      kn: 'ನಿಮ್ಮ ಆಧಾರ್ ಕಾರ್ಡ್ ಮತ್ತು ಪ್ಯಾನ್ ಕಾರ್ಡ್‌ನ ಸ್ಪಷ್ಟ ಚಿತ್ರಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ. ನಿಮ್ಮ ದಾಖಲೆಗಳು ಸಂಪೂರ್ಣವಾಗಿ ಸುರಕ್ಷಿತವಾಗಿರುತ್ತವೆ.',
-      ta: 'உங்கள் ஆதார் கார்டு மற்றும் பேன் கார்டின் தெளிவான புகைப்படங்களைப் பதிவேற்றுங்கள். உங்கள் ஆவணங்கள் பாதுகாப்பானவை.',
-      te: 'మీ ఆధార్ కార్డ్ మరియు పాన్ కార్డ్ యొక్క స్పష్టమైన ఫోటోలను అప్‌లోడ్ చేయండి. మీ పత్రాలు సురక్షితంగా ఉంటాయి.'
+      en: 'Upload clear photos of your Aadhaar Card (front and back) and PAN Card or Voter ID. Your documents remain completely private and secure on our encrypted system.',
+      hi: 'अपने आधार कार्ड (आगे और पीछे का हिस्सा) और पैन कार्ड की साफ़ तस्वीरें अपलोड करें। आपके दस्तावेज पूरी तरह से सुरक्षित रहते हैं।',
+      kn: 'ನಿಮ್ಮ ಆಧಾರ್ ಕಾರ್ಡ್ ಮತ್ತು ಪ್ಯಾನ್ ಕಾರ್ಡ್‌ನ ಸ್ಪಷ್ಟ ಚಿತ್ರಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ. ನಿಮ್ಮ ದಾಖಲೆಗಳು ಸುರಕ್ಷಿತವಾಗಿರುತ್ತವೆ.',
+      ta: 'உங்கள் ஆதார் கார்டு மற்றும் பேன் கார்டின் தெளிவான புகைப்படங்களைப் பதிவேற்றுங்கள்.',
+      te: 'మీ ఆధార్ కార్డ్ మరియు పాన్ కార్డ్ యొక్క స్పష్టమైన ఫోటోలను అప్‌లోడ్ చేయండి.'
     }
   },
   5: {
     title: {
-      en: 'Step 5: State Online Police Verification (PCC)',
+      en: 'Step 5: Online State Police Verification (PCC)',
       hi: 'चरण 5: ऑनलाइन पुलिस वेरिफिकेशन प्रमाण पत्र',
       kn: 'ಹಂತ 5: ಆನ್‌ಲೈನ್ ಪೊಲೀಸ್ ಪರಿಶೀಲನೆ (PCC)',
       ta: 'படி 5: ஆன்லைன் காவல் துறை சான்றிதழ்',
-      te: 'దశ 5: ఆన్‌లైన్ పోలీస్ వెరిఫికేషన్ (PCC)'
+      te: 'దశ 5: ఆన్‌లైన్ పోలీస్ వెరిఫಿಕೇషన్ (PCC)'
     },
     subtitle: {
-      en: 'Apply online from your home state (UP/Bihar) or current metro city',
-      hi: 'अपने गृह राज्य (UP/बिहार) या वर्तमान शहर के पोर्टल से ऑनलाइन आवेदन करें',
-      kn: 'ನಿಮ್ಮ ಸ್ವಂತ ರಾಜ್ಯ ಅಥವಾ ಪ್ರಸ್ತುತ ನಗರದ ಪೋರ್ಟಲ್‌ನಿಂದ ಆನ್‌ಲೈನ್‌ನಲ್ಲಿ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ',
-      ta: 'உங்கள் சொந்த மாநிலம் அல்லது தற்போதைய நகர போர்ட்டலில் விண்ணப்பிக்கவும்',
-      te: 'మీ సొంత రాష్ట్రం లేదా ప్రస్తుత నగర పోర్టల్ నుండి ఆన్‌లైన్‌లో దరఖాస్తు చేసుకోండి'
+      en: 'Apply online from any Indian state portal to get 5x more customer calls',
+      hi: 'किसी भी राज्य पुलिस पोर्टल से ऑनलाइन आवेदन करें और 5 गुना ज्यादा ग्राहक पाएं',
+      kn: 'ಯಾವುದೇ ರಾಜ್ಯ ಪೊಲೀಸ್ ಪೋರ್ಟಲ್‌ನಿಂದ ಆನ್‌ಲೈನ್‌ನಲ್ಲಿ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ',
+      ta: 'எந்தவொரு மாநில காவல்துறை போர்ட்டலிலும் ஆன்லைனில் விண்ணப்பிக்கவும்',
+      te: 'ఏదైనా రాష్ట్ర పోలీస్ పోర్టల్ నుండి ఆన్‌లైన్‌లో దరఖాస్తు చేసుకోండి'
     },
     mockup: {
       header: 'Police Clearance Certificate',
       screenTitle: 'Upload PCC Document',
       elements: [
         { label: 'State PCC Document', value: '✓ police_verification.pdf Uploaded', type: 'uploaded' },
-        { label: 'Verification Badge Status', value: '🛡️ Safety Verified Professional', type: 'badge' },
+        { label: 'Verification Badge Status', value: '🛡️ Safety Verified Service Pro', type: 'badge' },
         { label: 'Continue Profile', value: 'PROCEED TO PORTFOLIO ➔', type: 'button' }
       ],
-      badge: '5x Direct Calls'
+      badge: '5x Customer Bookings'
     },
     details: {
-      en: 'Having a Police Clearance Certificate (PCC) boosts your profile ranking and unlocks 5x more customer bookings. You can apply online via UPCOP (UP), RTPS Bihar, Seva Sindhu (Karnataka), Aaple Sarkar (Maharashtra), or Delhi Police PCC portal.',
-      hi: 'पुलिस वेरिफिकेशन सर्टिफिकेट (PCC) होने से आपकी प्रोफाइल सबसे ऊपर दिखती है और 5 गुना ज्यादा ग्राहक काम देते हैं। आप UPCOP (UP), RTPS बिहार, सेवा सिंधु (कर्नाटक), या दिल्ली पुलिस पोर्टल से ऑनलाइन बनवा सकते हैं।',
-      kn: 'ಪೊಲೀಸ್ ಪರಿಶೀಲನೆ ಪ್ರಮಾಣಪತ್ರ (PCC) ಹೊಂದಿದ್ದರೆ ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಉನ್ನತ ಸ್ಥಾನ ಪಡೆಯುತ್ತದೆ ಮತ್ತು 5 ಪಟ್ಟು ಹೆಚ್ಚು ಗ್ರಾಹಕ ಬುಕ್ಕಿಂಗ್ ಲಭಿಸುತ್ತದೆ.',
-      ta: 'காவல் துறை சான்றிதழ் (PCC) வைத்திருப்பது 5 மடங்கு கூடுதல் வாடிக்கையாளர் ஆர்டர்களைப் பெற உதவும்.',
-      te: 'పోలీస్ వెరిఫికేషన్ సర్టిఫికేట్ (PCC) ఉండటం వలన 5 రెట్లు ఎక్కువ కస్టమర్ బుకింగ్‌లు లభిస్తాయి.'
+      en: 'Uploading a Police Clearance Certificate (PCC) earns you the "Safety Verified Pro" badge. Select your state from our interactive tool below to get direct official portal links (UPCOP, RTPS Bihar, Seva Sindhu Karnataka, Aaple Sarkar Maharashtra, Delhi Police PCC).',
+      hi: 'पुलिस वेरिफिकेशन सर्टिफिकेट (PCC) अपलोड करने से आपको "Safety Verified Pro" बैज मिलता है। नीचे दिए गए टूल से अपने राज्य का सरकारी पोर्टल लिंक पाएं।',
+      kn: 'ಪೊಲೀಸ್ ಪರಿಶೀಲನೆ ಪ್ರಮಾಣಪತ್ರ (PCC) ಅಪ್‌ಲೋಡ್ ಮಾಡುವುದರಿಂದ "Safety Verified Pro" ಬ್ಯಾಡ್ಜ್ ಲಭಿಸುತ್ತದೆ. ಕೆಳಗಿನ ಟೂಲ್‌ನಿಂದ ನಿಮ್ಮ ರಾಜ್ಯದ ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್ ಆಯ್ಕೆಮಾಡಿ.',
+      ta: 'காவல் துறை சான்றிதழ் (PCC) பதிவேற்றுவது "Safety Verified Pro" பேட்ஜைப் பெற உதவும்.',
+      te: 'పోలీస్ వెరిఫికేషన్ సర్టిఫికేట్ (PCC) అప్‌లోడ్ చేయడం వలన "Safety Verified Pro" బ్యాడ్జ్ లభిస్తుంది.'
     }
   },
   6: {
     title: {
-      en: 'Step 6: Work Portfolio Photos & Going Live!',
+      en: 'Step 6: Work Photos & Profile Going Live!',
       hi: 'चरण 6: काम की फोटो अपलोड करें और प्रोफाइल Live करें!',
       kn: 'ಹಂತ 6: ಕೆಲಸದ ಚಿತ್ರಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ ಮತ್ತು ಪ್ರೊಫೈಲ್ ಲೈವ್ ಮಾಡಿ!',
       ta: 'படி 6: புகைப்படங்கள் பதிவேற்றி நேரலைக்குச் செல்லுங்கள்!',
       te: 'దశ 6: పని ఫోటోలు అప్‌లోడ్ చేసి లైవ్‌లోకి వెళ్ళండి!'
     },
     subtitle: {
-      en: 'Showcase your craftsmanship and start receiving direct calls',
-      hi: 'अपने बनाए फर्नीचर/काम की फोटो दिखाएं और बिना कमीशन सीधे ग्राहक पाएं',
-      kn: 'ನಿಮ್ಮ ಅತ್ಯುತ್ತಮ ಕೆಲಸದ ಚಿತ್ರಗಳನ್ನು ತೋರಿಸಿ ಮತ್ತು ನೇರ ಫೋನ್ ಕರೆಗಳನ್ನು ಸ್ವೀಕರಿಸಲು ಪ್ರಾರಂಭಿಸಿ',
-      ta: 'உங்கள் வேலைப் படங்களைக் காட்டி நேரடி அழைப்புகளைப் பெறத் தொடங்குங்கள்',
-      te: 'మీ పని ఫోటోలను చూపించి నేరుగా ఫోన్ కాల్స్ పొందడం ప్రారంభించండి'
+      en: 'Showcase your work and start receiving direct customer calls with 0% commission',
+      hi: 'अपने काम की फोटो दिखाएं और बिना किसी कमीशन सीधे ग्राहक पाएं',
+      kn: 'ನಿಮ್ಮ ಅತ್ಯುತ್ತಮ ಕೆಲಸದ ಚಿತ್ರಗಳನ್ನು ತೋರಿಸಿ ಮತ್ತು 0% ಕಮಿಷನ್‌ನೊಂದಿಗೆ ನೇರ ಫೋನ್ ಕರೆಗಳನ್ನು ಸ್ವೀಕರಿಸಿ',
+      ta: '0% கமிஷனுடன் நேரடி அழைப்புகளைப் பெறத் தொடங்குங்கள்',
+      te: '0% కమిషన్‌తో నేరుగా కస్టమర్ ఫోన్ కాల్స్ పొందడం ప్రారంభించండి'
     },
     mockup: {
-      header: 'Live Craftsman Directory',
+      header: 'Live Service Pro Directory',
       screenTitle: 'Profile Status: LIVE',
       elements: [
-        { label: 'Portfolio Uploaded', value: '📷 4 Work Photos Uploaded', type: 'uploaded' },
-        { label: 'Direct Call Button', value: '📞 Call Artisan Direct (Active)', type: 'button' },
+        { label: 'Work Portfolio', value: '📷 4 Project Photos Uploaded', type: 'uploaded' },
+        { label: 'Direct Call Button', value: '📞 Call Service Pro Direct (Active)', type: 'button' },
         { label: 'Commission Rate', value: '0% Commission (Keep 100% Earnings)', type: 'badge' }
       ],
       badge: 'Profile 100% Live'
     },
     details: {
-      en: 'Upload 3 to 5 clear photos of your finished carpentry work (modular kitchens, wardrobes, lock repair, polishing). Click "Submit Profile" to get listed on Carpenterwala directory and start getting direct customer calls!',
-      hi: 'अपने किए गए काम की 3 से 5 तस्वीरें अपलोड करें (मॉडुलर किचन, अलमारी, लॉक रिपेयर)। "सबमिट प्रोफाइल" पर क्लिक करें और बिना किसी ठेकेदार कमीशन के सीधे ग्राहकों से फोन कॉल पाएं!',
-      kn: 'ನಿಮ್ಮ ಕೆಲಸದ 3 ರಿಂದ 5 ಚಿತ್ರಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ. ಕಾರ್ಪೆಂಟರ್‍ವಾಲಾ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ಲೈವ್ ಆಗಿ ನೇರ ಗ್ರಾಹಕ ಕರೆಗಳನ್ನು ಪಡೆಯಿರಿ!',
-      ta: 'உங்கள் வேலைப்பாடுகளின் 3 முதல் 5 புகைப்படங்களைப் பதிவேற்றுங்கள். நேரடியாக வாடிக்கையாளர் அழைப்புகளைப் பெறுங்கள்!',
-      te: 'మీ పని యొక్క 3 నుండి 5 ఫోటోలను అప్‌లోడ్ చేయండి. నేరుగా కస్టమర్ ఫోన్ కాల్స్ పొందడం ప్రారంభించండి!'
+      en: 'Upload 3 to 5 photos of your past completed service jobs. Click "Submit Profile" to go live on the Carpenterwala Service Pro Directory and start getting direct customer calls with ZERO commission fees!',
+      hi: 'अपने पिछले काम की 3 से 5 तस्वीरें अपलोड करें। "सबमिट प्रोफाइल" पर क्लिक करें और बिना किसी कमीशन सीधे ग्राहकों से फोन कॉल पाना शुरू करें!',
+      kn: 'ನಿಮ್ಮ 3 ರಿಂದ 5 ಕೆಲಸದ ಚಿತ್ರಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ ಮತ್ತು 0% ಕಮಿಷನ್‌ನೊಂದಿಗೆ ನೇರ ಫೋನ್ ಕರೆಗಳನ್ನು ಪಡೆಯಿರಿ!',
+      ta: 'உங்கள் வேலைகளின் 3 முதல் 5 புகைப்படங்களைப் பதிவேற்றி நேரடியாக வாடிக்கையாளர் அழைப்புகளைப் பெறுங்கள்!',
+      te: 'మీ 3 నుండి 5 పని ఫోటోలను అప్‌లోడ్ చేసి నేరుగా కస్టమర్ ఫోన్ కాల్స్ పొందండి!'
     }
   }
 };
@@ -356,10 +356,10 @@ export default function ProOnboardingVisualTour() {
             letterSpacing: '0.05em',
             marginBottom: '6px'
           }}>
-            Interactive Tour Widget
+            Service Pro Registration Guide
           </div>
           <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, color: '#ffffff' }}>
-            🔨 Carpenterwala Registration Visual Tour
+            🛠️ Carpenterwala Service Pro Registration Tour
           </h3>
         </div>
 
@@ -642,7 +642,7 @@ export default function ProOnboardingVisualTour() {
                   boxShadow: '0 4px 14px rgba(16, 185, 129, 0.4)'
                 }}
               >
-                🚀 START FREE REGISTRATION NOW
+                🚀 START FREE SERVICE PRO REGISTRATION
               </Link>
             )}
           </div>
