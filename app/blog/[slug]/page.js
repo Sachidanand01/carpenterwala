@@ -3,6 +3,7 @@ import { BLOG_POSTS } from '@/lib/blog-data';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
 import BlogComments from '@/components/BlogComments';
+import ProOnboardingVisualTour from '@/components/ProOnboardingVisualTour';
 
 const slugify = (cat) => cat.toLowerCase().replace(/\s+/g, '-');
 
@@ -253,7 +254,15 @@ export default async function BlogPost({ params }) {
               filter: brightness(1.1);
             }
           `}} />
-          <div dangerouslySetInnerHTML={{ __html: post.content }} className="blog-content" />
+          {post.content.includes('<!-- PRO_ONBOARDING_TOUR_WIDGET -->') ? (
+            <>
+              <div dangerouslySetInnerHTML={{ __html: post.content.split('<!-- PRO_ONBOARDING_TOUR_WIDGET -->')[0] }} className="blog-content" />
+              <ProOnboardingVisualTour />
+              <div dangerouslySetInnerHTML={{ __html: post.content.split('<!-- PRO_ONBOARDING_TOUR_WIDGET -->')[1] }} className="blog-content" />
+            </>
+          ) : (
+            <div dangerouslySetInnerHTML={{ __html: post.content }} className="blog-content" />
+          )}
 
           {/* Author Bio Card */}
           <div className="glass" style={{ display: 'flex', gap: '1.5rem', padding: '2rem', marginTop: '4rem', alignItems: 'center', flexWrap: 'wrap' }}>
