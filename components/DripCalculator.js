@@ -3,6 +3,22 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function DripCalculator() {
+  const calcJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Water Wastage & Tap Drip Cost Calculator",
+    "url": "https://carpenterwala.com/services/plumbing#calculator",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "INR"
+    },
+    "description": "Calculate daily and monthly water loss (in litres and Rupees) caused by leaking taps, flush tanks, and pipes in Indian households."
+  };
+
   const [taps, setTaps] = useState(1);
   const [dripRate, setDripRate] = useState(30); // drips per minute
   const [waterSource, setWaterSource] = useState('tanker'); // 'municipal', 'tanker', 'can'
@@ -54,6 +70,10 @@ export default function DripCalculator() {
       boxShadow: '0 12px 40px rgba(0, 0, 0, 0.3)',
       maxWidth: '950px'
     }} className="glass animate-fade-in">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(calcJsonLd) }}
+      />
       <style dangerouslySetInnerHTML={{ __html: `
         .slider-input::-webkit-slider-thumb {
           -webkit-appearance: none;

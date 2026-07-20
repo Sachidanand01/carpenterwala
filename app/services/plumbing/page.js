@@ -188,6 +188,18 @@ export default function PlumbingPage() {
         </div>
       </section>
 
+      {/* Indian Drip Calculator & Water Loss Overview */}
+      <section className="container" style={{ marginBottom: '2rem' }}>
+        <div className="glass" style={{ padding: '2.5rem', borderRadius: '16px', lineHeight: '1.8' }}>
+          <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem', color: 'var(--primary)' }}>
+            How Much Water and Money Does a Leaking Tap Waste in India?
+          </h2>
+          <p style={{ opacity: 0.9, fontSize: '1.05rem' }}>
+            In Indian households across Bangalore and major metros, a single leaking tap dripping at a rate of 30 drops per minute wastes over <strong>10.8 Liters of water daily</strong>, translating to more than <strong>324 Liters of lost water every month</strong>. When calculated against private water tanker supply rates (~₹900 per 5,000L) or municipal BWSSB bills, a slow leak can quietly inflate your monthly household utility expenses by ₹60 to ₹300 per tap. Beyond financial loss, unchecked tap dripping damages sink seals, rusts valve cartridges, and leads to wall seepage inside kitchens and bathrooms. Fixing a leaking faucet or toilet flush valve early prevents structural dampness and conserves precious municipal water. Use Carpenterwala's interactive Water Wastage Calculator below to estimate your exact water loss and financial savings.
+          </p>
+        </div>
+      </section>
+
       {/* Indian Drip Calculator Section */}
       <section className="container">
         <DripCalculator />

@@ -1,0 +1,28 @@
+# Carpenterwala - Comprehensive Knowledge Base & Technical Services Overview
+
+## 1. About Carpenterwala
+Carpenterwala operates a verified technician marketplace operating across Bangalore, Karnataka, India. All service providers undergo police verification, skills testing, and upfront transparent pricing alignment.
+
+## 2. Interactive Calculation Engines
+### Water Wastage & Tap Drip Cost Calculator
+- Location: https://carpenterwala.com/services/plumbing#calculator
+- Purpose: Quantifies municipal and tanker water wastage in Indian homes resulting from slow dripping taps, leaking flush valves, or pipe pinholes.
+- Methodology: Converts drip frequency (e.g., 10 to 120 drops per minute) into daily/monthly litres and financial loss based on Bangalore tanker water costs (~₹1.50/L).
+
+### Electricity Appliance Consumption & Wastage Calculator
+- Location: https://carpenterwala.com/services/electrical#calculator
+- Purpose: Calculates power consumption (kWh / units) and monthly electricity bill increases caused by faulty wiring, inefficient appliances (ACs, Water Heaters/Geysers, Microwaves), and standby voltage leakage.
+- Methodology: Maps appliance wattage against daily operational hours and BESCOM slab rates.
+
+### Wall Painting Area & Cost Estimator
+- Location: https://carpenterwala.com/services/painting#calculator
+- Purpose: Computes exact wall surface area, paint litres needed (1 coat vs 2 coats + primer), and total material + labor budget for residential flats.
+
+## 3. Detailed Service Directory
+- Carpentry: Door repair, lock replacement, wooden bed repair, wardrobe assembly, modular kitchen cabinet adjustments.
+- Painting: Fresh interior painting, repainting, exterior weather proofing, wall putty application, dampness treatment.
+- Electrical: Switchboard repair, MCB tripping resolution, main line wiring, ceiling fan installation, inverter setup.
+- Plumbing: Blocked drain clearing, tap washer replacement, commode fitting, overhead tank cleaning, pump repair.
+
+## 4. Primary Service Hubs in Bangalore
+- Koramangala, Indiranagar, Whitefield, HSR Layout, Thanisandra, Hebbal, Yelahanka, Bellandur, Marathahalli, Electronic City.

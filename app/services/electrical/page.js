@@ -188,6 +188,18 @@ export default function ElectricalPage() {
         </div>
       </section>
 
+      {/* Electricity Wastage Overview */}
+      <section className="container" style={{ marginBottom: '2rem' }}>
+        <div className="glass" style={{ padding: '2.5rem', borderRadius: '16px', lineHeight: '1.8' }}>
+          <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem', color: 'var(--primary)' }}>
+            How Does Faulty Wiring & Appliance Standby Power Inflate Electricity Bills in India?
+          </h2>
+          <p style={{ opacity: 0.9, fontSize: '1.05rem' }}>
+            In Indian residences, unoptimized electrical appliances and legacy non-star-rated ceiling fans account for up to <strong>30% of unnecessary power consumption</strong>. For instance, operating an older 75-Watt conventional ceiling fan for 12 hours daily consumes 0.9 kWh per day, whereas an energy-efficient BLDC fan uses only 0.33 kWh, saving nearly <strong>17 kWh per month per fan</strong>. Similarly, vampire standby power drawn by televisions, microwave displays, and plugged-in chargers slowly drains electricity even when switched off at the device level. Overloaded circuits, worn-out insulation, and loose wire terminations also generate electrical resistance and heat, raising monthly BESCOM tariff slab rates. Installing 5-star rated appliances and scheduling regular electrical safety audits prevents voltage spikes and cuts energy bills. Calculate your home appliance power consumption using Carpenterwala's interactive Electricity Calculator below.
+          </p>
+        </div>
+      </section>
+
       {/* Electricity Wastage Calculator Section */}
       <section className="container">
         <ElectricityCalculator />

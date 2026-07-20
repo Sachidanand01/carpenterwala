@@ -3,6 +3,22 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function PaintCalculator() {
+  const calcJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Wall Painting Area, Primer & Paint Quantity Cost Estimator",
+    "url": "https://carpenterwala.com/services/painting#calculator",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "INR"
+    },
+    "description": "Calculate wall surface area, paint litres needed, primer requirements, and total labor and material cost for painting homes in India."
+  };
+
   const [area, setArea] = useState(1000);
   const [projectType, setProjectType] = useState('interior'); // 'interior' or 'exterior'
   const [surfaceCondition, setSurfaceCondition] = useState('repaint'); // 'fresh' or 'repaint'
@@ -77,6 +93,10 @@ export default function PaintCalculator() {
       boxShadow: '0 12px 40px rgba(0, 0, 0, 0.3)',
       maxWidth: '950px'
     }} className="glass animate-fade-in">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(calcJsonLd) }}
+      />
       <style dangerouslySetInnerHTML={{ __html: `
         .slider-input::-webkit-slider-thumb {
           -webkit-appearance: none;

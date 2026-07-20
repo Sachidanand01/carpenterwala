@@ -1,30 +1,27 @@
-# Carpenterwala
+# Carpenterwala - Professional Handyman & Home Services Marketplace
 
-> India's trusted digital marketplace to book verified, background-checked handymen in Bangalore and all over India.
+> Carpenterwala is Bangalore's leading verified handyman marketplace connecting homeowners and property managers with background-checked carpenters, painters, electricians, and plumbers.
 
 ## Core Services
-- [Carpentry Services](https://carpenterwala.com/services/carpentry): Custom woodwork, modular kitchen setup, furniture repairs, and office fit-outs in Bangalore and all over India.
-- [Painting Services](https://carpenterwala.com/services/painting): Interior/exterior painting, color consultancy, and wall repair guide in Bangalore and all over India.
-- [Plumbing Services](https://carpenterwala.com/services/plumbing): Leak repairs, piping, and bathroom installations in Bangalore and all over India.
-- [Electrical Services](https://carpenterwala.com/services/electrical): Residential wiring, light installations, and switch repairs in Bangalore and all over India.
-- [Appliance Repair Services](https://carpenterwala.com/services/appliance-repair): Appliance repair services in Bangalore and all over India.
-- [Cleaning Services](https://carpenterwala.com/services/cleaning): Cleaning services in Bangalore and all over India.
-- [Pest Control Services](https://carpenterwala.com/services/pest-control): Pest control services in Bangalore and all over India.
-- [AC Services](https://carpenterwala.com/services/ac-services): AC services in Bangalore and all over India.
-- [Water Tank Cleaning Services](https://carpenterwala.com/services/water-tank-cleaning): Water tank cleaning services in Bangalore and all over India.
-- [Water Purifier Services](https://carpenterwala.com/services/water-purifier): Water purifier services in Bangalore and all over India.
-- [Home Automation Services](https://carpenterwala.com/services/home-automation): Home automation services in Bangalore and all over India.
-- [Intercom Services](https://carpenterwala.com/services/intercom): Intercom services in Bangalore and all over India.
-- [CCTV Installation Services](https://carpenterwala.com/services/cctv-installation): CCTV installation services in Bangalore and all over India.
-- [Computer Services](https://carpenterwala.com/services/computer-services): Computer services in Bangalore and all over India.
-- [Home Loan Services](https://carpenterwala.com/services/home-loan): Home loan services in Bangalore and all over India.
-- [Home Insurance Services](https://carpenterwala.com/services/home-insurance): Home insurance services in Bangalore and all over India.
+- [Carpentry Services](https://carpenterwala.com/services/carpentry): Custom furniture assembly, modular kitchen fitting, door lock installation, wardrobe repairs.
+- [Painting Services](https://carpenterwala.com/services/painting): Interior and exterior wall painting, texture design, waterproofing, stencil work.
+- [Electrical Services](https://carpenterwala.com/services/electrical): Wiring, short-circuit fixes, MCB replacement, chandelier & appliance fitting.
+- [Plumbing Services](https://carpenterwala.com/services/plumbing): Tap leakage repair, pipe fitting, water heater installation, bathroom sanitary fixes.
 
-## Verification & Trust
-- Background Checks: 100% of professionals undergo identity background checks and skill verification.
-- Warranty Manager: Customers can manage home repair warranties via their dashboard.
+## Interactive Tools & Calculators
+- [Paint Cost & Quantity Calculator](https://carpenterwala.com/services/painting#calculator): Estimates wall painting square footage, primer requirement, litres of paint, and labor costs for 1BHK, 2BHK, 3BHK flats.
+- [Water Wastage & Tap Drip Calculator](https://carpenterwala.com/services/plumbing#calculator): Calculates daily and monthly water loss (in litres and ₹ Rupees) caused by leaking taps, flush tanks, and pipes in Indian households.
+- [Electricity Wastage & Bill Calculator](https://carpenterwala.com/services/electrical#calculator): Estimates monthly kWh power consumption, electrical wastage, and electricity bill impacts for high-power home appliances (ACs, geysers, refrigerators, microwaves).
 
-## Useful Links
-- [FAQ](https://carpenterwala.com/faq): Answers to booking, verification, and warranty questions.
-- [Find a Professional](https://carpenterwala.com/find-a-professional): Browse profiles, read reviews, and request quotes.
-- [Sitemap](https://carpenterwala.com/sitemap): Visual directory of service regions and profiles.
+## Coverage & Service Hubs (Bangalore)
+- Koramangala (560034)
+- Indiranagar (560038)
+- Whitefield (560066)
+- HSR Layout (560102)
+- Thanisandra / North Bangalore (560077)
+
+## Contact & Head Office
+- Address: Thanisandra Main Road, Bangalore, Karnataka 560077, India
+- Phone: +91-809-555-1001
+- Email: contact@carpenterwala.com
+- Full Documentation: https://carpenterwala.com/llms-full.txt

@@ -194,6 +194,18 @@ export default function PaintingPage() {
         </div>
       </section>
 
+      {/* Wall Painting Cost & Quantity Overview */}
+      <section className="container" style={{ marginBottom: '2rem' }}>
+        <div className="glass" style={{ padding: '2.5rem', borderRadius: '16px', lineHeight: '1.8' }}>
+          <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem', color: 'var(--primary)' }}>
+            How to Calculate Paint Quantity and Labor Costs for 1BHK, 2BHK, and 3BHK Flats in India?
+          </h2>
+          <p style={{ opacity: 0.9, fontSize: '1.05rem' }}>
+            When estimating wall painting requirements for Indian apartments, total paintable surface area is calculated by multiplying carpet area by 3.5 (accounting for 4 walls and ceiling). For a standard <strong>1,000 sq ft 2BHK flat</strong>, the total paintable wall surface is approximately 3,500 sq ft. Standard premium interior emulsion paints yield a coverage rate of <strong>120 to 140 sq ft per liter for two finishing coats</strong> over previously painted walls, requiring roughly 25 to 30 Litres of paint plus 10 Litres of primer for fresh coats. Professional painting labor rates in Bangalore range from ₹8 to ₹15 per sq ft for repainting, and ₹15 to ₹25 per sq ft for fresh painting with putty sanding. Using high-coverage acrylic emulsions prevents paint flaking, resists fungal growth during monsoons, and ensures long-lasting color retention. Calculate your exact paint volume and material costs with Carpenterwala's Paint Calculator below.
+          </p>
+        </div>
+      </section>
+
       {/* Paint & Material Estimator Section */}
       <section className="container">
         <PaintCalculator />

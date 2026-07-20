@@ -3,6 +3,22 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function ElectricityCalculator() {
+  const calcJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Home Electricity Wastage & Bill Calculator",
+    "url": "https://carpenterwala.com/services/electrical#calculator",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "INR"
+    },
+    "description": "Calculate monthly kWh power consumption, electrical wastage, and electricity bill impacts for appliances in Indian homes."
+  };
+
   const [appliance, setAppliance] = useState('fan');
   const [customWattage, setCustomWattage] = useState(100);
   const [quantity, setQuantity] = useState(1);
@@ -58,6 +74,10 @@ export default function ElectricityCalculator() {
       boxShadow: '0 12px 40px rgba(0, 0, 0, 0.3)',
       maxWidth: '950px'
     }} className="glass animate-fade-in">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(calcJsonLd) }}
+      />
       <style dangerouslySetInnerHTML={{ __html: `
         .slider-input::-webkit-slider-thumb {
           -webkit-appearance: none;

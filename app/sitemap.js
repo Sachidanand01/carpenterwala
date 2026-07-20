@@ -59,12 +59,27 @@ export default async function sitemap() {
   const staticPages = [...homepage, ...highPriorityPages, ...midPriorityPages, ...authPages, ...legalPages];
 
   // 2. Service pages
-  const services = ['carpentry', 'painting', 'plumbing', 'electrical'].map((service) => ({
+  const serviceNames = ['carpentry', 'painting', 'plumbing', 'electrical'];
+  const locations = ['koramangala', 'indiranagar', 'whitefield', 'hsr-layout', 'thanisandra'];
+
+  const services = serviceNames.map((service) => ({
     url: `${baseUrl}/services/${service}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: 0.8,
   }));
+
+  const locationServices = [];
+  serviceNames.forEach((service) => {
+    locations.forEach((location) => {
+      locationServices.push({
+        url: `${baseUrl}/services/${service}/${location}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.75,
+      });
+    });
+  });
 
   // 3. Blog articles
   const blogPosts = BLOG_POSTS.map((post) => ({
@@ -101,6 +116,6 @@ export default async function sitemap() {
     console.error("Error fetching profiles for sitemap:", err);
   }
 
-  return [...staticPages, ...services, ...blogPosts, ...blogCategories, ...profileRoutes];
+  return [...staticPages, ...services, ...locationServices, ...blogPosts, ...blogCategories, ...profileRoutes];
 }
 

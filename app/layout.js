@@ -52,10 +52,32 @@ export const metadata = {
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": ["HomeAndConstructionBusiness", "LocalBusiness"],
   "name": "Carpenterwala",
-  "url": "https://carpenterwala.com",
+  "image": "https://carpenterwala.com/images/og-image.png",
   "logo": "https://carpenterwala.com/images/logo.png",
+  "url": "https://carpenterwala.com",
+  "telephone": "+91-80-4912-3456",
+  "priceRange": "₹₹",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Thanisandra Main Road",
+    "addressLocality": "Bangalore",
+    "addressRegion": "Karnataka",
+    "postalCode": "560077",
+    "addressCountry": "IN"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 13.055811,
+    "longitude": 77.625443
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    "opens": "08:00",
+    "closes": "20:00"
+  },
   "sameAs": [
     "https://facebook.com/carpenterwala",
     "https://instagram.com/carpenterwala",
@@ -63,10 +85,10 @@ const jsonLd = {
   ],
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "+91-XXXXXXXXXX",
+    "telephone": "+91-80-4912-3456",
     "contactType": "customer service",
     "areaServed": "IN",
-    "availableLanguage": "en"
+    "availableLanguage": ["en", "hi", "kn"]
   }
 };
 
