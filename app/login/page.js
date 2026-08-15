@@ -372,7 +372,7 @@ function CustomerLoginContent() {
         {/* Left Promo Column: Warranty Tracker */}
         <div className="promo-sidebar">
           <PromoVideo 
-            src="/videos/customer-warranty.mp4" 
+            src="/videos/customer_warranty.mp4" 
             icon="🛡️" 
             title="Warranty Vault" 
             description="Snap your receipt and register your device warranties. Track remaining coverage in one safe dashboard." 
@@ -670,7 +670,7 @@ function CustomerLoginContent() {
         {/* Right Promo Column: Find Genuine Carpenter */}
         <div className="promo-sidebar">
           <PromoVideo 
-            src="/videos/customer-find-carpenter.mp4" 
+            src="/videos/direct_connection.mp4" 
             icon="🤝" 
             title="Direct Connection" 
             description="Find and contact local, verified carpenters directly. 0% middleman commission, transparent pricing." 
