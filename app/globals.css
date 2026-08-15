@@ -1,23 +1,23 @@
 :root {
   /* ── Core Palette ── */
-  /* Warm dark backgrounds — feels like polished wood, not cold tech */
-  --background: #111009;
-  --background-2: #1a1710;
-  --foreground: #f5f0e8;
-  --foreground-muted: #c4b99a;
+  /* Theme 1: Refined Warmth (Default) */
+  --background: #0E0D0B;
+  --background-2: #161410;
+  --foreground: #F5F0E8;
+  --foreground-muted: #C4B99A;
 
   /* Primary: Rich Saffron/Amber — trustworthy, Indian, warm */
-  --primary: #e8913a;
-  --primary-hover: #d4782a;
+  --primary: #E8913A;
+  --primary-hover: #D4782A;
   --primary-light: rgba(232, 145, 58, 0.15);
   --primary-glow: rgba(232, 145, 58, 0.35);
 
   /* Secondary: Deep Warm Charcoal surfaces */
-  --secondary: #241f16;
-  --secondary-hover: #2e271b;
+  --secondary: #1F1C18;
+  --secondary-hover: #2B2721;
 
   /* Accent: Saffron-Gold for highlights & stars */
-  --accent: #f5c842;
+  --accent: #F5C842;
   --accent-light: rgba(245, 200, 66, 0.2);
 
   /* Success / verification green */
@@ -29,14 +29,14 @@
   --error-bg: rgba(248, 113, 113, 0.1);
 
   /* Warm glass surfaces — like varnished wood */
-  --glass-bg: rgba(30, 25, 16, 0.75);
-  --glass-bg-light: rgba(42, 35, 22, 0.6);
-  --glass-border: rgba(232, 145, 58, 0.12);
-  --glass-border-hover: rgba(232, 145, 58, 0.3);
+  --glass-bg: rgba(22, 20, 16, 0.75);
+  --glass-bg-light: rgba(30, 27, 22, 0.6);
+  --glass-border: rgba(232, 145, 58, 0.15);
+  --glass-border-hover: rgba(232, 145, 58, 0.35);
 
   /* Card surfaces */
-  --card-bg: #1e1910;
-  --card-border: rgba(255, 240, 210, 0.07);
+  --card-bg: #161410;
+  --card-border: rgba(255, 240, 210, 0.08);
 
   /* Radius & Transition */
   --border-radius: 14px;
@@ -46,6 +46,87 @@
 
   /* Navbar */
   --navbar-height: 102px;
+}
+
+/* Theme 2: Clean Craftsmanship (Light Theme) */
+[data-theme="clean-craftsmanship"] {
+  --background: #FAF8F5;
+  --background-2: #FAF8F5;
+  --foreground: #0F172A;
+  --foreground-muted: #475569;
+  --primary: #C2410C;
+  --primary-hover: #A03006;
+  --primary-light: rgba(194, 65, 12, 0.12);
+  --primary-glow: rgba(194, 65, 12, 0.25);
+  --secondary: #F5EFE6;
+  --secondary-hover: #EAE3D5;
+  --accent: #D97706;
+  --accent-light: rgba(217, 119, 6, 0.15);
+  --glass-bg: rgba(245, 239, 230, 0.85);
+  --glass-bg-light: rgba(250, 248, 245, 0.75);
+  --glass-border: rgba(194, 65, 12, 0.18);
+  --glass-border-hover: rgba(194, 65, 12, 0.35);
+  --card-bg: #F5EFE6;
+  --card-border: rgba(15, 23, 42, 0.08);
+}
+[data-theme="clean-craftsmanship"] body {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(194, 65, 12, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(194, 65, 12, 0.02) 0%, transparent 50%);
+}
+
+/* Theme 3: Modern Tech & Steel (Cool Dark Mode) */
+[data-theme="modern-tech"] {
+  --background: #0F172A;
+  --background-2: #0B0F19;
+  --foreground: #F8FAFC;
+  --foreground-muted: #94A3B8;
+  --primary: #FF9F0A;
+  --primary-hover: #E08500;
+  --primary-light: rgba(255, 159, 10, 0.15);
+  --primary-glow: rgba(255, 159, 10, 0.35);
+  --secondary: #1E293B;
+  --secondary-hover: #2D3748;
+  --accent: #38BDF8;
+  --accent-light: rgba(56, 189, 248, 0.2);
+  --glass-bg: rgba(30, 41, 59, 0.8);
+  --glass-bg-light: rgba(51, 65, 85, 0.6);
+  --glass-border: rgba(56, 189, 248, 0.2);
+  --glass-border-hover: rgba(56, 189, 248, 0.4);
+  --card-bg: #1E293B;
+  --card-border: rgba(255, 255, 255, 0.06);
+}
+[data-theme="modern-tech"] body {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 159, 10, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(56, 189, 248, 0.03) 0%, transparent 50%);
+}
+
+/* Theme 4: Eco-Friendly Naturalist (Organic Earthy) */
+[data-theme="eco-friendly"] {
+  --background: #0B1A13;
+  --background-2: #07100B;
+  --foreground: #F0EAE1;
+  --foreground-muted: #8FA196;
+  --primary: #E2B13C;
+  --primary-hover: #C5982B;
+  --primary-light: rgba(226, 177, 60, 0.15);
+  --primary-glow: rgba(226, 177, 60, 0.35);
+  --secondary: #1F3329;
+  --secondary-hover: #294436;
+  --accent: #B45309;
+  --accent-light: rgba(180, 83, 9, 0.2);
+  --glass-bg: rgba(31, 51, 41, 0.8);
+  --glass-bg-light: rgba(41, 68, 54, 0.6);
+  --glass-border: rgba(226, 177, 60, 0.15);
+  --glass-border-hover: rgba(226, 177, 60, 0.35);
+  --card-bg: #1F3329;
+  --card-border: rgba(255, 255, 255, 0.05);
+}
+[data-theme="eco-friendly"] body {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(226, 177, 60, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(180, 83, 9, 0.03) 0%, transparent 50%);
 }
 
 * {
