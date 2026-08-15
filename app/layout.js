@@ -4,7 +4,6 @@ import Script from "next/script";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import ThemeSwitcher from "@/components/ThemeSwitcher";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -182,7 +181,6 @@ export default function RootLayout({ children }) {
         <main style={{ paddingTop: "var(--navbar-height)", minHeight: "100vh" }}>
           {children}
         </main>
-        <ThemeSwitcher />
         <Footer />
       </body>
     </html>

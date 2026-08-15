@@ -1,42 +1,42 @@
 :root {
   /* ── Core Palette ── */
-  /* Theme 1: Refined Warmth (Default) */
-  --background: #0E0D0B;
-  --background-2: #161410;
-  --foreground: #F5F0E8;
-  --foreground-muted: #C4B99A;
+  /* Theme: Clean Craftsmanship (Default Light Theme) */
+  --background: #FAF8F5;
+  --background-2: #FAF8F5;
+  --foreground: #0F172A;
+  --foreground-muted: #475569;
 
-  /* Primary: Rich Saffron/Amber — trustworthy, Indian, warm */
-  --primary: #E8913A;
-  --primary-hover: #D4782A;
-  --primary-light: rgba(232, 145, 58, 0.15);
-  --primary-glow: rgba(232, 145, 58, 0.35);
+  /* Primary: Deep Rust/Orange — clean craftsmanship, trustworthy */
+  --primary: #C2410C;
+  --primary-hover: #A03006;
+  --primary-light: rgba(194, 65, 12, 0.12);
+  --primary-glow: rgba(194, 65, 12, 0.25);
 
-  /* Secondary: Deep Warm Charcoal surfaces */
-  --secondary: #1F1C18;
-  --secondary-hover: #2B2721;
+  /* Secondary: Soft linen/sand tone */
+  --secondary: #F5EFE6;
+  --secondary-hover: #EAE3D5;
 
-  /* Accent: Saffron-Gold for highlights & stars */
-  --accent: #F5C842;
-  --accent-light: rgba(245, 200, 66, 0.2);
+  /* Accent: Warm Amber for highlights */
+  --accent: #D97706;
+  --accent-light: rgba(217, 119, 6, 0.15);
 
   /* Success / verification green */
-  --success: #4ade80;
-  --success-bg: rgba(74, 222, 128, 0.1);
+  --success: #15803d;
+  --success-bg: rgba(22, 163, 74, 0.1);
 
   /* Error */
-  --error: #f87171;
-  --error-bg: rgba(248, 113, 113, 0.1);
+  --error: #b91c1c;
+  --error-bg: rgba(220, 38, 38, 0.1);
 
-  /* Warm glass surfaces — like varnished wood */
-  --glass-bg: rgba(22, 20, 16, 0.75);
-  --glass-bg-light: rgba(30, 27, 22, 0.6);
-  --glass-border: rgba(232, 145, 58, 0.15);
-  --glass-border-hover: rgba(232, 145, 58, 0.35);
+  /* Clean glass surfaces */
+  --glass-bg: rgba(245, 239, 230, 0.85);
+  --glass-bg-light: rgba(250, 248, 245, 0.75);
+  --glass-border: rgba(194, 65, 12, 0.18);
+  --glass-border-hover: rgba(194, 65, 12, 0.35);
 
   /* Card surfaces */
-  --card-bg: #161410;
-  --card-border: rgba(255, 240, 210, 0.08);
+  --card-bg: #F5EFE6;
+  --card-border: rgba(15, 23, 42, 0.08);
 
   /* Radius & Transition */
   --border-radius: 14px;
@@ -48,86 +48,7 @@
   --navbar-height: 102px;
 }
 
-/* Theme 2: Clean Craftsmanship (Light Theme) */
-[data-theme="clean-craftsmanship"] {
-  --background: #FAF8F5;
-  --background-2: #FAF8F5;
-  --foreground: #0F172A;
-  --foreground-muted: #475569;
-  --primary: #C2410C;
-  --primary-hover: #A03006;
-  --primary-light: rgba(194, 65, 12, 0.12);
-  --primary-glow: rgba(194, 65, 12, 0.25);
-  --secondary: #F5EFE6;
-  --secondary-hover: #EAE3D5;
-  --accent: #D97706;
-  --accent-light: rgba(217, 119, 6, 0.15);
-  --glass-bg: rgba(245, 239, 230, 0.85);
-  --glass-bg-light: rgba(250, 248, 245, 0.75);
-  --glass-border: rgba(194, 65, 12, 0.18);
-  --glass-border-hover: rgba(194, 65, 12, 0.35);
-  --card-bg: #F5EFE6;
-  --card-border: rgba(15, 23, 42, 0.08);
-}
-[data-theme="clean-craftsmanship"] body {
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(194, 65, 12, 0.04) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(194, 65, 12, 0.02) 0%, transparent 50%);
-}
 
-/* Theme 3: Modern Tech & Steel (Cool Dark Mode) */
-[data-theme="modern-tech"] {
-  --background: #0F172A;
-  --background-2: #0B0F19;
-  --foreground: #F8FAFC;
-  --foreground-muted: #94A3B8;
-  --primary: #FF9F0A;
-  --primary-hover: #E08500;
-  --primary-light: rgba(255, 159, 10, 0.15);
-  --primary-glow: rgba(255, 159, 10, 0.35);
-  --secondary: #1E293B;
-  --secondary-hover: #2D3748;
-  --accent: #38BDF8;
-  --accent-light: rgba(56, 189, 248, 0.2);
-  --glass-bg: rgba(30, 41, 59, 0.8);
-  --glass-bg-light: rgba(51, 65, 85, 0.6);
-  --glass-border: rgba(56, 189, 248, 0.2);
-  --glass-border-hover: rgba(56, 189, 248, 0.4);
-  --card-bg: #1E293B;
-  --card-border: rgba(255, 255, 255, 0.06);
-}
-[data-theme="modern-tech"] body {
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 159, 10, 0.05) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(56, 189, 248, 0.03) 0%, transparent 50%);
-}
-
-/* Theme 4: Eco-Friendly Naturalist (Organic Earthy) */
-[data-theme="eco-friendly"] {
-  --background: #0B1A13;
-  --background-2: #07100B;
-  --foreground: #F0EAE1;
-  --foreground-muted: #8FA196;
-  --primary: #E2B13C;
-  --primary-hover: #C5982B;
-  --primary-light: rgba(226, 177, 60, 0.15);
-  --primary-glow: rgba(226, 177, 60, 0.35);
-  --secondary: #1F3329;
-  --secondary-hover: #294436;
-  --accent: #B45309;
-  --accent-light: rgba(180, 83, 9, 0.2);
-  --glass-bg: rgba(31, 51, 41, 0.8);
-  --glass-bg-light: rgba(41, 68, 54, 0.6);
-  --glass-border: rgba(226, 177, 60, 0.15);
-  --glass-border-hover: rgba(226, 177, 60, 0.35);
-  --card-bg: #1F3329;
-  --card-border: rgba(255, 255, 255, 0.05);
-}
-[data-theme="eco-friendly"] body {
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(226, 177, 60, 0.05) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(180, 83, 9, 0.03) 0%, transparent 50%);
-}
 
 * {
   box-sizing: border-box;
@@ -146,8 +67,8 @@ body {
   line-height: 1.6;
   /* Subtle warm grain texture overlay */
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(232, 145, 58, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(232, 145, 58, 0.04) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(194, 65, 12, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(194, 65, 12, 0.02) 0%, transparent 50%);
 }
 
 a {
@@ -170,7 +91,7 @@ a {
 .glass:hover {
   transform: translateY(-4px);
   border-color: var(--glass-border-hover);
-  box-shadow: 0 12px 40px rgba(232, 145, 58, 0.12);
+  box-shadow: 0 12px 40px rgba(194, 65, 12, 0.12);
 }
 
 /* ════════════════════════════════════════
@@ -223,7 +144,7 @@ a {
 
 .nav-link:hover {
   opacity: 1;
-  background: rgba(232, 145, 58, 0.1);
+  background: rgba(194, 65, 12, 0.1);
   color: var(--primary);
 }
 
@@ -412,7 +333,7 @@ h1, h2, h3, h4, h5, h6 {
   bottom: 0;
   background: var(--background);
   /* warm gradient overlay */
-  background-image: radial-gradient(ellipse 100% 60% at 50% 0%, rgba(232, 145, 58, 0.06) 0%, transparent 70%);
+  background-image: radial-gradient(ellipse 100% 60% at 50% 0%, rgba(194, 65, 12, 0.06) 0%, transparent 70%);
   z-index: 90;
   padding: 2rem;
   display: flex;
@@ -483,11 +404,11 @@ h1, h2, h3, h4, h5, h6 {
 .marquee-container {
   width: 100%;
   height: 32px;
-  background: rgba(10, 8, 4, 0.85);
+  background: var(--secondary);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(232, 145, 58, 0.15);
-  border-bottom: 1px solid rgba(232, 145, 58, 0.08);
+  border-top: 1px solid var(--glass-border);
+  border-bottom: 1px solid rgba(194, 65, 12, 0.08);
   overflow: hidden;
   position: relative;
   display: flex;
@@ -530,7 +451,7 @@ h1, h2, h3, h4, h5, h6 {
    FORM INPUTS — consistent warm style
    ════════════════════════════════════════ */
 input, textarea, select {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 input:focus, textarea:focus, select:focus {
@@ -550,17 +471,17 @@ input:focus, textarea:focus, select:focus {
   background: var(--background-2);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(232, 145, 58, 0.35);
+  background: rgba(194, 65, 12, 0.35);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(232, 145, 58, 0.6);
+  background: rgba(194, 65, 12, 0.6);
 }
 
 /* ════════════════════════════════════════
    SELECTION COLOR
    ════════════════════════════════════════ */
 ::selection {
-  background: rgba(232, 145, 58, 0.3);
+  background: rgba(194, 65, 12, 0.3);
   color: var(--foreground);
 }
