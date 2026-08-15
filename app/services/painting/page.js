@@ -119,7 +119,7 @@ export default function PaintingPage() {
           background: 'linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.8))',
           zIndex: -1,
         }}></div>
-        
+
         <div className="container" style={{ textAlign: 'center' }}>
           <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
             Expert <span className="text-gradient">Painting</span> Services
@@ -218,7 +218,7 @@ export default function PaintingPage() {
           <p style={{ opacity: 0.8, textAlign: 'center', maxWidth: '700px', margin: '0 auto 2.5rem' }}>
             Estimating your home painting cost in India depends on multiple factors like size, paint type, and surface condition. Explore typical painter charges per sq ft to budget your project.
           </p>
-          
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
             <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
               <h3 style={{ fontSize: '1.25rem', color: 'var(--primary)', marginBottom: '1rem' }}>1. Fresh Wall Painting Charges</h3>
@@ -226,7 +226,7 @@ export default function PaintingPage() {
               <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--accent)' }}>₹18 – ₹35 / sq ft</div>
               <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>Includes 2 coats of putty, 1 coat of primer, 2 coats of paint.</span>
             </div>
-            
+
             <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
               <h3 style={{ fontSize: '1.25rem', color: 'var(--primary)', marginBottom: '1rem' }}>2. Wall Repainting Charges</h3>
               <p style={{ fontSize: '0.95rem', opacity: 0.8, marginBottom: '1rem' }}>Ideal for touch-ups or colour changes on walls in good condition.</p>
@@ -241,7 +241,7 @@ export default function PaintingPage() {
               <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>Price varies depending on material and pattern complexity.</span>
             </div>
           </div>
-          
+
           <div style={{ marginTop: '2.5rem', padding: '1.5rem', borderRadius: '8px', border: '1px dashed rgba(255, 255, 255, 0.2)', textAlign: 'center', fontSize: '0.95rem' }}>
             💡 <strong>Pro Tip:</strong> Exterior house painting charges typically range from <strong>₹15 to ₹40 per sq ft</strong>, including scaffolding, high-pressure cleaning, and weather-proof coats.
           </div>
@@ -249,7 +249,7 @@ export default function PaintingPage() {
       </section>
 
       {/* Why Us Section */}
-      <section style={{ backgroundColor: 'rgba(30, 41, 59, 0.3)', padding: '6rem 0', marginBottom: '6rem' }}>
+      <section style={{ backgroundColor: 'rgba(250, 248, 245  , 1)', padding: '6rem 0', marginBottom: '6rem' }}>
         <div className="container">
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4rem', alignItems: 'center' }}>
             <div style={{ flex: '1 1 400px' }}>
@@ -320,11 +320,11 @@ export default function PaintingPage() {
 
       {/* Bottom AdSense Banner */}
       <section className="container" style={{ marginBottom: '6rem' }}>
-        <AdSenseContainer 
-          slot="5678901234" 
-          format="auto" 
-          responsive="true" 
-          style={{ minHeight: '250px' }} 
+        <AdSenseContainer
+          slot="5678901234"
+          format="auto"
+          responsive="true"
+          style={{ minHeight: '250px' }}
         />
       </section>
     </div>

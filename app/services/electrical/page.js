@@ -118,7 +118,7 @@ export default function ElectricalPage() {
           background: 'linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.8))',
           zIndex: -1,
         }}></div>
-        
+
         <div className="container" style={{ textAlign: 'center' }}>
           <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
             Professional <span className="text-gradient">Electrician Services</span>
@@ -206,7 +206,7 @@ export default function ElectricalPage() {
       </section>
 
       {/* Why Us Section */}
-      <section style={{ backgroundColor: 'rgba(30, 41, 59, 0.3)', padding: '6rem 0', marginBottom: '6rem' }}>
+      <section style={{ backgroundColor: 'rgba(250, 248, 245  , 1)', padding: '6rem 0', marginBottom: '6rem' }}>
         <div className="container">
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4rem', alignItems: 'center' }}>
             <div style={{ flex: '1 1 400px' }}>
@@ -277,11 +277,11 @@ export default function ElectricalPage() {
 
       {/* Bottom AdSense Banner */}
       <section className="container" style={{ marginBottom: '6rem' }}>
-        <AdSenseContainer 
-          slot="6789012345" 
-          format="auto" 
-          responsive="true" 
-          style={{ minHeight: '250px' }} 
+        <AdSenseContainer
+          slot="6789012345"
+          format="auto"
+          responsive="true"
+          style={{ minHeight: '250px' }}
         />
       </section>
     </div>
