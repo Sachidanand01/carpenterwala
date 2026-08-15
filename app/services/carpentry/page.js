@@ -6,11 +6,11 @@ export const metadata = {
   title: 'Professional Carpentry Services | Find Trusted Carpenters',
   description: 'Looking for verified carpenters in India? Find trusted local carpenters near me for furniture repair, home renovation, custom carpentry, and office fit-out.',
   keywords: [
-    'how to find trusted carpenter', 
-    'trusted carpenter near me', 
-    'verified carpenter india', 
-    'hire carpenter for office fit-out', 
-    'office carpenter India', 
+    'how to find trusted carpenter',
+    'trusted carpenter near me',
+    'verified carpenter india',
+    'hire carpenter for office fit-out',
+    'office carpenter India',
     'commercial carpentry work',
     'Carpenter Services in Bangalore',
     'Carpenter in Mumbai',
@@ -127,7 +127,7 @@ export default function CarpentryPage() {
           background: 'linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.8))',
           zIndex: -1,
         }}></div>
-        
+
         <div className="container" style={{ textAlign: 'center' }}>
           <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
             Expert <span className="text-gradient">Carpentry</span> Services
@@ -204,7 +204,7 @@ export default function CarpentryPage() {
       </section>
 
       {/* Serving Major Cities Across India */}
-      <section style={{ backgroundColor: 'rgba(30, 41, 59, 0.2)', padding: '5rem 0', marginBottom: '6rem' }}>
+      <section style={{ backgroundColor: 'rgba(250, 248, 245, 1)', padding: '5rem 0', marginBottom: '6rem' }}>
         <div className="container">
           <h2 style={{ fontSize: '2.25rem', marginBottom: '1rem', textAlign: 'center' }}>Serving Major Cities Across India</h2>
           <p style={{ opacity: 0.8, textAlign: 'center', maxWidth: '600px', margin: '0 auto 3rem' }}>
@@ -245,7 +245,7 @@ export default function CarpentryPage() {
       </section>
 
       {/* Why Us Section */}
-      <section style={{ backgroundColor: 'rgba(30, 41, 59, 0.3)', padding: '6rem 0', marginBottom: '6rem' }}>
+      <section style={{ backgroundColor: 'rgba(250, 248, 245, 1)', padding: '6rem 0', marginBottom: '6rem' }}>
         <div className="container">
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4rem', alignItems: 'center' }}>
             <div style={{ flex: '1 1 400px' }}>
@@ -342,11 +342,11 @@ export default function CarpentryPage() {
 
       {/* Bottom AdSense Banner */}
       <section className="container" style={{ marginBottom: '6rem' }}>
-        <AdSenseContainer 
-          slot="4567890123" 
-          format="auto" 
-          responsive="true" 
-          style={{ minHeight: '250px' }} 
+        <AdSenseContainer
+          slot="4567890123"
+          format="auto"
+          responsive="true"
+          style={{ minHeight: '250px' }}
         />
       </section>
     </div>
