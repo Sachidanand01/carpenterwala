@@ -3,7 +3,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-function PromoVideo({ src, icon, title, description }) {
+function PromoVideo({ src, title, description }) {
   const [videoError, setVideoError] = useState(false);
   
   return (
@@ -45,49 +45,20 @@ function PromoVideo({ src, icon, title, description }) {
         position: 'relative',
         zIndex: 1,
         textAlign: 'center',
-        padding: '1.5rem',
+        padding: '2rem',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: videoError ? 'transparent' : 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0) 100%)',
+        background: 'rgba(15, 23, 42, 0.55)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
         color: 'white',
         width: '100%'
       }}>
-        {videoError && (
-          <div style={{
-            width: '50px',
-            height: '50px',
-            borderRadius: '55%',
-            background: 'rgba(255,255,255,0.1)',
-            border: '1px solid rgba(255,255,255,0.3)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '1.2rem',
-            marginBottom: '1rem',
-            boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
-          }}>
-            ▶️
-          </div>
-        )}
-        <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem' }}>{icon}</span>
-        <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 0.5rem 0', color: 'var(--accent)' }}>{title}</h3>
-        <p style={{ fontSize: '0.8rem', opacity: 0.75, margin: 0, lineHeight: '1.4' }}>{description}</p>
-        
-        {!videoError && (
-          <span style={{
-            position: 'absolute',
-            bottom: '1rem',
-            fontSize: '0.7rem',
-            opacity: 0.5,
-            letterSpacing: '1px',
-            textTransform: 'uppercase'
-          }}>
-            📺 Video Preview
-          </span>
-        )}
+        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: '0 0 0.75rem 0', color: 'var(--accent)' }}>{title}</h3>
+        <p style={{ fontSize: '0.9rem', opacity: 0.9, margin: 0, lineHeight: '1.5' }}>{description}</p>
       </div>
     </div>
   );
@@ -373,7 +344,6 @@ function CustomerLoginContent() {
         <div className="promo-sidebar">
           <PromoVideo 
             src="/videos/customer_warranty.mp4" 
-            icon="🛡️" 
             title="Warranty Vault" 
             description="Snap your receipt and register your device warranties. Track remaining coverage in one safe dashboard." 
           />
@@ -671,7 +641,6 @@ function CustomerLoginContent() {
         <div className="promo-sidebar">
           <PromoVideo 
             src="/videos/direct_connection.mp4" 
-            icon="🤝" 
             title="Direct Connection" 
             description="Find and contact local, verified carpenters directly. 0% middleman commission, transparent pricing." 
           />
