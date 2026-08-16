@@ -130,17 +130,19 @@ export default function CarpentryPage() {
         }}></div>
 
         <div className="container" style={{ textAlign: 'center' }}>
-          <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
-            Expert <span className="text-gradient">Carpentry</span> Services
-          </h1>
-          <p style={{ fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto 2rem', opacity: 0.9 }}>
-            From intricate furniture restoration to modern home fittings, our verified carpenters deliver craftsmanship you can trust.
-          </p>
-          <MagneticCTA>
-            <Link href="/find-a-professional?category=Carpenter" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
-              Find a Carpenter Nearby
-            </Link>
-          </MagneticCTA>
+          <div className="hero-backdrop-card animate-fade-in">
+            <h1 style={{ fontSize: '3.25rem', marginBottom: '1.25rem', color: '#0F172A' }}>
+              Expert <span className="text-gradient">Carpentry</span> Services
+            </h1>
+            <p style={{ fontSize: '1.2rem', maxWidth: '680px', margin: '0 auto 2rem' }}>
+              From intricate furniture restoration to modern home fittings, our verified carpenters deliver craftsmanship you can trust.
+            </p>
+            <MagneticCTA>
+              <Link href="/find-a-professional?category=Carpenter" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
+                Find a Carpenter Nearby
+              </Link>
+            </MagneticCTA>
+          </div>
         </div>
       </section>
 
