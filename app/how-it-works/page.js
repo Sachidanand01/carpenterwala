@@ -76,7 +76,7 @@ export default function HowItWorks() {
                 <div style={{
                   fontSize: "3rem",
                   fontWeight: "900",
-                  opacity: 0.1,
+                  opacity: 1,
                   marginBottom: "-1rem",
                   color: "var(--primary)"
                 }}>
@@ -120,7 +120,7 @@ export default function HowItWorks() {
                 <div style={{
                   fontSize: "3rem",
                   fontWeight: "900",
-                  opacity: 0.1,
+                  opacity: 1,
                   marginBottom: "-1rem",
                   color: "var(--accent)"
                 }}>
