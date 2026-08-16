@@ -79,7 +79,7 @@ function FAQItem({ question, answer }) {
 
   return (
     <div className="glass" style={{ marginBottom: "1rem", overflow: "hidden" }}>
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
         style={{
           width: "100%",
@@ -89,7 +89,7 @@ function FAQItem({ question, answer }) {
           alignItems: "center",
           background: "none",
           border: "none",
-          color: "white",
+          color: "#0f172a",
           textAlign: "left",
           cursor: "pointer",
           fontSize: "1.1rem",
@@ -97,21 +97,21 @@ function FAQItem({ question, answer }) {
         }}
       >
         <span>{question}</span>
-        <span style={{ 
-          fontSize: "1.5rem", 
+        <span style={{
+          fontSize: "1.5rem",
           transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
           transition: "transform 0.3s ease",
           opacity: 0.6
         }}>+</span>
       </button>
-      
+
       <div style={{
         maxHeight: isOpen ? "500px" : "0",
         padding: isOpen ? "0 1.5rem 1.5rem 1.5rem" : "0 1.5rem",
         opacity: isOpen ? 1 : 0,
         transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
         lineHeight: "1.6",
-        color: "rgba(255,255,255,0.7)"
+        color: "#0f172a"
       }}>
         <p>{answer}</p>
       </div>
@@ -125,7 +125,7 @@ export default function FAQPage() {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": faqs.flatMap(cat => 
+    "mainEntity": faqs.flatMap(cat =>
       cat.questions.map(faq => ({
         "@type": "Question",
         "name": faq.q,
@@ -173,9 +173,9 @@ export default function FAQPage() {
         ))}
       </div>
 
-      <div className="glass" style={{ 
-        marginTop: "5rem", 
-        padding: "3rem", 
+      <div className="glass" style={{
+        marginTop: "5rem",
+        padding: "3rem",
         textAlign: "center",
         background: "linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(245, 158, 11, 0.1))"
       }}>
