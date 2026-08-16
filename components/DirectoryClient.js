@@ -35,8 +35,10 @@ function DirectoryContent() {
   const [filteredProfiles, setFilteredProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // User location
+  // User location & city
   const [userLocation, setUserLocation] = useState(null);
+  const [detectedCity, setDetectedCity] = useState("Bangalore");
+  const [locationLoading, setLocationLoading] = useState(false);
   const [locationError, setLocationError] = useState("");
 
   // Filters state
@@ -63,20 +65,57 @@ function DirectoryContent() {
     loadDirectory();
   }, []);
 
-  // Handle location request
+  // 1. Automatic IP-based city detection on page load
+  useEffect(() => {
+    async function detectCityByIp() {
+      try {
+        const res = await fetch("/api/geo");
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.city && data.city.trim().length > 0) {
+            setDetectedCity(data.city.trim());
+          }
+        }
+      } catch (err) {
+        console.warn("IP city lookup notice:", err);
+      }
+    }
+    detectCityByIp();
+  }, []);
+
+  // 2. High-precision GPS location & Reverse Geocoding
   const requestLocation = () => {
     if ("geolocation" in navigator) {
+      setLocationLoading(true);
+      setLocationError("");
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-          setLocationError("");
+        async (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          setUserLocation({ lat, lng });
+          setLocationLoading(false);
+
+          // Reverse geocode coordinates to update city dynamically
+          try {
+            const revRes = await fetch(
+              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`
+            );
+            if (revRes.ok) {
+              const revData = await revRes.json();
+              const city = revData.city || revData.locality || revData.principalSubdivision;
+              if (city) {
+                setDetectedCity(city.trim());
+              }
+            }
+          } catch (e) {
+            console.warn("Reverse geocoding error:", e);
+          }
         },
         (error) => {
-          setLocationError("Could not get your location. Please allow access.");
-        }
+          setLocationLoading(false);
+          setLocationError("Could not access your location. Please check browser permissions.");
+        },
+        { timeout: 10000 }
       );
     } else {
       setLocationError("Geolocation is not supported by your browser.");
@@ -144,17 +183,72 @@ function DirectoryContent() {
   return (
     <div className="flex gap-8" style={{ alignItems: "flex-start", flexWrap: "wrap" }}>
         
+        {/* Style Overrides for Filter Selects */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          .custom-filter-select {
+            width: 100%;
+            padding: 0.65rem 2.2rem 0.65rem 0.85rem;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background-color: var(--background, #FAF8F5);
+            color: var(--foreground, #0F172A);
+            font-size: 0.92rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            transition: var(--transition);
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C2410C' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+          }
+          .custom-filter-select:hover {
+            border-color: var(--primary);
+            background-color: #fff;
+          }
+          .custom-filter-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+            background-color: #fff;
+          }
+          .custom-filter-select option {
+            background-color: #FAF8F5;
+            color: #0F172A;
+            padding: 0.5rem;
+          }
+        `}} />
+
         {/* SIDEBAR FILTERS */}
-        <aside className="glass" style={{ width: "100%", maxWidth: "300px", padding: "1.5rem" }}>
-          <h2 style={{ fontSize: "1.25rem", marginBottom: "1.5rem" }}>Filters</h2>
+        <aside className="glass" style={{ width: "100%", maxWidth: "300px", padding: "1.75rem", borderRadius: "16px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
+            <h2 style={{ fontSize: "1.25rem", margin: 0 }}>Filters</h2>
+            {detectedCity && (
+              <span style={{ 
+                fontSize: "0.78rem", 
+                fontWeight: 600, 
+                color: "var(--primary)", 
+                background: "var(--primary-light)", 
+                padding: "0.2rem 0.55rem", 
+                borderRadius: "100px",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.25rem"
+              }}>
+                📍 {detectedCity}
+              </span>
+            )}
+          </div>
 
           {/* Category */}
           <div style={{ marginBottom: "1.5rem" }}>
-            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>Category</label>
+            <label style={{ display: "block", marginBottom: "0.45rem", fontWeight: "600", fontSize: "0.9rem", color: "var(--foreground)" }}>Category</label>
             <select 
               value={category} 
               onChange={(e) => setCategory(e.target.value)}
-              style={{ width: "100%", padding: "0.5rem", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(0,0,0,0.2)", color: "white" }}
+              className="custom-filter-select"
             >
               <option value="All">All Categories</option>
               <option value="Carpenter">Carpenters</option>
@@ -166,11 +260,11 @@ function DirectoryContent() {
 
           {/* Sorting */}
           <div style={{ marginBottom: "1.5rem" }}>
-            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>Sort By</label>
+            <label style={{ display: "block", marginBottom: "0.45rem", fontWeight: "600", fontSize: "0.9rem", color: "var(--foreground)" }}>Sort By</label>
             <select 
               value={sortBy} 
               onChange={(e) => setSortBy(e.target.value)}
-              style={{ width: "100%", padding: "0.5rem", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(0,0,0,0.2)", color: "white" }}
+              className="custom-filter-select"
             >
               <option value="rating">Highest Rated</option>
               <option value="newest">Newly Added</option>
@@ -180,19 +274,34 @@ function DirectoryContent() {
 
           {/* Distance */}
           <div style={{ marginBottom: "1.5rem" }}>
-            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>Distance (Nearby)</label>
+            <label style={{ display: "block", marginBottom: "0.45rem", fontWeight: "600", fontSize: "0.9rem", color: "var(--foreground)" }}>Distance (Nearby)</label>
             {!userLocation ? (
               <button 
                 onClick={requestLocation}
-                style={{ fontSize: "0.9rem", padding: "0.5rem", width: "100%", backgroundColor: "rgba(255,255,255,0.1)", border: "none", borderRadius: "8px", color: "white", cursor: "pointer" }}
+                disabled={locationLoading}
+                className="btn btn-secondary"
+                style={{ 
+                  fontSize: "0.88rem", 
+                  padding: "0.65rem 0.85rem", 
+                  width: "100%", 
+                  borderRadius: "10px", 
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center", 
+                  gap: "0.4rem", 
+                  fontWeight: 600,
+                  color: "var(--primary)",
+                  borderColor: "var(--glass-border)"
+                }}
               >
-                📍 Enable Location to filter
+                <span>📍</span>
+                <span>{locationLoading ? "Detecting Location..." : "Enable Location to filter"}</span>
               </button>
             ) : (
               <select 
                 value={maxDistance} 
                 onChange={(e) => setMaxDistance(e.target.value)}
-                style={{ width: "100%", padding: "0.5rem", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(0,0,0,0.2)", color: "white" }}
+                className="custom-filter-select"
               >
                 <option value="Any">Any Distance</option>
                 <option value="5">Within 5 km</option>
@@ -200,32 +309,49 @@ function DirectoryContent() {
                 <option value="20">Within 20 km</option>
               </select>
             )}
-            {locationError && <p style={{ color: "#ff4444", fontSize: "0.8rem", marginTop: "0.5rem" }}>{locationError}</p>}
+            {locationError && (
+              <p style={{ 
+                color: "var(--error, #b91c1c)", 
+                background: "var(--error-bg, rgba(220,38,38,0.08))", 
+                fontSize: "0.8rem", 
+                marginTop: "0.5rem", 
+                padding: "0.4rem 0.6rem", 
+                borderRadius: "6px" 
+              }}>
+                ⚠️ {locationError}
+              </p>
+            )}
           </div>
 
           {/* Languages */}
           <div style={{ marginBottom: "1.5rem" }}>
-            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>Languages Spoken</label>
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "600", fontSize: "0.9rem", color: "var(--foreground)" }}>Languages Spoken</label>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
               {ALL_LANGUAGES.map(lang => (
-                <label key={lang} style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
+                <label key={lang} style={{ display: "flex", alignItems: "center", gap: "0.6rem", cursor: "pointer", fontSize: "0.9rem", color: "var(--foreground)" }}>
                   <input 
                     type="checkbox" 
                     checked={selectedLanguages.includes(lang)}
                     onChange={() => toggleLanguage(lang)}
+                    style={{ 
+                      accentColor: "var(--primary)",
+                      width: "16px",
+                      height: "16px",
+                      cursor: "pointer"
+                    }}
                   />
-                  {lang}
+                  <span>{lang}</span>
                 </label>
               ))}
             </div>
           </div>
 
           {/* Safety & Fraud Guide Card */}
-          <div style={{ marginTop: "2rem", paddingTop: "1.5rem", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
-            <h4 style={{ fontSize: "1.05rem", color: "var(--primary)", marginBottom: "0.75rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+          <div style={{ marginTop: "2rem", paddingTop: "1.5rem", borderTop: "1px solid var(--glass-border)" }}>
+            <h4 style={{ fontSize: "1rem", color: "var(--primary)", marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
               🛡️ Avoid Carpenter Fraud
             </h4>
-            <p style={{ fontSize: "0.85rem", opacity: 0.8, lineHeight: "1.5" }}>
+            <p style={{ fontSize: "0.83rem", opacity: 0.85, lineHeight: "1.5", color: "var(--foreground-muted)" }}>
               Want to avoid a fake handyman or <strong>carpenter fraud in India</strong>? Make sure to hire only background-checked, verified professionals. Carpenterwala physically verifies all tradesmen identity records, certifications, and customer reviews before approval.
             </p>
           </div>
@@ -252,7 +378,7 @@ function DirectoryContent() {
                       {pro.avatar ? (
                         <img src={pro.avatar} alt={pro.name} width={60} height={60} style={{ width: "60px", height: "60px", borderRadius: "50%", objectFit: "cover" }} />
                       ) : (
-                        <div style={{ width: "60px", height: "60px", borderRadius: "50%", backgroundColor: "rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <div style={{ width: "60px", height: "60px", borderRadius: "50%", backgroundColor: "var(--primary-light)", color: "var(--primary)", fontWeight: "bold", fontSize: "1.2rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
                           {pro.name[0]}
                         </div>
                       )}
@@ -260,7 +386,7 @@ function DirectoryContent() {
                         <h3 style={{ fontSize: "1.1rem", margin: 0, display: "flex", alignItems: "center", gap: "0.5rem" }}>
                           {pro.name} {pro.verified && <VerifiedBadge />}
                         </h3>
-                        <p style={{ margin: 0, opacity: 0.7, fontSize: "0.9rem" }}>{pro.trade}</p>
+                        <p style={{ margin: 0, opacity: 0.75, fontSize: "0.9rem", color: "var(--foreground-muted)" }}>{pro.trade}</p>
                       </div>
                     </div>
 
@@ -268,13 +394,13 @@ function DirectoryContent() {
                       <span style={{ display: "flex", alignItems: "center", gap: "0.2rem" }}>
                         ⭐ {pro.average_rating ? pro.average_rating.toFixed(1) : "New"}
                       </span>
-                      <span style={{ opacity: 0.7 }}>📍 {pro.location}</span>
+                      <span style={{ opacity: 0.75 }}>📍 {pro.location}</span>
                     </div>
 
                     <div style={{ marginBottom: "1rem", flex: 1 }}>
                       <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
                         {(pro.skills || []).slice(0, 3).map(skill => (
-                          <span key={skill} style={{ backgroundColor: "rgba(255,255,255,0.1)", padding: "0.2rem 0.6rem", borderRadius: "12px", fontSize: "0.8rem" }}>
+                          <span key={skill} style={{ backgroundColor: "var(--primary-light)", color: "var(--primary)", padding: "0.2rem 0.6rem", borderRadius: "12px", fontSize: "0.8rem", fontWeight: 500 }}>
                             {skill}
                           </span>
                         ))}
@@ -285,7 +411,7 @@ function DirectoryContent() {
                     </div>
 
                     {pro.languages && pro.languages.length > 0 && (
-                      <div style={{ fontSize: "0.8rem", opacity: 0.6, borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "0.8rem" }}>
+                      <div style={{ fontSize: "0.8rem", opacity: 0.75, borderTop: "1px solid var(--glass-border)", paddingTop: "0.8rem", color: "var(--foreground-muted)" }}>
                         🗣️ {pro.languages.join(", ")}
                       </div>
                     )}
@@ -294,17 +420,20 @@ function DirectoryContent() {
               ))}
             </div>
           )}
-          {/* Search Engine Information Block */}
-          <div className="glass" style={{ padding: "3rem", marginTop: "4rem", lineHeight: "1.7", opacity: 0.9 }}>
-            <h2 style={{ marginBottom: "1.5rem" }}>How to Find a Professional Handyman in Bangalore</h2>
-            <p style={{ marginBottom: "1.2rem" }}>
-              Finding reliable help for your home repairs can be hard. Whether you need to <strong>find a professional</strong> for custom woodwork, a local painter in Bangalore, or a trusted electrician, we make it simple and transparent. Our directory lists top-rated, local professionals across different trades.
+
+          {/* Dynamic Search Engine Information Block */}
+          <div className="glass" style={{ padding: "3rem", marginTop: "4rem", lineHeight: "1.7", borderRadius: "16px" }}>
+            <h2 style={{ marginBottom: "1.5rem", fontSize: "1.8rem" }}>
+              How to Find a Professional Handyman in <span className="text-gradient">{detectedCity}</span>
+            </h2>
+            <p style={{ marginBottom: "1.2rem", color: "var(--foreground-muted)" }}>
+              Finding reliable help for your home repairs can be hard. Whether you need to <strong>find a professional</strong> for custom woodwork, a local painter in <strong>{detectedCity}</strong>, or a trusted electrician, we make it simple and transparent. Our directory lists top-rated, local professionals across different trades.
             </p>
-            <p style={{ marginBottom: "1.2rem" }}>
+            <p style={{ marginBottom: "1.2rem", color: "var(--foreground-muted)" }}>
               Every handyman on our platform is background-checked and verified by our team. This helps you avoid common scams and <strong>carpenter fraud in India</strong>. You can easily filter profiles by trade, how close they are to your location, and the languages they speak.
             </p>
-            <p style={{ marginBottom: "1.2rem" }}>
-              Before you <strong>hire verified carpenter</strong> or other repair services, you can check their profile ratings, read customer reviews, and see photos of their past projects. If you have any questions or need help, feel free to visit our Help Center or contact our friendly support team.
+            <p style={{ marginBottom: "1.2rem", color: "var(--foreground-muted)" }}>
+              Before you <strong>hire verified carpenter</strong> or other repair services in <strong>{detectedCity}</strong>, you can check their profile ratings, read customer reviews, and see photos of their past projects. If you have any questions or need help, feel free to visit our Help Center or contact our friendly support team.
             </p>
           </div>
         </div>
@@ -322,8 +451,7 @@ export default function DirectoryClient() {
       ]} />
       <div style={{ marginBottom: "2rem", textAlign: "center" }}>
         <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>Find a Professional</h1>
-        <h2 style={{ display: 'none' }}>Verified Local Handyman Directory in Bangalore</h2>
-        <p style={{ opacity: 0.8, fontSize: "1.1rem" }}>
+        <p style={{ opacity: 0.8, fontSize: "1.1rem", color: "var(--foreground-muted)" }}>
           Browse our verified handymen. Filter by trade, location, and languages.
         </p>
       </div>
@@ -334,3 +462,4 @@ export default function DirectoryClient() {
     </div>
   );
 }
+
