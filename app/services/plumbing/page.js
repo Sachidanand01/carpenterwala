@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import MagneticCTA from "@/components/MagneticCTA";
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
 import DripCalculator from '@/components/DripCalculator';
@@ -126,9 +127,11 @@ export default function PlumbingPage() {
           <p style={{ fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto 2rem', opacity: 0.9 }}>
             Fast, reliable, and verified plumber repair services for your home. From emergency leaks to major fixture installations, we've got you covered.
           </p>
-          <Link href="/find-a-professional?category=Plumber" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
-            Find a Plumber Nearby
-          </Link>
+          <MagneticCTA>
+            <Link href="/find-a-professional?category=Plumber" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
+              Find a Plumber Nearby
+            </Link>
+          </MagneticCTA>
         </div>
       </section>
 
@@ -241,9 +244,11 @@ export default function PlumbingPage() {
                 <p style={{ marginBottom: '2rem', opacity: 0.8 }}>
                   Don't let a small leak turn into a big disaster. Connect with a verified plumber in your area right now.
                 </p>
-                <Link href="/find-a-professional?category=Plumber" className="btn btn-primary" style={{ width: '100%' }}>
-                  View Available Plumbers
-                </Link>
+                <MagneticCTA style={{ width: '100%' }}>
+                  <Link href="/find-a-professional?category=Plumber" className="btn btn-primary" style={{ width: '100%' }}>
+                    View Available Plumbers
+                  </Link>
+                </MagneticCTA>
               </div>
             </div>
           </div>

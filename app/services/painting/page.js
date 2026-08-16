@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import MagneticCTA from "@/components/MagneticCTA";
 import ColorVisualizer from '@/components/ColorVisualizer';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
@@ -127,9 +128,11 @@ export default function PaintingPage() {
           <p style={{ fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto 2rem', opacity: 0.9 }}>
             Revitalize your living space with professional color consultations and flawless execution by Bangalore's top-rated painters.
           </p>
-          <Link href="/find-a-professional?category=Painter" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
-            Find a Painter Nearby
-          </Link>
+          <MagneticCTA>
+            <Link href="/find-a-professional?category=Painter" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
+              Find a Painter Nearby
+            </Link>
+          </MagneticCTA>
         </div>
       </section>
 
@@ -284,9 +287,11 @@ export default function PaintingPage() {
                 <p style={{ marginBottom: '2rem', opacity: 0.8 }}>
                   Not sure which shade to choose? Connect with our experts for professional advice on colors and finishes.
                 </p>
-                <Link href="/find-a-professional?category=Painter" className="btn btn-primary" style={{ width: '100%' }}>
-                  View All Painters
-                </Link>
+                <MagneticCTA style={{ width: '100%' }}>
+                  <Link href="/find-a-professional?category=Painter" className="btn btn-primary" style={{ width: '100%' }}>
+                    View All Painters
+                  </Link>
+                </MagneticCTA>
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import MagneticCTA from "./MagneticCTA";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -72,9 +73,11 @@ export default function Navbar() {
             ) : (
               <Link href="/login" className="nav-link">My Account</Link>
             )}
-            <Link href="/pro/login" className="btn btn-primary" style={{ padding: "0.5rem 1rem" }}>
-              Pro Portal
-            </Link>
+            <MagneticCTA>
+              <Link href="/pro/login" className="btn btn-primary" style={{ padding: "0.5rem 1rem" }}>
+                Pro Portal
+              </Link>
+            </MagneticCTA>
           </div>
 
           {/* Mobile Menu Button */}

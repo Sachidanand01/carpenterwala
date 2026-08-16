@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import MagneticCTA from "@/components/MagneticCTA";
 import { notFound } from 'next/navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
@@ -142,9 +143,11 @@ export default async function ServiceLocationPage({ params }) {
         </div>
 
         <div style={{ marginTop: '2.5rem', textAlign: 'center' }}>
-          <Link href="/find-a-professional" className="btn btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>
-            Book {srv.type} Expert in {loc.name} Now
-          </Link>
+          <MagneticCTA>
+            <Link href="/find-a-professional" className="btn btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>
+              Book {srv.type} Expert in {loc.name} Now
+            </Link>
+          </MagneticCTA>
         </div>
       </div>
     </div>

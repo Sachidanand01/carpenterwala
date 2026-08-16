@@ -1,4 +1,5 @@
 import Link from "next/link";
+import MagneticCTA from "@/components/MagneticCTA";
 
 export const metadata = {
   title: "Carpenterwala | Professional Handyman Marketplace",
@@ -134,13 +135,17 @@ export default function Home() {
             One of the best handyman apps in India to hire verified carpenters, painters, plumbers, and electricians near you. Experience the premium home services app in India with real reviews and transparent pricing.
           </p>
 
-          <div className="flex gap-4 justify-center flex-mobile-col">
-            <Link href="/find-a-professional" className="btn btn-primary" style={{ fontSize: "1.1rem", padding: "1rem 2rem" }}>
-              Find a Professional
-            </Link>
-            <Link href="/pro/login" className="btn btn-secondary" style={{ fontSize: "1.1rem", padding: "1rem 2rem" }}>
-              Join as a Pro
-            </Link>
+          <div className="flex gap-4 justify-center flex-mobile-col" style={{ alignItems: "center" }}>
+            <MagneticCTA>
+              <Link href="/find-a-professional" className="btn btn-primary" style={{ fontSize: "1.1rem", padding: "1rem 2rem" }}>
+                Find a Professional
+              </Link>
+            </MagneticCTA>
+            <MagneticCTA>
+              <Link href="/pro/login" className="btn btn-secondary" style={{ fontSize: "1.1rem", padding: "1rem 2rem" }}>
+                Join as a Pro
+              </Link>
+            </MagneticCTA>
           </div>
         </div>
 
@@ -173,9 +178,11 @@ export default function Home() {
               <p style={{ opacity: 0.85, lineHeight: "1.8", marginBottom: "1.5rem" }}>
                 Just got the keys to your new apartment? Finding a reliable carpenter for your <strong>home setup after possession</strong> can be stressful. From custom wardrobes to modular kitchens, our verified professionals make setting up your new flat easy. We handle all the woodwork with clear pricing, quality materials, and a complete safety guarantee.
               </p>
-              <Link href="/find-a-professional?category=Carpenter" className="btn btn-primary">
-                Get Carpenter for New Flat
-              </Link>
+              <MagneticCTA>
+                <Link href="/find-a-professional?category=Carpenter" className="btn btn-primary">
+                  Get Carpenter for New Flat
+                </Link>
+              </MagneticCTA>
             </div>
             <div style={{ flex: "1 1 300px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
               <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.05)" }}>

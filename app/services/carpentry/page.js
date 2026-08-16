@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import MagneticCTA from "@/components/MagneticCTA";
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
 
@@ -135,9 +136,11 @@ export default function CarpentryPage() {
           <p style={{ fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto 2rem', opacity: 0.9 }}>
             From intricate furniture restoration to modern home fittings, our verified carpenters deliver craftsmanship you can trust.
           </p>
-          <Link href="/find-a-professional?category=Carpenter" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
-            Find a Carpenter Nearby
-          </Link>
+          <MagneticCTA>
+            <Link href="/find-a-professional?category=Carpenter" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
+              Find a Carpenter Nearby
+            </Link>
+          </MagneticCTA>
         </div>
       </section>
 
@@ -280,9 +283,11 @@ export default function CarpentryPage() {
                 <p style={{ marginBottom: '2rem', opacity: 0.8 }}>
                   Join thousands of happy homeowners in Bangalore who trust Carpenterwala for their home improvement needs.
                 </p>
-                <Link href="/find-a-professional?category=Carpenter" className="btn btn-primary" style={{ width: '100%' }}>
-                  View All Carpenters
-                </Link>
+                <MagneticCTA style={{ width: '100%' }}>
+                  <Link href="/find-a-professional?category=Carpenter" className="btn btn-primary" style={{ width: '100%' }}>
+                    View All Carpenters
+                  </Link>
+                </MagneticCTA>
               </div>
             </div>
           </div>

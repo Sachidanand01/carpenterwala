@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import MagneticCTA from "@/components/MagneticCTA";
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
 import ElectricityCalculator from '@/components/ElectricityCalculator';
@@ -126,9 +127,11 @@ export default function ElectricalPage() {
           <p style={{ fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto 2rem', opacity: 0.9 }}>
             Safe and reliable electrical help for your home or business. Our verified local electricians in Bangalore can handle any job—from fixing a simple loose switch to rewiring your entire house.
           </p>
-          <Link href="/find-a-professional?category=Electrician" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
-            Find an Electrician Nearby
-          </Link>
+          <MagneticCTA>
+            <Link href="/find-a-professional?category=Electrician" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
+              Find an Electrician Nearby
+            </Link>
+          </MagneticCTA>
         </div>
       </section>
 
@@ -241,9 +244,11 @@ export default function ElectricalPage() {
                 <p style={{ marginBottom: '2rem', opacity: 0.8 }}>
                   Protect your home from potential fire hazards. Our experts can perform a comprehensive check of your entire electrical system.
                 </p>
-                <Link href="/find-a-professional?category=Electrician" className="btn btn-primary" style={{ width: '100%' }}>
-                  Book an Electrician Now
-                </Link>
+                <MagneticCTA style={{ width: '100%' }}>
+                  <Link href="/find-a-professional?category=Electrician" className="btn btn-primary" style={{ width: '100%' }}>
+                    Book an Electrician Now
+                  </Link>
+                </MagneticCTA>
               </div>
             </div>
           </div>
