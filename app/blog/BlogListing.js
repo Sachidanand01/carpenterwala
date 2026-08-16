@@ -91,15 +91,16 @@ export default function BlogListing({ selectedCategorySlug = 'all' }) {
       <div className="container" style={{ marginBottom: '4rem' }}>
         <div style={{ 
           display: 'flex', 
-          gap: '1rem', 
+          gap: '0.6rem', 
           justifyContent: 'center', 
           flexWrap: 'wrap',
-          padding: '1rem',
-          backgroundColor: 'rgba(255,255,255,0.05)',
+          padding: '0.6rem',
+          backgroundColor: 'var(--card-bg, #F5EFE6)',
           borderRadius: '50px',
           border: '1px solid var(--glass-border)',
           width: 'fit-content',
-          margin: '0 auto'
+          margin: '0 auto',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
         }}>
           {CATEGORIES.map(cat => {
             const catSlug = slugify(cat);
@@ -111,15 +112,17 @@ export default function BlogListing({ selectedCategorySlug = 'all' }) {
                 key={cat}
                 href={href}
                 style={{
-                  padding: '0.6rem 1.5rem',
+                  padding: '0.6rem 1.4rem',
                   borderRadius: '25px',
                   border: 'none',
                   cursor: 'pointer',
-                  backgroundColor: isActive ? 'var(--primary)' : 'transparent',
-                  color: isActive ? 'white' : 'var(--text-secondary)',
+                  backgroundColor: isActive ? 'var(--primary, #c2410c)' : 'transparent',
+                  color: isActive ? '#ffffff' : 'var(--foreground-muted, #475569)',
                   fontWeight: '600',
-                  transition: 'all 0.3s ease',
-                  textDecoration: 'none'
+                  fontSize: '0.95rem',
+                  transition: 'all 0.25s ease',
+                  textDecoration: 'none',
+                  boxShadow: isActive ? '0 4px 12px var(--primary-glow)' : 'none'
                 }}
               >
                 {cat}
@@ -153,15 +156,18 @@ export default function BlogListing({ selectedCategorySlug = 'all' }) {
                   <img src={post.image} alt={post.title} width={400} height={240} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s ease' }} className="card-image" />
                   <div style={{ 
                     position: 'absolute', 
-                    top: '1.5rem', 
-                    left: '1.5rem', 
-                    backgroundColor: 'rgba(15, 23, 42, 0.7)', 
-                    backdropFilter: 'blur(10px)',
-                    padding: '0.4rem 1rem', 
+                    top: '1.25rem', 
+                    left: '1.25rem', 
+                    backgroundColor: 'var(--primary, #c2410c)', 
+                    color: '#ffffff',
+                    padding: '0.35rem 0.9rem', 
                     borderRadius: '20px', 
-                    fontSize: '0.8rem', 
+                    fontSize: '0.82rem', 
                     fontWeight: 'bold',
-                    border: '1px solid rgba(255,255,255,0.1)'
+                    boxShadow: '0 4px 12px rgba(194, 65, 12, 0.35)',
+                    letterSpacing: '0.02em',
+                    display: 'inline-flex',
+                    alignItems: 'center'
                   }}>
                     {post.category}
                   </div>

@@ -310,11 +310,53 @@ export default async function BlogPost({ params }) {
         <aside style={{ flex: '1 1 300px' }}>
           <div className="glass" style={{ padding: '2rem', position: 'sticky', top: '100px' }}>
             <h3 style={{ marginBottom: '1.5rem' }}>Share this article</h3>
-            <div style={{ display: 'flex', gap: '1rem', marginBottom: '3rem' }}>
-              <div className="social-icon" style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyCenter: 'center', fontSize: '0.8rem' }}>FB</div>
-              <div className="social-icon" style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyCenter: 'center', fontSize: '0.8rem' }}>TW</div>
-              <div className="social-icon" style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyCenter: 'center', fontSize: '0.8rem' }}>LN</div>
-              <div className="social-icon" style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyCenter: 'center', fontSize: '0.8rem' }}>WA</div>
+            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '3rem' }}>
+              <a 
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://carpenterwala.com/blog/${post.slug}`)}`}
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="social-icon"
+                aria-label="Share on Facebook"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                </svg>
+              </a>
+              <a 
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://carpenterwala.com/blog/${post.slug}`)}`}
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="social-icon"
+                aria-label="Share on X (Twitter)"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              </a>
+              <a 
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://carpenterwala.com/blog/${post.slug}`)}`}
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="social-icon"
+                aria-label="Share on LinkedIn"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                  <rect x="2" y="9" width="4" height="12"/>
+                  <circle cx="4" cy="4" r="2"/>
+                </svg>
+              </a>
+              <a 
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${post.title} - https://carpenterwala.com/blog/${post.slug}`)}`}
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="social-icon"
+                aria-label="Share on WhatsApp"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                </svg>
+              </a>
             </div>
 
             <h3 style={{ marginBottom: '1.5rem' }}>Related Categories</h3>
