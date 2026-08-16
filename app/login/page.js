@@ -430,7 +430,7 @@ function CustomerLoginContent() {
                     cursor: "pointer",
                     transition: "all 0.25s ease",
                     background: activeTab === 'login' ? 'var(--primary)' : 'transparent',
-                    color: activeTab === 'login' ? 'white' : 'rgba(255, 255, 255, 0.65)'
+                    color: activeTab === 'login' ? 'white' : 'var(--primary)'
                   }}
                 >
                   🔑 Log In
@@ -448,7 +448,7 @@ function CustomerLoginContent() {
                     cursor: "pointer",
                     transition: "all 0.25s ease",
                     background: activeTab === 'register' ? 'var(--primary)' : 'transparent',
-                    color: activeTab === 'register' ? 'white' : 'rgba(255, 255, 255, 0.65)'
+                    color: activeTab === 'register' ? 'white' : 'var(--primary)'
                   }}
                 >
                   ✨ Create Account
@@ -498,7 +498,7 @@ function CustomerLoginContent() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       style={{
-                        padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white", fontSize: "0.95rem"
+                        padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "var(--foreground)", fontSize: "0.95rem"
                       }} 
                     />
                   </div>
@@ -527,7 +527,7 @@ function CustomerLoginContent() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         style={{
-                          padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white", fontSize: "0.95rem"
+                          padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "var(--foreground)", fontSize: "0.95rem"
                         }} 
                       />
                     </div>
@@ -541,7 +541,7 @@ function CustomerLoginContent() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         style={{
-                          padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white", fontSize: "0.95rem"
+                          padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "var(--foreground)", fontSize: "0.95rem"
                         }} 
                       />
                     </div>
@@ -561,7 +561,7 @@ function CustomerLoginContent() {
                           value={phone}
                           onChange={(e) => handlePhoneChange(e.target.value)}
                           style={{
-                            padding: "0.75rem 0.75rem 0.75rem 2.6rem", width: "100%", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white", fontSize: "0.95rem", letterSpacing: "0.5px"
+                            padding: "0.75rem 0.75rem 0.75rem 2.6rem", width: "100%", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "var(--foreground)", fontSize: "0.95rem", letterSpacing: "0.5px"
                           }} 
                         />
                       </div>
@@ -602,7 +602,7 @@ function CustomerLoginContent() {
                     value={otp}
                     onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                     style={{
-                      padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white", fontSize: "1.15rem", textAlign: "center", letterSpacing: "5px", fontWeight: "bold"
+                      padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "var(--foreground)", fontSize: "1.15rem", textAlign: "center", letterSpacing: "5px", fontWeight: "bold"
                     }} 
                   />
                 </div>

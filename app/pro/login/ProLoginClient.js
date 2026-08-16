@@ -263,7 +263,7 @@ export default function ProLogin({ lang }) {
 
   const inputStyle = {
     padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--glass-border)',
-    background: 'rgba(255,255,255,0.05)', color: 'white', fontSize: '0.95rem', width: '100%',
+    background: 'rgba(255,255,255,0.05)', color: 'var(--foreground)', fontSize: '0.95rem', width: '100%',
     outline: 'none', transition: 'border-color 0.2s'
   };
 
@@ -406,8 +406,8 @@ export default function ProLogin({ lang }) {
                       padding: '0.35rem 0.7rem',
                       borderRadius: '6px',
                       border: isActive ? '1px solid var(--primary)' : '1px solid transparent',
-                      background: isActive ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-                      color: isActive ? 'white' : 'rgba(255, 255, 255, 0.6)',
+                      background: isActive ? 'var(--primary)' : 'transparent',
+                      color: isActive ? 'white' : 'var(--primary)',
                       fontSize: '0.8rem',
                       fontWeight: isActive ? 600 : 400,
                       cursor: 'pointer',
@@ -437,13 +437,13 @@ export default function ProLogin({ lang }) {
                   flex: 1, padding: '0.6rem', border: 'none', borderRadius: '8px', cursor: 'pointer',
                   fontWeight: 600, fontSize: '0.88rem', transition: 'all 0.2s',
                   background: !isRegister ? 'var(--primary)' : 'transparent',
-                  color: !isRegister ? 'white' : 'rgba(255,255,255,0.6)'
+                  color: !isRegister ? 'white' : 'var(--primary)'
                 }}>{t.tab_signin}</button>
                 <button onClick={() => toggleTab(true)} style={{
                   flex: 1, padding: '0.6rem', border: 'none', borderRadius: '8px', cursor: 'pointer',
                   fontWeight: 600, fontSize: '0.88rem', transition: 'all 0.2s',
                   background: isRegister ? 'var(--primary)' : 'transparent',
-                  color: isRegister ? 'white' : 'rgba(255,255,255,0.6)'
+                  color: isRegister ? 'white' : 'var(--primary)'
                 }}>{t.tab_join}</button>
               </div>
             )}
@@ -545,7 +545,7 @@ export default function ProLogin({ lang }) {
                   <button key={pro.id} onClick={() => loginAsPro(pro)} style={{
                     display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem',
                     background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)',
-                    borderRadius: '10px', cursor: 'pointer', color: 'white', textAlign: 'left',
+                    borderRadius: '10px', cursor: 'pointer', color: 'var(--foreground)', textAlign: 'left',
                     transition: 'all 0.2s'
                   }}
                     onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--primary)'}
