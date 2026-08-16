@@ -124,42 +124,9 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
       />
-      <section className="hero-wrapper flex flex-col items-center justify-center gap-8" style={{ padding: "4rem 0", textAlign: "center", position: "relative", width: "100%" }}>
-        
-        {/* Floating handyman icons in the background */}
-        <div className="floating-bg-icon float-1" style={{ left: "5%", top: "15%" }} aria-hidden="true">
-          {/* Hammer (Carpentry) */}
-          <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m15 5 4 4" />
-            <path d="M21.5 2.5a2.12 2.12 0 0 0-3-3L11 7l-4 4-4 4v5h5l4-4 4-4 1.5-1.5z" />
-            <path d="m9 11 3 3" />
-          </svg>
-        </div>
+      <section className="flex flex-col items-center justify-center gap-8" style={{ padding: "4rem 0", textAlign: "center" }}>
 
-        <div className="floating-bg-icon float-2" style={{ right: "8%", top: "10%" }} aria-hidden="true">
-          {/* Paint Roller (Painting) */}
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <rect width="16" height="6" x="2" y="6" rx="2" />
-            <path d="M10 12v8c0 1.1-.9 2-2 2H6" />
-            <path d="M22 10V8a2 2 0 0 0-2-2h-2" />
-          </svg>
-        </div>
-
-        <div className="floating-bg-icon float-3" style={{ left: "10%", bottom: "25%" }} aria-hidden="true">
-          {/* Wrench (Plumbing) */}
-          <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-          </svg>
-        </div>
-
-        <div className="floating-bg-icon float-4" style={{ right: "12%", bottom: "20%" }} aria-hidden="true">
-          {/* Lightning Bolt (Electrical) */}
-          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
-          </svg>
-        </div>
-
-        <div className="animate-fade-in" style={{ maxWidth: "800px", position: "relative", zIndex: 1 }}>
+        <div className="animate-fade-in" style={{ maxWidth: "800px" }}>
           <h1 style={{ fontSize: "4rem", marginBottom: "1.5rem", letterSpacing: "-0.02em" }}>
             Your Trusted <span className="desktop-only"><br /></span>
             <span className="text-gradient">Handyman & Home Services App</span>

@@ -513,23 +513,34 @@ input:focus, textarea:focus, select:focus {
   100% { transform: translateY(0px) rotate(0deg); }
 }
 
-.floating-bg-icon {
-  position: absolute;
-  color: var(--primary);
-  opacity: 0.08;
+.floating-bg-container {
+  position: fixed;
+  inset: 0;
   pointer-events: none;
   z-index: 0;
-  transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease;
+  overflow: hidden;
 }
 
-/* Hover-like visual response when interactive element is nearby (simulated by hover support on container) */
-.hero-wrapper:hover .floating-bg-icon {
-  opacity: 0.14;
+.floating-bg-icon-wrapper {
+  position: fixed;
+  pointer-events: none;
+  will-change: transform;
 }
 
-.floating-bg-icon:hover {
-  opacity: 0.22;
-  color: var(--accent);
+.magnetic-inner {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+.floating-bg-icon-img {
+  width: 100%;
+  height: 100%;
+  opacity: 0.08;
+  filter: sepia(1) saturate(10) hue-rotate(345deg);
+  transition: opacity 0.3s ease, filter 0.3s ease;
+  will-change: opacity, filter;
 }
 
 .float-1 {
@@ -547,7 +558,7 @@ input:focus, textarea:focus, select:focus {
 
 /* Hide on mobile screens to prevent layout clutter and text overlap */
 @media (max-width: 992px) {
-  .floating-bg-icon {
+  .floating-bg-container {
     display: none !important;
   }
 }
