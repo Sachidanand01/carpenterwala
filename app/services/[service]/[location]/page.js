@@ -81,7 +81,7 @@ export default async function ServiceLocationPage({ params }) {
     "@type": ["HomeAndConstructionBusiness", "LocalBusiness"],
     "name": `Carpenterwala ${srv.type} Services - ${loc.name}`,
     "url": `https://carpenterwala.com/services/${service}/${location}`,
-    "telephone": "+91-80-4912-3456",
+    "telephone": "+91-809-555-1001",
     "priceRange": "₹₹",
     "areaServed": {
       "@type": "AdministrativeArea",

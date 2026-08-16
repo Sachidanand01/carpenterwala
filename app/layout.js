@@ -59,7 +59,7 @@ const jsonLd = {
   "image": "https://carpenterwala.com/images/og-image.png",
   "logo": "https://carpenterwala.com/images/logo.png",
   "url": "https://carpenterwala.com",
-  "telephone": "+91-80-4912-3456",
+  "telephone": "+91-809-555-1001",
   "priceRange": "₹₹",
   "address": {
     "@type": "PostalAddress",
@@ -87,7 +87,7 @@ const jsonLd = {
   ],
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "+91-80-4912-3456",
+    "telephone": "+91-809-555-1001",
     "contactType": "customer service",
     "areaServed": "IN",
     "availableLanguage": ["en", "hi", "kn"]

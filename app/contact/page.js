@@ -103,7 +103,7 @@ export default function ContactUs() {
                 <h3 style={{ color: "var(--primary)", marginBottom: "0.25rem", fontSize: "1.1rem" }}>Bangalore (Head Office)</h3>
                 <p style={{ opacity: 0.7, fontSize: "0.9rem", marginBottom: "0.5rem" }}>Thanisandra, Bangalore, Karnataka, India.</p>
                 <p style={{ fontSize: "0.9rem" }}>
-                  📞 Support: <a href="tel:+918095551001" style={{ color: "var(--accent)", fontWeight: "bold", textDecoration: "none" }}>+91-80-4912-3456</a>
+                  📞 Support: <a href="tel:+918095551001" style={{ color: "var(--accent)", fontWeight: "bold", textDecoration: "none" }}>+91-809-555-1001</a>
                 </p>
               </div>
             </div>
