@@ -485,3 +485,70 @@ input:focus, textarea:focus, select:focus {
   background: rgba(194, 65, 12, 0.3);
   color: var(--foreground);
 }
+
+/* ════════════════════════════════════════
+   FLOATING DECORATIVE BACKGROUND ICONS
+   ════════════════════════════════════════ */
+@keyframes float-slow-1 {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(5deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes float-slow-2 {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(12px) rotate(-8deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes float-slow-3 {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(-4deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes float-slow-4 {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(15px) rotate(6deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.floating-bg-icon {
+  position: absolute;
+  color: var(--primary);
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease;
+}
+
+/* Hover-like visual response when interactive element is nearby (simulated by hover support on container) */
+.hero-wrapper:hover .floating-bg-icon {
+  opacity: 0.14;
+}
+
+.floating-bg-icon:hover {
+  opacity: 0.22;
+  color: var(--accent);
+}
+
+.float-1 {
+  animation: float-slow-1 8s ease-in-out infinite;
+}
+.float-2 {
+  animation: float-slow-2 9s ease-in-out infinite;
+}
+.float-3 {
+  animation: float-slow-3 7s ease-in-out infinite;
+}
+.float-4 {
+  animation: float-slow-4 10s ease-in-out infinite;
+}
+
+/* Hide on mobile screens to prevent layout clutter and text overlap */
+@media (max-width: 992px) {
+  .floating-bg-icon {
+    display: none !important;
+  }
+}
+
