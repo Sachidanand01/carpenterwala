@@ -78,7 +78,7 @@ export default function HowItWorks() {
                   fontWeight: "900",
                   opacity: 1,
                   marginBottom: "-1rem",
-                  color: "var(--primary)"
+                  color: "var(--accent)"
                 }}>
                   {item.step}
                 </div>
