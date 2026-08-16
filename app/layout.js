@@ -79,9 +79,9 @@ const jsonLd = {
     "closes": "20:00"
   },
   "sameAs": [
-    "https://facebook.com/carpenterwala",
-    "https://instagram.com/carpenterwala",
-    "https://linkedin.com/company/carpenterwala"
+    "https://www.facebook.com/your.carpenterwala",
+    "https://x.com/Carpenterwala",
+    "https://www.youtube.com/@your-carpenterwala"
   ],
   "contactPoint": {
     "@type": "ContactPoint",
