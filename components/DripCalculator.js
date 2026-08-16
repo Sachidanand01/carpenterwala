@@ -62,7 +62,7 @@ export default function DripCalculator() {
   };
 
   return (
-    <div style={{
+    <div id="calculator" style={{
       margin: '4rem auto',
       padding: '3rem 2rem',
       background: 'var(--glass-bg)',

@@ -1,6 +1,6 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, useRef, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
@@ -756,7 +756,7 @@ function ViewWarrantyDocumentModal({ title, base64Data, onClose }) {
   );
 }
 
-export default function BookingsDashboard() {
+function BookingsDashboardContent() {
   const [customer, setCustomer] = useState(null);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -774,6 +774,14 @@ export default function BookingsDashboard() {
   const [rebookModal, setRebookModal] = useState(null); // booking object
   const [reviewedIds, setReviewedIds] = useState(new Set());
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const tabParam = searchParams ? searchParams.get('tab') : null;
+
+  useEffect(() => {
+    if (tabParam === 'warranties') {
+      setActiveTab('warranties');
+    }
+  }, [tabParam]);
 
   // Search & filter states inside warranties
   const [warrantySearch, setWarrantySearch] = useState('');
@@ -783,7 +791,11 @@ export default function BookingsDashboard() {
     if (typeof window !== 'undefined') {
       const phone = localStorage.getItem('customer_phone');
       const name = localStorage.getItem('customer_name');
-      if (!phone) { router.push('/login'); return; }
+      if (!phone) {
+        const redirectTarget = encodeURIComponent(window.location.pathname + window.location.search);
+        router.push(`/login?redirect=${redirectTarget}`);
+        return;
+      }
       setCustomer({ phone, name });
       fetchBookings(phone);
       fetchWarranties(phone);
@@ -1395,3 +1407,19 @@ export default function BookingsDashboard() {
     </div>
   );
 }
+
+export default function BookingsDashboard() {
+  return (
+    <Suspense fallback={
+      <div className="container" style={{ padding: '4rem 1rem', textAlign: 'center', minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="glass" style={{ padding: '3rem', maxWidth: '480px', width: '100%', borderRadius: '16px' }}>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.75rem' }}>Loading Portal...</h2>
+          <p style={{ opacity: 0.75, fontSize: '0.95rem' }}>Please wait while your records are retrieved.</p>
+        </div>
+      </div>
+    }>
+      <BookingsDashboardContent />
+    </Suspense>
+  );
+}
+

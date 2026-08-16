@@ -5,6 +5,7 @@ import "./globals.css";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import FloatingBackground from "@/components/FloatingBackground";
+import ExitIntentModal from "@/components/ExitIntentModal";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -180,6 +181,7 @@ export default function RootLayout({ children }) {
 
         <FloatingBackground />
         <Navbar />
+        <ExitIntentModal />
         <main style={{ paddingTop: "var(--navbar-height)", minHeight: "100vh" }}>
           {children}
         </main>
