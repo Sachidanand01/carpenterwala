@@ -7,23 +7,23 @@ export default function AboutPage() {
   return (
     <div className="animate-fade-in">
       {/* Hero Section */}
-      <section style={{ padding: "4rem 0", background: "radial-gradient(circle at top left, rgba(245, 158, 11, 0.1), transparent)" }}>
+      <section style={{ padding: "4rem 0", background: "radial-gradient(circle at top left, rgba(250, 248, 245, 1), transparent)" }}>
         <div className="container">
           <Breadcrumbs items={[
             { name: "Home", url: "/" },
             { name: "About Us", url: "/about" }
           ]} />
-          <div style={{ 
-            display: "grid", 
-            gridTemplateColumns: "1fr 1fr", 
-            gap: "4rem", 
-            alignItems: "center" 
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "4rem",
+            alignItems: "center"
           }}>
             <div className="glass" style={{ padding: "1rem", order: 2 }}>
               <div style={{ position: "relative", width: "100%", height: "500px", borderRadius: "12px", overflow: "hidden" }}>
-                <Image 
-                  src="/images/about-us-hero.png" 
-                  alt="Carpenterwala Team" 
+                <Image
+                  src="/images/about-us-hero.png"
+                  alt="Carpenterwala Team"
                   fill
                   style={{ objectFit: "cover" }}
                   priority
@@ -47,7 +47,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Story Section */}
-      <section style={{ padding: "5rem 0", backgroundColor: "rgba(15, 23, 42, 0.5)" }}>
+      <section style={{ padding: "5rem 0", backgroundColor: "rgba(250, 248, 245, 1)" }}>
         <div className="container">
           <div style={{ maxWidth: "800px", margin: "0 auto", textAlign: "center" }}>
             <h2 className="text-gradient" style={{ fontSize: "2.5rem", marginBottom: "2rem" }}>Our Story</h2>
@@ -87,7 +87,7 @@ export default function AboutPage() {
       </section>
 
       {/* Core Values Section */}
-      <section style={{ padding: "5rem 0", backgroundColor: "rgba(15, 23, 42, 0.5)" }}>
+      <section style={{ padding: "5rem 0", backgroundColor: "rgba(250, 248, 245, 1)" }}>
         <div className="container">
           <div style={{ textAlign: "center", marginBottom: "4rem" }}>
             <h2 className="text-gradient" style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>Our Core Values</h2>
@@ -102,7 +102,7 @@ export default function AboutPage() {
               { title: "Community Driven", desc: "We grow when our professionals grow and our customers are happy." }
             ].map((value, idx) => (
               <div key={idx} className="glass" style={{ padding: "2rem", textAlign: "center" }}>
-                <h4 style={{ fontSize: "1.25rem", marginBottom: "1rem", color: "white" }}>{value.title}</h4>
+                <h4 style={{ fontSize: "1.25rem", marginBottom: "1rem", color: "var(--primary)" }}>{value.title}</h4>
                 <p style={{ opacity: 0.7, fontSize: "0.95rem", lineHeight: "1.6" }}>{value.desc}</p>
               </div>
             ))}
@@ -135,10 +135,10 @@ export default function AboutPage() {
       {/* CTA Section */}
       <section style={{ padding: "8rem 0" }}>
         <div className="container">
-          <div className="glass" style={{ 
-            padding: "4rem", 
-            textAlign: "center", 
-            background: "linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(59, 130, 246, 0.2))" 
+          <div className="glass" style={{
+            padding: "4rem",
+            textAlign: "center",
+            background: "linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(59, 130, 246, 0.2))"
           }}>
             <h2 style={{ fontSize: "3rem", marginBottom: "1.5rem" }}>Be Part of Our Journey</h2>
             <p style={{ fontSize: "1.2rem", opacity: 0.8, marginBottom: "2.5rem", maxWidth: "600px", margin: "0 auto 2.5rem auto" }}>
