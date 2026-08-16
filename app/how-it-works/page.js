@@ -7,7 +7,7 @@ export default function HowItWorks() {
   return (
     <div className="animate-fade-in">
       {/* Hero Section */}
-      <section style={{ padding: "4rem 0", background: "radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent)" }}>
+      <section style={{ padding: "4rem 0", background: "radial-gradient(circle at top right, rgba(250, 248, 245, 1), transparent)" }}>
         <div className="container">
           <Breadcrumbs items={[
             { name: "Home", url: "/" },
@@ -47,7 +47,7 @@ export default function HowItWorks() {
       </section>
 
       {/* For Homeowners Section */}
-      <section style={{ padding: "5rem 0", backgroundColor: "rgba(15, 23, 42, 0.5)" }}>
+      <section style={{ padding: "5rem 0", backgroundColor: "rgba(250, 248, 245, 1)" }}>
         <div className="container">
           <div style={{ textAlign: "center", marginBottom: "4rem" }}>
             <h2 className="text-gradient" style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>For Homeowners</h2>
@@ -135,7 +135,7 @@ export default function HowItWorks() {
       </section>
 
       {/* Why Choose Us */}
-      <section style={{ padding: "5rem 0", backgroundColor: "rgba(15, 23, 42, 0.5)" }}>
+      <section style={{ padding: "5rem 0", backgroundColor: "rgba(250, 248, 245, 1)" }}>
         <div className="container">
           <div style={{ textAlign: "center", marginBottom: "4rem" }}>
             <h2 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>Why Bangalore Trusts Carpenterwala</h2>
