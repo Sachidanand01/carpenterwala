@@ -42,7 +42,7 @@ export default function CursorConstruction({
 
   useEffect(() => {
     // Check if disabled by env flag or user preference
-    const envEnabled = process.env.NEXT_PUBLIC_ENABLE_IDLE_ANIMATION !== "false";
+    const envEnabled = process.env.NEXT_PUBLIC_ENABLE_IDLE_ANIMATION !== "true";
     if (!enabled || !envEnabled) return;
 
     // Check prefers-reduced-motion
