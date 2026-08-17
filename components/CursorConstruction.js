@@ -42,14 +42,17 @@ export default function CursorConstruction({
 
   useEffect(() => {
     // Check if disabled by env flag or user preference
-    const envEnabled = process.env.NEXT_PUBLIC_ENABLE_IDLE_ANIMATION !== "true";
+    const envEnabled = process.env.NEXT_PUBLIC_ENABLE_IDLE_ANIMATION !== "false";
     if (!enabled || !envEnabled) return;
 
-    // Check prefers-reduced-motion
+    // Check prefers-reduced-motion, mobile touch, and user preferences
     if (typeof window !== "undefined") {
+      if (window.DISABLE_IDLE_CURSOR) return;
       const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (prefersReduced) return;
       if (localStorage.getItem("cw_disable_idle_cursor") === "true") return;
+      // Only enable on devices with a mouse/trackpad (fine pointer)
+      if (window.matchMedia && !window.matchMedia("(pointer: fine)").matches) return;
     }
 
     const canvas = canvasRef.current;
@@ -226,8 +229,8 @@ export default function CursorConstruction({
       state.smokePuffs = [];
       state.confetti = [];
 
-      const cx = state.cursorX;
-      const cy = state.cursorY;
+      const cx = state.cursorX > 0 ? state.cursorX : Math.round(width / 2);
+      const cy = state.cursorY > 0 ? state.cursorY : Math.round(height / 2);
       state.targetHousePos = calculateHouseTarget(cx, cy);
       state.cursorParts = getInitialCursorSegments(cx, cy);
       state.workers = initWorkers(cx, cy);
@@ -859,12 +862,12 @@ export default function CursorConstruction({
         }
       });
 
-      // If all workers left screen in scatter mode, reset
+      // If all workers left screen in scatter mode or fallback duration reached, reset
       if (state.phase === "scatter") {
         const anyOnScreen = state.workers.some(
-          (w) => w.x >= -50 && w.x <= width + 50 && w.y >= -50 && w.y <= height + 50
+          (w) => w.x >= -60 && w.x <= width + 60 && w.y >= -60 && w.y <= height + 60
         );
-        if (!anyOnScreen && (now - state.scatterStartTime > 1200)) {
+        if (!anyOnScreen || (now - state.scatterStartTime > 1600)) {
           resetState();
           return;
         }
@@ -1013,12 +1016,11 @@ export default function CursorConstruction({
         aria-hidden="true"
       />
       {isCursorHidden && (
-        <style jsx global>{`
-          body,
-          body * {
-            cursor: none !important;
-          }
-        `}</style>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `body, body * { cursor: none !important; }`,
+          }}
+        />
       )}
     </>
   );
