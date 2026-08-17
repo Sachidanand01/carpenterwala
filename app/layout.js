@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import FloatingBackground from "@/components/FloatingBackground";
 import ExitIntentModal from "@/components/ExitIntentModal";
+import CursorConstruction from "@/components/CursorConstruction";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -180,6 +181,7 @@ export default function RootLayout({ children }) {
         </Script>
 
         <FloatingBackground />
+        <CursorConstruction />
         <Navbar />
         <ExitIntentModal />
         <main style={{ paddingTop: "var(--navbar-height)", minHeight: "100vh" }}>
