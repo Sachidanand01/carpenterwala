@@ -66,20 +66,8 @@ export default function BlogActionBar({ title, slug, canonicalUrl }) {
       name: 'ChatGPT',
       url: `https://chatgpt.com/?q=${encodedPrompt}`,
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-          <g clip-path="url(#a)">
-            <mask id="b" width="20" height="20" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:luminance">
-              <path fill="#fff" d="M20 0H0v20h20z" />
-            </mask>
-            <g mask="url(#b)">
-              <path fill="#3b3d4a" d="M18.21 8.373a4.773 4.773 0 0 0-5.12-6.526 4.772 4.772 0 0 0-8.21 1.174 4.773 4.773 0 0 0-3.089 7.697 4.773 4.773 0 0 0 3.18 6.413c.406.11.824.168 1.244.17q.35 0 .697-.052a4.773 4.773 0 0 0 8.208-1.174 4.774 4.774 0 0 0 3.09-7.698zm-3.535-5.098a3.41 3.41 0 0 1 2.434 4.091 4 4 0 0 0-.248-.154l-3.793-2.194a.68.68 0 0 0-.681 0l-3.75 2.166V5.609l3.451-1.993a3.4 3.4 0 0 1 2.587-.34m-3.311 7.058L10 11.12l-1.363-.787V8.758L10 7.971l1.364.787zm-5.455-5.56A3.409 3.409 0 0 1 11.665 2.3c-.085.044-.17.085-.256.138L7.614 4.625a.68.68 0 0 0-.341.59v4.33l-1.364-.787zM2.573 6.045A3.4 3.4 0 0 1 4.556 4.48q-.01.147-.01.293v4.379a.68.68 0 0 0 .34.59l3.75 2.165-1.363.792-3.452-1.997a3.41 3.41 0 0 1-1.248-4.657m2.752 9.77a3.41 3.41 0 0 1-2.434-4.09q.121.08.248.154l3.793 2.194a.68.68 0 0 0 .682 0l3.75-2.166v1.575l-3.452 1.993a3.4 3.4 0 0 1-2.587.34m8.766-1.497a3.408 3.408 0 0 1-5.754 2.476q.127-.065.255-.139l3.794-2.19a.68.68 0 0 0 .341-.59v-4.33l1.364.788zm3.336-1.272a3.4 3.4 0 0 1-1.982 1.565q.009-.146.01-.293V9.94a.68.68 0 0 0-.341-.59l-3.75-2.165 1.363-.788L16.18 8.39a3.41 3.41 0 0 1 1.248 4.657" />
-            </g>
-          </g>
-          <defs>
-            <clipPath id="a">
-              <path fill="#fff" d="M0 0h20v20H0z" />
-            </clipPath>
-          </defs>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.872zm16.597 3.855l-5.833-3.387L15.119 7.2a.076.076 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.407-.667zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.5 4.5 0 0 1 6.68 4.66zm-12.64 4.135l2.64-1.523 2.64 1.523v3.046l-2.64 1.523-2.64-1.523z"/>
         </svg>
       )
     },
@@ -87,8 +75,8 @@ export default function BlogActionBar({ title, slug, canonicalUrl }) {
       name: 'Claude',
       url: `https://claude.ai/new?q=${encodedPrompt}`,
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <path fill="#3b3d4a" d="m5.927 15.3 3.933-2.207.066-.191-.066-.107h-.192l-.657-.04-2.247-.061-1.95-.081-1.887-.101-.476-.102-.445-.587.046-.293.4-.268.572.05 1.264.086 1.898.13 1.377.082 2.04.212h.323l.046-.131-.11-.081-.087-.081-1.964-1.33-2.126-1.407-1.113-.81-.602-.41-.304-.385-.13-.84.546-.602.734.05.188.05.744.573 1.588 1.23 2.075 1.527.303.252.122-.086.015-.06-.137-.229-1.128-2.04-1.204-2.074-.536-.86-.142-.515a2.5 2.5 0 0 1-.086-.607l.622-.845L7.584 2l.83.11.35.304.516 1.18.835 1.857 1.296 2.526.38.749.202.693.075.212h.131V9.51l.107-1.423.197-1.746.191-2.248.066-.633.314-.758.622-.41.486.232.4.572-.056.37-.238 1.544-.465 2.419-.304 1.62h.177l.202-.203.82-1.088 1.376-1.721.608-.683.708-.754.455-.36h.86l.633.941-.284.972-.885 1.123-.734.951-1.053 1.418-.657 1.133.06.09.157-.014 2.378-.506 1.285-.232 1.534-.263.693.324.076.329-.273.673-1.64.405-1.923.385-2.864.678-.035.025.04.05 1.29.122.553.03h1.35l2.517.187.657.434.394.532-.066.405-1.012.516-1.366-.324-3.188-.759-1.094-.272h-.15v.09l.91.891 1.67 1.508 2.09 1.943.107.48-.268.38-.284-.04-1.837-1.383-.709-.622-1.604-1.351h-.107v.142l.37.541 1.953 2.936.101.9-.142.293-.506.177-.556-.102-1.143-1.605-1.18-1.807-.951-1.62-.116.067-.562 6.048-.263.309-.607.232-.506-.385-.269-.622.269-1.23.324-1.604.263-1.276.237-1.584.142-.527-.01-.035-.115.015-1.195 1.64-1.817 2.455-1.437 1.539-.344.136-.597-.309.055-.552.334-.491 1.99-2.531 1.2-1.568.774-.906-.006-.131h-.045l-5.284 3.43-.941.122-.405-.379.05-.622.191-.203 1.589-1.093-.005.006z" />
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2a1 1 0 0 1 1 1v2.07a8 8 0 0 1 3.52 1.46l1.46-1.46a1 1 0 1 1 1.42 1.42l-1.46 1.46A8 8 0 0 1 19.4 11H21a1 1 0 1 1 0 2h-1.6a8 8 0 0 1-1.46 3.52l1.46 1.46a1 1 0 0 1-1.42 1.42l-1.46-1.46A8 8 0 0 1 13 19.4V21a1 1 0 1 1-2 0v-1.6a8 8 0 0 1-3.52-1.46l-1.46 1.46a1 1 0 0 1-1.42-1.42l1.46-1.46A8 8 0 0 1 4.6 13H3a1 1 0 1 1 0-2h1.6a8 8 0 0 1 1.46-3.52L4.6 6.02a1 1 0 0 1 1.42-1.42l1.46 1.46A8 8 0 0 1 11 4.6V3a1 1 0 0 1 1-1zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/>
         </svg>
       )
     },
@@ -96,113 +84,8 @@ export default function BlogActionBar({ title, slug, canonicalUrl }) {
       name: 'Gemini',
       url: `https://gemini.google.com/app?q=${encodedPrompt}`,
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <g clip-path="url(#a)">
-            <mask id="b" width="24" height="24" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:luminance">
-              <path fill="#fff" d="M24 0H0v24h24z" />
-            </mask>
-            <g mask="url(#b)">
-              <mask id="d" width="20" height="20" x="2" y="2" maskUnits="userSpaceOnUse" style="mask-type:alpha">
-                <path fill="#000" d="M12 2c.21 0 .392.143.444.347q.235.934.615 1.82a12.8 12.8 0 0 0 2.73 4.045 12.85 12.85 0 0 0 5.865 3.345.458.458 0 0 1 0 .886q-.936.236-1.82.617a12.9 12.9 0 0 0-4.046 2.728 12.85 12.85 0 0 0-3.345 5.866.458.458 0 0 1-.886 0 12.83 12.83 0 0 0-3.345-5.865 12.85 12.85 0 0 0-5.865-3.346.457.457 0 0 1 0-.886q.934-.234 1.82-.616a12.8 12.8 0 0 0 4.045-2.729 12.84 12.84 0 0 0 3.345-5.865A.46.46 0 0 1 12 2" />
-                <path fill="url(#c)" d="M12 2c.21 0 .392.143.444.347q.235.934.615 1.82a12.8 12.8 0 0 0 2.73 4.045 12.85 12.85 0 0 0 5.865 3.345.458.458 0 0 1 0 .886q-.936.236-1.82.617a12.9 12.9 0 0 0-4.046 2.728 12.85 12.85 0 0 0-3.345 5.866.458.458 0 0 1-.886 0 12.83 12.83 0 0 0-3.345-5.865 12.85 12.85 0 0 0-5.865-3.346.457.457 0 0 1 0-.886q.934-.234 1.82-.616a12.8 12.8 0 0 0 4.045-2.729 12.84 12.84 0 0 0 3.345-5.865A.46.46 0 0 1 12 2" />
-              </mask>
-              <g mask="url(#d)">
-                <g filter="url(#e)">
-                  <path fill="#3b3d4a" d="M.195 17.636c2.31.82 4.967-.718 5.932-3.437s-.125-5.588-2.436-6.408-4.967.718-5.932 3.436c-.966 2.72.125 5.589 2.436 6.41" />
-                </g>
-                <g filter="url(#f)">
-                  <path fill="#3b3d4a" d="M10.455 8.672c3.175 0 5.748-2.63 5.748-5.874 0-3.245-2.573-5.875-5.748-5.875-3.174 0-5.748 2.63-5.748 5.875s2.573 5.874 5.748 5.874" />
-                </g>
-                <g filter="url(#g)">
-                  <use href="#h" />
-                </g>
-                <g filter="url(#i)">
-                  <use href="#h" />
-                </g>
-                <g filter="url(#j)">
-                  <path fill="#3b3d4a" d="M11.54 24.863c2.779-1.69 3.522-5.54 1.661-8.599s-5.621-4.168-8.4-2.478-3.522 5.54-1.661 8.6c1.862 3.058 5.622 4.167 8.4 2.477" />
-                </g>
-                <g filter="url(#k)">
-                  <path fill="#3b3d4a" d="M22.77 15.25c3.122 0 5.654-2.438 5.654-5.444 0-3.007-2.532-5.445-5.654-5.445-3.123 0-5.654 2.438-5.654 5.445s2.531 5.444 5.654 5.444" />
-                </g>
-                <g filter="url(#l)">
-                  <path fill="#3b3d4a" d="M-2.026 14.619c2.875 2.186 7.076 1.5 9.382-1.532s1.845-7.264-1.03-9.45C3.45 1.45-.75 2.135-3.056 5.167s-1.845 7.265 1.03 9.451" />
-                </g>
-                <g filter="url(#m)">
-                  <path fill="#3b3d4a" d="M12.707 17.85c3.432 2.36 7.981 1.703 10.16-1.468 2.18-3.17 1.165-7.653-2.267-10.012s-7.98-1.703-10.16 1.467-1.165 7.654 2.267 10.014" />
-                </g>
-                <g filter="url(#n)">
-                  <path fill="#3b3d4a" d="M18.946 1.28c.873 1.187-.249 3.495-2.506 5.155s-4.794 2.044-5.667.857.248-3.495 2.505-5.155c2.258-1.66 4.795-2.044 5.668-.857" />
-                </g>
-                <g filter="url(#o)">
-                  <path fill="#3b3d4a" d="M11.779 6.963c3.49-3.238 4.688-7.621 2.676-9.791C12.442-4.998 7.98-4.132 4.49-.894S-.199 6.727 1.814 8.897s6.474 1.304 9.965-1.934" />
-                </g>
-                <g filter="url(#p)">
-                  <path fill="#3b3d4a" d="M4.623 18.593c2.075 1.485 4.457 1.71 5.32.504s-.118-3.388-2.193-4.873c-2.074-1.485-4.457-1.71-5.32-.504-.863 1.207.118 3.388 2.193 4.873" />
-                </g>
-              </g>
-            </g>
-          </g>
-          <defs>
-            <filter id="e" width="12.705" height="13.92" x="-4.41" y="5.753" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-              <feGaussianBlur result="effect1_foregroundBlur_5142_3218" stdDeviation=".908" />
-            </filter>
-            <filter id="f" width="29.059" height="29.312" x="-4.074" y="-11.858" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-              <feGaussianBlur result="effect1_foregroundBlur_5142_3218" stdDeviation="4.391" />
-            </filter>
-            <filter id="g" width="26.956" height="30.488" x="-5.637" y="4.442" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-              <feGaussianBlur result="effect1_foregroundBlur_5142_3218" stdDeviation="3.733" />
-            </filter>
-            <filter id="i" width="26.956" height="30.488" x="-5.637" y="4.442" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-              <feGaussianBlur result="effect1_foregroundBlur_5142_3218" stdDeviation="3.733" />
-            </filter>
-            <filter id="j" width="27.041" height="27.588" x="-5.35" y="5.531" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-              <feGaussianBlur result="effect1_foregroundBlur_5142_3218" stdDeviation="3.733" />
-            </filter>
-            <filter id="k" width="25.496" height="25.076" x="10.022" y="-2.733" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-              <feGaussianBlur result="effect1_foregroundBlur_5142_3218" stdDeviation="3.547" />
-            </filter>
-            <filter id="l" width="26.206" height="26.399" x="-10.954" y="-4.072" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-              <feGaussianBlur result="effect1_foregroundBlur_5142_3218" stdDeviation="3.215" />
-            </filter>
-            <filter id="m" width="26.208" height="25.796" x="3.55" y="-.788" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-              <feGaussianBlur result="effect1_foregroundBlur_5142_3218" stdDeviation="2.871" />
-            </filter>
-            <filter id="n" width="19.041" height="17.666" x="5.339" y="-4.547" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-              <feGaussianBlur result="effect1_foregroundBlur_5142_3218" stdDeviation="2.569" />
-            </filter>
-            <filter id="o" width="23.272" height="22.794" x="-3.502" y="-8.363" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-              <feGaussianBlur result="effect1_foregroundBlur_5142_3218" stdDeviation="2.17" />
-            </filter>
-            <filter id="p" width="18.882" height="17.67" x="-3.254" y="7.574" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-              <feGaussianBlur result="effect1_foregroundBlur_5142_3218" stdDeviation="2.685" />
-            </filter>
-            <linearGradient id="c" x1="7.685" x2="18.073" y1="15.382" y2="6.624" gradientUnits="userSpaceOnUse">
-            </linearGradient>
-            <path id="h" fill="#3b3d4a" d="M8.221 27.46c3.314-.162 5.83-3.774 5.62-8.067s-3.066-7.642-6.38-7.48-5.83 3.773-5.62 8.067c.21 4.293 3.066 7.642 6.38 7.48" />
-          </defs>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C12 6.627 6.627 12 0 12c6.627 0 12 5.627 12 12 0-6.373 5.627-12 12-12-6.373 0-12-5.373-12-12z"/>
         </svg>
       )
     },
@@ -210,15 +93,9 @@ export default function BlogActionBar({ title, slug, canonicalUrl }) {
       name: 'Perplexity',
       url: `https://www.perplexity.ai/search?q=${encodedPrompt}`,
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <g clip-path="url(#a)">
-            <path fill="#3b3d4a" fill-rule="evenodd" d="m5.896 1.5 5.98 5.51V1.513h1.164v5.521L19.046 1.5v6.282h2.467v9.06h-2.46v5.594l-6.013-5.284v5.345h-1.164v-5.258L5.903 22.5v-5.658H3.437v-9.06h2.459zm5.102 7.431H4.601v6.762h1.3V13.56zM7.067 14.07v5.864l4.809-4.235V9.702zm6.006 1.573V9.696l4.81 4.369v2.777h.007v3.032zm5.98.05h1.295V8.93h-6.35l5.056 4.58zm-1.17-7.911V4.145l-3.948 3.637zm-6.876 0H7.06V4.145z" clip-rule="evenodd" />
-          </g>
-          <defs>
-            <clipPath id="a">
-              <path fill="#fff" d="M2.437 1.043h19.127v21.913H2.437z" />
-            </clipPath>
-          </defs>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="m4.93 4.93 14.14 14.14"/>
         </svg>
       )
     },
@@ -226,15 +103,8 @@ export default function BlogActionBar({ title, slug, canonicalUrl }) {
       name: 'Grok',
       url: `https://x.com/i/grok?text=${encodedPrompt}`,
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <g fill="#3b3d4a" clip-path="url(#a)">
-            <path d="m9.787 14.671 6.518-4.818c.32-.236.777-.144.929.223.801 1.935.443 4.26-1.151 5.857-1.595 1.596-3.813 1.946-5.841 1.149l-2.215 1.027c3.177 2.174 7.035 1.636 9.446-.78 1.913-1.914 2.505-4.524 1.951-6.878l.005.005c-.803-3.457.198-4.839 2.247-7.665l.146-.203-2.697 2.7V5.28l-9.34 9.393m-1.343 1.169c-2.28-2.181-1.888-5.557.058-7.503 1.439-1.44 3.797-2.029 5.854-1.164l2.21-1.022a6.4 6.4 0 0 0-1.493-.816 7.33 7.33 0 0 0-7.968 1.605C5.033 9.014 4.383 12.2 5.5 14.919c.835 2.032-.534 3.47-1.912 4.92-.489.514-.979 1.028-1.374 1.573l6.226-5.568" />
-          </g>
-          <defs>
-            <clipPath id="a">
-              <path fill="#fff" d="M2 2.294h20v19.412H2z" />
-            </clipPath>
-          </defs>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
         </svg>
       )
     },
@@ -242,44 +112,8 @@ export default function BlogActionBar({ title, slug, canonicalUrl }) {
       name: 'Copilot',
       url: `https://copilot.microsoft.com/?q=${encodedPrompt}`,
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48">
-          <path fill="url(#a)" d="M34.142 7.325A4.63 4.63 0 0 0 29.7 4h-1.35a4.63 4.63 0 0 0-4.554 3.794L21.48 20.407l.575-1.965a4.63 4.63 0 0 1 4.444-3.33h7.853l3.294 1.282 3.175-1.283h-.926a4.63 4.63 0 0 1-4.443-3.325z" />
-          <path fill="url(#b)" d="M14.33 40.656A4.63 4.63 0 0 0 18.779 44h2.87a4.63 4.63 0 0 0 4.629-4.51l.312-12.163-.654 2.233a4.63 4.63 0 0 1-4.443 3.329h-7.919l-2.823-1.532-3.057 1.532h.912a4.63 4.63 0 0 1 4.447 3.344l1.279 4.423z" />
-          <path fill="url(#c)" d="M29.5 4H13.46c-4.583 0-7.332 6.057-9.165 12.113C2.123 23.29-.72 32.885 7.503 32.885h6.925a4.63 4.63 0 0 0 4.456-3.358 2079 2079 0 0 1 4.971-17.156c.843-2.843 1.544-5.284 2.621-6.805C27.08 4.714 28.086 4 29.5 4" />
-          <path fill="url(#d)" d="M29.5 4H13.46c-4.583 0-7.332 6.057-9.165 12.113C2.123 23.29-.72 32.885 7.503 32.885h6.925a4.63 4.63 0 0 0 4.456-3.358 2079 2079 0 0 1 4.971-17.156c.843-2.843 1.544-5.284 2.621-6.805C27.08 4.714 28.086 4 29.5 4" />
-          <path fill="url(#e)" d="M18.498 44h16.04c4.582 0 7.332-6.058 9.165-12.115 2.171-7.177 5.013-16.775-3.208-16.775h-6.926a4.63 4.63 0 0 0-4.455 3.358 2084 2084 0 0 1-4.972 17.16c-.842 2.843-1.544 5.285-2.62 6.806-.604.852-1.61 1.566-3.024 1.566" />
-          <path fill="url(#f)" d="M18.498 44h16.04c4.582 0 7.332-6.058 9.165-12.115 2.171-7.177 5.013-16.775-3.208-16.775h-6.926a4.63 4.63 0 0 0-4.455 3.358 2084 2084 0 0 1-4.972 17.16c-.842 2.843-1.544 5.285-2.62 6.806-.604.852-1.61 1.566-3.024 1.566" />
-          <defs>
-            <radialGradient id="a" cx="0" cy="0" r="1" gradientTransform="rotate(230.696 23.861 1.255)scale(17.3033 16.2706)" gradientUnits="userSpaceOnUse">
-              <stop offset=".096" />
-              <stop offset=".773" />
-              <stop offset="1" />
-            </radialGradient>
-            <radialGradient id="b" cx="0" cy="0" r="1" gradientTransform="rotate(51.84 -28.201 27.85)scale(15.9912 15.5119)" gradientUnits="userSpaceOnUse">
-              <stop />
-              <stop offset=".634" />
-              <stop offset=".923" />
-            </radialGradient>
-            <radialGradient id="e" cx="0" cy="0" r="1" gradientTransform="rotate(109.274 16.301 20.802)scale(38.3873 45.9867)" gradientUnits="userSpaceOnUse">
-              <stop offset=".066" />
-              <stop offset=".5" />
-              <stop offset=".896" />
-            </radialGradient>
-            <linearGradient id="c" x1="12.5" x2="14.788" y1="7.5" y2="33.975" gradientUnits="userSpaceOnUse">
-              <stop offset=".156" />
-              <stop offset=".487" />
-              <stop offset=".652" />
-              <stop offset=".937" />
-            </linearGradient>
-            <linearGradient id="d" x1="14.5" x2="15.75" y1="4" y2="32.885" gradientUnits="userSpaceOnUse">
-              <stop />
-              <stop offset=".247" stop-opacity="0" />
-            </linearGradient>
-            <linearGradient id="f" x1="42.586" x2="42.569" y1="13.346" y2="21.215" gradientUnits="userSpaceOnUse">
-              <stop offset=".058" />
-              <stop offset=".708" stop-opacity="0" />
-            </linearGradient>
-          </defs>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V15a1 1 0 0 0-2 0v1.93A8 8 0 0 1 4.07 13H6a1 1 0 0 0 0-2H4.07A8 8 0 0 1 11 4.07V6a1 1 0 0 0 2 0V4.07A8 8 0 0 1 19.93 11H18a1 1 0 0 0 0 2h1.93A8 8 0 0 1 13 16.93z"/>
         </svg>
       )
     }
@@ -326,7 +160,7 @@ export default function BlogActionBar({ title, slug, canonicalUrl }) {
         {/* Left Section: Summarize with AI */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', flexWrap: 'wrap' }}>
           <span style={{
-            fontSize: '0.9rem',
+            fontSize: '0.92rem',
             fontWeight: '600',
             color: 'var(--foreground)',
             letterSpacing: '0.2px'
@@ -342,21 +176,8 @@ export default function BlogActionBar({ title, slug, canonicalUrl }) {
                 rel="noopener noreferrer"
                 title={`Summarize with ${tool.name}`}
                 aria-label={`Summarize article using ${tool.name}`}
-                className="ai-tool-btn"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '38px',
-                  height: '38px',
-                  borderRadius: '10px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  textDecoration: 'none',
-                  transition: 'all 0.25s ease',
-                  cursor: 'pointer'
-                }}
+                className="social-icon"
+                style={{ textDecoration: 'none' }}
               >
                 {tool.icon}
               </a>
@@ -381,7 +202,7 @@ export default function BlogActionBar({ title, slug, canonicalUrl }) {
                 borderRadius: '10px',
                 backgroundColor: isSaved ? 'rgba(59, 130, 246, 0.15)' : 'rgba(255, 255, 255, 0.06)',
                 border: isSaved ? '1px solid var(--primary)' : '1px solid rgba(255, 255, 255, 0.12)',
-                color: isSaved ? 'var(--primary)' : '#0f172a',
+                color: isSaved ? 'var(--primary)' : 'var(--foreground)',
                 fontSize: '0.9rem',
                 fontWeight: '600',
                 cursor: 'pointer',
@@ -500,13 +321,6 @@ export default function BlogActionBar({ title, slug, canonicalUrl }) {
       </div>
 
       <style jsx>{`
-        .ai-tool-btn:hover {
-          background-color: rgba(255, 255, 255, 0.15) !important;
-          color: #ffffff !important;
-          transform: translateY(-2px);
-          border-color: var(--primary) !important;
-          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
-        }
         .action-btn-save:hover {
           background-color: rgba(255, 255, 255, 0.12) !important;
           transform: translateY(-1px);
