@@ -1,4 +1,22 @@
 # Vercel deployment ignore rules
+# These files are tracked in Git/GitHub, but excluded from Vercel deployment bundles
+
+# Antigravity agent instructions & system files
 .agents/
 AGENTS.md
+CLAUDE.md
 .gemini/
+
+# Blog export spreadsheets & data dumps
+blogs_export.*
+*.xlsx
+*.csv
+
+# Temporary standalone voice/audio test files
+/voice.mp3
+
+# Development, export & audit scripts
+scripts/
+
+# Raw SQL database schemas & migration scripts
+*.sql

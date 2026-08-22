@@ -6,17 +6,23 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "export:blogs": "node scripts/export-blogs.mjs",
+    "import:blogs": "node scripts/import-blogs.mjs",
+    "audit:blogs": "node scripts/audit-blog-skills.mjs"
   },
   "dependencies": {
+    "@remotion/cli": "^4.0.512",
     "@supabase/supabase-js": "^2.105.4",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "remotion": "^4.0.512",
     "resend": "^6.12.3"
   },
   "devDependencies": {
     "eslint": "^9",
-    "eslint-config-next": "16.2.6"
+    "eslint-config-next": "16.2.6",
+    "xlsx": "^0.18.5"
   }
 }
