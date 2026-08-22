@@ -48,7 +48,7 @@ function extractTOCAndInjectIds(htmlContent) {
   const modifiedHtml = htmlContent.replace(/<(h[23])([^>]*)>(.*?)<\/\1>/gis, (match, tag, attrs, innerHtml) => {
     const rawText = innerHtml.replace(/<[^>]+>/g, '').trim();
     if (!rawText) return match;
-    
+
     const idMatch = attrs.match(/id=["']([^"']+)["']/i);
     let id = idMatch ? idMatch[1] : '';
     if (!id) {
@@ -96,8 +96,8 @@ function extractHowToSchema(post, canonicalUrl) {
       const fullText = liMatch[1].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
       if (fullText.length > 5) {
         const strongMatch = liMatch[1].match(/<strong>(.*?)<\/strong>/i);
-        const name = strongMatch 
-          ? strongMatch[1].replace(/<[^>]+>/g, '').replace(/[:.]/g, '').trim() 
+        const name = strongMatch
+          ? strongMatch[1].replace(/<[^>]+>/g, '').replace(/[:.]/g, '').trim()
           : `Step ${stepIndex}`;
         steps.push({
           "@type": "HowToStep",
@@ -187,7 +187,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = BLOG_POSTS.find((p) => p.slug === slug);
   if (!post) return { title: 'Post Not Found' };
-  
+
   const siteUrl = 'https://carpenterwala.com';
   const canonicalUrl = `${siteUrl}/blog/${post.slug}`;
   let cleanTitle = post.title;
@@ -207,7 +207,7 @@ export async function generateMetadata({ params }) {
   } else if (cleanTitle === "Top 5 Smart Home Electrical Upgrades for 2026") {
     cleanTitle = "5 Smart Home Electrical Upgrades";
   }
-  
+
   const pageTitle = `${cleanTitle} | Carpenterwala`;
   const pageDescription = post.excerpt;
 
@@ -345,32 +345,32 @@ export default async function BlogPost({ params }) {
 
       {/* Blog Hero */}
       <section style={{ height: '52vh', minHeight: '420px', position: 'relative', overflow: 'hidden' }}>
-        <img 
-          src={post.image} 
-          alt={post.title} 
-          width={1200} 
-          height={600} 
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+        <img
+          src={post.image}
+          alt={post.title}
+          width={1200}
+          height={600}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
-        <div style={{ 
-          position: 'absolute', 
-          top: 0, 
-          left: 0, 
-          width: '100%', 
-          height: '100%', 
-          background: 'linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.95))' 
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.95))'
         }}></div>
         <div className="container" style={{ position: 'absolute', bottom: '3.5rem', left: '50%', transform: 'translateX(-50%)', width: '100%' }}>
           <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
-            <Link 
+            <Link
               href={`/blog/category/${slugify(post.category)}`}
               className="category-badge-link"
-              style={{ 
-                backgroundColor: 'var(--primary)', 
-                display: 'inline-block', 
-                padding: '0.35rem 1.1rem', 
-                borderRadius: '20px', 
-                fontSize: '0.85rem', 
+              style={{
+                backgroundColor: 'var(--primary)',
+                display: 'inline-block',
+                padding: '0.35rem 1.1rem',
+                borderRadius: '20px',
+                fontSize: '0.85rem',
                 fontWeight: 'bold',
                 textDecoration: 'none',
                 color: 'white',
@@ -380,27 +380,27 @@ export default async function BlogPost({ params }) {
               {post.category}
             </Link>
             {howToJsonLd && (
-              <span style={{ 
-                backgroundColor: 'rgba(16, 185, 129, 0.2)', 
-                color: '#34d399', 
+              <span style={{
+                backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                color: '#34d399',
                 border: '1px solid rgba(16, 185, 129, 0.4)',
-                padding: '0.35rem 0.9rem', 
-                borderRadius: '20px', 
-                fontSize: '0.8rem', 
-                fontWeight: '600' 
+                padding: '0.35rem 0.9rem',
+                borderRadius: '20px',
+                fontSize: '0.8rem',
+                fontWeight: '600'
               }}>
                 🛠️ Step-by-Step DIY Guide
               </span>
             )}
             {faqJsonLd && (
-              <span style={{ 
-                backgroundColor: 'rgba(59, 130, 246, 0.2)', 
-                color: '#60a5fa', 
+              <span style={{
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                color: '#60a5fa',
                 border: '1px solid rgba(59, 130, 246, 0.4)',
-                padding: '0.35rem 0.9rem', 
-                borderRadius: '20px', 
-                fontSize: '0.8rem', 
-                fontWeight: '600' 
+                padding: '0.35rem 0.9rem',
+                borderRadius: '20px',
+                fontSize: '0.8rem',
+                fontWeight: '600'
               }}>
                 💡 Troubleshooting Included
               </span>
@@ -411,25 +411,26 @@ export default async function BlogPost({ params }) {
           </h1>
           <div style={{ display: 'flex', gap: '1.5rem', opacity: 0.9, flexWrap: 'wrap', fontSize: '0.95rem' }}>
             <span>By <strong style={{ color: '#ffffff' }}>{author.name}</strong></span>
-            <span>📅 {post.date}</span>
-            <span>⏱️ {post.readTime}</span>
+            <span>📅 {post.date} style={{ color: '#ffffff' }} </span>
+            <span>⏱️ {post.readTime} style={{ color: '#ffffff' }} </span>
           </div>
         </div>
       </section>
 
       {/* Blog Action Bar (AI Summarize + Save + Google Preferred) */}
       <div className="container" style={{ paddingTop: '2rem' }}>
-        <BlogActionBar 
-          title={post.title} 
-          slug={post.slug} 
-          canonicalUrl={canonicalUrl} 
+        <BlogActionBar
+          title={post.title}
+          slug={post.slug}
+          canonicalUrl={canonicalUrl}
         />
       </div>
 
       {/* Content Section */}
       <section className="container" style={{ padding: '2rem 0 6rem', display: 'flex', gap: '3.5rem', flexWrap: 'wrap' }}>
         <article style={{ flex: '2 1 620px', minWidth: '300px', fontSize: '1.15rem', lineHeight: '1.85' }}>
-          <style dangerouslySetInnerHTML={{ __html: `
+          <style dangerouslySetInnerHTML={{
+            __html: `
             .blog-content h2 {
               font-size: 1.85rem;
               margin: 3.5rem 0 1.25rem;
@@ -540,12 +541,12 @@ export default async function BlogPost({ params }) {
 
           {/* Author Bio Card (E-E-A-T) */}
           <div className="glass" style={{ display: 'flex', gap: '1.5rem', padding: '2rem', marginTop: '4rem', alignItems: 'center', flexWrap: 'wrap', borderRadius: '12px' }}>
-            <img 
-              src={author.avatar} 
-              alt={author.name} 
+            <img
+              src={author.avatar}
+              alt={author.name}
               width={80}
               height={80}
-              style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary)' }} 
+              style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary)' }}
             />
             <div style={{ flex: 1, minWidth: '240px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
@@ -558,20 +559,20 @@ export default async function BlogPost({ params }) {
               <p style={{ margin: 0, fontSize: '0.95rem', opacity: 0.8, lineHeight: '1.6' }}>{author.bio}</p>
             </div>
           </div>
-          
+
           {/* Bottom Content Native Ad */}
-          <AdSenseContainer 
-            slot="2345678901" 
-            format="fluid" 
-            responsive="true" 
+          <AdSenseContainer
+            slot="2345678901"
+            format="fluid"
+            responsive="true"
             style={{ margin: '3rem 0', minHeight: '280px' }}
           />
-          
+
           {/* Professional Support CTA Card */}
-          <div style={{ 
-            marginTop: '3.5rem', 
-            padding: '2.25rem', 
-            backgroundColor: 'rgba(255,255,255,0.04)', 
+          <div style={{
+            marginTop: '3.5rem',
+            padding: '2.25rem',
+            backgroundColor: 'rgba(255,255,255,0.04)',
             borderRadius: '14px',
             border: '1px solid var(--glass-border)'
           }}>
@@ -587,7 +588,7 @@ export default async function BlogPost({ params }) {
         {/* Sidebar */}
         <aside style={{ flex: '1 1 320px', minWidth: '280px' }}>
           <div style={{ position: 'sticky', top: '100px', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            
+
             {/* Desktop Table of Contents */}
             {toc.length > 0 && (
               <div className="glass" style={{ padding: '1.75rem', borderRadius: '14px' }}>
@@ -613,50 +614,50 @@ export default async function BlogPost({ params }) {
             <div className="glass" style={{ padding: '1.75rem', borderRadius: '14px' }}>
               <h3 style={{ fontSize: '1.15rem', marginBottom: '1.25rem' }}>Share this guide</h3>
               <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '2rem' }}>
-                <a 
+                <a
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonicalUrl)}`}
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="social-icon"
                   aria-label="Share on Facebook"
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                   </svg>
                 </a>
-                <a 
+                <a
                   href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(canonicalUrl)}`}
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="social-icon"
                   aria-label="Share on X (Twitter)"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                   </svg>
                 </a>
-                <a 
+                <a
                   href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonicalUrl)}`}
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="social-icon"
                   aria-label="Share on LinkedIn"
                 >
                   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-                    <rect x="2" y="9" width="4" height="12"/>
-                    <circle cx="4" cy="4" r="2"/>
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                    <rect x="2" y="9" width="4" height="12" />
+                    <circle cx="4" cy="4" r="2" />
                   </svg>
                 </a>
-                <a 
+                <a
                   href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${post.title} - ${canonicalUrl}`)}`}
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="social-icon"
                   aria-label="Share on WhatsApp"
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                   </svg>
                 </a>
               </div>
@@ -664,15 +665,15 @@ export default async function BlogPost({ params }) {
               <h3 style={{ fontSize: '1.15rem', marginBottom: '1rem' }}>Browse Categories</h3>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                 {Array.from(new Set(BLOG_POSTS.map(p => p.category))).map(cat => (
-                  <Link 
-                    key={cat} 
+                  <Link
+                    key={cat}
                     href={`/blog/category/${slugify(cat)}`}
                     className="category-link"
-                    style={{ 
-                      padding: '0.4rem 0.9rem', 
-                      backgroundColor: 'rgba(255,255,255,0.08)', 
-                      borderRadius: '16px', 
-                      fontSize: '0.85rem' 
+                    style={{
+                      padding: '0.4rem 0.9rem',
+                      backgroundColor: 'rgba(255,255,255,0.08)',
+                      borderRadius: '16px',
+                      fontSize: '0.85rem'
                     }}
                   >
                     {cat}
@@ -682,10 +683,10 @@ export default async function BlogPost({ params }) {
             </div>
 
             {/* Sidebar Display Ad */}
-            <AdSenseContainer 
-              slot="3456789012" 
-              format="auto" 
-              style={{ minHeight: '280px' }} 
+            <AdSenseContainer
+              slot="3456789012"
+              format="auto"
+              style={{ minHeight: '280px' }}
             />
           </div>
         </aside>
