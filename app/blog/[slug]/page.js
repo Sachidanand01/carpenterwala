@@ -409,10 +409,10 @@ export default async function BlogPost({ params }) {
           <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', lineHeight: '1.2', maxWidth: '920px', marginBottom: '1.5rem', color: '#ffffff' }}>
             {post.title}
           </h1>
-          <div style={{ display: 'flex', gap: '1.5rem', opacity: 0.9, flexWrap: 'wrap', fontSize: '0.95rem' }}>
-            <span>By <strong style={{ color: '#ffffff' }}>{author.name}</strong></span>
-            <span>📅 {post.date} style={{ color: '#ffffff' }} </span>
-            <span>⏱️ {post.readTime} style={{ color: '#ffffff' }} </span>
+          <div style={{ display: 'flex', gap: '1.5rem', opacity: 0.9, flexWrap: 'wrap', fontSize: '0.95rem', color: 'white' }}>
+            <span>By <strong>{author.name}</strong></span>
+            <span>📅 {post.date} </span>
+            <span>⏱️ {post.readTime} </span>
           </div>
         </div>
       </section>
