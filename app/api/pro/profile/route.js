@@ -13,7 +13,7 @@ export async function GET(request) {
       .from('profiles')
       .select(`id, slug, name, email, trade, experience, location, avatar, about, skills, portfolio, verified, created_at,
         phone, full_address, aadhaar_front, aadhaar_back, pan_front, pan_back, 
-        voter_driving_front, voter_driving_back, police_verification, onboarding_completed, onboarding_step, accepting_leads, pending_avatar,
+        voter_driving_front, voter_driving_back, police_verification, onboarding_completed, onboarding_step, accepting_leads, pending_avatar, rejection_reason,
         reviews ( id, author, rating, text, created_at )`)
       .eq('id', id)
       .single();
@@ -32,7 +32,7 @@ export async function PUT(request) {
     const { 
       id, name, trade, location, about, skills, experience, portfolio, avatar,
       phone, full_address, aadhaar_front, aadhaar_back, pan_front, pan_back, 
-      voter_driving_front, voter_driving_back, police_verification, onboarding_completed, onboarding_step, accepting_leads, pending_avatar
+      voter_driving_front, voter_driving_back, police_verification, onboarding_completed, onboarding_step, accepting_leads, pending_avatar, rejection_reason
     } = body;
 
     if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 });
@@ -54,7 +54,26 @@ export async function PUT(request) {
     }
 
     // Onboarding fields
-    if (phone !== undefined) updateData.phone = phone;
+    if (phone !== undefined) {
+      const cleanPhone = phone ? phone.trim().replace(/\D/g, '').slice(-10) : '';
+      if (cleanPhone) {
+        // Check if another profile already has this phone number
+        const { data: existingPhone } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('phone', cleanPhone)
+          .neq('id', id)
+          .maybeSingle();
+
+        if (existingPhone) {
+          return NextResponse.json({
+            error: 'This mobile number is already registered with another professional account. Please use your personal number.',
+            code: 'PHONE_EXISTS'
+          }, { status: 400 });
+        }
+      }
+      updateData.phone = cleanPhone || phone;
+    }
     if (full_address !== undefined) updateData.full_address = full_address;
     if (aadhaar_front !== undefined) updateData.aadhaar_front = aadhaar_front;
     if (aadhaar_back !== undefined) updateData.aadhaar_back = aadhaar_back;
@@ -63,10 +82,17 @@ export async function PUT(request) {
     if (voter_driving_front !== undefined) updateData.voter_driving_front = voter_driving_front;
     if (voter_driving_back !== undefined) updateData.voter_driving_back = voter_driving_back;
     if (police_verification !== undefined) updateData.police_verification = police_verification;
-    if (onboarding_completed !== undefined) updateData.onboarding_completed = onboarding_completed;
+    if (onboarding_completed !== undefined) {
+      updateData.onboarding_completed = onboarding_completed;
+      if (onboarding_completed === true) {
+        // Clear previous rejection reasons when pro resubmits
+        updateData.rejection_reason = null;
+      }
+    }
     if (onboarding_step !== undefined) updateData.onboarding_step = onboarding_step;
     if (accepting_leads !== undefined) updateData.accepting_leads = accepting_leads;
     if (pending_avatar !== undefined) updateData.pending_avatar = pending_avatar;
+    if (rejection_reason !== undefined) updateData.rejection_reason = rejection_reason;
 
     const { error } = await supabase.from('profiles').update(updateData).eq('id', id);
     if (error) throw error;

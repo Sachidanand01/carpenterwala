@@ -175,6 +175,9 @@ export default function ProDashboard() {
   const [portfolio, setPortfolio] = useState([]);
   const [newPhotoUrl, setNewPhotoUrl] = useState('');
   const [portfolioStatus, setPortfolioStatus] = useState('');
+  const [portfolioProcessing, setPortfolioProcessing] = useState('');
+  const [portfolioError, setPortfolioError] = useState('');
+  const [showUrlInput, setShowUrlInput] = useState(false);
   const router = useRouter();
 
   // Onboarding Wizard State
@@ -300,33 +303,92 @@ export default function ProDashboard() {
     } catch { setSaveStatus('error'); }
   };
 
+  // Portfolio Management (Up to 30 photos with Camera & Multi-Select Gallery)
+  const handlePortfolioFiles = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    e.target.value = '';
+
+    setPortfolioError('');
+
+    const maxPhotos = 30;
+    const currentCount = portfolio.length;
+    const availableSlots = maxPhotos - currentCount;
+
+    if (availableSlots <= 0) {
+      setPortfolioError(`Portfolio limit reached (${maxPhotos} photos maximum). Please remove an existing photo to add new ones.`);
+      return;
+    }
+
+    const filesToProcess = files.slice(0, availableSlots);
+    if (files.length > availableSlots) {
+      setPortfolioError(`Only ${availableSlots} more photo${availableSlots === 1 ? '' : 's'} can be added to stay within the 30-photo limit.`);
+    }
+
+    setPortfolioProcessing(`Optimizing & adding ${filesToProcess.length} photo${filesToProcess.length === 1 ? '' : 's'}…`);
+
+    try {
+      const processedList = [];
+      for (const file of filesToProcess) {
+        if (!file.type.startsWith('image/')) continue;
+        // Process work sample photo with watermark enabled (1200px @ 80% quality)
+        const res = await processDocumentImage(file, 1200, 0.80, true);
+        if (res?.dataUrl) {
+          processedList.push(res.dataUrl);
+        }
+      }
+
+      if (processedList.length > 0) {
+        setPortfolio(prev => [...prev, ...processedList]);
+        setPortfolioStatus('unsaved');
+      } else {
+        setPortfolioError('No valid images could be processed.');
+      }
+    } catch (err) {
+      console.error(err);
+      setPortfolioError('Failed to process image(s). Please try again.');
+    } finally {
+      setPortfolioProcessing('');
+    }
+  };
+
   const handleAddPhoto = () => {
     const url = newPhotoUrl.trim();
     if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
-      setPortfolioStatus('invalid'); setTimeout(() => setPortfolioStatus(''), 2000); return;
+      setPortfolioStatus('invalid'); setTimeout(() => setPortfolioStatus(''), 3000); return;
     }
-    if (portfolio.includes(url)) { setPortfolioStatus('duplicate'); setTimeout(() => setPortfolioStatus(''), 2000); return; }
+    if (portfolio.length >= 30) {
+      setPortfolioError('Portfolio limit reached (30 photos maximum).'); return;
+    }
+    if (portfolio.includes(url)) {
+      setPortfolioStatus('duplicate'); setTimeout(() => setPortfolioStatus(''), 3000); return;
+    }
     setPortfolio(prev => [...prev, url]);
+    setPortfolioStatus('unsaved');
     setNewPhotoUrl('');
   };
 
-  const handleRemovePhoto = (url) => setPortfolio(prev => prev.filter(p => p !== url));
+  const handleRemovePhoto = (url) => {
+    setPortfolio(prev => prev.filter(p => p !== url));
+    setPortfolioStatus('unsaved');
+  };
 
   const handleProfileAvatarChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    e.target.value = '';
 
     if (!file.type.startsWith('image/')) {
-      alert('Please select a valid image file (PNG, JPG, JPEG).');
+      alert('Please select a valid image file (PNG, JPG, JPEG, WebP).');
       return;
     }
 
     setUploadingField('pending_avatar');
     try {
-      const base64 = await compressImage(file);
-      setForm(prev => ({ ...prev, pending_avatar: base64 }));
+      const res = await processDocumentImage(file, 800, 0.85, true);
+      setForm(prev => ({ ...prev, pending_avatar: res.dataUrl }));
     } catch (err) {
-      alert('Failed to process image.');
+      alert('Failed to process profile photo.');
     } finally {
       setUploadingField(null);
     }
@@ -344,7 +406,7 @@ export default function ProDashboard() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: proInfo.id, portfolio }),
       });
-      if (res.ok) { setPortfolioStatus('saved'); setTimeout(() => setPortfolioStatus(''), 3000); }
+      if (res.ok) { setPortfolioStatus('saved'); setTimeout(() => setPortfolioStatus(''), 4000); }
       else setPortfolioStatus('error');
     } catch { setPortfolioStatus('error'); }
   };
@@ -364,8 +426,9 @@ export default function ProDashboard() {
     setOnboardError('');
     setUploadingField(field);
     try {
-      // 1. Process image at high resolution (1600px @ 85% quality) and calculate sharpness
-      const processed = await processDocumentImage(file, 1600, 0.85);
+      // 1. Process image: 800px with watermark for public avatar, 1600px clean for official KYC documents
+      const isPublicAvatar = field === 'avatar';
+      const processed = await processDocumentImage(file, isPublicAvatar ? 800 : 1600, 0.85, isPublicAvatar);
 
       if (processed.isBlurry) {
         setOnboardError('⚠️ Image appears blurry or out of focus. Please retake a sharp, clear photo in good lighting.');
@@ -448,6 +511,8 @@ export default function ProDashboard() {
         body: JSON.stringify(payload),
       });
 
+      const data = await res.json().catch(() => ({}));
+
       if (res.ok) {
         if (completionStatus) {
           // Completed wizard! Trigger reload
@@ -456,7 +521,7 @@ export default function ProDashboard() {
           setOnboardStep(nextStepVal);
         }
       } else {
-        setOnboardError('Failed to save your progress. Please try again.');
+        setOnboardError(data.error || 'Failed to save your progress. Please try again.');
       }
     } catch (err) {
       setOnboardError('Network error. Failed to save progress.');
@@ -623,6 +688,33 @@ export default function ProDashboard() {
               <span>{currentPercent}% Complete</span>
             </div>
           </div>
+
+          {/* Admin Rejection & Re-upload Request Banner */}
+          {profile?.rejection_reason && (
+            <div style={{
+              background: 'rgba(245,158,11,0.08)',
+              border: '1.5px solid rgba(245,158,11,0.4)',
+              borderRadius: '14px',
+              padding: '1.25rem 1.5rem',
+              marginBottom: '1.5rem',
+              display: 'flex',
+              gap: '1rem',
+              alignItems: 'flex-start'
+            }}>
+              <div style={{ fontSize: '1.8rem', lineHeight: 1 }}>⚠️</div>
+              <div style={{ flex: 1 }}>
+                <h3 style={{ fontSize: '0.98rem', fontWeight: 800, color: '#f59e0b', margin: '0 0 0.35rem 0' }}>
+                  Document Re-upload Requested by Verification Team
+                </h3>
+                <div style={{ fontSize: '0.88rem', lineHeight: 1.5, opacity: 0.9 }}>
+                  <strong>Admin Feedback:</strong> {profile.rejection_reason}
+                </div>
+                <div style={{ fontSize: '0.78rem', opacity: 0.65, marginTop: '0.5rem' }}>
+                  Your previously entered contact and address information is saved. Please replace the requested document scan(s) using the <strong>📸 Take Photo</strong> or <strong>📁 Upload</strong> buttons and click <strong>Submit</strong>.
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Error Banner */}
           {onboardError && (
@@ -1348,64 +1440,268 @@ export default function ProDashboard() {
 
         {/* ── PORTFOLIO TAB ── */}
         {tab === 'portfolio' && (
-          <div className="glass" style={{ padding: '1.5rem', borderRadius: '14px' }}>
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.4rem' }}>My Portfolio</h2>
-            <p style={{ opacity: 0.6, fontSize: '0.9rem', marginBottom: '1.75rem' }}>
-              Add photos of your past work. They will appear on your public profile to attract customers.
-            </p>
+          <div className="glass" style={{ padding: '1.75rem', borderRadius: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem' }}>
+              <div>
+                <h2 style={{ fontSize: '1.3rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  📸 Work Portfolio
+                  <span style={{
+                    fontSize: '0.8rem', fontWeight: 600, padding: '0.2rem 0.65rem', borderRadius: '20px',
+                    background: portfolio.length >= 30 ? 'rgba(239,68,68,0.15)' : 'rgba(194,65,12,0.15)',
+                    color: portfolio.length >= 30 ? '#f87171' : 'var(--primary)'
+                  }}>
+                    {portfolio.length} / 30 Photos
+                  </span>
+                </h2>
+                <p style={{ opacity: 0.65, fontSize: '0.88rem', marginTop: '0.25rem', maxWidth: '650px' }}>
+                  Upload photos of your completed work (carpentry, modular installations, repairs, polish). These showcase your craftsmanship to customers.
+                </p>
+              </div>
 
-            {/* Add new photo */}
-            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
-              <input
-                type="url"
-                placeholder="Paste a photo URL (e.g. https://...)"
-                value={newPhotoUrl}
-                onChange={e => setNewPhotoUrl(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleAddPhoto()}
-                style={{ flex: 1, minWidth: '250px', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.05)', color: 'var(--foreground)', fontSize: '0.9rem' }}
-              />
-              <button onClick={handleAddPhoto} className="btn btn-primary" style={{ padding: '0.75rem 1.25rem', whiteSpace: 'nowrap' }}>
-                + Add Photo
-              </button>
+              {/* Top Action Save Button */}
+              {portfolio.length > 0 && (
+                <button
+                  onClick={handleSavePortfolio}
+                  className="btn btn-primary"
+                  disabled={portfolioStatus === 'saving'}
+                  style={{ padding: '0.6rem 1.4rem', fontSize: '0.9rem' }}
+                >
+                  {portfolioStatus === 'saving' ? 'Saving…' : `💾 Save Portfolio (${portfolio.length})`}
+                </button>
+              )}
             </div>
 
-            {portfolioStatus === 'invalid' && <div style={{ color: '#f87171', fontSize: '0.85rem', marginBottom: '1rem' }}>⚠️ Please enter a valid URL starting with http:// or https://</div>}
-            {portfolioStatus === 'duplicate' && <div style={{ color: '#f87171', fontSize: '0.85rem', marginBottom: '1rem' }}>⚠️ This photo URL is already in your portfolio.</div>}
+            {/* Progress bar */}
+            <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '3px', overflow: 'hidden', marginBottom: '1.5rem' }}>
+              <div style={{
+                width: `${Math.min(100, (portfolio.length / 30) * 100)}%`,
+                height: '100%',
+                background: portfolio.length >= 30 ? '#ef4444' : 'linear-gradient(90deg, var(--primary), #f59e0b)',
+                transition: 'width 0.3s ease'
+              }} />
+            </div>
+
+            {/* Upload Action Bar */}
+            <div style={{
+              padding: '1.25rem', background: 'rgba(255,255,255,0.02)', border: '1px dashed var(--glass-border)',
+              borderRadius: '12px', marginBottom: '1.75rem', display: 'flex', flexDirection: 'column', gap: '0.85rem'
+            }}>
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                {/* 1. Camera Capture Button */}
+                <label className="btn btn-primary" style={{ padding: '0.6rem 1.25rem', fontSize: '0.88rem', cursor: portfolio.length >= 30 ? 'not-allowed' : 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', opacity: portfolio.length >= 30 ? 0.5 : 1 }}>
+                  📸 Snap Photo with Camera
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    disabled={portfolio.length >= 30}
+                    onChange={handlePortfolioFiles}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+
+                {/* 2. Multi-Select Gallery Picker */}
+                <label className="btn btn-secondary" style={{ padding: '0.6rem 1.25rem', fontSize: '0.88rem', cursor: portfolio.length >= 30 ? 'not-allowed' : 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', opacity: portfolio.length >= 30 ? 0.5 : 1 }}>
+                  📁 Choose from Gallery (Multi-select)
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    disabled={portfolio.length >= 30}
+                    onChange={handlePortfolioFiles}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+
+                {/* 3. Toggle URL Link paste */}
+                <button
+                  type="button"
+                  onClick={() => setShowUrlInput(!showUrlInput)}
+                  style={{ background: 'none', border: 'none', color: 'var(--foreground)', opacity: 0.7, fontSize: '0.82rem', cursor: 'pointer', textDecoration: 'underline', marginLeft: 'auto' }}
+                >
+                  {showUrlInput ? 'Hide URL paste' : '🔗 Or paste image link'}
+                </button>
+              </div>
+
+              {/* Optional URL input accordion */}
+              {showUrlInput && (
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
+                  <input
+                    type="url"
+                    placeholder="Paste a direct photo URL (e.g. https://...)"
+                    value={newPhotoUrl}
+                    onChange={e => setNewPhotoUrl(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleAddPhoto()}
+                    style={{ flex: 1, minWidth: '220px', padding: '0.55rem 0.8rem', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.05)', color: 'var(--foreground)', fontSize: '0.85rem' }}
+                  />
+                  <button onClick={handleAddPhoto} className="btn btn-secondary" style={{ padding: '0.55rem 1rem', fontSize: '0.85rem' }}>
+                    Add Link
+                  </button>
+                </div>
+              )}
+
+              {/* Status messages */}
+              {portfolioProcessing && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', fontSize: '0.85rem', fontWeight: 600 }}>
+                  <style>{`@keyframes port-spin { to { transform: rotate(360deg); } }`}</style>
+                  <div style={{ width: '16px', height: '16px', borderRadius: '50%', border: '2px solid rgba(194,65,12,0.2)', borderTop: '2px solid var(--primary)', animation: 'port-spin 0.8s linear infinite' }} />
+                  {portfolioProcessing}
+                </div>
+              )}
+
+              {portfolioError && (
+                <div style={{ color: '#f87171', fontSize: '0.85rem', background: 'rgba(239,68,68,0.1)', padding: '0.4rem 0.75rem', borderRadius: '6px' }}>
+                  ⚠️ {portfolioError}
+                </div>
+              )}
+
+              {portfolioStatus === 'invalid' && <div style={{ color: '#f87171', fontSize: '0.85rem' }}>⚠️ Please enter a valid URL starting with http:// or https://</div>}
+              {portfolioStatus === 'duplicate' && <div style={{ color: '#f87171', fontSize: '0.85rem' }}>⚠️ This photo is already in your portfolio.</div>}
+            </div>
 
             {/* Photo grid */}
             {portfolio.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '3rem', opacity: 0.45, border: '2px dashed rgba(255,255,255,0.15)', borderRadius: '12px' }}>
-                <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>🖼️</div>
-                <p>No photos yet. Paste an image URL above to add your first portfolio photo.</p>
-                <p style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}>Tip: Upload your photos to Google Drive, Imgur, or Unsplash and paste the direct link here.</p>
+              <div style={{ textAlign: 'center', padding: '3.5rem 1.5rem', opacity: 0.6, border: '2px dashed rgba(255,255,255,0.12)', borderRadius: '14px', background: 'rgba(255,255,255,0.01)' }}>
+                <div style={{ fontSize: '3.2rem', marginBottom: '0.75rem' }}>📸</div>
+                <h3 style={{ fontSize: '1.05rem', fontWeight: 600, marginBottom: '0.35rem' }}>No portfolio photos uploaded yet</h3>
+                <p style={{ fontSize: '0.85rem', maxWidth: '420px', margin: '0 auto 1.25rem' }}>
+                  Snap pictures of your recent woodwork, furniture polishing, or modular fittings to gain instant trust from customers.
+                </p>
+                <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <label className="btn btn-primary" style={{ padding: '0.55rem 1.2rem', fontSize: '0.85rem', cursor: 'pointer' }}>
+                    📸 Snap First Photo
+                    <input type="file" accept="image/*" capture="environment" onChange={handlePortfolioFiles} style={{ display: 'none' }} />
+                  </label>
+                  <label className="btn btn-secondary" style={{ padding: '0.55rem 1.2rem', fontSize: '0.85rem', cursor: 'pointer' }}>
+                    📁 Select from Gallery
+                    <input type="file" accept="image/*" multiple onChange={handlePortfolioFiles} style={{ display: 'none' }} />
+                  </label>
+                </div>
               </div>
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
-                {portfolio.map((url, i) => (
-                  <div key={i} style={{ position: 'relative', borderRadius: '10px', overflow: 'hidden', border: '1px solid var(--glass-border)' }}>
-                    <img src={url} alt={`Portfolio ${i + 1}`}
-                      style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block' }}
-                      onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
-                    />
-                    <div style={{ display: 'none', height: '180px', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.04)', fontSize: '0.8rem', opacity: 0.5 }}>Image failed to load</div>
-                    <button onClick={() => handleRemovePhoto(url)} style={{
-                      position: 'absolute', top: '8px', right: '8px',
-                      background: 'rgba(239,68,68,0.85)', border: 'none', borderRadius: '50%',
-                      width: '28px', height: '28px', cursor: 'pointer', color: 'white',
-                      fontWeight: 'bold', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center'
-                    }}>×</button>
-                  </div>
-                ))}
-              </div>
-            )}
+              <div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '1rem', marginBottom: '1.75rem' }}>
+                  {portfolio.map((url, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        position: 'relative', borderRadius: '12px', overflow: 'hidden',
+                        border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)', height: '170px'
+                      }}
+                    >
+                      <img
+                        src={url}
+                        alt={`Portfolio Work ${i + 1}`}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                      />
+                      <div style={{ display: 'none', height: '100%', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.04)', fontSize: '0.8rem', opacity: 0.5 }}>
+                        Image failed to load
+                      </div>
 
-            {portfolio.length > 0 && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)' }}>
-                <button onClick={handleSavePortfolio} className="btn btn-primary" disabled={portfolioStatus === 'saving'}>
-                  {portfolioStatus === 'saving' ? 'Saving…' : `Save Portfolio (${portfolio.length} photos)`}
-                </button>
-                {portfolioStatus === 'saved' && <span style={{ color: '#34d399', fontWeight: 600, fontSize: '0.9rem' }}>✓ Portfolio updated on your public profile!</span>}
-                {portfolioStatus === 'error' && <span style={{ color: '#f87171', fontSize: '0.9rem' }}>Failed to save. Try again.</span>}
+                      {/* Top Overlay Bar */}
+                      <div style={{
+                        position: 'absolute', top: 0, left: 0, right: 0, padding: '6px 8px',
+                        background: 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, transparent 100%)',
+                        display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+                      }}>
+                        <span style={{ fontSize: '0.72rem', color: 'white', fontWeight: 700, background: 'rgba(0,0,0,0.5)', padding: '2px 6px', borderRadius: '4px' }}>
+                          #{i + 1}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemovePhoto(url)}
+                          title="Delete photo"
+                          style={{
+                            background: 'rgba(239,68,68,0.9)', border: 'none', borderRadius: '50%',
+                            width: '24px', height: '24px', cursor: 'pointer', color: 'white',
+                            fontWeight: 'bold', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                          }}
+                        >
+                          ×
+                        </button>
+                      </div>
+
+                      {/* Click to preview zoom overlay */}
+                      <button
+                        type="button"
+                        onClick={() => setPreviewDocModal({ title: `Portfolio Photo #${i + 1}`, src: url })}
+                        style={{
+                          position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)', border: 'none',
+                          color: 'white', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem',
+                          opacity: 0, transition: 'opacity 0.2s', marginTop: '28px'
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+                        onMouseLeave={e => e.currentTarget.style.opacity = '0'}
+                      >
+                        👁️ Full View
+                      </button>
+                    </div>
+                  ))}
+
+                  {/* Add more tile if under 30 */}
+                  {portfolio.length < 30 && (
+                    <label
+                      style={{
+                        height: '170px', borderRadius: '12px', border: '2px dashed var(--glass-border)',
+                        background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column',
+                        alignItems: 'center', justifyContent: 'center', cursor: 'pointer', textAlign: 'center',
+                        padding: '1rem', transition: 'all 0.2s ease'
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--primary)'}
+                      onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--glass-border)'}
+                    >
+                      <span style={{ fontSize: '1.8rem', marginBottom: '0.3rem' }}>➕</span>
+                      <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--primary)' }}>Add More Photos</span>
+                      <span style={{ fontSize: '0.72rem', opacity: 0.5, marginTop: '0.15rem' }}>({30 - portfolio.length} slots left)</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handlePortfolioFiles}
+                        style={{ display: 'none' }}
+                      />
+                    </label>
+                  )}
+                </div>
+
+                {/* Save Banner */}
+                <div style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem',
+                  paddingTop: '1.25rem', borderTop: '1px solid var(--glass-border)'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <button
+                      onClick={handleSavePortfolio}
+                      className="btn btn-primary"
+                      disabled={portfolioStatus === 'saving'}
+                      style={{ padding: '0.65rem 1.6rem', fontSize: '0.92rem' }}
+                    >
+                      {portfolioStatus === 'saving' ? 'Saving…' : `💾 Save Portfolio (${portfolio.length} Photos)`}
+                    </button>
+                    {portfolioStatus === 'unsaved' && (
+                      <span style={{ color: '#f59e0b', fontSize: '0.85rem', fontWeight: 500 }}>
+                        ● Unsaved changes (click save to publish)
+                      </span>
+                    )}
+                    {portfolioStatus === 'saved' && (
+                      <span style={{ color: '#34d399', fontWeight: 600, fontSize: '0.9rem' }}>
+                        ✓ Portfolio updated on your public profile!
+                      </span>
+                    )}
+                    {portfolioStatus === 'error' && (
+                      <span style={{ color: '#f87171', fontSize: '0.9rem' }}>
+                        Failed to save. Try again.
+                      </span>
+                    )}
+                  </div>
+
+                  <span style={{ fontSize: '0.8rem', opacity: 0.5 }}>
+                    Max 30 photos • Automatic HD compression
+                  </span>
+                </div>
               </div>
             )}
           </div>
@@ -1448,6 +1744,30 @@ export default function ProDashboard() {
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Universal Full Screen Document / Portfolio Preview Modal */}
+        {previewDocModal && (
+          <div style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 300,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', backdropFilter: 'blur(5px)'
+          }}>
+            <div className="glass animate-fade-in" style={{
+              width: '100%', maxWidth: '750px', borderRadius: '16px', overflow: 'hidden',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.7)', maxHeight: '90vh', display: 'flex', flexDirection: 'column'
+            }}>
+              <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: 700 }}>🔍 {previewDocModal.title}</h3>
+                <button onClick={() => setPreviewDocModal(null)} style={{ background: 'none', border: 'none', color: 'var(--foreground)', fontSize: '1.5rem', cursor: 'pointer', lineHeight: 1 }}>×</button>
+              </div>
+              <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'auto', background: 'rgba(0,0,0,0.3)' }}>
+                <img src={previewDocModal.src} alt={previewDocModal.title} style={{ maxWidth: '100%', maxHeight: '65vh', objectFit: 'contain', borderRadius: '8px' }} />
+              </div>
+              <div style={{ padding: '0.75rem 1.5rem', borderTop: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'flex-end' }}>
+                <button onClick={() => setPreviewDocModal(null)} className="btn btn-secondary" style={{ padding: '0.4rem 1rem', fontSize: '0.85rem' }}>Close Preview</button>
+              </div>
+            </div>
           </div>
         )}
 

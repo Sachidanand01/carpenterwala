@@ -17,6 +17,7 @@ export default function ProLogin({ lang }) {
   const [otpSentAlert, setOtpSentAlert] = useState(false);
   const [matchedProfiles, setMatchedProfiles] = useState([]);
   const [error, setError] = useState('');
+  const [errorCode, setErrorCode] = useState('');
   const [loading, setLoading] = useState(false);
 
   // Registration Fields
@@ -182,10 +183,20 @@ export default function ProLogin({ lang }) {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || 'Failed to send OTP.');
+        if (data.code === 'EMAIL_EXISTS') {
+          setErrorCode('EMAIL_EXISTS');
+          setError(t.error_email_exists || data.error);
+        } else if (data.code === 'PHONE_EXISTS') {
+          setErrorCode('PHONE_EXISTS');
+          setError(t.error_phone_exists || data.error);
+        } else {
+          setErrorCode('');
+          setError(data.error || 'Failed to send OTP.');
+        }
         setLoading(false);
         return;
       }
+      setErrorCode('');
       setIsSimulated(data.simulated);
       if (data.simulated && data.otp) {
         setGeneratedOtp(data.otp);
@@ -198,6 +209,7 @@ export default function ProLogin({ lang }) {
       setStep(2);
       setOtpSentAlert(true);
     } catch (err) {
+      setErrorCode('');
       setError('Connection error. Please try again.');
     } finally {
       setLoading(false);
@@ -253,7 +265,7 @@ export default function ProLogin({ lang }) {
 
   const resetFlow = () => {
     setStep(1); setOtp(''); setGeneratedOtp(''); setOtpToken('');
-    setOtpSentAlert(false); setMatchedProfiles([]); setError('');
+    setOtpSentAlert(false); setMatchedProfiles([]); setError(''); setErrorCode('');
   };
 
   const toggleTab = (registerMode) => {
@@ -448,13 +460,46 @@ export default function ProLogin({ lang }) {
               </div>
             )}
 
-            {/* Error */}
+            {/* Error Banner with Smart Switch to Sign In */}
             {error && (
               <div style={{
-                background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)',
-                color: '#f87171', padding: '0.75rem 1rem', borderRadius: '8px',
-                fontSize: '0.9rem', marginBottom: '1.5rem'
-              }}>⚠️ {error}</div>
+                background: errorCode === 'EMAIL_EXISTS' ? 'rgba(59, 130, 246, 0.12)' : 'rgba(239,68,68,0.12)',
+                border: `1px solid ${errorCode === 'EMAIL_EXISTS' ? 'rgba(59, 130, 246, 0.35)' : 'rgba(239,68,68,0.3)'}`,
+                color: errorCode === 'EMAIL_EXISTS' ? '#60a5fa' : '#f87171',
+                padding: '0.9rem 1rem', borderRadius: '10px',
+                fontSize: '0.88rem', marginBottom: '1.5rem',
+                display: 'flex', flexDirection: 'column', gap: '0.6rem'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <span>⚠️</span>
+                  <span>{error}</span>
+                </div>
+                {errorCode === 'EMAIL_EXISTS' && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEmail(regEmail);
+                      setIsRegister(false);
+                      setError('');
+                      setErrorCode('');
+                    }}
+                    className="btn btn-primary"
+                    style={{
+                      padding: '0.45rem 0.9rem',
+                      fontSize: '0.82rem',
+                      alignSelf: 'flex-start',
+                      background: 'var(--primary)',
+                      border: 'none',
+                      boxShadow: 'none',
+                      color: 'white',
+                      fontWeight: 600,
+                      borderRadius: '6px'
+                    }}
+                  >
+                    {t.btn_switch_signin || '👉 Switch to Sign In with this Email'}
+                  </button>
+                )}
+              </div>
             )}
 
             {/* Step 1: Login Form */}

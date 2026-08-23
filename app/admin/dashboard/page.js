@@ -2,6 +2,16 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
+const REJECTION_PRESETS = [
+  'Blurry / unreadable Aadhaar card front photo',
+  'Aadhaar back side (address page) is missing or illegible',
+  'Invalid / blurry PAN card front photo',
+  'Police Verification certificate is missing, blurry, or expired',
+  'Profile photo is unclear (face not visible or extreme angle)',
+  'Voter ID / Driving License scan is cut off or unreadable',
+  'Address details do not match the uploaded proof',
+];
+
 export default function AdminDashboardClient() {
   const [adminToken, setAdminToken] = useState(null);
   const [passwordInput, setPasswordInput] = useState('');
@@ -18,6 +28,12 @@ export default function AdminDashboardClient() {
   const [zoomedImage, setZoomedImage] = useState(null);
   const [actionStatus, setActionStatus] = useState({ type: '', message: '' });
   const [processingId, setProcessingId] = useState(null);
+
+  // Rejection Dialog State
+  const [rejectModalPro, setRejectModalPro] = useState(null);
+  const [rejectReasons, setRejectReasons] = useState([]);
+  const [rejectCustomMessage, setRejectCustomMessage] = useState('');
+  const [rejectTargetStep, setRejectTargetStep] = useState(2);
 
   useEffect(() => {
     const token = sessionStorage.getItem('admin_token');
@@ -103,7 +119,7 @@ export default function AdminDashboardClient() {
   };
 
   // Handle verification action (verify/reject)
-  const handleVerifyAction = async (proId, action) => {
+  const handleVerifyAction = async (proId, action, extraParams = {}) => {
     setProcessingId(proId);
     setActionStatus({ type: '', message: '' });
     try {
@@ -113,7 +129,7 @@ export default function AdminDashboardClient() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${adminToken}`
         },
-        body: JSON.stringify({ proId, action }),
+        body: JSON.stringify({ proId, action, ...extraParams }),
       });
 
       if (response.status === 401) {
@@ -125,7 +141,7 @@ export default function AdminDashboardClient() {
       if (response.ok && result.success) {
         let msg = '';
         if (action === 'verify') msg = 'Professional successfully verified & approved ✓';
-        else if (action === 'reject') msg = 'Professional rejected & reverted to onboarding';
+        else if (action === 'reject') msg = 'Onboarding rejected & email notice dispatched with re-upload link ✉️';
         else if (action === 'approve_avatar') msg = 'Profile image approved successfully ✓';
         else if (action === 'reject_avatar') msg = 'Profile image update request rejected';
 
@@ -140,18 +156,22 @@ export default function AdminDashboardClient() {
         // If the review modal is open, update the selected profile state locally
         if (selectedPro && selectedPro.id === proId) {
           if (action === 'verify') {
-            setSelectedPro(prev => ({ ...prev, verified: true, onboarding_completed: true }));
+            setSelectedPro(prev => ({ ...prev, verified: true, onboarding_completed: true, rejection_reason: null }));
           } else if (action === 'reject') {
-            setSelectedPro(prev => ({ ...prev, verified: false, onboarding_completed: false, onboarding_step: 1 }));
+            setSelectedPro(prev => ({ ...prev, verified: false, onboarding_completed: false, onboarding_step: extraParams.targetStep || 2, rejection_reason: extraParams.reasons?.join(', ') }));
           } else if (action === 'approve_avatar') {
             setSelectedPro(prev => ({ ...prev, avatar: prev.pending_avatar, pending_avatar: null }));
           } else if (action === 'reject_avatar') {
             setSelectedPro(prev => ({ ...prev, pending_avatar: null }));
           }
         }
+
+        setRejectModalPro(null);
+        setRejectReasons([]);
+        setRejectCustomMessage('');
         
-        // Clear message after 4 seconds
-        setTimeout(() => setActionStatus({ type: '', message: '' }), 4000);
+        // Clear message after 5 seconds
+        setTimeout(() => setActionStatus({ type: '', message: '' }), 5000);
       } else {
         throw new Error(result.error || 'Failed to update status');
       }
@@ -1123,14 +1143,14 @@ export default function AdminDashboardClient() {
               <div style={{ display: 'flex', gap: '0.75rem' }}>
                 <button
                   disabled={processingId !== null}
-                  onClick={() => handleVerifyAction(selectedPro.id, 'reject')}
+                  onClick={() => setRejectModalPro(selectedPro)}
                   className="btn btn-secondary"
                   style={{
                     padding: '0.6rem 1.25rem', fontSize: '0.88rem', border: '1px solid rgba(239,68,68,0.3)',
                     color: '#f87171', background: 'rgba(239,68,68,0.05)'
                   }}
                 >
-                  {processingId === selectedPro.id ? 'Processing…' : '❌ Reject & Reset Onboarding'}
+                  ❌ Decline & Request Re-upload
                 </button>
                 
                 <button
@@ -1200,6 +1220,131 @@ export default function AdminDashboardClient() {
           animation: pulse 2s infinite ease-in-out;
         }
       `}</style>
+      {/* ── REJECTION REASON DIALOG MODAL ── */}
+      {rejectModalPro && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 2500,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', backdropFilter: 'blur(8px)'
+        }}>
+          <div className="glass animate-fade-in" style={{
+            width: '100%', maxWidth: '620px', borderRadius: '18px', overflow: 'hidden',
+            boxShadow: '0 25px 60px rgba(0,0,0,0.6)', border: '1px solid rgba(239,68,68,0.3)',
+            background: 'rgba(15, 23, 42, 0.95)', maxHeight: '90vh', display: 'flex', flexDirection: 'column'
+          }}>
+            <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#f87171', display: 'flex', alignItems: 'center', gap: '0.4rem', margin: 0 }}>
+                  ⚠️ Decline Onboarding & Request Re-upload
+                </h3>
+                <p style={{ fontSize: '0.8rem', opacity: 0.6, margin: '0.2rem 0 0 0' }}>
+                  Professional: <strong>{rejectModalPro.name}</strong> ({rejectModalPro.email || rejectModalPro.phone})
+                </p>
+              </div>
+              <button onClick={() => setRejectModalPro(null)} style={{ background: 'none', border: 'none', color: 'var(--foreground)', fontSize: '1.5rem', cursor: 'pointer', lineHeight: 1 }}>×</button>
+            </div>
+
+            <div style={{ padding: '1.5rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              {/* 1. Quick reason checkboxes */}
+              <div>
+                <label style={{ fontSize: '0.85rem', fontWeight: 700, display: 'block', marginBottom: '0.6rem' }}>
+                  Select Issue(s) with Uploaded Documents:
+                </label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  {REJECTION_PRESETS.map((preset, idx) => {
+                    const isChecked = rejectReasons.includes(preset);
+                    return (
+                      <label
+                        key={idx}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.55rem 0.85rem',
+                          background: isChecked ? 'rgba(239,68,68,0.12)' : 'rgba(255,255,255,0.02)',
+                          border: `1px solid ${isChecked ? 'rgba(239,68,68,0.4)' : 'rgba(255,255,255,0.06)'}`,
+                          borderRadius: '8px', cursor: 'pointer', fontSize: '0.82rem', transition: 'all 0.15s'
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={(e) => {
+                            if (e.target.checked) setRejectReasons(prev => [...prev, preset]);
+                            else setRejectReasons(prev => prev.filter(r => r !== preset));
+                          }}
+                          style={{ accentColor: '#ef4444' }}
+                        />
+                        <span style={{ color: isChecked ? '#fca5a5' : 'inherit' }}>{preset}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 2. Custom explanation note */}
+              <div>
+                <label style={{ fontSize: '0.85rem', fontWeight: 700, display: 'block', marginBottom: '0.4rem' }}>
+                  Additional Explanation / Notes for Professional:
+                </label>
+                <textarea
+                  rows={3}
+                  value={rejectCustomMessage}
+                  onChange={e => setRejectCustomMessage(e.target.value)}
+                  placeholder="e.g. Please capture a flat photo of Aadhaar with all 4 corners visible in bright lighting..."
+                  style={{
+                    width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--glass-border)',
+                    background: 'rgba(255,255,255,0.05)', color: 'var(--foreground)', fontSize: '0.85rem', resize: 'vertical'
+                  }}
+                />
+              </div>
+
+              {/* 3. Re-open Step Selector */}
+              <div>
+                <label style={{ fontSize: '0.85rem', fontWeight: 700, display: 'block', marginBottom: '0.4rem' }}>
+                  Reopen Onboarding Wizard At:
+                </label>
+                <select
+                  value={rejectTargetStep}
+                  onChange={e => setRejectTargetStep(Number(e.target.value))}
+                  style={{
+                    width: '100%', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid var(--glass-border)',
+                    background: 'rgba(30,41,59,0.9)', color: 'var(--foreground)', fontSize: '0.85rem'
+                  }}
+                >
+                  <option value={2}>Step 2: Identity Documents (Aadhaar & PAN Scans)</option>
+                  <option value={3}>Step 3: Background Verification & Profile Photo</option>
+                  <option value={1}>Step 1: Address & Basic Experience</option>
+                </select>
+              </div>
+            </div>
+
+            <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid rgba(255,255,255,0.08)', background: 'rgba(30,41,59,0.5)', display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
+              <button
+                type="button"
+                onClick={() => setRejectModalPro(null)}
+                className="btn btn-secondary"
+                style={{ padding: '0.5rem 1.2rem', fontSize: '0.85rem' }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={processingId !== null || (rejectReasons.length === 0 && !rejectCustomMessage.trim())}
+                onClick={() => handleVerifyAction(rejectModalPro.id, 'reject', {
+                  reasons: rejectReasons,
+                  customMessage: rejectCustomMessage,
+                  targetStep: rejectTargetStep,
+                })}
+                className="btn btn-primary"
+                style={{
+                  padding: '0.5rem 1.5rem', fontSize: '0.85rem', background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                  border: 'none', opacity: (rejectReasons.length === 0 && !rejectCustomMessage.trim()) ? 0.5 : 1
+                }}
+              >
+                {processingId === rejectModalPro.id ? 'Sending Notice…' : '✉️ Send Rejection & Re-open Uploads'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

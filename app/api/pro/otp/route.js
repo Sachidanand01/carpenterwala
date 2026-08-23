@@ -35,8 +35,10 @@ export async function POST(request) {
       if (!name || name.trim().length < 2) {
         return NextResponse.json({ error: 'Please enter a valid name (min 2 characters).' }, { status: 400 });
       }
-      if (!phone || !/^[6-9]\d{9}$/.test(phone.trim())) {
-        return NextResponse.json({ error: 'Please enter a valid 10-digit mobile number.' }, { status: 400 });
+      
+      const cleanPhone = phone ? phone.trim().replace(/\D/g, '').slice(-10) : '';
+      if (!cleanPhone || !/^[6-9]\d{9}$/.test(cleanPhone)) {
+        return NextResponse.json({ error: 'Please enter a valid 10-digit mobile number starting with 6-9.' }, { status: 400 });
       }
       if (!trade || trade === '') {
         return NextResponse.json({ error: 'Please select a valid trade.' }, { status: 400 });
@@ -45,9 +47,27 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Please enter a valid location.' }, { status: 400 });
       }
 
-      // Check if profile already exists
+      // 1. Check if email is already registered
       if (profile) {
-        return NextResponse.json({ error: 'An account with this email is already registered.' }, { status: 400 });
+        return NextResponse.json({
+          error: 'This email address is already registered. Please sign in instead.',
+          code: 'EMAIL_EXISTS',
+          email: cleanEmail
+        }, { status: 400 });
+      }
+
+      // 2. Check if mobile number is already registered across any profile
+      const { data: phoneProfile } = await supabase
+        .from('profiles')
+        .select('id, name')
+        .eq('phone', cleanPhone)
+        .maybeSingle();
+
+      if (phoneProfile) {
+        return NextResponse.json({
+          error: 'This mobile number is already registered with another account. Please sign in with your registered email or use a different phone number.',
+          code: 'PHONE_EXISTS'
+        }, { status: 400 });
       }
 
       const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
@@ -60,7 +80,7 @@ export async function POST(request) {
         code: generatedCode,
         expiresAt,
         name: name.trim(),
-        phone: phone.trim(),
+        phone: cleanPhone,
         trade: trade,
         location: location.trim()
       };
@@ -177,6 +197,36 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Invalid OTP. Please try again.' }, { status: 400 });
       }
 
+      // Atomically check email and phone uniqueness again before inserting
+      const { data: existingEmail } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('email', cleanEmail)
+        .maybeSingle();
+
+      if (existingEmail) {
+        return NextResponse.json({
+          error: 'This email address is already registered. Please sign in instead.',
+          code: 'EMAIL_EXISTS'
+        }, { status: 400 });
+      }
+
+      const cleanDecryptedPhone = decrypted.phone ? decrypted.phone.trim().replace(/\D/g, '').slice(-10) : '';
+      if (cleanDecryptedPhone) {
+        const { data: existingPhone } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('phone', cleanDecryptedPhone)
+          .maybeSingle();
+
+        if (existingPhone) {
+          return NextResponse.json({
+            error: 'This mobile number is already registered with another account.',
+            code: 'PHONE_EXISTS'
+          }, { status: 400 });
+        }
+      }
+
       // Generate unique slug
       const baseSlug = decrypted.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       let slug = baseSlug;
@@ -195,7 +245,7 @@ export async function POST(request) {
           slug,
           name: decrypted.name,
           email: cleanEmail,
-          phone: decrypted.phone,
+          phone: cleanDecryptedPhone || decrypted.phone,
           trade: decrypted.trade,
           location: decrypted.location,
           verified: false,
