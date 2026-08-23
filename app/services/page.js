@@ -30,7 +30,7 @@ export default function ServicesPage() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [locationState, setLocationState] = useState("Prompting..."); // Prompting, Allowed, Denied
-  
+
   const loaderRef = useRef(null);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export default function ServicesPage() {
   // Fetch profiles and aggregate counts
   const fetchAndSortServices = async (userLat, userLng) => {
     const { data: profiles, error } = await supabase.from("profiles").select("trade, latitude, longitude");
-    
+
     if (error) {
       console.error("Error fetching profiles:", error);
       setLoading(false);
@@ -155,16 +155,16 @@ export default function ServicesPage() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2rem" }}>
           {displayedServices.map((service, index) => {
             const isTopPopular = index < 2 && service.proCount > 0;
-            
+
             return (
               <div key={service.id} className="glass" style={{ overflow: "hidden", display: "flex", flexDirection: "column" }}>
                 <div style={{ position: "relative", height: "200px" }}>
-                  <img 
-                    src={service.image} 
-                    alt={service.name} 
+                  <img
+                    src={service.image}
+                    alt={service.name}
                     width={400}
                     height={200}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }} 
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                   {isTopPopular && (
                     <div style={{ position: "absolute", top: "10px", right: "10px", background: "linear-gradient(135deg, #ff416c, #ff4b2b)", color: "white", padding: "0.3rem 0.8rem", borderRadius: "20px", fontSize: "0.8rem", fontWeight: "bold", boxShadow: "0 4px 10px rgba(0,0,0,0.3)" }}>
@@ -172,11 +172,11 @@ export default function ServicesPage() {
                     </div>
                   )}
                 </div>
-                
+
                 <div style={{ padding: "1.5rem", flex: 1, display: "flex", flexDirection: "column" }}>
                   <h2 style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>{service.name}</h2>
                   <p style={{ opacity: 0.8, marginBottom: "1.5rem", flex: 1 }}>{service.desc}</p>
-                  
+
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem", fontSize: "0.9rem" }}>
                     <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                       🧑‍🔧 <strong>{service.proCount}</strong> professionals available
@@ -184,15 +184,15 @@ export default function ServicesPage() {
                   </div>
 
                   {service.proCount > 0 ? (
-                    <Link 
-                      href={`/find-a-professional?category=${service.id}`} 
-                      className="btn btn-primary" 
+                    <Link
+                      href={`/find-a-professional?category=${service.id}`}
+                      className="btn btn-primary"
                       style={{ textAlign: "center", width: "100%" }}
                     >
                       Pick Service Professional
                     </Link>
                   ) : (
-                    <div style={{ textAlign: "center", padding: "0.8rem", backgroundColor: "rgba(255,255,255,0.05)", borderRadius: "8px", color: "rgba(255,255,255,0.6)" }}>
+                    <div style={{ textAlign: "center", padding: "0.8rem", backgroundColor: "rgba(255,255,255,0.05)", borderRadius: "8px", color: "var(--foreground-muted)" }}>
                       Pros are getting added
                     </div>
                   )}
@@ -229,16 +229,16 @@ export default function ServicesPage() {
 // Distance helper
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   if (!lat1 || !lon1 || !lat2 || !lon2) return null;
-  const R = 6371; 
+  const R = 6371;
   const dLat = deg2rad(lat2 - lat1);
   const dLon = deg2rad(lon2 - lon1);
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c; 
+  return R * c;
 }
 function deg2rad(deg) { return deg * (Math.PI / 180); }
