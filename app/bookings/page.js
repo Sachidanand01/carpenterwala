@@ -302,7 +302,7 @@ function AddWarrantyModal({ customerPhone, onClose, onSaved }) {
   // Storing Base64 document formats
   const [receiptBase64, setReceiptBase64] = useState(null);
   const [receiptMeta, setReceiptMeta] = useState(null); // size, name
-  
+
   const [invoiceBase64, setInvoiceBase64] = useState(null);
   const [invoiceMeta, setInvoiceMeta] = useState(null);
 
@@ -760,10 +760,10 @@ function BookingsDashboardContent() {
   const [customer, setCustomer] = useState(null);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Tab states: 'bookings' or 'warranties'
   const [activeTab, setActiveTab] = useState('bookings');
-  
+
   // Warranties states
   const [warranties, setWarranties] = useState([]);
   const [warrantiesLoading, setWarrantiesLoading] = useState(true);
@@ -976,9 +976,9 @@ function BookingsDashboardContent() {
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button onClick={() => setAddWarrantyOpen(true)} className="btn btn-secondary" style={{
-            background: 'linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1))',
-            border: '1px solid rgba(59,130,246,0.4)',
-            color: 'white',
+            background: 'linear-gradient(135deg, var(--secondary), var(--secondary)))',
+            border: '1px solid var(--glass-border)',
+            color: 'var(--foreground)',
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem'
@@ -994,7 +994,7 @@ function BookingsDashboardContent() {
         <button
           onClick={() => setActiveTab('bookings')}
           style={{
-            background: 'none', border: 'none', color: activeTab === 'bookings' ? 'var(--primary)' : 'white',
+            background: 'none', border: 'none', color: activeTab === 'bookings' ? 'var(--primary)' : 'var(--foreground)',
             borderBottom: activeTab === 'bookings' ? '2px solid var(--primary)' : '2px solid transparent',
             padding: '0.75rem 1.25rem', cursor: 'pointer', fontWeight: 600, fontSize: '0.95rem',
             opacity: activeTab === 'bookings' ? 1 : 0.6, transition: 'all 0.2s', outline: 'none'
@@ -1005,7 +1005,7 @@ function BookingsDashboardContent() {
         <button
           onClick={() => setActiveTab('warranties')}
           style={{
-            background: 'none', border: 'none', color: activeTab === 'warranties' ? 'var(--primary)' : 'white',
+            background: 'none', border: 'none', color: activeTab === 'warranties' ? 'var(--primary)' : 'var(--foreground)',
             borderBottom: activeTab === 'warranties' ? '2px solid var(--primary)' : '2px solid transparent',
             padding: '0.75rem 1.25rem', cursor: 'pointer', fontWeight: 600, fontSize: '0.95rem',
             opacity: activeTab === 'warranties' ? 1 : 0.6, transition: 'all 0.2s', outline: 'none'
@@ -1183,23 +1183,29 @@ function BookingsDashboardContent() {
       {/* ── APPLIANCE WARRANTIES TAB ── */}
       {activeTab === 'warranties' && (
         <div className="animate-fade-in flex flex-col gap-6">
-          
+
           {/* Warranty Quick Stats Banner */}
           <div className="flex gap-4" style={{ flexWrap: 'wrap' }}>
             {[
               { label: 'Total Tracked Appliances', value: warranties.length, color: 'var(--primary)' },
-              { label: 'Active Coverage', value: warranties.filter(w => {
-                const b = calculateWarrantyBadge(w.warranty_start_date, w.warranty_duration_months);
-                return b.active || b.expiringSoon;
-              }).length, color: '#34d399' },
-              { label: 'Expiring Soon (< 30 days)', value: warranties.filter(w => {
-                const b = calculateWarrantyBadge(w.warranty_start_date, w.warranty_duration_months);
-                return b.expiringSoon;
-              }).length, color: '#fbbf24' },
-              { label: 'Expired Records', value: warranties.filter(w => {
-                const b = calculateWarrantyBadge(w.warranty_start_date, w.warranty_duration_months);
-                return b.expired;
-              }).length, color: '#f87171' },
+              {
+                label: 'Active Coverage', value: warranties.filter(w => {
+                  const b = calculateWarrantyBadge(w.warranty_start_date, w.warranty_duration_months);
+                  return b.active || b.expiringSoon;
+                }).length, color: '#34d399'
+              },
+              {
+                label: 'Expiring Soon (< 30 days)', value: warranties.filter(w => {
+                  const b = calculateWarrantyBadge(w.warranty_start_date, w.warranty_duration_months);
+                  return b.expiringSoon;
+                }).length, color: '#fbbf24'
+              },
+              {
+                label: 'Expired Records', value: warranties.filter(w => {
+                  const b = calculateWarrantyBadge(w.warranty_start_date, w.warranty_duration_months);
+                  return b.expired;
+                }).length, color: '#f87171'
+              },
             ].map(({ label, value, color }) => (
               <div key={label} className="glass" style={{ flex: 1, minWidth: '150px', padding: '1.25rem', textAlign: 'center' }}>
                 <h3 style={{ opacity: 0.7, fontSize: '0.8rem', fontWeight: 500, marginBottom: '0.4rem' }}>{label}</h3>
@@ -1264,7 +1270,7 @@ function BookingsDashboardContent() {
               <div>
                 <h3 style={{ fontSize: '1.3rem', fontWeight: 600 }}>No Appliance Warranties Logged</h3>
                 <p style={{ opacity: 0.7, maxWidth: '520px', margin: '0.5rem auto 1.5rem', fontSize: '0.92rem', lineHeight: 1.5 }}>
-                  Keep track of all your household warranties (TV, Washing Machine, Phone, Iron Box, etc.) at one place. 
+                  Keep track of all your household warranties (TV, Washing Machine, Phone, Iron Box, etc.) at one place.
                   Securely upload reference documents to access them instantly when needed!
                 </p>
                 <button onClick={() => setAddWarrantyOpen(true)} className="btn btn-primary">

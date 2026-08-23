@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 function PromoVideo({ src, title, description }) {
   const [videoError, setVideoError] = useState(false);
-  
+
   return (
     <div className="glass animate-fade-in" style={{
       width: '100%',
@@ -40,7 +40,7 @@ function PromoVideo({ src, title, description }) {
           }}
         />
       ) : null}
-      
+
       <div style={{
         position: 'relative',
         zIndex: 1,
@@ -78,7 +78,7 @@ function CustomerLoginContent() {
   const [error, setError] = useState('');
   const [infoMessage, setInfoMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   // Track existing customer details fetched on successful login-check
   const [fetchedCustomer, setFetchedCustomer] = useState(null);
 
@@ -106,7 +106,7 @@ function CustomerLoginContent() {
     e.preventDefault();
     setError('');
     setInfoMessage('');
-    
+
     if (activeTab === 'login') {
       // Validation 1: Email format must meet standard structure
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -313,7 +313,8 @@ function CustomerLoginContent() {
 
   return (
     <div className="container flex items-center justify-center" style={{ minHeight: "calc(100vh - var(--navbar-height))", padding: "2.5rem 1rem" }}>
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .customer-wrapper {
           display: flex;
           flex-direction: column;
@@ -342,16 +343,16 @@ function CustomerLoginContent() {
 
         {/* Left Promo Column: Warranty Tracker */}
         <div className="promo-sidebar">
-          <PromoVideo 
-            src="/videos/customer_warranty.mp4" 
-            title="Warranty Vault" 
-            description="Snap your receipt and register your device warranties. Track remaining coverage in one safe dashboard." 
+          <PromoVideo
+            src="/videos/customer_warranty.mp4"
+            title="Warranty Vault"
+            description="Snap your receipt and register your device warranties. Track remaining coverage in one safe dashboard."
           />
         </div>
 
         {/* Center Portal Column */}
         <div style={{ width: "100%", maxWidth: "450px", flexShrink: 0 }}>
-          
+
           {/* Premium Simulated / Real OTP Gateway Banner */}
           {otpSentAlert && (
             <div className="glass animate-fade-in" style={{
@@ -370,12 +371,12 @@ function CustomerLoginContent() {
             }}>
               <div className="flex items-center gap-2">
                 <span style={{ fontSize: "1.25rem" }}>✉️</span>
-                <span style={{ 
-                  fontSize: "0.8rem", 
-                  opacity: 0.95, 
-                  color: isSimulatedOtp ? "var(--accent)" : "#10b981", 
-                  fontWeight: 700, 
-                  letterSpacing: "0.06em" 
+                <span style={{
+                  fontSize: "0.8rem",
+                  opacity: 0.95,
+                  color: isSimulatedOtp ? "var(--accent)" : "#10b981",
+                  fontWeight: 700,
+                  letterSpacing: "0.06em"
                 }}>
                   {isSimulatedOtp ? 'SIMULATED EMAIL GATEWAY' : 'OTP sent to your entered emailID'}
                 </span>
@@ -396,7 +397,7 @@ function CustomerLoginContent() {
           )}
 
           <div className="glass animate-fade-in" style={{ padding: "2.5rem", width: "100%", borderRadius: "16px", boxShadow: "0 12px 45px rgba(0,0,0,0.35)" }}>
-            
+
             <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", textAlign: "center", fontWeight: 800 }}>
               Customer Portal
             </h1>
@@ -417,7 +418,7 @@ function CustomerLoginContent() {
                 marginBottom: "1.75rem",
                 border: "1px solid var(--glass-border)"
               }}>
-                <button 
+                <button
                   type="button"
                   onClick={() => { setActiveTab('login'); setError(''); setInfoMessage(''); }}
                   style={{
@@ -435,7 +436,7 @@ function CustomerLoginContent() {
                 >
                   🔑 Log In
                 </button>
-                <button 
+                <button
                   type="button"
                   onClick={() => { setActiveTab('register'); setError(''); setInfoMessage(''); }}
                   style={{
@@ -460,7 +461,7 @@ function CustomerLoginContent() {
               <div style={{
                 background: "rgba(239, 68, 68, 0.12)",
                 border: "1px solid rgba(239, 68, 68, 0.25)",
-                color: "#f87171",
+                color: "#d81111",
                 padding: "0.75rem 1rem",
                 borderRadius: "8px",
                 fontSize: "0.88rem",
@@ -472,9 +473,9 @@ function CustomerLoginContent() {
 
             {infoMessage && (
               <div style={{
-                background: "rgba(59, 130, 246, 0.12)",
-                border: "1px solid rgba(59, 130, 246, 0.25)",
-                color: "#60a5fa",
+                background: "rgba(239, 68, 68, 0.08)",
+                border: "1px solid rgba(194, 65, 12, 1)",
+                color: "var(--foreground)",
                 padding: "0.75rem 1rem",
                 borderRadius: "8px",
                 fontSize: "0.88rem",
@@ -486,20 +487,20 @@ function CustomerLoginContent() {
 
             {step === 1 ? (
               <form className="flex flex-col gap-4" onSubmit={handleSendOtp}>
-                
+
                 {/* Login Email Field */}
                 {activeTab === 'login' && (
                   <div className="flex flex-col gap-1">
                     <label style={{ fontSize: "0.88rem", fontWeight: 600, opacity: 0.9 }}>Email Address</label>
-                    <input 
-                      type="email" 
-                      placeholder="e.g. amit@example.com" 
-                      required 
+                    <input
+                      type="email"
+                      placeholder="e.g. amit@example.com"
+                      required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       style={{
                         padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "var(--foreground)", fontSize: "0.95rem"
-                      }} 
+                      }}
                     />
                   </div>
                 )}
@@ -510,8 +511,8 @@ function CustomerLoginContent() {
                     <div className="flex flex-col gap-1">
                       <div className="flex justify-between items-center">
                         <label style={{ fontSize: "0.88rem", fontWeight: 600, opacity: 0.9 }}>Your Name</label>
-                        <span style={{ 
-                          fontSize: "0.75rem", 
+                        <span style={{
+                          fontSize: "0.75rem",
                           opacity: name.length > 16 ? 1 : 0.6,
                           color: name.length > 16 ? "#f87171" : "inherit",
                           fontWeight: name.length > 0 ? 600 : 400
@@ -519,30 +520,30 @@ function CustomerLoginContent() {
                           {name.length}/16 chars
                         </span>
                       </div>
-                      <input 
-                        type="text" 
-                        placeholder="e.g. Sachin Tendulkar" 
-                        required 
+                      <input
+                        type="text"
+                        placeholder="e.g. Sachin Tendulkar"
+                        required
                         maxLength={16}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         style={{
                           padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "var(--foreground)", fontSize: "0.95rem"
-                        }} 
+                        }}
                       />
                     </div>
 
                     <div className="flex flex-col gap-1">
                       <label style={{ fontSize: "0.88rem", fontWeight: 600, opacity: 0.9 }}>Email Address</label>
-                      <input 
-                        type="email" 
-                        placeholder="sachin@example.com" 
-                        required 
+                      <input
+                        type="email"
+                        placeholder="sachin@example.com"
+                        required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         style={{
                           padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "var(--foreground)", fontSize: "0.95rem"
-                        }} 
+                        }}
                       />
                     </div>
 
@@ -553,16 +554,16 @@ function CustomerLoginContent() {
                         <span style={{
                           position: "absolute", left: "0.75rem", opacity: 0.7, fontSize: "0.95rem", fontWeight: 600
                         }}>+91</span>
-                        <input 
-                          type="tel" 
-                          placeholder="9876543210" 
-                          required 
+                        <input
+                          type="tel"
+                          placeholder="9876543210"
+                          required
                           maxLength={10}
                           value={phone}
                           onChange={(e) => handlePhoneChange(e.target.value)}
                           style={{
                             padding: "0.75rem 0.75rem 0.75rem 2.6rem", width: "100%", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "var(--foreground)", fontSize: "0.95rem", letterSpacing: "0.5px"
-                          }} 
+                          }}
                         />
                       </div>
                       <span style={{ fontSize: "0.75rem", opacity: 0.55, marginTop: "0.15rem" }}>
@@ -572,10 +573,10 @@ function CustomerLoginContent() {
                   </>
                 )}
 
-                <button 
-                  type="submit" 
-                  disabled={loading} 
-                  className="btn btn-primary" 
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn btn-primary"
                   style={{ marginTop: "1rem", width: "100%", padding: "0.8rem", fontSize: "0.95rem" }}
                 >
                   {loading ? 'Processing...' : activeTab === 'register' ? 'Register & Send OTP' : 'Send OTP'}
@@ -586,40 +587,40 @@ function CustomerLoginContent() {
                 <div className="flex flex-col gap-1">
                   <div className="flex justify-between items-center">
                     <label style={{ fontSize: "0.9rem", fontWeight: 600, opacity: 0.9 }}>Enter 6-Digit OTP</label>
-                    <button 
-                      type="button" 
+                    <button
+                      type="button"
                       onClick={resetFlow}
                       style={{ background: "none", border: "none", color: "var(--primary)", fontSize: "0.8rem", cursor: "pointer", fontWeight: 700 }}
                     >
                       Edit Email
                     </button>
                   </div>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. 123456" 
-                    required 
+                  <input
+                    type="text"
+                    placeholder="e.g. 123456"
+                    required
                     maxLength={6}
                     value={otp}
                     onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                     style={{
                       padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "var(--foreground)", fontSize: "1.15rem", textAlign: "center", letterSpacing: "5px", fontWeight: "bold"
-                    }} 
+                    }}
                   />
                 </div>
 
-                <button 
-                  type="submit" 
-                  disabled={loading} 
-                  className="btn btn-primary" 
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn btn-primary"
                   style={{ marginTop: "1rem", width: "100%", padding: "0.8rem" }}
                 >
                   {loading ? 'Verifying...' : 'Verify & Log In'}
                 </button>
 
-                <button 
-                  type="button" 
-                  onClick={resetFlow} 
-                  className="btn btn-secondary" 
+                <button
+                  type="button"
+                  onClick={resetFlow}
+                  className="btn btn-secondary"
                   style={{ width: "100%", padding: "0.8rem" }}
                 >
                   Cancel
@@ -639,10 +640,10 @@ function CustomerLoginContent() {
 
         {/* Right Promo Column: Find Genuine Carpenter */}
         <div className="promo-sidebar">
-          <PromoVideo 
-            src="/videos/direct_connection.mp4" 
-            title="Direct Connection" 
-            description="Find and contact local, verified carpenters directly. 0% middleman commission, transparent pricing." 
+          <PromoVideo
+            src="/videos/direct_connection.mp4"
+            title="Direct Connection"
+            description="Find and contact local, verified carpenters directly. 0% middleman commission, transparent pricing."
           />
         </div>
 
