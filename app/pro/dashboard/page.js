@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ProGuidedTour from '@/components/ProGuidedTour';
+import { processDocumentImage } from '@/lib/document-scanner';
 
 const TABS = [
   { id: 'overview', label: '📊 Overview' },
@@ -32,6 +33,134 @@ function Stars({ rating }) {
         <span key={i} style={{ color: i <= rating ? '#f59e0b' : 'rgba(255,255,255,0.2)', fontSize: '0.9rem' }}>★</span>
       ))}
     </span>
+  );
+}
+
+function DocUploadSlot({
+  id,
+  icon,
+  title,
+  subtitle,
+  field,
+  optional = false,
+  value,
+  uploadingField,
+  validation,
+  onFileChange,
+  onDelete,
+  onPreview,
+}) {
+  const isUploading = uploadingField === field;
+
+  return (
+    <div
+      id={id}
+      style={{
+        padding: '1.25rem',
+        background: 'rgba(255,255,255,0.03)',
+        border: '1px dashed var(--glass-border)',
+        borderRadius: '12px',
+        textAlign: 'center',
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        minHeight: '210px'
+      }}
+    >
+      <div>
+        <div style={{ fontSize: '1.6rem', marginBottom: '0.3rem' }}>{icon}</div>
+        <div style={{ fontSize: '0.9rem', fontWeight: 600 }}>
+          {title} {optional && <span style={{ fontSize: '0.75rem', opacity: 0.6 }}>(Optional)</span>}
+        </div>
+        <div style={{ fontSize: '0.75rem', opacity: 0.55, marginTop: '0.15rem', marginBottom: '0.85rem' }}>
+          {subtitle}
+        </div>
+      </div>
+
+      {isUploading ? (
+        <div style={{ padding: '1.5rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+          <style>{`@keyframes doc-spin { to { transform: rotate(360deg); } }`}</style>
+          <div style={{
+            width: '24px', height: '24px', borderRadius: '50%',
+            border: '3px solid rgba(194,65,12,0.2)', borderTop: '3px solid var(--primary)',
+            animation: 'doc-spin 0.8s linear infinite'
+          }} />
+          <span style={{ fontSize: '0.78rem', color: 'var(--primary)', fontWeight: 600 }}>
+            🔍 Scanning clarity & verifying document…
+          </span>
+        </div>
+      ) : value ? (
+        <div className="flex flex-col items-center gap-2">
+          <div style={{ position: 'relative', width: '100%', maxWidth: '220px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--glass-border)' }}>
+            <img
+              src={value}
+              alt={title}
+              style={{ width: '100%', height: '100px', objectFit: 'cover', display: 'block', background: 'rgba(0,0,0,0.2)' }}
+            />
+            <button
+              type="button"
+              onClick={() => onPreview({ title, src: value })}
+              style={{
+                position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', border: 'none',
+                color: 'white', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem',
+                opacity: 0, transition: 'opacity 0.2s'
+              }}
+              onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+              onMouseLeave={e => e.currentTarget.style.opacity = '0'}
+            >
+              👁️ View Full Size
+            </button>
+          </div>
+
+          {/* Validation Status Badge */}
+          {validation && validation.status === 'verified' && (
+            <div style={{
+              fontSize: '0.72rem', color: '#10b981', background: 'rgba(16,185,129,0.12)',
+              padding: '0.25rem 0.6rem', borderRadius: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.3rem'
+            }}>
+              ✓ {validation.detectedType || 'Clear & Sharp Scan'}
+            </div>
+          )}
+
+          {validation && validation.status === 'warning' && (
+            <div style={{
+              fontSize: '0.72rem', color: '#f59e0b', background: 'rgba(245,158,11,0.12)',
+              padding: '0.25rem 0.6rem', borderRadius: '8px', fontWeight: 500, lineHeight: 1.3
+            }}>
+              ⚠️ {validation.reason || 'Clear scan saved for manual verification'}
+            </div>
+          )}
+
+          <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.25rem' }}>
+            <label className="btn btn-secondary" style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', cursor: 'pointer' }}>
+              🔄 Retake
+              <input type="file" accept="image/*" onChange={e => onFileChange(e, field)} style={{ display: 'none' }} />
+            </label>
+            <button
+              type="button"
+              onClick={() => onDelete(field)}
+              style={{ padding: '0.25rem 0.6rem', border: 'none', background: 'rgba(239,68,68,0.15)', color: '#f87171', fontSize: '0.75rem', borderRadius: '6px', cursor: 'pointer' }}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          {/* Dual Action: Native Camera + File Picker */}
+          <label className="btn btn-primary" style={{ padding: '0.45rem 0.8rem', fontSize: '0.78rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+            📸 Take Photo
+            <input type="file" accept="image/*" capture="environment" onChange={e => onFileChange(e, field)} style={{ display: 'none' }} />
+          </label>
+          <label className="btn btn-secondary" style={{ padding: '0.45rem 0.8rem', fontSize: '0.78rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+            📁 Upload
+            <input type="file" accept="image/*" onChange={e => onFileChange(e, field)} style={{ display: 'none' }} />
+          </label>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -69,6 +198,8 @@ export default function ProDashboard() {
   const [savingStep, setSavingStep] = useState(false);
   const [uploadingField, setUploadingField] = useState(null);
   const [tourActive, setTourActive] = useState(false);
+  const [docValidations, setDocValidations] = useState({});
+  const [previewDocModal, setPreviewDocModal] = useState(null);
 
   useEffect(() => {
     const id = localStorage.getItem('pro_id');
@@ -218,62 +349,79 @@ export default function ProDashboard() {
     } catch { setPortfolioStatus('error'); }
   };
 
-  // Base64 Compression Utility
-  const compressImage = (file) => {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        const img = new Image();
-        img.src = event.target.result;
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const max_width = 600; // Keep image compact & responsive
-          let width = img.width;
-          let height = img.height;
-
-          if (width > height) {
-            if (width > max_width) {
-              height *= max_width / width;
-              width = max_width;
-            }
-          } else {
-            if (height > max_width) {
-              width *= max_width / height;
-              height = max_width;
-            }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-
-          // Compress JPEG with 0.6 quality for minimal payload overhead (avg ~40KB)
-          const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
-          resolve(dataUrl);
-        };
-      };
-    });
-  };
-
-  // Handle file uploads in wizard
+  // Handle file uploads in wizard with High-Fidelity scanning & AI validation
   const handleFileChange = async (e, field) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    e.target.value = '';
 
     // Must be image
     if (!file.type.startsWith('image/')) {
-      setOnboardError('Please select a valid image file (PNG, JPG, JPEG).');
+      setOnboardError('Please select a valid image file (PNG, JPG, JPEG, WebP).');
       return;
     }
 
     setOnboardError('');
     setUploadingField(field);
     try {
-      const base64 = await compressImage(file);
-      setOnboardForm(prev => ({ ...prev, [field]: base64 }));
+      // 1. Process image at high resolution (1600px @ 85% quality) and calculate sharpness
+      const processed = await processDocumentImage(file, 1600, 0.85);
+
+      if (processed.isBlurry) {
+        setOnboardError('⚠️ Image appears blurry or out of focus. Please retake a sharp, clear photo in good lighting.');
+        setUploadingField(null);
+        return;
+      }
+      if (processed.isTooDark) {
+        setOnboardError('⚠️ Image is too dark. Please take photo with adequate lighting or flash.');
+        setUploadingField(null);
+        return;
+      }
+
+      // 2. AI Document & Readability Verification
+      let validation = { valid: true, readable: true, detectedType: field, isStateFormat: false };
+      try {
+        const res = await fetch('/api/pro/verify-doc', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            imageBase64: processed.dataUrl,
+            documentType: field,
+          }),
+        });
+        if (res.ok) {
+          validation = await res.json();
+        }
+      } catch (apiErr) {
+        console.warn('API verification check skipped:', apiErr);
+      }
+
+      if (!validation.readable) {
+        setOnboardError(`⚠️ Readability check failed: ${validation.reason || 'Document text is not clearly readable. Please retake photo.'}`);
+        setUploadingField(null);
+        return;
+      }
+
+      // If document format is completely wrong for national IDs (Aadhaar, PAN)
+      if (!validation.valid && !validation.isStateFormat && ['aadhaar_front', 'aadhaar_back', 'pan_front'].includes(field)) {
+        setOnboardError(`⚠️ Document Mismatch: Uploaded photo was detected as "${validation.detectedType}". Please upload your authentic ${field.replace(/_/g, ' ').toUpperCase()}.`);
+        setUploadingField(null);
+        return;
+      }
+
+      // Accept document!
+      setOnboardForm(prev => ({ ...prev, [field]: processed.dataUrl }));
+      setDocValidations(prev => ({
+        ...prev,
+        [field]: {
+          status: validation.isStateFormat || !validation.valid ? 'warning' : 'verified',
+          detectedType: validation.detectedType,
+          reason: validation.reason,
+          isStateFormat: validation.isStateFormat,
+        }
+      }));
     } catch (err) {
+      console.error(err);
       setOnboardError('Failed to process image. Please try another copy.');
     } finally {
       setUploadingField(null);
@@ -548,57 +696,32 @@ export default function ProDashboard() {
                 <div>
                   <h3 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>1. Aadhaar Card Scan</h3>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
-
-                    {/* Aadhaar Front */}
-                    <div id="tour-aadhaar-front" style={{
-                      padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
-                      borderRadius: '12px', textAlign: 'center', position: 'relative'
-                    }}>
-                      <div style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>📇</div>
-                      <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>Aadhaar Front Side</div>
-                      <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.2rem', marginBottom: '0.75rem' }}>Upload clear picture scan</div>
-
-                      {onboardForm.aadhaar_front ? (
-                        <div className="flex flex-col items-center gap-2">
-                          <img src={onboardForm.aadhaar_front} style={{ width: '100%', maxHeight: '110px', objectFit: 'contain', borderRadius: '6px' }} />
-                          <button onClick={() => setOnboardForm(prev => ({ ...prev, aadhaar_front: '' }))}
-                            style={{ padding: '0.25rem 0.6rem', border: 'none', background: 'rgba(239,68,68,0.2)', color: '#f87171', fontSize: '0.75rem', borderRadius: '4px', cursor: 'pointer' }}>
-                            Delete Scan
-                          </button>
-                        </div>
-                      ) : (
-                        <label className="btn btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', cursor: 'pointer', display: 'inline-block' }}>
-                          {uploadingField === 'aadhaar_front' ? 'Processing…' : '📷 Take Photo / Upload'}
-                          <input type="file" accept="image/*" onChange={e => handleFileChange(e, 'aadhaar_front')} style={{ display: 'none' }} />
-                        </label>
-                      )}
-                    </div>
-
-                    {/* Aadhaar Back */}
-                    <div id="tour-aadhaar-back" style={{
-                      padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
-                      borderRadius: '12px', textAlign: 'center', position: 'relative'
-                    }}>
-                      <div style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>📇</div>
-                      <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>Aadhaar Back Side</div>
-                      <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.2rem', marginBottom: '0.75rem' }}>Upload address page scan</div>
-
-                      {onboardForm.aadhaar_back ? (
-                        <div className="flex flex-col items-center gap-2">
-                          <img src={onboardForm.aadhaar_back} style={{ width: '100%', maxHeight: '110px', objectFit: 'contain', borderRadius: '6px' }} />
-                          <button onClick={() => setOnboardForm(prev => ({ ...prev, aadhaar_back: '' }))}
-                            style={{ padding: '0.25rem 0.6rem', border: 'none', background: 'rgba(239,68,68,0.2)', color: '#f87171', fontSize: '0.75rem', borderRadius: '4px', cursor: 'pointer' }}>
-                            Delete Scan
-                          </button>
-                        </div>
-                      ) : (
-                        <label className="btn btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', cursor: 'pointer', display: 'inline-block' }}>
-                          {uploadingField === 'aadhaar_back' ? 'Processing…' : '📷 Take Photo / Upload'}
-                          <input type="file" accept="image/*" onChange={e => handleFileChange(e, 'aadhaar_back')} style={{ display: 'none' }} />
-                        </label>
-                      )}
-                    </div>
-
+                    <DocUploadSlot
+                      id="tour-aadhaar-front"
+                      icon="📇"
+                      title="Aadhaar Front Side"
+                      subtitle="Photo & name side (Clear scan)"
+                      field="aadhaar_front"
+                      value={onboardForm.aadhaar_front}
+                      uploadingField={uploadingField}
+                      validation={docValidations.aadhaar_front}
+                      onFileChange={handleFileChange}
+                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
+                      onPreview={setPreviewDocModal}
+                    />
+                    <DocUploadSlot
+                      id="tour-aadhaar-back"
+                      icon="📇"
+                      title="Aadhaar Back Side"
+                      subtitle="Address & QR code page"
+                      field="aadhaar_back"
+                      value={onboardForm.aadhaar_back}
+                      uploadingField={uploadingField}
+                      validation={docValidations.aadhaar_back}
+                      onFileChange={handleFileChange}
+                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
+                      onPreview={setPreviewDocModal}
+                    />
                   </div>
                 </div>
 
@@ -606,60 +729,35 @@ export default function ProDashboard() {
                 <div>
                   <h3 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>2. PAN Card Scan</h3>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
-
-                    {/* PAN Front */}
-                    <div id="tour-pan-front" style={{
-                      padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
-                      borderRadius: '12px', textAlign: 'center', position: 'relative'
-                    }}>
-                      <div style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>💳</div>
-                      <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>PAN Front Side</div>
-                      <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.2rem', marginBottom: '0.75rem' }}>Upload details front scan</div>
-
-                      {onboardForm.pan_front ? (
-                        <div className="flex flex-col items-center gap-2">
-                          <img src={onboardForm.pan_front} style={{ width: '100%', maxHeight: '110px', objectFit: 'contain', borderRadius: '6px' }} />
-                          <button onClick={() => setOnboardForm(prev => ({ ...prev, pan_front: '' }))}
-                            style={{ padding: '0.25rem 0.6rem', border: 'none', background: 'rgba(239,68,68,0.2)', color: '#f87171', fontSize: '0.75rem', borderRadius: '4px', cursor: 'pointer' }}>
-                            Delete Scan
-                          </button>
-                        </div>
-                      ) : (
-                        <label className="btn btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', cursor: 'pointer', display: 'inline-block' }}>
-                          {uploadingField === 'pan_front' ? 'Processing…' : '📷 Take Photo / Upload'}
-                          <input type="file" accept="image/*" onChange={e => handleFileChange(e, 'pan_front')} style={{ display: 'none' }} />
-                        </label>
-                      )}
-                    </div>
-
-                    {/* PAN Back (Optional) */}
-                    <div id="tour-pan-back" style={{
-                      padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
-                      borderRadius: '12px', textAlign: 'center', opacity: onboardForm.pan_back ? 1 : 0.7
-                    }}>
-                      <div style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>💳</div>
-                      <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>PAN Back Side <span style={{ fontSize: '0.75rem', opacity: 0.6 }}>(Optional)</span></div>
-                      <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.2rem', marginBottom: '0.75rem' }}>Upload signature back scan</div>
-
-                      {onboardForm.pan_back ? (
-                        <div className="flex flex-col items-center gap-2">
-                          <img src={onboardForm.pan_back} style={{ width: '100%', maxHeight: '110px', objectFit: 'contain', borderRadius: '6px' }} />
-                          <button onClick={() => setOnboardForm(prev => ({ ...prev, pan_back: '' }))}
-                            style={{ padding: '0.25rem 0.6rem', border: 'none', background: 'rgba(239,68,68,0.2)', color: '#f87171', fontSize: '0.75rem', borderRadius: '4px', cursor: 'pointer' }}>
-                            Delete Scan
-                          </button>
-                        </div>
-                      ) : (
-                        <label className="btn btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', cursor: 'pointer', display: 'inline-block', opacity: 0.8 }}>
-                          {uploadingField === 'pan_back' ? 'Processing…' : '📷 Take Photo / Upload'}
-                          <input type="file" accept="image/*" onChange={e => handleFileChange(e, 'pan_back')} style={{ display: 'none' }} />
-                        </label>
-                      )}
-                    </div>
-
+                    <DocUploadSlot
+                      id="tour-pan-front"
+                      icon="💳"
+                      title="PAN Front Side"
+                      subtitle="Front details & photo scan"
+                      field="pan_front"
+                      value={onboardForm.pan_front}
+                      uploadingField={uploadingField}
+                      validation={docValidations.pan_front}
+                      onFileChange={handleFileChange}
+                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
+                      onPreview={setPreviewDocModal}
+                    />
+                    <DocUploadSlot
+                      id="tour-pan-back"
+                      icon="💳"
+                      title="PAN Back Side"
+                      subtitle="Signature & back scan"
+                      field="pan_back"
+                      optional={true}
+                      value={onboardForm.pan_back}
+                      uploadingField={uploadingField}
+                      validation={docValidations.pan_back}
+                      onFileChange={handleFileChange}
+                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
+                      onPreview={setPreviewDocModal}
+                    />
                   </div>
                 </div>
-
               </div>
             )}
 
@@ -693,15 +791,29 @@ export default function ProDashboard() {
                       <h3 style={{ fontSize: '0.95rem', fontWeight: 700 }}>Clear Public Profile Photo (Mandatory)</h3>
                       <p style={{ opacity: 0.55, fontSize: '0.78rem', marginTop: '0.15rem', marginBottom: '0.6rem' }}>This image is displayed to Bengaluru customers on your public profile page.</p>
 
-                      {onboardForm.avatar ? (
-                        <button onClick={() => setOnboardForm(prev => ({ ...prev, avatar: '' }))} className="btn btn-secondary" style={{ padding: '0.35rem 0.75rem', fontSize: '0.78rem' }}>
-                          Change Profile Photo
-                        </button>
+                      {uploadingField === 'avatar' ? (
+                        <span style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: 600 }}>🔍 Processing & checking photo clarity…</span>
+                      ) : onboardForm.avatar ? (
+                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                          <label className="btn btn-secondary" style={{ padding: '0.35rem 0.75rem', fontSize: '0.78rem', cursor: 'pointer' }}>
+                            🔄 Change Photo
+                            <input type="file" accept="image/*" onChange={e => handleFileChange(e, 'avatar')} style={{ display: 'none' }} />
+                          </label>
+                          <button onClick={() => setOnboardForm(prev => ({ ...prev, avatar: '' }))} style={{ padding: '0.35rem 0.6rem', border: 'none', background: 'rgba(239,68,68,0.15)', color: '#f87171', fontSize: '0.75rem', borderRadius: '6px', cursor: 'pointer' }}>
+                            Remove
+                          </button>
+                        </div>
                       ) : (
-                        <label className="btn btn-primary" style={{ padding: '0.4rem 0.9rem', fontSize: '0.8rem', cursor: 'pointer', display: 'inline-block' }}>
-                          {uploadingField === 'avatar' ? 'Processing…' : '📷 Take Portrait / Upload'}
-                          <input type="file" accept="image/*" onChange={e => handleFileChange(e, 'avatar')} style={{ display: 'none' }} />
-                        </label>
+                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                          <label className="btn btn-primary" style={{ padding: '0.4rem 0.9rem', fontSize: '0.8rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                            📸 Take Portrait
+                            <input type="file" accept="image/*" capture="user" onChange={e => handleFileChange(e, 'avatar')} style={{ display: 'none' }} />
+                          </label>
+                          <label className="btn btn-secondary" style={{ padding: '0.4rem 0.9rem', fontSize: '0.8rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                            📁 Upload Photo
+                            <input type="file" accept="image/*" onChange={e => handleFileChange(e, 'avatar')} style={{ display: 'none' }} />
+                          </label>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -711,85 +823,53 @@ export default function ProDashboard() {
                 <div>
                   <h3 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>1. Voter ID or Driving License</h3>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
-
-                    {/* Voter Front */}
-                    <div id="tour-voter-front" style={{
-                      padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
-                      borderRadius: '12px', textAlign: 'center'
-                    }}>
-                      <div style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>🪪</div>
-                      <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>Front Side Scan</div>
-                      <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.2rem', marginBottom: '0.75rem' }}>Upload details front scan</div>
-
-                      {onboardForm.voter_driving_front ? (
-                        <div className="flex flex-col items-center gap-2">
-                          <img src={onboardForm.voter_driving_front} style={{ width: '100%', maxHeight: '110px', objectFit: 'contain', borderRadius: '6px' }} />
-                          <button onClick={() => setOnboardForm(prev => ({ ...prev, voter_driving_front: '' }))}
-                            style={{ padding: '0.25rem 0.6rem', border: 'none', background: 'rgba(239,68,68,0.2)', color: '#f87171', fontSize: '0.75rem', borderRadius: '4px', cursor: 'pointer' }}>
-                            Delete Scan
-                          </button>
-                        </div>
-                      ) : (
-                        <label className="btn btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', cursor: 'pointer', display: 'inline-block' }}>
-                          {uploadingField === 'voter_driving_front' ? 'Processing…' : '📷 Take Photo / Upload'}
-                          <input type="file" accept="image/*" onChange={e => handleFileChange(e, 'voter_driving_front')} style={{ display: 'none' }} />
-                        </label>
-                      )}
-                    </div>
-
-                    {/* Voter Back */}
-                    <div id="tour-voter-back" style={{
-                      padding: '1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
-                      borderRadius: '12px', textAlign: 'center', opacity: onboardForm.voter_driving_back ? 1 : 0.7
-                    }}>
-                      <div style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>🪪</div>
-                      <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>Back Side Scan <span style={{ fontSize: '0.75rem', opacity: 0.6 }}>(Optional)</span></div>
-                      <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.2rem', marginBottom: '0.75rem' }}>Upload address back scan</div>
-
-                      {onboardForm.voter_driving_back ? (
-                        <div className="flex flex-col items-center gap-2">
-                          <img src={onboardForm.voter_driving_back} style={{ width: '100%', maxHeight: '110px', objectFit: 'contain', borderRadius: '6px' }} />
-                          <button onClick={() => setOnboardForm(prev => ({ ...prev, voter_driving_back: '' }))}
-                            style={{ padding: '0.25rem 0.6rem', border: 'none', background: 'rgba(239,68,68,0.2)', color: '#f87171', fontSize: '0.75rem', borderRadius: '4px', cursor: 'pointer' }}>
-                            Delete Scan
-                          </button>
-                        </div>
-                      ) : (
-                        <label className="btn btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', cursor: 'pointer', display: 'inline-block', opacity: 0.8 }}>
-                          {uploadingField === 'voter_driving_back' ? 'Processing…' : '📷 Take Photo / Upload'}
-                          <input type="file" accept="image/*" onChange={e => handleFileChange(e, 'voter_driving_back')} style={{ display: 'none' }} />
-                        </label>
-                      )}
-                    </div>
-
+                    <DocUploadSlot
+                      id="tour-voter-front"
+                      icon="🪪"
+                      title="Front Side Scan"
+                      subtitle="Voter ID or Driving License"
+                      field="voter_driving_front"
+                      value={onboardForm.voter_driving_front}
+                      uploadingField={uploadingField}
+                      validation={docValidations.voter_driving_front}
+                      onFileChange={handleFileChange}
+                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
+                      onPreview={setPreviewDocModal}
+                    />
+                    <DocUploadSlot
+                      id="tour-voter-back"
+                      icon="🪪"
+                      title="Back Side Scan"
+                      subtitle="Address & details back scan"
+                      field="voter_driving_back"
+                      optional={true}
+                      value={onboardForm.voter_driving_back}
+                      uploadingField={uploadingField}
+                      validation={docValidations.voter_driving_back}
+                      onFileChange={handleFileChange}
+                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
+                      onPreview={setPreviewDocModal}
+                    />
                   </div>
                 </div>
 
                 {/* Police Verification copy */}
                 <div>
                   <h3 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>2. Official Police Verification Copy (Mandatory)</h3>
-                  <div id="tour-police" style={{
-                    padding: '1.5rem', background: 'rgba(255,255,255,0.03)', border: '1px dashed var(--glass-border)',
-                    borderRadius: '12px', textAlign: 'center'
-                  }}>
-                    <div style={{ fontSize: '1.8rem', marginBottom: '0.4rem' }}>👮‍♂️</div>
-                    <div style={{ fontSize: '0.9rem', fontWeight: 600 }}>Police Verification Certificate Scan</div>
-                    <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.2rem', marginBottom: '0.75rem' }}>Upload certificate image (PNG/JPG)</div>
-
-                    {onboardForm.police_verification ? (
-                      <div className="flex flex-col items-center gap-2">
-                        <img src={onboardForm.police_verification} style={{ width: '100%', maxHeight: '140px', objectFit: 'contain', borderRadius: '6px' }} />
-                        <button onClick={() => setOnboardForm(prev => ({ ...prev, police_verification: '' }))}
-                          style={{ padding: '0.25rem 0.6rem', border: 'none', background: 'rgba(239,68,68,0.2)', color: '#f87171', fontSize: '0.75rem', borderRadius: '4px', cursor: 'pointer' }}>
-                          Delete Scan
-                        </button>
-                      </div>
-                    ) : (
-                      <label className="btn btn-secondary" style={{ padding: '0.4rem 0.9rem', fontSize: '0.85rem', cursor: 'pointer', display: 'inline-block' }}>
-                        {uploadingField === 'police_verification' ? 'Processing…' : '📷 Take Portrait / Upload Scan'}
-                        <input type="file" accept="image/*" onChange={e => handleFileChange(e, 'police_verification')} style={{ display: 'none' }} />
-                      </label>
-                    )}
+                  <div style={{ maxWidth: '480px', margin: '0 auto' }}>
+                    <DocUploadSlot
+                      id="tour-police"
+                      icon="👮‍♂️"
+                      title="Police Verification Certificate"
+                      subtitle="Certificate / Character verification scan"
+                      field="police_verification"
+                      value={onboardForm.police_verification}
+                      uploadingField={uploadingField}
+                      validation={docValidations.police_verification}
+                      onFileChange={handleFileChange}
+                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
+                      onPreview={setPreviewDocModal}
+                    />
                   </div>
                 </div>
 
@@ -887,6 +967,31 @@ export default function ProDashboard() {
 
           </div>
         </div>
+
+        {/* Full Screen Document Preview Modal */}
+        {previewDocModal && (
+          <div style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 300,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', backdropFilter: 'blur(5px)'
+          }}>
+            <div className="glass animate-fade-in" style={{
+              width: '100%', maxWidth: '720px', borderRadius: '16px', overflow: 'hidden',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.7)', maxHeight: '90vh', display: 'flex', flexDirection: 'column'
+            }}>
+              <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: 700 }}>🔍 {previewDocModal.title}</h3>
+                <button onClick={() => setPreviewDocModal(null)} style={{ background: 'none', border: 'none', color: 'var(--foreground)', fontSize: '1.5rem', cursor: 'pointer', lineHeight: 1 }}>×</button>
+              </div>
+              <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'auto', background: 'rgba(0,0,0,0.3)' }}>
+                <img src={previewDocModal.src} alt={previewDocModal.title} style={{ maxWidth: '100%', maxHeight: '65vh', objectFit: 'contain', borderRadius: '8px' }} />
+              </div>
+              <div style={{ padding: '0.75rem 1.5rem', borderTop: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'flex-end' }}>
+                <button onClick={() => setPreviewDocModal(null)} className="btn btn-secondary" style={{ padding: '0.4rem 1rem', fontSize: '0.85rem' }}>Close Preview</button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     );
   }
