@@ -373,7 +373,8 @@ export default function ProDashboard() {
 
   const inputStyle = {
     padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--glass-border)',
-    background: 'rgba(255,255,255,0.05)', color: 'white', fontSize: '0.9rem', width: '100%'
+    background: 'rgba(255,255,255,0.05)', color: 'var(--foreground)', fontSize: '0.9rem', width: '100%',
+    outline: 'none', colorScheme: 'light'
   };
 
   if (loadingProfile) return (
@@ -448,16 +449,16 @@ export default function ProDashboard() {
                 <div key={s.num} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <div style={{
                     width: '28px', height: '28px', borderRadius: '50%',
-                    background: onboardStep === s.num ? 'var(--primary)' : (onboardStep > s.num ? '#10b981' : 'rgba(255,255,255,0.1)'),
-                    color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: onboardStep === s.num ? 'var(--primary)' : (onboardStep > s.num ? '#10b981' : 'rgba(0,0,0,0.08)'),
+                    color: onboardStep >= s.num ? 'white' : 'var(--foreground)', display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: '0.85rem', fontWeight: 'bold'
                   }}>
                     {onboardStep > s.num ? '✓' : s.num}
                   </div>
                   <span style={{
                     fontSize: '0.85rem', fontWeight: 600,
-                    opacity: onboardStep === s.num ? 1 : 0.6,
-                    color: onboardStep === s.num ? 'var(--primary)' : 'white'
+                    opacity: onboardStep === s.num ? 1 : 0.7,
+                    color: onboardStep === s.num ? 'var(--primary)' : 'var(--foreground)'
                   }}>{s.label}</span>
                 </div>
               ))}
@@ -949,8 +950,9 @@ export default function ProDashboard() {
               padding: '0.6rem 1.1rem', borderRadius: '8px', border: 'none', cursor: 'pointer',
               fontWeight: 600, fontSize: '0.9rem', transition: 'all 0.2s',
               background: tab === t.id ? 'var(--primary)' : 'transparent',
-              color: tab === t.id ? 'white' : 'rgba(255,255,255,0.6)',
-              boxShadow: tab === t.id ? '0 2px 12px rgba(59,130,246,0.35)' : 'none',
+              color: tab === t.id ? 'white' : 'var(--foreground)',
+              opacity: tab === t.id ? 1 : 0.7,
+              boxShadow: tab === t.id ? '0 2px 12px rgba(194,65,12,0.35)' : 'none',
             }}>{t.label}</button>
           ))}
         </div>
@@ -1255,7 +1257,7 @@ export default function ProDashboard() {
                 value={newPhotoUrl}
                 onChange={e => setNewPhotoUrl(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleAddPhoto()}
-                style={{ flex: 1, minWidth: '250px', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.05)', color: 'white', fontSize: '0.9rem' }}
+                style={{ flex: 1, minWidth: '250px', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.05)', color: 'var(--foreground)', fontSize: '0.9rem' }}
               />
               <button onClick={handleAddPhoto} className="btn btn-primary" style={{ padding: '0.75rem 1.25rem', whiteSpace: 'nowrap' }}>
                 + Add Photo

@@ -58,13 +58,13 @@ export default function ContactUs() {
               <div className="flex flex-col gap-1" style={{ flex: 1, minWidth: "200px" }}>
                 <label style={{ fontSize: "0.9rem", fontWeight: 500, opacity: 0.8 }}>Full Name</label>
                 <input type="text" placeholder="John Doe" style={{
-                  padding: "0.85rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white"
+                  padding: "0.85rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "var(--foreground)"
                 }} />
               </div>
               <div className="flex flex-col gap-1" style={{ flex: 1, minWidth: "200px" }}>
                 <label style={{ fontSize: "0.9rem", fontWeight: 500, opacity: 0.8 }}>Email Address</label>
                 <input type="email" placeholder="john@example.com" style={{
-                  padding: "0.85rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white"
+                  padding: "0.85rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "var(--foreground)"
                 }} />
               </div>
             </div>
@@ -72,7 +72,7 @@ export default function ContactUs() {
             <div className="flex flex-col gap-1">
               <label style={{ fontSize: "0.9rem", fontWeight: 500, opacity: 0.8 }}>Subject</label>
               <select style={{
-                padding: "0.85rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(30,41,59,0.9)", color: "white"
+                padding: "0.85rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "var(--card-bg, rgba(245,239,230,0.85))", color: "var(--foreground)"
               }}>
                 <option>General Inquiry</option>
                 <option>Booking Issue</option>
@@ -84,7 +84,7 @@ export default function ContactUs() {
             <div className="flex flex-col gap-1">
               <label style={{ fontSize: "0.9rem", fontWeight: 500, opacity: 0.8 }}>Message</label>
               <textarea rows="5" placeholder="How can we help you?" style={{
-                padding: "0.85rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "white", resize: "vertical"
+                padding: "0.85rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "var(--foreground)", resize: "vertical"
               }}></textarea>
             </div>
 
