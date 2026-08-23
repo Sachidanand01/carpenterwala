@@ -628,6 +628,7 @@ export default function AdminDashboardClient() {
                       </td>
                       <td style={{ padding: '1rem', fontSize: '0.85rem' }}>
                         <div style={{ fontFamily: 'monospace', fontWeight: 600 }}>{pro.phone || 'No phone'}</div>
+                        {pro.email && <div style={{ fontSize: '0.78rem', opacity: 0.7, wordBreak: 'break-all' }}>{pro.email}</div>}
                         <div style={{ opacity: 0.6, fontSize: '0.78rem', marginTop: '0.1rem' }}>{pro.location}</div>
                       </td>
                       <td style={{ padding: '1rem', fontSize: '0.85rem', opacity: 0.8 }}>
@@ -714,6 +715,7 @@ export default function AdminDashboardClient() {
                     </td>
                     <td style={{ padding: '0.85rem 1rem', fontSize: '0.85rem' }}>
                       <div style={{ fontFamily: 'monospace', fontWeight: 600 }}>{pro.phone || '—'}</div>
+                      {pro.email && <div style={{ fontSize: '0.75rem', opacity: 0.7, wordBreak: 'break-all' }}>{pro.email}</div>}
                       <div style={{ opacity: 0.6, fontSize: '0.75rem' }}>{pro.location}</div>
                     </td>
                     <td style={{ padding: '0.85rem 1rem', fontSize: '0.85rem', fontWeight: 600, opacity: 0.8 }}>
@@ -980,6 +982,12 @@ export default function AdminDashboardClient() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
                     <span style={{ opacity: 0.6, fontSize: '0.85rem' }}>Mobile Contact</span>
                     <span style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--primary)', fontFamily: 'monospace' }}>{selectedPro.phone || 'None'}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', alignItems: 'center' }}>
+                    <span style={{ opacity: 0.6, fontSize: '0.85rem' }}>Email Address</span>
+                    <span style={{ fontWeight: 600, fontSize: '0.85rem', color: selectedPro.email ? 'var(--foreground)' : 'var(--foreground-muted)', wordBreak: 'break-all', textAlign: 'right' }}>
+                      {selectedPro.email || 'None'}
+                    </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
                     <span style={{ opacity: 0.6, fontSize: '0.85rem' }}>Service Range</span>
