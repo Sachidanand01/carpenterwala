@@ -490,7 +490,7 @@ function AddWarrantyModal({ customerPhone, onClose, onSaved }) {
                         padding: '1.5rem 1rem', borderRadius: '12px',
                         border: selected ? `2px solid var(--primary)` : '1px solid var(--glass-border)',
                         background: selected ? 'rgba(59,130,246,0.12)' : 'rgba(255,255,255,0.03)',
-                        color: 'white', cursor: 'pointer', textAlign: 'center',
+                        color: 'var(--foreground)', cursor: 'pointer', textAlign: 'center',
                         transition: 'transform 0.15s, border-color 0.15s',
                         transform: selected ? 'scale(1.02)' : 'none',
                         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem'
