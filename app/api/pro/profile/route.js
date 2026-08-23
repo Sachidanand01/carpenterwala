@@ -9,7 +9,7 @@ export async function GET(request) {
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 });
 
   try {
-    const { data: profile, error } = await supabase
+    let { data: profile, error } = await supabase
       .from('profiles')
       .select(`id, slug, name, email, trade, experience, location, avatar, about, skills, portfolio, verified, created_at,
         phone, full_address, aadhaar_front, aadhaar_back, pan_front, pan_back, 
@@ -18,9 +18,23 @@ export async function GET(request) {
       .eq('id', id)
       .single();
 
+    if (error && (error.message?.includes('rejection_reason') || error.code === 'PGRST204' || error.code === '42703')) {
+      const fallbackRes = await supabase
+        .from('profiles')
+        .select(`id, slug, name, email, trade, experience, location, avatar, about, skills, portfolio, verified, created_at,
+          phone, full_address, aadhaar_front, aadhaar_back, pan_front, pan_back, 
+          voter_driving_front, voter_driving_back, police_verification, onboarding_completed, onboarding_step, accepting_leads, pending_avatar,
+          reviews ( id, author, rating, text, created_at )`)
+        .eq('id', id)
+        .single();
+      profile = fallbackRes.data;
+      error = fallbackRes.error;
+    }
+
     if (error) throw error;
     return NextResponse.json({ profile });
   } catch (err) {
+    console.error('Failed to fetch profile:', err);
     return NextResponse.json({ error: 'Failed to fetch profile' }, { status: 500 });
   }
 }
@@ -94,10 +108,17 @@ export async function PUT(request) {
     if (pending_avatar !== undefined) updateData.pending_avatar = pending_avatar;
     if (rejection_reason !== undefined) updateData.rejection_reason = rejection_reason;
 
-    const { error } = await supabase.from('profiles').update(updateData).eq('id', id);
+    let { error } = await supabase.from('profiles').update(updateData).eq('id', id);
+    if (error && (error.message?.includes('rejection_reason') || error.code === 'PGRST204' || error.code === '42703')) {
+      const fallbackData = { ...updateData };
+      delete fallbackData.rejection_reason;
+      const retry = await supabase.from('profiles').update(fallbackData).eq('id', id);
+      error = retry.error;
+    }
     if (error) throw error;
     return NextResponse.json({ success: true });
   } catch (err) {
+    console.error('Failed to update profile:', err);
     return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 });
   }
 }

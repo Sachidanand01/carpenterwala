@@ -65,16 +65,58 @@ export async function POST(request) {
         onboarding_step: Number(targetStep) || 2, // Reopen at selected step
         rejection_reason: combinedReason,
       };
+    } else if (action === 'approve_avatar') {
+      if (!profile.pending_avatar) {
+        return NextResponse.json({ error: 'No pending photo update found to approve' }, { status: 400 });
+      }
 
-      // Send rejection notification email via Resend if email exists
-      if (profile.email) {
-        try {
-          const proName = profile.name || 'Service Professional';
-          const reasonsListHtml = Array.isArray(reasons) && reasons.length > 0
-            ? reasons.map(r => `<li style="margin-bottom: 6px;">${r}</li>`).join('')
-            : `<li>Documents require clearer, higher resolution scans.</li>`;
+      updateData = {
+        avatar: profile.pending_avatar,
+        pending_avatar: null,
+      };
+    } else if (action === 'reject_avatar') {
+      updateData = {
+        pending_avatar: null,
+      };
+    } else {
+      return NextResponse.json({ error: 'Invalid action. Must be "verify", "reject", "approve_avatar", or "reject_avatar"' }, { status: 400 });
+    }
 
-          const emailHtml = `
+    // Attempt update
+    let { error } = await supabase
+      .from('profiles')
+      .update(updateData)
+      .eq('id', proId);
+
+    // Graceful fallback if `rejection_reason` column does not exist yet in Supabase
+    if (error && (error.message?.includes('rejection_reason') || error.details?.includes('rejection_reason') || error.code === 'PGRST204' || error.code === '42703')) {
+      console.warn('Supabase profiles table missing rejection_reason column. Retrying update without rejection_reason:', error);
+      const fallbackData = { ...updateData };
+      delete fallbackData.rejection_reason;
+      const retry = await supabase
+        .from('profiles')
+        .update(fallbackData)
+        .eq('id', proId);
+      error = retry.error;
+    }
+
+    if (error) {
+      console.error('Supabase update failed in /api/admin/verify:', error);
+      return NextResponse.json({ 
+        error: error.message || 'Failed to update professional verification status',
+        details: error.details || error.hint || error.code 
+      }, { status: 500 });
+    }
+
+    // Send rejection notification email via Resend if email exists (non-blocking)
+    if (action === 'reject' && profile.email) {
+      try {
+        const proName = profile.name || 'Service Professional';
+        const reasonsListHtml = Array.isArray(reasons) && reasons.length > 0
+          ? reasons.map(r => `<li style="margin-bottom: 6px;">${r}</li>`).join('')
+          : `<li>Documents require clearer, higher resolution scans.</li>`;
+
+        const emailHtml = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -136,54 +178,29 @@ export async function POST(request) {
   </div>
 </body>
 </html>
-          `;
+        `;
 
-          if (process.env.RESEND_API_KEY) {
-            let emailRes = await resend.emails.send({
-              from: 'Carpenterwala Verification <onboarding@carpenterwala.com>',
+        if (process.env.RESEND_API_KEY) {
+          let emailRes = await resend.emails.send({
+            from: 'Carpenterwala Verification <onboarding@carpenterwala.com>',
+            to: profile.email,
+            subject: 'Action Required: Update Your Verification Documents on Carpenterwala',
+            html: emailHtml,
+          });
+
+          if (emailRes.error) {
+            console.warn('Custom domain send failed, trying resend.dev fallback:', emailRes.error);
+            await resend.emails.send({
+              from: 'Carpenterwala Verification <onboarding@resend.dev>',
               to: profile.email,
               subject: 'Action Required: Update Your Verification Documents on Carpenterwala',
               html: emailHtml,
             });
-
-            if (emailRes.error) {
-              console.warn('Custom domain send failed, trying resend.dev fallback:', emailRes.error);
-              await resend.emails.send({
-                from: 'Carpenterwala Verification <onboarding@resend.dev>',
-                to: profile.email,
-                subject: 'Action Required: Update Your Verification Documents on Carpenterwala',
-                html: emailHtml,
-              });
-            }
           }
-        } catch (emailErr) {
-          console.warn('Failed to send rejection email notification:', emailErr);
         }
+      } catch (emailErr) {
+        console.warn('Failed to send rejection email notification:', emailErr);
       }
-    } else if (action === 'approve_avatar') {
-      if (!profile.pending_avatar) {
-        return NextResponse.json({ error: 'No pending photo update found to approve' }, { status: 400 });
-      }
-
-      updateData = {
-        avatar: profile.pending_avatar,
-        pending_avatar: null,
-      };
-    } else if (action === 'reject_avatar') {
-      updateData = {
-        pending_avatar: null,
-      };
-    } else {
-      return NextResponse.json({ error: 'Invalid action. Must be "verify", "reject", "approve_avatar", or "reject_avatar"' }, { status: 400 });
-    }
-
-    const { error } = await supabase
-      .from('profiles')
-      .update(updateData)
-      .eq('id', proId);
-
-    if (error) {
-      throw error;
     }
 
     return NextResponse.json({
@@ -192,6 +209,9 @@ export async function POST(request) {
     });
   } catch (err) {
     console.error('Error verifying profile securely:', err);
-    return NextResponse.json({ error: 'Failed to update professional verification status' }, { status: 500 });
+    return NextResponse.json({ 
+      error: err?.message || 'Failed to update professional verification status',
+      details: err?.details || err?.hint || String(err)
+    }, { status: 500 });
   }
 }
