@@ -489,7 +489,7 @@ export default async function BlogPost({ params }) {
               }
             }
             .toc-link {
-              color: rgba(255, 255, 255, 0.8);
+              color: var(--foreground);
               text-decoration: none;
               display: block;
               padding: 0.35rem 0;
