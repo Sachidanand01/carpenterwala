@@ -441,7 +441,7 @@ export default async function BlogPost({ params }) {
             .blog-content h3 {
               font-size: 1.4rem;
               margin: 2.5rem 0 1rem;
-              color: #f8fafc;
+              color: #c2410c;
               scroll-margin-top: 100px;
             }
             .blog-content p {
@@ -456,7 +456,7 @@ export default async function BlogPost({ params }) {
               margin-bottom: 0.85rem;
             }
             .blog-content strong {
-              color: #ffffff;
+              color: #c2410c;
             }
             .category-link {
               transition: all 0.3s ease;
