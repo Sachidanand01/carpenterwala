@@ -231,10 +231,9 @@ export default function AdminDashboardClient() {
           width: '100%',
           padding: '2.5rem',
           borderRadius: '24px',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          background: 'rgba(15, 23, 42, 0.45)',
-          backdropFilter: 'blur(16px)',
+          boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
+          border: '1px solid var(--glass-border)',
+          background: 'var(--card-bg, #F5EFE6)',
           textAlign: 'center'
         }}>
           {/* Glowing Security Shield Icon */}
@@ -242,14 +241,14 @@ export default function AdminDashboardClient() {
             width: '64px',
             height: '64px',
             borderRadius: '50%',
-            background: 'rgba(59, 130, 246, 0.1)',
-            border: '2px solid rgba(59, 130, 246, 0.4)',
+            background: 'var(--primary-light)',
+            border: '2px solid var(--primary)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 1.5rem',
             fontSize: '1.8rem',
-            boxShadow: '0 0 20px rgba(59,130,246,0.2)'
+            boxShadow: '0 0 20px var(--primary-glow)'
           }}>
             🛡️
           </div>
@@ -257,14 +256,14 @@ export default function AdminDashboardClient() {
           <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
             Restricted Directory Access
           </span>
-          <h2 style={{ fontSize: '1.6rem', fontWeight: 800, marginTop: '0.25rem', marginBottom: '0.5rem' }}>Admin Gatekeeper</h2>
-          <p style={{ fontSize: '0.85rem', opacity: 0.6, marginBottom: '2rem', lineHeight: 1.4 }}>
+          <h2 style={{ fontSize: '1.6rem', fontWeight: 800, marginTop: '0.25rem', marginBottom: '0.5rem', color: 'var(--foreground)' }}>Admin Gatekeeper</h2>
+          <p style={{ fontSize: '0.85rem', opacity: 0.7, marginBottom: '2rem', lineHeight: 1.4, color: 'var(--foreground-muted)' }}>
             Verify credentials to inspect handyman scans, Pan card uploads, and audit verification statuses.
           </p>
 
           <form onSubmit={handleLoginSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', textAlign: 'left' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label style={{ fontSize: '0.8rem', fontWeight: 700, opacity: 0.7 }}>Secure Administrative Password</label>
+              <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--foreground)' }}>Secure Administrative Password</label>
               <input
                 type="password"
                 value={passwordInput}
@@ -276,16 +275,16 @@ export default function AdminDashboardClient() {
                   width: '100%',
                   padding: '0.85rem 1.1rem',
                   borderRadius: '12px',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  background: 'rgba(255,255,255,0.03)',
-                  color: 'white',
+                  border: '1px solid var(--glass-border)',
+                  background: 'var(--background, #FAF8F5)',
+                  color: 'var(--foreground)',
                   fontSize: '0.95rem',
                   outline: 'none',
                   transition: 'all 0.2s',
                   fontFamily: 'monospace'
                 }}
                 onFocus={(e) => e.target.style.border = '1px solid var(--primary)'}
-                onBlur={(e) => e.target.style.border = '1px solid rgba(255,255,255,0.08)'}
+                onBlur={(e) => e.target.style.border = '1px solid var(--glass-border)'}
               />
             </div>
 
@@ -293,7 +292,7 @@ export default function AdminDashboardClient() {
               <div style={{
                 background: 'rgba(239, 68, 68, 0.08)',
                 border: '1px solid rgba(239, 68, 68, 0.25)',
-                color: '#f87171',
+                color: '#b91c1c',
                 padding: '0.75rem',
                 borderRadius: '10px',
                 fontSize: '0.8rem',
@@ -320,14 +319,14 @@ export default function AdminDashboardClient() {
                 gap: '0.5rem',
                 background: 'linear-gradient(135deg, var(--primary), var(--primary-hover))',
                 border: 'none',
-                boxShadow: '0 4px 15px rgba(59,130,246,0.3)'
+                boxShadow: '0 4px 15px var(--primary-glow)'
               }}
             >
               {authLoading ? 'Authorizing Session…' : '🔑 Unlock Secure Terminal'}
             </button>
           </form>
 
-          <div style={{ marginTop: '2rem', fontSize: '0.75rem', opacity: 0.4 }}>
+          <div style={{ marginTop: '2rem', fontSize: '0.75rem', opacity: 0.6, color: 'var(--foreground-muted)' }}>
             Carpenterwala Platform Administration • Clean audit trail guaranteed
           </div>
         </div>
@@ -394,15 +393,15 @@ export default function AdminDashboardClient() {
 
         <div className="glass flex-col" style={{ flex: 1, minWidth: '220px', padding: '1.5rem', borderRadius: '16px', position: 'relative', overflow: 'hidden' }}>
           <h3 style={{ opacity: 0.6, fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase' }}>Verified Service Pros</h3>
-          <span style={{ fontSize: '2.8rem', fontWeight: 800, color: '#34d399', marginTop: '0.5rem' }}>
-            {verifiedProfilesCount} <span style={{ fontSize: '1.2rem', fontWeight: 500, color: 'rgba(255,255,255,0.4)' }}>/ {totalProfiles}</span>
+          <span style={{ fontSize: '2.8rem', fontWeight: 800, color: '#15803d', marginTop: '0.5rem' }}>
+            {verifiedProfilesCount} <span style={{ fontSize: '1.2rem', fontWeight: 500, color: 'var(--foreground-muted)', opacity: 0.6 }}>/ {totalProfiles}</span>
           </span>
           <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.25rem' }}>Active listed professionals</div>
         </div>
 
         <div className="glass flex-col" style={{ flex: 1, minWidth: '220px', padding: '1.5rem', borderRadius: '16px', position: 'relative', overflow: 'hidden' }}>
           <h3 style={{ opacity: 0.6, fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase' }}>Top Trade Demand</h3>
-          <span style={{ fontSize: '1.6rem', fontWeight: 800, color: 'white', marginTop: '1.2rem', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
+          <span style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--foreground)', marginTop: '1.2rem', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
             🔨 {topDemand}
           </span>
           <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.55rem' }}>Based on recent customer requests</div>
@@ -412,16 +411,16 @@ export default function AdminDashboardClient() {
       {/* Global Notification Banner */}
       {actionStatus.message && (
         <div style={{
-          background: actionStatus.type === 'success' ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)',
-          border: `1px solid ${actionStatus.type === 'success' ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'}`,
-          color: actionStatus.type === 'success' ? '#34d399' : '#f87171',
+          background: actionStatus.type === 'success' ? 'rgba(22,163,74,0.1)' : 'rgba(220,38,38,0.1)',
+          border: `1px solid ${actionStatus.type === 'success' ? 'rgba(22,163,74,0.3)' : 'rgba(220,38,38,0.3)'}`,
+          color: actionStatus.type === 'success' ? '#15803d' : '#b91c1c',
           padding: '1rem 1.25rem',
           borderRadius: '12px',
           fontSize: '0.9rem',
           display: 'flex',
           alignItems: 'center',
           gap: '0.6rem',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+          boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
         }}>
           <span>{actionStatus.type === 'success' ? '✅' : '⚠️'}</span>
           <span style={{ fontWeight: 550 }}>{actionStatus.message}</span>
@@ -431,13 +430,13 @@ export default function AdminDashboardClient() {
       {/* Custom Tabs Navigation */}
       <div style={{
         display: 'flex',
-        gap: '0.25rem',
-        background: 'rgba(255,255,255,0.03)',
+        gap: '0.35rem',
+        background: 'var(--card-bg)',
         borderRadius: '12px',
         padding: '0.35rem',
         border: '1px solid var(--glass-border)',
         flexWrap: 'wrap',
-        marginBottom: '1rem'
+        marginBottom: '1.5rem'
       }}>
         <button
           onClick={() => setActiveTab('overview')}
@@ -445,8 +444,9 @@ export default function AdminDashboardClient() {
             padding: '0.65rem 1.25rem', borderRadius: '8px', border: 'none', cursor: 'pointer',
             fontWeight: 600, fontSize: '0.9rem', transition: 'all 0.2s',
             background: activeTab === 'overview' ? 'var(--primary)' : 'transparent',
-            color: activeTab === 'overview' ? 'white' : 'rgba(255,255,255,0.6)',
-            boxShadow: activeTab === 'overview' ? '0 4px 12px rgba(59,130,246,0.3)' : 'none'
+            color: activeTab === 'overview' ? '#ffffff' : 'var(--foreground)',
+            opacity: activeTab === 'overview' ? 1 : 0.75,
+            boxShadow: activeTab === 'overview' ? '0 4px 12px var(--primary-glow)' : 'none'
           }}
         >
           📊 Overview
@@ -457,9 +457,10 @@ export default function AdminDashboardClient() {
             padding: '0.65rem 1.25rem', borderRadius: '8px', border: 'none', cursor: 'pointer',
             fontWeight: 600, fontSize: '0.9rem', transition: 'all 0.2s',
             background: activeTab === 'pending' ? 'var(--primary)' : 'transparent',
-            color: activeTab === 'pending' ? 'white' : 'rgba(255,255,255,0.6)',
-            boxShadow: activeTab === 'pending' ? '0 4px 12px rgba(59,130,246,0.3)' : 'none',
-            display: 'flex', alignItems: 'center', gap: '0.4rem'
+            color: activeTab === 'pending' ? '#ffffff' : 'var(--foreground)',
+            opacity: activeTab === 'pending' ? 1 : 0.75,
+            boxShadow: activeTab === 'pending' ? '0 4px 12px var(--primary-glow)' : 'none',
+            display: 'flex', alignItems: 'center', gap: '0.45rem'
           }}
         >
           ⏳ Pending Reviews
@@ -480,8 +481,9 @@ export default function AdminDashboardClient() {
             padding: '0.65rem 1.25rem', borderRadius: '8px', border: 'none', cursor: 'pointer',
             fontWeight: 600, fontSize: '0.9rem', transition: 'all 0.2s',
             background: activeTab === 'directory' ? 'var(--primary)' : 'transparent',
-            color: activeTab === 'directory' ? 'white' : 'rgba(255,255,255,0.6)',
-            boxShadow: activeTab === 'directory' ? '0 4px 12px rgba(59,130,246,0.3)' : 'none'
+            color: activeTab === 'directory' ? '#ffffff' : 'var(--foreground)',
+            opacity: activeTab === 'directory' ? 1 : 0.75,
+            boxShadow: activeTab === 'directory' ? '0 4px 12px var(--primary-glow)' : 'none'
           }}
         >
           👥 Service Professionals
@@ -492,8 +494,9 @@ export default function AdminDashboardClient() {
             padding: '0.65rem 1.25rem', borderRadius: '8px', border: 'none', cursor: 'pointer',
             fontWeight: 600, fontSize: '0.9rem', transition: 'all 0.2s',
             background: activeTab === 'leads' ? 'var(--primary)' : 'transparent',
-            color: activeTab === 'leads' ? 'white' : 'rgba(255,255,255,0.6)',
-            boxShadow: activeTab === 'leads' ? '0 4px 12px rgba(59,130,246,0.3)' : 'none'
+            color: activeTab === 'leads' ? '#ffffff' : 'var(--foreground)',
+            opacity: activeTab === 'leads' ? 1 : 0.75,
+            boxShadow: activeTab === 'leads' ? '0 4px 12px var(--primary-glow)' : 'none'
           }}
         >
           📋 Recent Leads
@@ -545,17 +548,17 @@ export default function AdminDashboardClient() {
                 </thead>
                 <tbody>
                   {leads.slice(0, 5).map(lead => (
-                    <tr key={lead.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                    <tr key={lead.id} style={{ borderBottom: '1px solid var(--card-border)' }}>
                       <td style={{ padding: '0.85rem 1rem', fontSize: '0.85rem', opacity: 0.8 }}>{new Date(lead.created_at).toLocaleDateString()}</td>
                       <td style={{ padding: '0.85rem 1rem' }}>
                         <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>{lead.profiles?.name || 'Unknown Pro'}</span>
-                        <span style={{ marginLeft: '0.5rem', background: 'rgba(59,130,246,0.15)', color: 'var(--primary)', fontSize: '0.7rem', padding: '0.1rem 0.4rem', borderRadius: '10px' }}>
+                        <span style={{ marginLeft: '0.5rem', background: 'var(--primary-light)', color: 'var(--primary)', fontSize: '0.7rem', padding: '0.1rem 0.4rem', borderRadius: '10px', fontWeight: 600 }}>
                           {lead.profiles?.trade || 'N/A'}
                         </span>
                       </td>
                       <td style={{ padding: '0.85rem 1rem', fontSize: '0.88rem' }}>
                         <div>{lead.name}</div>
-                        <div style={{ opacity: 0.5, fontSize: '0.75rem', fontFamily: 'monospace' }}>{lead.phone}</div>
+                        <div style={{ opacity: 0.6, fontSize: '0.75rem', fontFamily: 'monospace' }}>{lead.phone}</div>
                       </td>
                       <td style={{ padding: '0.85rem 1rem', fontSize: '0.85rem', opacity: 0.9 }}>{lead.task}</td>
                     </tr>
@@ -600,12 +603,12 @@ export default function AdminDashboardClient() {
                 </thead>
                 <tbody>
                   {pendingProfiles.map(pro => (
-                    <tr key={pro.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', verticalAlign: 'middle' }}>
+                    <tr key={pro.id} style={{ borderBottom: '1px solid var(--card-border)', verticalAlign: 'middle' }}>
                       <td style={{ padding: '1rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                           <div style={{
                             width: '40px', height: '40px', borderRadius: '50%',
-                            background: 'rgba(255,255,255,0.05)', border: '1.5px solid var(--accent)',
+                            background: 'rgba(0,0,0,0.05)', border: '1.5px solid var(--accent)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             overflow: 'hidden', flexShrink: 0
                           }}>
@@ -617,7 +620,7 @@ export default function AdminDashboardClient() {
                           </div>
                           <div>
                             <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{pro.name}</div>
-                            <span style={{ background: 'rgba(245,158,11,0.15)', color: 'var(--accent)', fontSize: '0.72rem', padding: '0.1rem 0.45rem', borderRadius: '10px', fontWeight: 600 }}>
+                            <span style={{ background: 'rgba(217, 119, 6, 0.12)', color: 'var(--accent)', fontSize: '0.72rem', padding: '0.1rem 0.45rem', borderRadius: '10px', fontWeight: 600 }}>
                               {pro.trade}
                             </span>
                           </div>
@@ -625,19 +628,19 @@ export default function AdminDashboardClient() {
                       </td>
                       <td style={{ padding: '1rem', fontSize: '0.85rem' }}>
                         <div style={{ fontFamily: 'monospace', fontWeight: 600 }}>{pro.phone || 'No phone'}</div>
-                        <div style={{ opacity: 0.5, fontSize: '0.78rem', marginTop: '0.1rem' }}>{pro.location}</div>
+                        <div style={{ opacity: 0.6, fontSize: '0.78rem', marginTop: '0.1rem' }}>{pro.location}</div>
                       </td>
                       <td style={{ padding: '1rem', fontSize: '0.85rem', opacity: 0.8 }}>
                         {pro.created_at ? new Date(pro.created_at).toLocaleDateString(undefined, { dateStyle: 'medium' }) : '—'}
                       </td>
                       <td style={{ padding: '1rem' }}>
                         {pro.pending_avatar && (
-                          <span style={{ background: 'rgba(245,158,11,0.15)', color: 'var(--accent)', fontSize: '0.75rem', padding: '0.2rem 0.6rem', borderRadius: '20px', fontWeight: 600, marginRight: '0.5rem', display: 'inline-block' }}>
+                          <span style={{ background: 'rgba(217, 119, 6, 0.15)', color: 'var(--accent)', fontSize: '0.75rem', padding: '0.2rem 0.6rem', borderRadius: '20px', fontWeight: 600, marginRight: '0.5rem', display: 'inline-block' }}>
                             📷 Photo Change
                           </span>
                         )}
                         {pro.onboarding_completed && !pro.verified && (
-                          <span style={{ background: 'rgba(59,130,246,0.15)', color: '#60a5fa', fontSize: '0.75rem', padding: '0.2rem 0.6rem', borderRadius: '20px', fontWeight: 600, display: 'inline-block' }}>
+                          <span style={{ background: 'var(--primary-light)', color: 'var(--primary)', fontSize: '0.75rem', padding: '0.2rem 0.6rem', borderRadius: '20px', fontWeight: 600, display: 'inline-block' }}>
                             🏁 Document Audit
                           </span>
                         )}
@@ -683,12 +686,12 @@ export default function AdminDashboardClient() {
               </thead>
               <tbody>
                 {profiles.map(pro => (
-                  <tr key={pro.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', verticalAlign: 'middle' }}>
+                  <tr key={pro.id} style={{ borderBottom: '1px solid var(--card-border)', verticalAlign: 'middle' }}>
                     <td style={{ padding: '0.85rem 1rem' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                         <div style={{
                           width: '36px', height: '36px', borderRadius: '50%',
-                          background: 'rgba(255,255,255,0.05)', border: `1.5px solid ${pro.verified ? '#10b981' : 'rgba(255,255,255,0.15)'}`,
+                          background: 'rgba(0,0,0,0.05)', border: `1.5px solid ${pro.verified ? 'var(--success)' : 'rgba(0,0,0,0.12)'}`,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           overflow: 'hidden', flexShrink: 0
                         }}>
@@ -700,36 +703,36 @@ export default function AdminDashboardClient() {
                         </div>
                         <div>
                           <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>{pro.name}</div>
-                          <span style={{ opacity: 0.5, fontSize: '0.72rem' }}>slug: {pro.slug}</span>
+                          <span style={{ opacity: 0.6, fontSize: '0.72rem' }}>slug: {pro.slug}</span>
                         </div>
                       </div>
                     </td>
                     <td style={{ padding: '0.85rem 1rem' }}>
-                      <span style={{ background: 'rgba(255,255,255,0.06)', fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: '8px', fontWeight: 600 }}>
+                      <span style={{ background: 'var(--secondary)', fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: '8px', fontWeight: 600 }}>
                         {pro.trade}
                       </span>
                     </td>
                     <td style={{ padding: '0.85rem 1rem', fontSize: '0.85rem' }}>
                       <div style={{ fontFamily: 'monospace', fontWeight: 600 }}>{pro.phone || '—'}</div>
-                      <div style={{ opacity: 0.5, fontSize: '0.75rem' }}>{pro.location}</div>
+                      <div style={{ opacity: 0.6, fontSize: '0.75rem' }}>{pro.location}</div>
                     </td>
                     <td style={{ padding: '0.85rem 1rem', fontSize: '0.85rem', fontWeight: 600, opacity: 0.8 }}>
                       {pro.experience || 'Not specified'}
                     </td>
                     <td style={{ padding: '0.85rem 1rem', fontSize: '0.85rem' }}>
                       {pro.onboarding_completed ? (
-                        <span style={{ color: '#34d399', fontWeight: 600 }}>Completed 🏁</span>
+                        <span style={{ color: 'var(--success)', fontWeight: 600 }}>Completed 🏁</span>
                       ) : (
                         <span style={{ opacity: 0.6 }}>Step {pro.onboarding_step || 1} of 4</span>
                       )}
                     </td>
                     <td style={{ padding: '0.85rem 1rem' }}>
                       {pro.verified ? (
-                        <span style={{ background: 'rgba(16,185,129,0.15)', color: '#34d399', fontSize: '0.75rem', padding: '0.25rem 0.65rem', borderRadius: '20px', fontWeight: 700, display: 'inline-flex', gap: '0.2rem', alignItems: 'center' }}>
+                        <span style={{ background: 'var(--success-bg)', color: 'var(--success)', fontSize: '0.75rem', padding: '0.25rem 0.65rem', borderRadius: '20px', fontWeight: 700, display: 'inline-flex', gap: '0.2rem', alignItems: 'center' }}>
                           ✓ Verified
                         </span>
                       ) : (
-                        <span style={{ background: 'rgba(245,158,11,0.12)', color: 'var(--accent)', fontSize: '0.75rem', padding: '0.25rem 0.65rem', borderRadius: '20px', fontWeight: 700 }}>
+                        <span style={{ background: 'rgba(217, 119, 6, 0.12)', color: 'var(--accent)', fontSize: '0.75rem', padding: '0.25rem 0.65rem', borderRadius: '20px', fontWeight: 700 }}>
                           Pending
                         </span>
                       )}
@@ -777,14 +780,14 @@ export default function AdminDashboardClient() {
               </thead>
               <tbody>
                 {leads.map(lead => (
-                  <tr key={lead.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                  <tr key={lead.id} style={{ borderBottom: '1px solid var(--card-border)' }}>
                     <td style={{ padding: '0.85rem 1rem', fontSize: '0.85rem', opacity: 0.8 }}>
                       {new Date(lead.created_at).toLocaleString()}
                     </td>
                     <td style={{ padding: '0.85rem 1rem' }}>
                       <span style={{ fontWeight: 700 }}>{lead.profiles?.name || 'Unknown Pro'}</span>
                       <br />
-                      <span style={{ fontSize: '0.75rem', opacity: 0.5 }}>{lead.profiles?.trade || 'N/A'}</span>
+                      <span style={{ fontSize: '0.75rem', opacity: 0.6 }}>{lead.profiles?.trade || 'N/A'}</span>
                     </td>
                     <td style={{ padding: '0.85rem 1rem', fontSize: '0.9rem', fontWeight: 600 }}>
                       {lead.name}
@@ -812,35 +815,37 @@ export default function AdminDashboardClient() {
       {selectedPro && (
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(15,23,42,0.85)', backdropFilter: 'blur(8px)',
-          display: 'flex', alignItems: 'center', justifyCenter: 'center',
+          background: 'rgba(15,23,42,0.75)', backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
           zIndex: 1000, padding: '2rem'
         }}>
-          <div className="glass" style={{
+          <div style={{
             width: '100%', maxWidth: '1050px', maxHeight: '90vh',
             display: 'flex', flexDirection: 'column', overflow: 'hidden',
-            boxShadow: '0 20px 50px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.15)',
-            borderRadius: '24px'
+            boxShadow: '0 25px 60px -15px rgba(0,0,0,0.5)', border: '1px solid var(--glass-border)',
+            borderRadius: '24px', background: 'var(--background, #FAF8F5)',
+            color: 'var(--foreground)'
           }}>
             
             {/* Modal Header */}
             <div style={{
-              display: 'flex', justifyBetween: 'space-between', alignItems: 'center',
-              padding: '1.5rem 2rem', borderBottom: '1px solid rgba(255,255,255,0.08)',
-              background: 'rgba(30,41,59,0.5)'
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '1.25rem 2rem', borderBottom: '1px solid var(--glass-border)',
+              background: 'var(--card-bg, #F5EFE6)'
             }}>
               <div>
-                <span style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 700, textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Document Audit
                 </span>
-                <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Audit Profile: {selectedPro.name}</h2>
+                <h2 style={{ fontSize: '1.35rem', fontWeight: 800, margin: 0 }}>Audit Profile: {selectedPro.name}</h2>
               </div>
               <button
                 onClick={() => { setSelectedPro(null); setActionStatus({ type: '', message: '' }); }}
                 style={{
-                  background: 'rgba(255,255,255,0.05)', border: 'none', color: 'white',
+                  background: 'rgba(0,0,0,0.06)', border: 'none', color: 'var(--foreground)',
                   width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer',
-                  fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontWeight: 'bold'
                 }}
               >
@@ -851,20 +856,20 @@ export default function AdminDashboardClient() {
             {/* Modal Body */}
             <div style={{
               display: 'flex', flex: 1, overflowY: 'auto', flexWrap: 'wrap',
-              background: 'rgba(15,23,42,0.3)'
+              background: 'var(--background, #FAF8F5)'
             }}>
               
               {/* Left Column: Pro Profile Details */}
               <div style={{
-                flex: '1', minWidth: '320px', padding: '2rem',
-                borderRight: '1px solid rgba(255,255,255,0.08)',
-                display: 'flex', flexDirection: 'column', gap: '1.5rem'
+                flex: '1', minWidth: '320px', padding: '1.75rem',
+                borderRight: '1px solid var(--glass-border)',
+                display: 'flex', flexDirection: 'column', gap: '1.25rem'
               }}>
                 <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
                   <div style={{
                     width: '72px', height: '72px', borderRadius: '50%',
                     border: '2.5px solid var(--primary)', overflow: 'hidden', flexShrink: 0,
-                    background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    background: 'rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center'
                   }}>
                     {selectedPro.avatar ? (
                       <img src={selectedPro.avatar} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -873,17 +878,17 @@ export default function AdminDashboardClient() {
                     )}
                   </div>
                   <div>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 800 }}>{selectedPro.name}</h3>
-                    <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.25rem', alignItems: 'center' }}>
-                      <span style={{ background: 'rgba(59,130,246,0.15)', color: 'var(--primary)', fontSize: '0.75rem', padding: '0.15rem 0.5rem', borderRadius: '8px', fontWeight: 600 }}>
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>{selectedPro.name}</h3>
+                    <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.35rem', alignItems: 'center' }}>
+                      <span style={{ background: 'var(--primary-light)', color: 'var(--primary)', fontSize: '0.75rem', padding: '0.15rem 0.5rem', borderRadius: '8px', fontWeight: 600 }}>
                         {selectedPro.trade}
                       </span>
                       {selectedPro.verified ? (
-                        <span style={{ background: 'rgba(16,185,129,0.15)', color: '#34d399', fontSize: '0.72rem', padding: '0.15rem 0.5rem', borderRadius: '8px', fontWeight: 700 }}>
+                        <span style={{ background: 'var(--success-bg)', color: 'var(--success)', fontSize: '0.72rem', padding: '0.15rem 0.5rem', borderRadius: '8px', fontWeight: 700 }}>
                           Verified ✓
                         </span>
                       ) : (
-                        <span style={{ background: 'rgba(245,158,11,0.12)', color: 'var(--accent)', fontSize: '0.72rem', padding: '0.15rem 0.5rem', borderRadius: '8px', fontWeight: 700 }}>
+                        <span style={{ background: 'rgba(217, 119, 6, 0.12)', color: 'var(--accent)', fontSize: '0.72rem', padding: '0.15rem 0.5rem', borderRadius: '8px', fontWeight: 700 }}>
                           Awaiting Review
                         </span>
                       )}
@@ -893,15 +898,15 @@ export default function AdminDashboardClient() {
 
                 {/* Pending Profile Image Change Section */}
                 {selectedPro.pending_avatar && (
-                  <div className="glass animate-fade-in" style={{
+                  <div style={{
                     padding: '1.25rem',
                     border: '1.5px dashed var(--accent)',
                     borderRadius: '14px',
-                    background: 'rgba(245,158,11,0.04)',
+                    background: 'rgba(217, 119, 6, 0.06)',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '0.75rem',
-                    marginTop: '0.5rem'
+                    marginTop: '0.25rem'
                   }}>
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                       <div style={{ 
@@ -915,7 +920,7 @@ export default function AdminDashboardClient() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        background: 'rgba(255,255,255,0.05)'
+                        background: 'rgba(0,0,0,0.05)'
                       }} onClick={() => setZoomedImage({ title: 'Pending Profile Image Update', url: selectedPro.pending_avatar })}>
                         <img src={selectedPro.pending_avatar} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Pending Avatar" />
                       </div>
@@ -937,7 +942,7 @@ export default function AdminDashboardClient() {
                           flex: 1,
                           padding: '0.45rem',
                           fontSize: '0.78rem',
-                          background: 'linear-gradient(135deg, #10b981, #059669)',
+                          background: 'linear-gradient(135deg, #15803d, #16a34a)',
                           border: 'none',
                           boxShadow: 'none'
                         }}
@@ -952,9 +957,9 @@ export default function AdminDashboardClient() {
                           flex: 1,
                           padding: '0.45rem',
                           fontSize: '0.78rem',
-                          borderColor: 'rgba(239,68,68,0.4)',
-                          color: '#f87171',
-                          background: 'rgba(239,68,68,0.05)'
+                          borderColor: 'rgba(220,38,38,0.4)',
+                          color: '#b91c1c',
+                          background: 'rgba(220,38,38,0.05)'
                         }}
                       >
                         Reject
@@ -963,32 +968,32 @@ export default function AdminDashboardClient() {
                   </div>
                 )}
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)', padding: '1.25rem', borderRadius: '14px' }}>
-                  <div style={{ display: 'flex', justifyBetween: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.04)', paddingBottom: '0.5rem' }}>
-                    <span style={{ opacity: 0.5, fontSize: '0.85rem' }}>Registered Slug</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', background: 'var(--card-bg, #F5EFE6)', border: '1px solid var(--glass-border)', padding: '1.25rem', borderRadius: '14px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
+                    <span style={{ opacity: 0.6, fontSize: '0.85rem' }}>Registered Slug</span>
                     <span style={{ fontWeight: 600, fontSize: '0.85rem', fontFamily: 'monospace' }}>{selectedPro.slug}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyBetween: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.04)', paddingBottom: '0.5rem' }}>
-                    <span style={{ opacity: 0.5, fontSize: '0.85rem' }}>Public Experience</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
+                    <span style={{ opacity: 0.6, fontSize: '0.85rem' }}>Public Experience</span>
                     <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>💪 {selectedPro.experience || 'Not specified'}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyBetween: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.04)', paddingBottom: '0.5rem' }}>
-                    <span style={{ opacity: 0.5, fontSize: '0.85rem' }}>Mobile Contact</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
+                    <span style={{ opacity: 0.6, fontSize: '0.85rem' }}>Mobile Contact</span>
                     <span style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--primary)', fontFamily: 'monospace' }}>{selectedPro.phone || 'None'}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyBetween: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.04)', paddingBottom: '0.5rem' }}>
-                    <span style={{ opacity: 0.5, fontSize: '0.85rem' }}>Service Range</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
+                    <span style={{ opacity: 0.6, fontSize: '0.85rem' }}>Service Range</span>
                     <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>📍 {selectedPro.location || 'Bangalore'}</span>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
-                    <span style={{ opacity: 0.5, fontSize: '0.85rem' }}>Private Home Address</span>
+                    <span style={{ opacity: 0.6, fontSize: '0.85rem' }}>Private Home Address</span>
                     <span style={{ fontSize: '0.82rem', lineHeight: 1.4 }}>🏠 {selectedPro.full_address || 'Address missing'}</span>
                   </div>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                   <h4 style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', opacity: 0.6 }}>About / Description</h4>
-                  <p style={{ fontSize: '0.85rem', opacity: 0.8, lineHeight: 1.5, background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.04)', padding: '0.75rem', borderRadius: '10px' }}>
+                  <p style={{ fontSize: '0.85rem', opacity: 0.8, lineHeight: 1.5, background: 'var(--card-bg, #F5EFE6)', border: '1px solid var(--glass-border)', padding: '0.75rem', borderRadius: '10px' }}>
                     {selectedPro.about || 'No about biography supplied by professional.'}
                   </p>
                 </div>
@@ -997,7 +1002,7 @@ export default function AdminDashboardClient() {
                   <h4 style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', opacity: 0.6 }}>Specialty Skills</h4>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                     {selectedPro.skills && selectedPro.skills.map((s, idx) => (
-                      <span key={idx} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', fontSize: '0.75rem', padding: '0.25rem 0.5rem', borderRadius: '6px' }}>
+                      <span key={idx} style={{ background: 'var(--card-bg)', border: '1px solid var(--glass-border)', fontSize: '0.75rem', padding: '0.25rem 0.5rem', borderRadius: '6px' }}>
                         ✨ {s}
                       </span>
                     ))}
@@ -1010,28 +1015,28 @@ export default function AdminDashboardClient() {
 
               {/* Right Column: Uploaded Documents Panel */}
               <div style={{
-                flex: '1.4', minWidth: '360px', padding: '2rem',
-                display: 'flex', flexDirection: 'column', gap: '2rem'
+                flex: '1.4', minWidth: '360px', padding: '1.75rem',
+                display: 'flex', flexDirection: 'column', gap: '1.75rem'
               }}>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--primary)', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--primary)', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', margin: 0 }}>
                   💳 Verification Documents
                 </h3>
 
                 {/* 1. Aadhaar Card Card */}
                 <div>
-                  <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.75rem', display: 'flex', justifyBetween: 'space-between', alignItems: 'center' }}>
+                  <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span>📇 Aadhaar Card (Identity & Private Address Proof)</span>
                   </h4>
                   <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                     <div style={{ flex: 1, minWidth: '160px' }}>
                       <div style={{ fontSize: '0.75rem', opacity: 0.6, marginBottom: '0.35rem', fontWeight: 600 }}>Front Side Scan</div>
                       {selectedPro.aadhaar_front ? (
-                        <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'rgba(255,255,255,0.02)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyCenter: 'center' }}
+                        <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'var(--card-bg)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                              onClick={() => setZoomedImage({ title: 'Aadhaar Card - Front Side', url: selectedPro.aadhaar_front })}>
                           <img src={selectedPro.aadhaar_front} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px', transition: 'transform 0.2s' }} />
                         </div>
                       ) : (
-                        <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyCenter: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#f87171', fontSize: '0.78rem' }}>
+                        <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#b91c1c', fontSize: '0.78rem' }}>
                           ⚠️ File Missing
                         </div>
                       )}
@@ -1040,12 +1045,12 @@ export default function AdminDashboardClient() {
                     <div style={{ flex: 1, minWidth: '160px' }}>
                       <div style={{ fontSize: '0.75rem', opacity: 0.6, marginBottom: '0.35rem', fontWeight: 600 }}>Back Side (Address) Scan</div>
                       {selectedPro.aadhaar_back ? (
-                        <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'rgba(255,255,255,0.02)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyCenter: 'center' }}
+                        <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'var(--card-bg)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                              onClick={() => setZoomedImage({ title: 'Aadhaar Card - Back Side', url: selectedPro.aadhaar_back })}>
                           <img src={selectedPro.aadhaar_back} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
                         </div>
                       ) : (
-                        <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyCenter: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#f87171', fontSize: '0.78rem' }}>
+                        <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#b91c1c', fontSize: '0.78rem' }}>
                           ⚠️ File Missing
                         </div>
                       )}
@@ -1060,12 +1065,12 @@ export default function AdminDashboardClient() {
                   <div style={{ flex: 1, minWidth: '180px' }}>
                     <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.75rem' }}>💳 PAN Card (Tax Identity)</h4>
                     {selectedPro.pan_front ? (
-                      <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'rgba(255,255,255,0.02)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyCenter: 'center' }}
+                      <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'var(--card-bg)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                            onClick={() => setZoomedImage({ title: 'PAN Card - Front', url: selectedPro.pan_front })}>
                         <img src={selectedPro.pan_front} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
                       </div>
                     ) : (
-                      <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyCenter: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#f87171', fontSize: '0.78rem' }}>
+                      <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#b91c1c', fontSize: '0.78rem' }}>
                         ⚠️ File Missing
                       </div>
                     )}
@@ -1075,12 +1080,12 @@ export default function AdminDashboardClient() {
                   <div style={{ flex: 1, minWidth: '180px' }}>
                     <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.75rem' }}>🪪 Voter ID / License</h4>
                     {selectedPro.voter_driving_front ? (
-                      <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'rgba(255,255,255,0.02)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyCenter: 'center' }}
+                      <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'var(--card-bg)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                            onClick={() => setZoomedImage({ title: 'Voter ID / License Scan', url: selectedPro.voter_driving_front })}>
                         <img src={selectedPro.voter_driving_front} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
                       </div>
                     ) : (
-                      <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyCenter: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#f87171', fontSize: '0.78rem' }}>
+                      <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#b91c1c', fontSize: '0.78rem' }}>
                         ⚠️ File Missing
                       </div>
                     )}
@@ -1094,13 +1099,13 @@ export default function AdminDashboardClient() {
                   {selectedPro.police_verification ? (
                     <div style={{
                       border: '1px dashed var(--glass-border)', borderRadius: '12px', padding: '1rem',
-                      background: 'rgba(255,255,255,0.01)', position: 'relative'
+                      background: 'var(--card-bg)', position: 'relative'
                     }}>
                       <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
                         <div style={{ fontSize: '2.2rem' }}>📄</div>
                         <div style={{ flex: 1 }}>
                           <div style={{ fontSize: '0.85rem', fontWeight: 700 }}>Official Certificate Scanned Image</div>
-                          <div style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.15rem' }}>Audit and confirm clean records check.</div>
+                          <div style={{ fontSize: '0.75rem', opacity: 0.6, marginTop: '0.15rem' }}>Audit and confirm clean records check.</div>
                           <button
                             onClick={() => setZoomedImage({ title: 'Police Verification Certificate', url: selectedPro.police_verification })}
                             className="btn btn-secondary"
@@ -1115,7 +1120,7 @@ export default function AdminDashboardClient() {
                       </div>
                     </div>
                   ) : (
-                    <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyCenter: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '12px', color: '#f87171' }}>
+                    <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '12px', color: '#b91c1c' }}>
                       <span style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>⚠️</span>
                       <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>No Police Certificate Uploaded!</span>
                     </div>
@@ -1127,14 +1132,14 @@ export default function AdminDashboardClient() {
 
             {/* Modal Actions Footer */}
             <div style={{
-              display: 'flex', justifyBetween: 'space-between', alignItems: 'center',
-              padding: '1.5rem 2rem', borderTop: '1px solid rgba(255,255,255,0.08)',
-              background: 'rgba(30,41,59,0.5)', flexWrap: 'wrap', gap: '1rem'
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '1.25rem 2rem', borderTop: '1px solid var(--glass-border)',
+              background: 'var(--card-bg, #F5EFE6)', flexWrap: 'wrap', gap: '1rem'
             }}>
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>Current Listing:</span>
+                <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>Current Listing:</span>
                 {selectedPro.verified ? (
-                  <span style={{ color: '#10b981', fontWeight: 'bold', fontSize: '0.85rem' }}>✓ Active & Verified</span>
+                  <span style={{ color: 'var(--success)', fontWeight: 'bold', fontSize: '0.85rem' }}>✓ Active & Verified</span>
                 ) : (
                   <span style={{ color: 'var(--accent)', fontWeight: 'bold', fontSize: '0.85rem' }}>⏳ Hidden / Inactive</span>
                 )}
@@ -1146,8 +1151,8 @@ export default function AdminDashboardClient() {
                   onClick={() => setRejectModalPro(selectedPro)}
                   className="btn btn-secondary"
                   style={{
-                    padding: '0.6rem 1.25rem', fontSize: '0.88rem', border: '1px solid rgba(239,68,68,0.3)',
-                    color: '#f87171', background: 'rgba(239,68,68,0.05)'
+                    padding: '0.6rem 1.25rem', fontSize: '0.88rem', border: '1px solid rgba(220,38,38,0.3)',
+                    color: '#b91c1c', background: 'rgba(220,38,38,0.05)'
                   }}
                 >
                   ❌ Decline & Request Re-upload
@@ -1159,9 +1164,9 @@ export default function AdminDashboardClient() {
                   className="btn btn-primary"
                   style={{
                     padding: '0.6rem 1.6rem', fontSize: '0.88rem',
-                    background: selectedPro.verified ? 'rgba(255,255,255,0.08)' : 'linear-gradient(135deg, #10b981, #059669)',
-                    border: 'none', color: selectedPro.verified ? 'rgba(255,255,255,0.3)' : 'white',
-                    boxShadow: selectedPro.verified ? 'none' : '0 4px 15px rgba(16,185,129,0.35)',
+                    background: selectedPro.verified ? 'rgba(0,0,0,0.08)' : 'linear-gradient(135deg, #15803d, #16a34a)',
+                    border: 'none', color: selectedPro.verified ? 'rgba(0,0,0,0.3)' : 'white',
+                    boxShadow: selectedPro.verified ? 'none' : '0 4px 15px rgba(22,163,74,0.35)',
                     cursor: selectedPro.verified ? 'not-allowed' : 'pointer'
                   }}
                 >
@@ -1223,20 +1228,21 @@ export default function AdminDashboardClient() {
       {/* ── REJECTION REASON DIALOG MODAL ── */}
       {rejectModalPro && (
         <div style={{
-          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 2500,
+          position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.75)', zIndex: 2500,
           display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', backdropFilter: 'blur(8px)'
         }}>
-          <div className="glass animate-fade-in" style={{
+          <div style={{
             width: '100%', maxWidth: '620px', borderRadius: '18px', overflow: 'hidden',
-            boxShadow: '0 25px 60px rgba(0,0,0,0.6)', border: '1px solid rgba(239,68,68,0.3)',
-            background: 'rgba(15, 23, 42, 0.95)', maxHeight: '90vh', display: 'flex', flexDirection: 'column'
+            boxShadow: '0 25px 60px rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)',
+            background: 'var(--background, #FAF8F5)', color: 'var(--foreground)',
+            maxHeight: '90vh', display: 'flex', flexDirection: 'column'
           }}>
-            <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid var(--glass-border)', background: 'var(--card-bg)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#f87171', display: 'flex', alignItems: 'center', gap: '0.4rem', margin: 0 }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#b91c1c', display: 'flex', alignItems: 'center', gap: '0.4rem', margin: 0 }}>
                   ⚠️ Decline Onboarding & Request Re-upload
                 </h3>
-                <p style={{ fontSize: '0.8rem', opacity: 0.6, margin: '0.2rem 0 0 0' }}>
+                <p style={{ fontSize: '0.8rem', opacity: 0.7, margin: '0.2rem 0 0 0' }}>
                   Professional: <strong>{rejectModalPro.name}</strong> ({rejectModalPro.email || rejectModalPro.phone})
                 </p>
               </div>
@@ -1257,8 +1263,8 @@ export default function AdminDashboardClient() {
                         key={idx}
                         style={{
                           display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.55rem 0.85rem',
-                          background: isChecked ? 'rgba(239,68,68,0.12)' : 'rgba(255,255,255,0.02)',
-                          border: `1px solid ${isChecked ? 'rgba(239,68,68,0.4)' : 'rgba(255,255,255,0.06)'}`,
+                          background: isChecked ? 'rgba(220,38,38,0.08)' : 'var(--card-bg)',
+                          border: `1px solid ${isChecked ? 'rgba(220,38,38,0.3)' : 'var(--glass-border)'}`,
                           borderRadius: '8px', cursor: 'pointer', fontSize: '0.82rem', transition: 'all 0.15s'
                         }}
                       >
@@ -1269,9 +1275,9 @@ export default function AdminDashboardClient() {
                             if (e.target.checked) setRejectReasons(prev => [...prev, preset]);
                             else setRejectReasons(prev => prev.filter(r => r !== preset));
                           }}
-                          style={{ accentColor: '#ef4444' }}
+                          style={{ accentColor: '#dc2626' }}
                         />
-                        <span style={{ color: isChecked ? '#fca5a5' : 'inherit' }}>{preset}</span>
+                        <span style={{ color: isChecked ? '#b91c1c' : 'inherit', fontWeight: isChecked ? 600 : 400 }}>{preset}</span>
                       </label>
                     );
                   })}
@@ -1290,7 +1296,7 @@ export default function AdminDashboardClient() {
                   placeholder="e.g. Please capture a flat photo of Aadhaar with all 4 corners visible in bright lighting..."
                   style={{
                     width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--glass-border)',
-                    background: 'rgba(255,255,255,0.05)', color: 'var(--foreground)', fontSize: '0.85rem', resize: 'vertical'
+                    background: 'var(--card-bg)', color: 'var(--foreground)', fontSize: '0.85rem', resize: 'vertical'
                   }}
                 />
               </div>
@@ -1305,7 +1311,7 @@ export default function AdminDashboardClient() {
                   onChange={e => setRejectTargetStep(Number(e.target.value))}
                   style={{
                     width: '100%', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid var(--glass-border)',
-                    background: 'rgba(30,41,59,0.9)', color: 'var(--foreground)', fontSize: '0.85rem'
+                    background: 'var(--card-bg)', color: 'var(--foreground)', fontSize: '0.85rem'
                   }}
                 >
                   <option value={2}>Step 2: Identity Documents (Aadhaar & PAN Scans)</option>
@@ -1315,7 +1321,7 @@ export default function AdminDashboardClient() {
               </div>
             </div>
 
-            <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid rgba(255,255,255,0.08)', background: 'rgba(30,41,59,0.5)', display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
+            <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid var(--glass-border)', background: 'var(--card-bg)', display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
               <button
                 type="button"
                 onClick={() => setRejectModalPro(null)}
