@@ -76,7 +76,7 @@ function ReviewModal({ booking, customerName, onClose, onSubmitted }) {
             </p>
           </div>
           <button onClick={onClose} style={{
-            background: 'none', border: 'none', color: 'white', fontSize: '1.5rem',
+            background: 'none', border: 'none', color: 'var(--foreground)', fontSize: '1.5rem',
             cursor: 'pointer', opacity: 0.6, lineHeight: 1
           }}>×</button>
         </div>
@@ -125,7 +125,7 @@ function ReviewModal({ booking, customerName, onClose, onSubmitted }) {
               style={{
                 width: '100%', padding: '0.75rem', borderRadius: '8px',
                 border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.05)',
-                color: 'white', fontSize: '0.9rem', resize: 'vertical'
+                color: 'var(--foreground)', fontSize: '0.9rem', resize: 'vertical'
               }} />
           </div>
 
@@ -199,7 +199,7 @@ function RebookModal({ booking, customerName, customerPhone, onClose, onSubmitte
             </p>
           </div>
           <button onClick={onClose} style={{
-            background: 'none', border: 'none', color: 'white', fontSize: '1.5rem',
+            background: 'none', border: 'none', color: 'var(--foreground)', fontSize: '1.5rem',
             cursor: 'pointer', opacity: 0.6, lineHeight: 1
           }}>×</button>
         </div>
@@ -247,7 +247,7 @@ function RebookModal({ booking, customerName, customerPhone, onClose, onSubmitte
                   style={{
                     width: '100%', padding: '0.75rem', borderRadius: '8px',
                     border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.05)',
-                    color: 'white', fontSize: '0.9rem', resize: 'vertical'
+                    color: 'var(--foreground)', fontSize: '0.9rem', resize: 'vertical'
                   }} />
               </div>
 
@@ -282,10 +282,11 @@ const inputStyle = {
   borderRadius: '10px',
   border: '1px solid var(--glass-border)',
   background: 'rgba(255,255,255,0.06)',
-  color: 'white',
+  color: 'var(--foreground)',
   fontSize: '0.92rem',
   outline: 'none',
   transition: 'border-color 0.25s, box-shadow 0.25s',
+  colorScheme: 'light',
 };
 
 // Wizard Modal component to add customer warranties
@@ -460,7 +461,7 @@ function AddWarrantyModal({ customerPhone, onClose, onSaved }) {
             </div>
           </div>
           <button onClick={onClose} style={{
-            background: 'none', border: 'none', color: 'white', fontSize: '1.6rem',
+            background: 'none', border: 'none', color: 'var(--foreground)', fontSize: '1.6rem',
             cursor: 'pointer', opacity: 0.6, lineHeight: 1
           }}>×</button>
         </div>
@@ -541,9 +542,9 @@ function AddWarrantyModal({ customerPhone, onClose, onSaved }) {
                       style={{
                         padding: '0.4rem 1rem', borderRadius: '20px',
                         border: duration === m ? '1px solid var(--primary)' : '1px solid var(--glass-border)',
-                        background: duration === m ? 'rgba(59,130,246,0.15)' : 'rgba(255,255,255,0.03)',
-                        color: duration === m ? 'var(--primary)' : 'white',
-                        cursor: 'pointer', fontSize: '0.85rem', fontWeight: 500
+                        background: duration === m ? 'rgba(194,65,12,0.12)' : 'rgba(255,255,255,0.03)',
+                        color: duration === m ? 'var(--primary)' : 'var(--foreground)',
+                        cursor: 'pointer', fontSize: '0.85rem', fontWeight: duration === m ? 600 : 500
                       }}>
                       {m === '12' ? '1 Year' : m === '24' ? '2 Years' : m === '36' ? '3 Years' : `${m} Months`}
                     </button>
@@ -552,9 +553,9 @@ function AddWarrantyModal({ customerPhone, onClose, onSaved }) {
                     style={{
                       padding: '0.4rem 1rem', borderRadius: '20px',
                       border: !['6', '12', '24', '36'].includes(duration) ? '1px solid var(--primary)' : '1px solid var(--glass-border)',
-                      background: !['6', '12', '24', '36'].includes(duration) ? 'rgba(59,130,246,0.15)' : 'rgba(255,255,255,0.03)',
-                      color: !['6', '12', '24', '36'].includes(duration) ? 'var(--primary)' : 'white',
-                      cursor: 'pointer', fontSize: '0.85rem', fontWeight: 500
+                      background: !['6', '12', '24', '36'].includes(duration) ? 'rgba(194,65,12,0.12)' : 'rgba(255,255,255,0.03)',
+                      color: !['6', '12', '24', '36'].includes(duration) ? 'var(--primary)' : 'var(--foreground)',
+                      cursor: 'pointer', fontSize: '0.85rem', fontWeight: !['6', '12', '24', '36'].includes(duration) ? 600 : 500
                     }}>Custom</button>
                 </div>
                 {!['6', '12', '24', '36'].includes(duration) && (
@@ -657,7 +658,7 @@ function AddWarrantyModal({ customerPhone, onClose, onSaved }) {
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 animate-fade-in">
               <div style={{
                 background: 'rgba(245,158,11,0.07)', border: '1px solid rgba(245,158,11,0.25)',
-                padding: '1.25rem', borderRadius: '12px', color: 'white'
+                padding: '1.25rem', borderRadius: '12px', color: 'var(--foreground)'
               }}>
                 <h4 style={{ color: '#f59e0b', fontWeight: 700, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.5rem' }}>
                   🛡️ Confidential Reference Guidelines & Disclaimer
@@ -740,7 +741,7 @@ function ViewWarrantyDocumentModal({ title, base64Data, onClose }) {
               📥 Download File
             </button>
             <button onClick={onClose} style={{
-              background: 'none', border: 'none', color: 'white', fontSize: '1.4rem',
+              background: 'none', border: 'none', color: 'var(--foreground)', fontSize: '1.4rem',
               cursor: 'pointer', opacity: 0.6, lineHeight: 1
             }}>×</button>
           </div>
@@ -1229,7 +1230,7 @@ function BookingsDashboardContent() {
                 style={{
                   padding: '0.6rem 1.25rem', borderRadius: '20px',
                   border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.04)',
-                  color: 'white', fontSize: '0.88rem', flex: 1, minWidth: '200px', outline: 'none'
+                  color: 'var(--foreground)', fontSize: '0.88rem', flex: 1, minWidth: '200px', outline: 'none'
                 }}
               />
               <select
@@ -1237,8 +1238,8 @@ function BookingsDashboardContent() {
                 onChange={e => setSelectedCatFilter(e.target.value)}
                 style={{
                   padding: '0.6rem 1rem', borderRadius: '20px',
-                  border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)',
-                  color: 'white', fontSize: '0.88rem', cursor: 'pointer', outline: 'none'
+                  border: '1px solid var(--glass-border)', background: 'var(--card-bg, rgba(245,239,230,0.85))',
+                  color: 'var(--foreground)', fontSize: '0.88rem', cursor: 'pointer', outline: 'none'
                 }}
               >
                 <option value="All">All Categories</option>
@@ -1307,7 +1308,7 @@ function BookingsDashboardContent() {
                     {/* Content Details */}
                     <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                       <div>
-                        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, color: 'white' }}>{w.appliance_name}</h3>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, color: 'var(--foreground)' }}>{w.appliance_name}</h3>
                         {w.notes && (
                           <p style={{ fontSize: '0.85rem', opacity: 0.65, marginTop: '0.4rem', fontStyle: 'italic', lineHeight: 1.4 }}>
                             "{w.notes}"
@@ -1342,15 +1343,15 @@ function BookingsDashboardContent() {
                         <span style={{ opacity: 0.6 }}>Attachments:</span>
                         <div style={{ display: 'flex', gap: '0.6rem' }}>
                           <span style={{
-                            opacity: w.receipt_copy ? 1 : 0.25, color: w.receipt_copy ? '#34d399' : 'white',
+                            opacity: w.receipt_copy ? 1 : 0.25, color: w.receipt_copy ? '#34d399' : 'var(--foreground)',
                             textDecoration: w.receipt_copy ? 'none' : 'line-through'
                           }}>🧾 Bill</span>
                           <span style={{
-                            opacity: w.invoice_copy ? 1 : 0.25, color: w.invoice_copy ? '#34d399' : 'white',
+                            opacity: w.invoice_copy ? 1 : 0.25, color: w.invoice_copy ? '#34d399' : 'var(--foreground)',
                             textDecoration: w.invoice_copy ? 'none' : 'line-through'
                           }}>📄 Invoice</span>
                           <span style={{
-                            opacity: w.warranty_card_copy ? 1 : 0.25, color: w.warranty_card_copy ? '#34d399' : 'white',
+                            opacity: w.warranty_card_copy ? 1 : 0.25, color: w.warranty_card_copy ? '#34d399' : 'var(--foreground)',
                             textDecoration: w.warranty_card_copy ? 'none' : 'line-through'
                           }}>🪪 Card</span>
                         </div>
