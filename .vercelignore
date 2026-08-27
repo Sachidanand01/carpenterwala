@@ -20,3 +20,12 @@ scripts/
 
 # Raw SQL database schemas & migration scripts
 *.sql
+
+# Architecture documentation, diagrams & Python diagram-as-code scripts
+docs/
+*journey*.md
+*journeys*.md
+*architecture*
+*generate_diagram*.py
+*.py
+

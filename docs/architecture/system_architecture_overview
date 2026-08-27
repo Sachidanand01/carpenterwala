@@ -1,0 +1,70 @@
+digraph "Carpenterwala — System Architecture Overview" {
+	graph [fontcolor="#2D3436" fontname="Sans-Serif" fontsize=15 label="Carpenterwala — System Architecture Overview" nodesep=0.60 pad=2.0 rankdir=TB ranksep=0.75 splines=ortho]
+	node [fixedsize=true fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 height=1.4 imagescale=true labelloc=b shape=box style=rounded width=1.4]
+	edge [color="#7B8894"]
+	subgraph "cluster_Client Layer" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="Client Layer" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"3dd3eefae2094550ae7f08d85976fd9e" [label="Homeowner / Customer" height=1.9 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/onprem/client\user.png" shape=none]
+		dc583359671f4bd2b4342fcb33a6b30f [label="Handyman / Professional" height=1.9 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/onprem/client\user.png" shape=none]
+		"36d1e86374da48dc9b5a9eca57ea3e0f" [label="Platform Administrator" height=1.9 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/onprem/client\user.png" shape=none]
+	}
+	subgraph "cluster_Next.js 16 App Router (Vercel Edge / Node Runtime)" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="Next.js 16 App Router (Vercel Edge / Node Runtime)" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		subgraph "cluster_Frontend UI Components" {
+			graph [bgcolor="#EBF3E7" fontname="Sans-Serif" fontsize=12 label="Frontend UI Components" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+			a9d0475aaaeb428b8070364fade2ebcf [label="SEO Landing Pages (123+ SSG)" height=1.9 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/programming/framework\react.png" shape=none]
+			"308a59887c364eb0ac456ca35d17ea19" [label="LeadCaptureModal / DirectCall" height=1.9 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/programming/framework\react.png" shape=none]
+			"3418be9649724ff6bf23c42f1d28c177" [label="4-Step Pro Onboarding Wizard" height=1.9 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/programming/framework\react.png" shape=none]
+			"5742e7f33de44d0f96243db9b537b011" [label="Customer Bookings & Warranty Hub" height=1.9 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/programming/framework\react.png" shape=none]
+			"380e996a214a4fc889804efa40f2fc36" [label="Admin Audit & Rejection Console" height=1.9 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/programming/framework\react.png" shape=none]
+		}
+		subgraph "cluster_REST API Route Handlers (/api/*)" {
+			graph [bgcolor="#EBF3E7" fontname="Sans-Serif" fontsize=12 label="REST API Route Handlers (/api/*)" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+			"119af11b9365497fa489ef6059222534" [label="Customer APIs
+/customer/otp, /leads, /warranties" height=2.3 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/onprem/compute\server.png" shape=none]
+			a748140f9eb14523b1ca841b0db547ea [label="Pro APIs
+/pro/otp, /profile, /verify-doc" height=2.3 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/onprem/compute\server.png" shape=none]
+			e85c20548e7248b39ff4869e1027d408 [label="Admin APIs
+/admin/login, /profiles, /verify" height=2.3 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/onprem/compute\server.png" shape=none]
+			a4aa74d1c7b74a1aa33bf06eb152f1b1 [label="Reviews & Geo APIs
+/reviews, /geo, /comments" height=2.3 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/onprem/compute\server.png" shape=none]
+		}
+	}
+	subgraph "cluster_Data & External Cloud Services" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="Data & External Cloud Services" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		subgraph "cluster_Supabase PostgreSQL Database" {
+			graph [bgcolor="#EBF3E7" fontname="Sans-Serif" fontsize=12 label="Supabase PostgreSQL Database" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+			f37644fd314f41c194a2abc8b68a4f47 [label="profiles
+(Docs, Verification, Bio)" height=2.3 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/onprem/database\postgresql.png" shape=none]
+			afd372df0bc14545a7b4c7821116f678 [label="leads
+(Task, Routing Status)" height=2.3 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/onprem/database\postgresql.png" shape=none]
+			c20e64b572354808b907ddbaf4712eb2 [label="customers
+(Contacts, Addresses)" height=2.3 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/onprem/database\postgresql.png" shape=none]
+			"6f2b706efc6a4439b8df907082140fc8" [label="warranties
+(90-Day Coverage, Claims)" height=2.3 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/onprem/database\postgresql.png" shape=none]
+			"24709d0113fb479f86753f484b6f6447" [label="reviews
+(Ratings & Feedback)" height=2.3 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/onprem/database\postgresql.png" shape=none]
+		}
+		"651085fdd1494fbab5e8621512a801ed" [label="Resend Email Service
+(HTML Notifications)" height=2.3 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/generic/blank\blank.png" shape=none]
+		"313b88d026034266a35ddb8c749d307b" [label="Browser Storage
+(localStorage / cookies)" height=2.3 image="C:\Users\Sachidanand.Singh\AppData\Roaming\Python\Python314\site-packages\resources/generic/blank\blank.png" shape=none]
+	}
+	"3dd3eefae2094550ae7f08d85976fd9e" -> "308a59887c364eb0ac456ca35d17ea19" [label="Book Service" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"3dd3eefae2094550ae7f08d85976fd9e" -> "5742e7f33de44d0f96243db9b537b011" [label="Track & Claim" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	dc583359671f4bd2b4342fcb33a6b30f -> "3418be9649724ff6bf23c42f1d28c177" [label="Register & Upload" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"36d1e86374da48dc9b5a9eca57ea3e0f" -> "380e996a214a4fc889804efa40f2fc36" [label="Audit Documents" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"308a59887c364eb0ac456ca35d17ea19" -> "119af11b9365497fa489ef6059222534" [label="POST /leads" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"5742e7f33de44d0f96243db9b537b011" -> "119af11b9365497fa489ef6059222534" [label="GET/POST /warranties" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"3418be9649724ff6bf23c42f1d28c177" -> a748140f9eb14523b1ca841b0db547ea [label="PUT /pro/profile" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"380e996a214a4fc889804efa40f2fc36" -> e85c20548e7248b39ff4869e1027d408 [label="POST /admin/verify" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"119af11b9365497fa489ef6059222534" -> afd372df0bc14545a7b4c7821116f678 [label="Insert Lead" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"119af11b9365497fa489ef6059222534" -> "6f2b706efc6a4439b8df907082140fc8" [label="Auto Warranty" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"119af11b9365497fa489ef6059222534" -> c20e64b572354808b907ddbaf4712eb2 [label=Register dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	a748140f9eb14523b1ca841b0db547ea -> f37644fd314f41c194a2abc8b68a4f47 [label="Update Docs" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	e85c20548e7248b39ff4869e1027d408 -> f37644fd314f41c194a2abc8b68a4f47 [label="Verify / Reject" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	a4aa74d1c7b74a1aa33bf06eb152f1b1 -> "24709d0113fb479f86753f484b6f6447" [label="Recalculate Rating" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"119af11b9365497fa489ef6059222534" -> "651085fdd1494fbab5e8621512a801ed" [label="Lead Alert" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	e85c20548e7248b39ff4869e1027d408 -> "651085fdd1494fbab5e8621512a801ed" [label="Rejection Notice" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	dc583359671f4bd2b4342fcb33a6b30f -> "313b88d026034266a35ddb8c749d307b" [label="Session Token" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+}
