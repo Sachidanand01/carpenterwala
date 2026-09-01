@@ -42,6 +42,7 @@ export default async function sitemap() {
     '/how-it-works',
     '/contact',
     '/sitemap',
+    '/pro/hindi',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: buildDate,

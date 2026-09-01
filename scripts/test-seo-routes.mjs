@@ -123,6 +123,18 @@ async function runAll() {
     'Electrical uses local hero image': (t) => t.includes('/images/electrical-hero.jpg'),
     'No external Unsplash background on electrical': (t) => !t.includes('images.unsplash.com/photo-1621905251189'),
   });
+
+  await testRoute('16. Hindi Pro Landing Page [/pro/hindi]', 'http://localhost:3000/pro/hindi', {
+    'Contains 0% Commission Hindi Heading': (t) => t.includes('0%') || t.includes('कमीशन'),
+    'Contains FAQPage schema in JSON-LD': (t) => t.includes('"FAQPage"'),
+    'Contains link to Pro Login Hindi': (t) => t.includes('/pro/login?lang=hi'),
+  });
+
+  await testRoute('17. Hindi Pro Attraction Blog Post', 'http://localhost:3000/blog/bangalore-mein-carpenter-painter-plumber-direct-kaam-zero-commission', {
+    'Contains Hindi Pro Title': (t) => t.includes('कारपेंटर') || t.includes('पेंटर'),
+    'Contains Commission Comparison Table': (t) => t.includes('कमीशन') && t.includes('<table'),
+    'Contains CTA to Pro Hindi Portal': (t) => t.includes('/pro/login?lang=hi'),
+  });
 }
 
 runAll();
