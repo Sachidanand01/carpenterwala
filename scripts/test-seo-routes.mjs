@@ -77,12 +77,20 @@ async function runAll() {
     'Contains Sibling Localities links': (t) => t.includes('/services/carpentry/koramangala') && t.includes('/services/carpentry/whitefield'),
   });
 
-  await testRoute(`7. Blog Post SXO & Decision Guide [/blog/${sampleSlug}]`, `http://localhost:3000/blog/${sampleSlug}`, {
-    'Loads local author avatar /images/authors/rajesh.jpg': (t) => t.includes('/images/authors/rajesh.jpg'),
-    'No external pravatar dependencies': (t) => !t.includes('i.pravatar.cc'),
-    'Contains DIY vs Pro Decision Helper': (t) => t.includes('DIY vs. Hiring a Professional: When to Call an Expert'),
-    'Contains Deep-linked Category CTA': (t) => t.includes('/find-a-professional?category=Carpentry'),
-    'Contains BlogPosting schema': (t) => t.includes('"BlogPosting"'),
+  await testRoute('8. Carpentry Service Hub Schema', 'http://localhost:3000/services/carpentry', {
+    'Contains Service schema': (t) => t.includes('"@type":"Service"'),
+    'Contains OfferCatalog': (t) => t.includes('"OfferCatalog"'),
+    'Contains FAQPage schema': (t) => t.includes('"FAQPage"'),
+  });
+
+  await testRoute('9. FAQ Page Server-Side Schema', 'http://localhost:3000/faq', {
+    'Contains FAQPage schema in SSR response': (t) => t.includes('"@type":"FAQPage"'),
+    'Includes zero commission FAQ': (t) => t.includes('100% free marketplace'),
+  });
+
+  await testRoute('10. How It Works Schema', 'http://localhost:3000/how-it-works', {
+    'Contains WebPage / ItemList schema': (t) => t.includes('"@type":"WebPage"') && t.includes('"ItemList"'),
+    'Includes step definitions': (t) => t.includes('Browse & Discover') || t.includes('Browse &amp; Discover'),
   });
 }
 

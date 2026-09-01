@@ -15,59 +15,80 @@ export const metadata = {
 };
 
 export default function PaintingPage() {
-  const jsonLd = {
+  const serviceJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Service",
-    "serviceType": "Painting",
-    "provider": {
-      "@type": "Organization",
-      "name": "Carpenterwala"
-    },
-    "areaServed": {
-      "@type": "City",
-      "name": "Bangalore"
-    },
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Painting Services",
-      "itemListElement": [
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Interior Painting"
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Exterior Painting"
-          }
-        }
-      ]
-    }
-  };
-
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
+    "@graph": [
       {
-        "@type": "Question",
-        "name": "How long does it take to paint a 2BHK house?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Typically, a full 2BHK interior painting project takes between 4 to 7 days, depending on the complexity and the number of coats required."
+        "@type": "Service",
+        "@id": "https://carpenterwala.com/services/painting#service",
+        "name": "Professional Home & Commercial Painting Services in Bangalore",
+        "serviceType": "Painting",
+        "provider": {
+          "@type": "Organization",
+          "name": "Carpenterwala",
+          "url": "https://carpenterwala.com",
+          "telephone": "+91-809-555-1001"
+        },
+        "areaServed": {
+          "@type": "City",
+          "name": "Bangalore"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Painting Services Catalog",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Interior Wall Painting & Repainting"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Exterior Weatherproof Coating"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Waterproofing & Damp Repair Treatment"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Accent Feature Wall Texturing"
+              }
+            }
+          ]
         }
       },
       {
-        "@type": "Question",
-        "name": "Do I need to move the furniture myself?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Our painters will assist in moving and covering your furniture with plastic sheets to protect them from paint splatters and dust."
-        }
+        "@type": "FAQPage",
+        "@id": "https://carpenterwala.com/services/painting#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How long does it take to paint a 2BHK house?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Typically, a full 2BHK interior painting project takes between 4 to 7 days, depending on the complexity and the number of coats required."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need to move the furniture myself?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Our painters will assist in moving and covering your furniture with plastic sheets to protect them from paint splatters and dust."
+            }
+          }
+        ]
       }
     ]
   };
@@ -83,11 +104,7 @@ export default function PaintingPage() {
       </div>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
       />
       {/* Hero Section */}
       <section style={{

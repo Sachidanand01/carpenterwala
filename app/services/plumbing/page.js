@@ -14,59 +14,80 @@ export const metadata = {
 };
 
 export default function PlumbingPage() {
-  const jsonLd = {
+  const serviceJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Service",
-    "serviceType": "Plumbing",
-    "provider": {
-      "@type": "Organization",
-      "name": "Carpenterwala"
-    },
-    "areaServed": {
-      "@type": "City",
-      "name": "Bangalore"
-    },
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Plumbing Services",
-      "itemListElement": [
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Leak Detection"
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Fixture Installation"
-          }
-        }
-      ]
-    }
-  };
-
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
+    "@graph": [
       {
-        "@type": "Question",
-        "name": "How much does it cost to fix a leaking tap?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Minor repairs like tap leaks usually have a base service fee. The final cost depends on whether a simple washer replacement is needed or the entire faucet needs to be changed."
+        "@type": "Service",
+        "@id": "https://carpenterwala.com/services/plumbing#service",
+        "name": "Professional Plumbing Services in Bangalore",
+        "serviceType": "Plumbing",
+        "provider": {
+          "@type": "Organization",
+          "name": "Carpenterwala",
+          "url": "https://carpenterwala.com",
+          "telephone": "+91-809-555-1001"
+        },
+        "areaServed": {
+          "@type": "City",
+          "name": "Bangalore"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Plumbing Services Catalog",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Leak Detection & Pipe Repair"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Bathroom & Sanitary Fixture Installation"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Water Tank Deep Cleaning (500L-1000L)"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Kitchen Sink Drain Unclogging"
+              }
+            }
+          ]
         }
       },
       {
-        "@type": "Question",
-        "name": "Do you provide a warranty on plumbing repairs?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Most of our verified plumbers provide a 15-30 day warranty on their labor."
-        }
+        "@type": "FAQPage",
+        "@id": "https://carpenterwala.com/services/plumbing#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much does it cost to fix a leaking tap?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Minor repairs like tap leaks usually have a base service fee. The final cost depends on whether a simple washer replacement is needed or the entire faucet needs to be changed."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you provide a warranty on plumbing repairs?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Most of our verified plumbers provide a 15-30 day warranty on their labor."
+            }
+          }
+        ]
       }
     ]
   };
@@ -82,11 +103,7 @@ export default function PlumbingPage() {
       </div>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
       />
       {/* Hero Section */}
       <section style={{

@@ -14,59 +14,80 @@ export const metadata = {
 };
 
 export default function ElectricalPage() {
-  const jsonLd = {
+  const serviceJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Service",
-    "serviceType": "Electrical",
-    "provider": {
-      "@type": "Organization",
-      "name": "Carpenterwala"
-    },
-    "areaServed": {
-      "@type": "City",
-      "name": "Bangalore"
-    },
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Electrical Services",
-      "itemListElement": [
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Wiring & Rewiring"
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Fixture Installation"
-          }
-        }
-      ]
-    }
-  };
-
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
+    "@graph": [
       {
-        "@type": "Question",
-        "name": "Why are my lights flickering frequently?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Flickering can be caused by loose wiring, voltage fluctuations, or an overloaded circuit. It's best to have an electrician check it immediately to prevent short circuits."
+        "@type": "Service",
+        "@id": "https://carpenterwala.com/services/electrical#service",
+        "name": "Professional Electrical Repair & Installation Services in Bangalore",
+        "serviceType": "Electrical",
+        "provider": {
+          "@type": "Organization",
+          "name": "Carpenterwala",
+          "url": "https://carpenterwala.com",
+          "telephone": "+91-809-555-1001"
+        },
+        "areaServed": {
+          "@type": "City",
+          "name": "Bangalore"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Electrical Services Catalog",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "House Wiring & Rewiring"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Switchboard & Power Socket Installation"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "MCB Trip Diagnostics & Fuse Repair"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Ceiling Fan & Light Fixture Fitting"
+              }
+            }
+          ]
         }
       },
       {
-        "@type": "Question",
-        "name": "Is it safe to use high-power appliances on normal sockets?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No, appliances like ACs, Geysers, and Microwaves should be used with 15A/16A power sockets and dedicated MCBs to prevent overheating of wires."
-        }
+        "@type": "FAQPage",
+        "@id": "https://carpenterwala.com/services/electrical#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why are my lights flickering frequently?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Flickering can be caused by loose wiring, voltage fluctuations, or an overloaded circuit. It's best to have an electrician check it immediately to prevent short circuits."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is it safe to use high-power appliances on normal sockets?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No, appliances like ACs, Geysers, and Microwaves should be used with 15A/16A power sockets and dedicated MCBs to prevent overheating of wires."
+            }
+          }
+        ]
       }
     ]
   };
@@ -82,11 +103,7 @@ export default function ElectricalPage() {
       </div>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
       />
       {/* Hero Section */}
       <section style={{

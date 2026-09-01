@@ -23,59 +23,80 @@ export const metadata = {
 };
 
 export default function CarpentryPage() {
-  const jsonLd = {
+  const serviceJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Service",
-    "serviceType": "Carpentry",
-    "provider": {
-      "@type": "Organization",
-      "name": "Carpenterwala"
-    },
-    "areaServed": {
-      "@type": "City",
-      "name": "Bangalore"
-    },
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Carpentry Services",
-      "itemListElement": [
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Furniture Repair"
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Custom Carpentry"
-          }
-        }
-      ]
-    }
-  };
-
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
+    "@graph": [
       {
-        "@type": "Question",
-        "name": "How do I get a quote for my carpentry work?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "You can browse carpenter profiles, view their past work, and contact them directly through the platform to get an initial estimate."
+        "@type": "Service",
+        "@id": "https://carpenterwala.com/services/carpentry#service",
+        "name": "Professional Carpentry Services in Bangalore",
+        "serviceType": "Carpentry",
+        "provider": {
+          "@type": "Organization",
+          "name": "Carpenterwala",
+          "url": "https://carpenterwala.com",
+          "telephone": "+91-809-555-1001"
+        },
+        "areaServed": {
+          "@type": "City",
+          "name": "Bangalore"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Carpentry Services Catalog",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Furniture Repair & Restoration"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Custom Furniture & Wardrobe Assembly"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Modular Kitchen & Cabinet Repair"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Door Lock & Window Latch Installation"
+              }
+            }
+          ]
         }
       },
       {
-        "@type": "Question",
-        "name": "Do you provide materials or should I buy them?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Most of our professionals can either bring the necessary materials or work with materials you provide."
-        }
+        "@type": "FAQPage",
+        "@id": "https://carpenterwala.com/services/carpentry#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do I get a quote for my carpentry work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can browse carpenter profiles, view their past work, and contact them directly through the platform to get an initial estimate."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you provide materials or should I buy them?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Most of our professionals can either bring the necessary materials or work with materials you provide."
+            }
+          }
+        ]
       }
     ]
   };
@@ -91,11 +112,7 @@ export default function CarpentryPage() {
       </div>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
       />
       {/* Hero Section */}
       <section style={{
