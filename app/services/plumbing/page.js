@@ -122,7 +122,7 @@ export default function PlumbingPage() {
           left: 0,
           width: '100%',
           height: '100%',
-          backgroundImage: 'url("https://images.unsplash.com/photo-1581244276894-8a3fb524cfdc?q=80&w=2070&auto=format&fit=crop")',
+          backgroundImage: 'url("/images/plumbing-hero.jpg")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           zIndex: -1,

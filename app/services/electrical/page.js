@@ -122,7 +122,7 @@ export default function ElectricalPage() {
           left: 0,
           width: '100%',
           height: '100%',
-          backgroundImage: 'url("https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop")',
+          backgroundImage: 'url("/images/electrical-hero.jpg")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           zIndex: -1,

@@ -64,9 +64,9 @@ export default async function sitemap() {
   // 4. Trade service pages with hero image metadata
   const serviceImages = {
     carpentry: `${baseUrl}/images/carpentry-hero.png`,
-    painting: `${baseUrl}/images/about-us-hero.png`,
-    plumbing: `${baseUrl}/images/about-us-hero.png`,
-    electrical: `${baseUrl}/images/about-us-hero.png`,
+    painting: `${baseUrl}/images/painting-hero.png`,
+    plumbing: `${baseUrl}/images/plumbing-hero.jpg`,
+    electrical: `${baseUrl}/images/electrical-hero.jpg`,
   };
 
   const serviceNames = ['carpentry', 'painting', 'plumbing', 'electrical'];

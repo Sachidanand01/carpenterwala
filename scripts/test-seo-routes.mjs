@@ -112,6 +112,16 @@ async function runAll() {
     'Contains 13 Bangalore Localities': (t) => t.includes('Koramangala') && t.includes('Electronic City'),
     'Contains Agent Citations & URLs': (t) => t.includes('https://carpenterwala.com/services/carpentry') && t.includes('https://carpenterwala.com/sitemap.xml'),
   });
+
+  await testRoute('14. Local Image Assets & Valid Extensions', 'http://localhost:3000/services/plumbing', {
+    'Plumbing uses local hero image': (t) => t.includes('/images/plumbing-hero.jpg'),
+    'No external Unsplash background on plumbing': (t) => !t.includes('images.unsplash.com/photo-1581244276894'),
+  });
+
+  await testRoute('15. Electrical Local Image Assets', 'http://localhost:3000/services/electrical', {
+    'Electrical uses local hero image': (t) => t.includes('/images/electrical-hero.jpg'),
+    'No external Unsplash background on electrical': (t) => !t.includes('images.unsplash.com/photo-1621905251189'),
+  });
 }
 
 runAll();
