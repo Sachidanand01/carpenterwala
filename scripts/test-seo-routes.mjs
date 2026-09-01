@@ -49,6 +49,7 @@ async function runAll() {
     'Contains WebSite with SearchAction': (t) => t.includes('"SearchAction"'),
     'Contains FAQPage schema': (t) => t.includes('"FAQPage"'),
     'Contains verified phone number +91-809-555-1001': (t) => t.includes('+91-809-555-1001'),
+    'Contains LLM knowledge alternate link': (t) => t.includes('/llms.txt'),
     'No placeholder phone number': (t) => !t.includes('+91-XXXXXXXXXX'),
   });
 

@@ -6,6 +6,9 @@ export const metadata = {
   description: "India's trusted digital marketplace to book verified background-checked carpenters, painters, plumbers, and electricians in Bangalore.",
   alternates: {
     canonical: 'https://carpenterwala.com',
+    types: {
+      'text/plain': 'https://carpenterwala.com/llms.txt',
+    },
   },
 };
 

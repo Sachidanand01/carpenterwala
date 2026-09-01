@@ -64,6 +64,12 @@ export const metadata = {
     shortcut: '/favicon.svg',
     apple: '/favicon.svg',
   },
+  alternates: {
+    canonical: 'https://carpenterwala.com',
+    types: {
+      'text/plain': 'https://carpenterwala.com/llms.txt',
+    },
+  },
 };
 
 const jsonLd = {
