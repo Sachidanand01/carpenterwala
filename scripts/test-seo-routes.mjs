@@ -42,6 +42,7 @@ async function runAll() {
     'Includes /contact': (t) => t.includes('<loc>https://carpenterwala.com/contact</loc>'),
     'Includes service-location pages': (t) => t.includes('/services/carpentry/hsr-layout'),
     'Includes blog posts': (t) => t.includes(`/blog/${sampleSlug}`),
+    'Includes sitemap hreflang links': (t) => t.includes('hreflang="hi"') && t.includes('/pro/login'),
   });
 
   await testRoute('3. Homepage Schema & NAP Consistency', 'http://localhost:3000/', {

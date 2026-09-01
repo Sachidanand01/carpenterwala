@@ -42,13 +42,29 @@ export default async function sitemap() {
     '/how-it-works',
     '/contact',
     '/sitemap',
-    '/pro/login',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: buildDate,
     changeFrequency: 'weekly',
     priority: 0.7,
   }));
+
+  const proLoginEntry = {
+    url: `${baseUrl}/pro/login`,
+    lastModified: buildDate,
+    changeFrequency: 'weekly',
+    priority: 0.7,
+    alternates: {
+      languages: {
+        en: `${baseUrl}/pro/login`,
+        hi: `${baseUrl}/pro/login?lang=hi`,
+        kn: `${baseUrl}/pro/login?lang=kn`,
+        ta: `${baseUrl}/pro/login?lang=ta`,
+        te: `${baseUrl}/pro/login?lang=te`,
+        'x-default': `${baseUrl}/pro/login`,
+      },
+    },
+  };
 
   // 3. Legal pages
   const staticLegal = [
@@ -148,6 +164,7 @@ export default async function sitemap() {
   return [
     ...staticHighPriority,
     ...staticMidPriority,
+    proLoginEntry,
     ...staticLegal,
     ...services,
     ...locationServices,
