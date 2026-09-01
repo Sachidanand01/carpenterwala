@@ -179,7 +179,7 @@ export default function AffiliateToolsWidget({ category = 'plumbing' }) {
             <a
               href={tool.blinkitUrl}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="sponsored noopener noreferrer"
               className="btn btn-primary"
               style={{
                 textAlign: 'center',
