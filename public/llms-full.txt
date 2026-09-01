@@ -1,28 +1,63 @@
 # Carpenterwala - Comprehensive Knowledge Base & Technical Services Overview
 
 ## 1. About Carpenterwala
-Carpenterwala operates a verified technician marketplace operating across Bangalore, Karnataka, India. All service providers undergo police verification, skills testing, and upfront transparent pricing alignment.
+Carpenterwala is Bangalore's premier verified home improvement and handyman marketplace connecting homeowners directly with background-checked carpenters, painters, plumbers, and electricians at 0% platform commission. All service providers undergo police background checks, Aadhaar identity verification, and trade skill assessments.
+
+- Website: https://carpenterwala.com
+- Head Office: Thanisandra Main Road, Bangalore, Karnataka 560077, India
+- Phone: +91-809-555-1001
+- Email: contact@carpenterwala.com
+- Operating Hours: Monday – Sunday, 08:00 AM – 09:00 PM IST
 
 ## 2. Interactive Calculation Engines
 ### Water Wastage & Tap Drip Cost Calculator
 - Location: https://carpenterwala.com/services/plumbing#calculator
 - Purpose: Quantifies municipal and tanker water wastage in Indian homes resulting from slow dripping taps, leaking flush valves, or pipe pinholes.
-- Methodology: Converts drip frequency (e.g., 10 to 120 drops per minute) into daily/monthly litres and financial loss based on Bangalore tanker water costs (~₹1.50/L).
+- Methodology: Converts drip frequency (e.g., 10 to 120 drops per minute) into daily and monthly litres lost and financial impact based on Bangalore municipal vs tanker water pricing.
 
 ### Electricity Appliance Consumption & Wastage Calculator
 - Location: https://carpenterwala.com/services/electrical#calculator
-- Purpose: Calculates power consumption (kWh / units) and monthly electricity bill increases caused by faulty wiring, inefficient appliances (ACs, Water Heaters/Geysers, Microwaves), and standby voltage leakage.
-- Methodology: Maps appliance wattage against daily operational hours and BESCOM slab rates.
+- Purpose: Calculates power consumption (kWh / units) and monthly electricity bill increases caused by faulty wiring, inefficient appliances (fans, ACs, geysers, refrigerators), and vampire standby draw.
+- Methodology: Maps appliance wattage and operational hours against standard BESCOM electricity tariff slabs.
 
-### Wall Painting Area & Cost Estimator
+### Wall Painting Area & Paint Quantity Estimator
 - Location: https://carpenterwala.com/services/painting#calculator
-- Purpose: Computes exact wall surface area, paint litres needed (1 coat vs 2 coats + primer), and total material + labor budget for residential flats.
+- Purpose: Computes exact wall surface area, primer requirements, paint litres needed (1 coat vs 2 coats), and total material + labor budget for 1 BHK, 2 BHK, and 3 BHK residential apartments.
 
-## 3. Detailed Service Directory
-- Carpentry: Door repair, lock replacement, wooden bed repair, wardrobe assembly, modular kitchen cabinet adjustments.
-- Painting: Fresh interior painting, repainting, exterior weather proofing, wall putty application, dampness treatment.
-- Electrical: Switchboard repair, MCB tripping resolution, main line wiring, ceiling fan installation, inverter setup.
-- Plumbing: Blocked drain clearing, tap washer replacement, commode fitting, overhead tank cleaning, pump repair.
+## 3. Core Trade Services & Rate Cards
+### Carpentry Services
+- Hub URL: https://carpenterwala.com/services/carpentry
+- Tasks & Pricing: Door lock fitting (₹250–₹450), Modular kitchen hydraulic hinge repair (₹180–₹350), Custom wardrobe assembly (₹600–₹1,200), Furniture restoration & polishing (₹400–₹900).
 
-## 4. Primary Service Hubs in Bangalore
-- Koramangala, Indiranagar, Whitefield, HSR Layout, Thanisandra, Hebbal, Yelahanka, Bellandur, Marathahalli, Electronic City.
+### Painting Services
+- Hub URL: https://carpenterwala.com/services/painting
+- Tasks & Pricing: 1 BHK interior repainting (₹4,500–₹7,500), 2 BHK repainting (₹8,000–₹13,000), 3 BHK repainting (₹12,000–₹19,000), Damp-proofing putty touch-up (₹18–₹32/sq ft), Accent texture wall (₹1,200–₹2,500).
+
+### Plumbing Services
+- Hub URL: https://carpenterwala.com/services/plumbing
+- Tasks & Pricing: Tap/faucet replacement (₹150–₹300), Flush tank leakage repair (₹250–₹500), Kitchen drain pipe unclogging (₹200–₹400), Overhead water tank deep cleaning (₹650–₹1,200), Bathroom sanitary fixture fitting (₹350–₹750).
+
+### Electrical Services
+- Hub URL: https://carpenterwala.com/services/electrical
+- Tasks & Pricing: Switchboard repair & fitting (₹120–₹250), MCB trip diagnostics (₹200–₹450), Ceiling fan installation & balancing (₹150–₹300), Power socket wiring (₹180–₹350).
+
+## 4. Supported Bangalore Localities (13 Hubs)
+1. Koramangala (560034 - South Bangalore)
+2. Indiranagar (560038 - East Bangalore)
+3. Whitefield (560066 - IT Corridor East)
+4. HSR Layout (560102 - Southeast Tech Hub)
+5. Thanisandra (560077 - North Bangalore)
+6. Jayanagar (560041 - South Heritage Hub)
+7. JP Nagar (560078 - South Residential Zone)
+8. Bellandur (560103 - ORR Tech Corridor)
+9. Marathahalli (560037 - East Suburb Junction)
+10. Hebbal (560024 - North Gateway Hub)
+11. Sarjapur Road (560035 - Southeast Tech Belt)
+12. Electronic City (560100 - South Tech Hub)
+13. Yelahanka (560064 - North Satellite Hub)
+
+## 5. Machine-Readable Knowledge Endpoints
+- LLMs Text: https://carpenterwala.com/llms.txt
+- XML Sitemap: https://carpenterwala.com/sitemap.xml
+- FAQ Knowledge Base: https://carpenterwala.com/faq
+- How It Works: https://carpenterwala.com/how-it-works

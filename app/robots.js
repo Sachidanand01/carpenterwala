@@ -16,6 +16,7 @@ export default function robots() {
       {
         userAgent: [
           'GPTBot',
+          'OAI-SearchBot',
           'ChatGPT-User',
           'PerplexityBot',
           'ClaudeBot',

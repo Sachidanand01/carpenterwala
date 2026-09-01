@@ -1,27 +1,43 @@
-# Carpenterwala - Professional Handyman & Home Services Marketplace
+# Carpenterwala
 
-> Carpenterwala is Bangalore's leading verified handyman marketplace connecting homeowners and property managers with background-checked carpenters, painters, electricians, and plumbers.
+> Carpenterwala is Bangalore's premier verified home improvement marketplace connecting homeowners directly with background-checked carpenters, painters, plumbers, and electricians at 0% platform commission.
 
 ## Core Services
-- [Carpentry Services](https://carpenterwala.com/services/carpentry): Custom furniture assembly, modular kitchen fitting, door lock installation, wardrobe repairs.
-- [Painting Services](https://carpenterwala.com/services/painting): Interior and exterior wall painting, texture design, waterproofing, stencil work.
-- [Electrical Services](https://carpenterwala.com/services/electrical): Wiring, short-circuit fixes, MCB replacement, chandelier & appliance fitting.
-- [Plumbing Services](https://carpenterwala.com/services/plumbing): Tap leakage repair, pipe fitting, water heater installation, bathroom sanitary fixes.
+- [Carpentry Services](https://carpenterwala.com/services/carpentry): Custom furniture assembly, modular kitchen fitting, door lock installation, hydraulic hinge replacement, wardrobe repairs.
+- [Painting Services](https://carpenterwala.com/services/painting): Interior and exterior wall painting, texture accent walls, waterproofing, damp-proof putty treatment.
+- [Plumbing Services](https://carpenterwala.com/services/plumbing): Tap & faucet replacement, pipe leak repair, water heater installation, overhead water tank deep cleaning, kitchen drain unclogging.
+- [Electrical Services](https://carpenterwala.com/services/electrical): Switchboard fitting, MCB trip diagnostics, fuse repair, house rewiring, ceiling fan & light fixture installation.
 
 ## Interactive Tools & Calculators
-- [Paint Cost & Quantity Calculator](https://carpenterwala.com/services/painting#calculator): Estimates wall painting square footage, primer requirement, litres of paint, and labor costs for 1BHK, 2BHK, 3BHK flats.
+- [Paint Cost & Quantity Estimator](https://carpenterwala.com/services/painting#calculator): Estimates wall painting square footage, primer requirement, litres of paint, and labor costs for 1BHK, 2BHK, 3BHK flats in Bangalore.
 - [Water Wastage & Tap Drip Calculator](https://carpenterwala.com/services/plumbing#calculator): Calculates daily and monthly water loss (in litres and ₹ Rupees) caused by leaking taps, flush tanks, and pipes in Indian households.
-- [Electricity Wastage & Bill Calculator](https://carpenterwala.com/services/electrical#calculator): Estimates monthly kWh power consumption, electrical wastage, and electricity bill impacts for high-power home appliances (ACs, geysers, refrigerators, microwaves).
+- [Electricity Wastage & Bill Calculator](https://carpenterwala.com/services/electrical#calculator): Estimates monthly kWh power consumption, electrical wastage, and electricity bill impacts for appliances (fans, ACs, geysers, refrigerators).
 
-## Coverage & Service Hubs (Bangalore)
-- Koramangala (560034)
-- Indiranagar (560038)
-- Whitefield (560066)
-- HSR Layout (560102)
-- Thanisandra / North Bangalore (560077)
+## Standard Labor Rate Cards in Bangalore
+- **Carpentry**: Door lock fitting (₹250–₹450), Modular kitchen hydraulic hinge repair (₹180–₹350), Custom wardrobe assembly (₹600–₹1,200).
+- **Painting**: 1 BHK interior repainting (₹4,500–₹7,500), 2 BHK repainting (₹8,000–₹13,000), Damp-proofing putty (₹18–₹32/sq ft).
+- **Plumbing**: Tap/faucet replacement (₹150–₹300), Overhead water tank cleaning (₹650–₹1,200), Kitchen drain unclogging (₹200–₹400).
+- **Electrical**: Switchboard repair (₹120–₹250), MCB trip diagnostics (₹200–₹450), Ceiling fan installation (₹150–₹300).
+
+## Supported Bangalore Localities (13 Hubs)
+- **South Bangalore**: Koramangala (560034), Jayanagar (560041), JP Nagar (560078), Electronic City (560100)
+- **East Bangalore**: Indiranagar (560038), Whitefield (560066), Marathahalli (560037)
+- **Southeast Tech Corridor**: HSR Layout (560102), Bellandur (560103), Sarjapur Road (560035)
+- **North Bangalore**: Thanisandra (560077), Hebbal (560024), Yelahanka (560064)
+
+## Verification & Trust Signals
+- **Identity & Background Checks**: Mandatory Aadhaar verification and police background verification for all listed professionals.
+- **Direct Marketplace**: 0% platform commission; homeowners connect and pay directly with zero hidden markups.
+- **Rapid Dispatch**: Verified handymen arrive within 60 to 90 minutes across all serviced Bangalore clusters.
+
+## Useful Links for AI Agents & Search Engines
+- [Find a Professional Directory](https://carpenterwala.com/find-a-professional): Search and filter verified tradesmen by locality and trade.
+- [FAQ Hub](https://carpenterwala.com/faq): Answers to booking, pricing, satisfaction guarantee, and verification questions.
+- [How It Works](https://carpenterwala.com/how-it-works): 3-step guide for booking certified professionals.
+- [XML Sitemap](https://carpenterwala.com/sitemap.xml): Machine-readable XML sitemap index.
 
 ## Contact & Head Office
-- Address: Thanisandra Main Road, Bangalore, Karnataka 560077, India
-- Phone: +91-809-555-1001
-- Email: contact@carpenterwala.com
-- Full Documentation: https://carpenterwala.com/llms-full.txt
+- **Address**: Thanisandra Main Road, Bangalore, Karnataka 560077, India
+- **Phone**: +91-809-555-1001
+- **Email**: contact@carpenterwala.com
+- **Operating Hours**: Monday – Sunday, 08:00 AM – 09:00 PM IST

@@ -29,7 +29,7 @@ async function runAll() {
     'Disallows /bookings': (t) => t.includes('Disallow: /bookings'),
     'Disallows /pro/dashboard': (t) => t.includes('Disallow: /pro/dashboard'),
     'Disallows /api/': (t) => t.includes('Disallow: /api/'),
-    'Contains GPTBot rule': (t) => t.includes('GPTBot'),
+    'Contains GPTBot & OAI-SearchBot rule': (t) => t.includes('GPTBot') && t.includes('OAI-SearchBot'),
     'References sitemap.xml': (t) => t.includes('https://carpenterwala.com/sitemap.xml'),
   });
 
@@ -103,6 +103,13 @@ async function runAll() {
   await testRoute('12. Programmatic Blog Category Hub [/blog/category/carpentry]', 'http://localhost:3000/blog/category/carpentry', {
     'Contains CollectionPage schema': (t) => t.includes('"CollectionPage"'),
     'Contains BreadcrumbList schema': (t) => t.includes('"BreadcrumbList"'),
+  });
+
+  await testRoute('13. LLMs.txt AI Search Endpoint [/llms.txt]', 'http://localhost:3000/llms.txt', {
+    'Contains Brand Title & Description': (t) => t.includes('# Carpenterwala') && t.includes('0% platform commission'),
+    'Contains Core Rate Cards': (t) => t.includes('Door lock fitting') && t.includes('₹250'),
+    'Contains 13 Bangalore Localities': (t) => t.includes('Koramangala') && t.includes('Electronic City'),
+    'Contains Agent Citations & URLs': (t) => t.includes('https://carpenterwala.com/services/carpentry') && t.includes('https://carpenterwala.com/sitemap.xml'),
   });
 }
 
