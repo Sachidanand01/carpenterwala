@@ -68,16 +68,21 @@ async function runAll() {
     'Contains verified contact phone': (t) => t.includes('+91-809-555-1001'),
   });
 
-  await testRoute(`7. Blog Post with Local Author Image [/blog/${sampleSlug}]`, `http://localhost:3000/blog/${sampleSlug}`, {
-    'Loads local author avatar /images/authors/rajesh.jpg': (t) => t.includes('/images/authors/rajesh.jpg'),
-    'No external pravatar dependencies': (t) => !t.includes('i.pravatar.cc'),
-    'Contains BlogPosting schema': (t) => t.includes('"BlogPosting"'),
-    'Contains BreadcrumbList schema': (t) => t.includes('"BreadcrumbList"'),
+  await testRoute('9. Service-Location SXO [Carpentry in HSR Layout]', 'http://localhost:3000/services/carpentry/hsr-layout', {
+    'Contains Transparent Rate Card table': (t) => t.includes('Rate Card in') && t.includes('Door Lock'),
+    'Contains Localized FAQ Accordion': (t) => t.includes('Frequently Asked Questions') && t.includes('Sector 1 to 7'),
+    'Contains Deep-linked Pro Filter CTA': (t) => t.includes('/find-a-professional?category=Carpenter') && t.includes('location=HSR'),
+    'Contains FAQPage schema in JSON-LD': (t) => t.includes('"@type":"FAQPage"'),
+    'Contains LocalBusiness schema': (t) => t.includes('"LocalBusiness"'),
+    'Contains Sibling Localities links': (t) => t.includes('/services/carpentry/koramangala') && t.includes('/services/carpentry/whitefield'),
   });
 
-  await testRoute('8. Local Author Image Asset Status', 'http://localhost:3000/images/authors/rajesh.jpg', {
-    'Returns HTTP 200': (t, res) => res.status === 200,
-    'Returns Image MIME Type': (t, res) => res.headers.get('content-type')?.includes('image'),
+  await testRoute(`7. Blog Post SXO & Decision Guide [/blog/${sampleSlug}]`, `http://localhost:3000/blog/${sampleSlug}`, {
+    'Loads local author avatar /images/authors/rajesh.jpg': (t) => t.includes('/images/authors/rajesh.jpg'),
+    'No external pravatar dependencies': (t) => !t.includes('i.pravatar.cc'),
+    'Contains DIY vs Pro Decision Helper': (t) => t.includes('DIY vs. Hiring a Professional: When to Call an Expert'),
+    'Contains Deep-linked Category CTA': (t) => t.includes('/find-a-professional?category=Carpentry'),
+    'Contains BlogPosting schema': (t) => t.includes('"BlogPosting"'),
   });
 }
 

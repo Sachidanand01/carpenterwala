@@ -568,19 +568,50 @@ export default async function BlogPost({ params }) {
             style={{ margin: '3rem 0', minHeight: '280px' }}
           />
 
-          {/* Professional Support CTA Card */}
+          {/* DIY vs Professional Decision Helper (SXO Conversion Component) */}
           <div style={{
             marginTop: '3.5rem',
-            padding: '2.25rem',
-            backgroundColor: 'rgba(255,255,255,0.04)',
+            padding: '2rem',
+            backgroundColor: 'rgba(255,255,255,0.03)',
             borderRadius: '14px',
             border: '1px solid var(--glass-border)'
           }}>
-            <h3 style={{ marginBottom: '0.75rem', color: 'var(--primary)' }}>Need Hands-On Professional Support?</h3>
-            <p style={{ marginBottom: '1.5rem', opacity: 0.9 }}>If you are facing a home repair challenge that requires heavy diagnostic tools or certified technical experience, our verified specialists in Bangalore are ready to assist.</p>
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              <Link href="/find-a-professional" className="btn btn-primary">Find a Verified Pro</Link>
-              <Link href="/services" className="btn btn-secondary">Explore All Services</Link>
+            <h3 style={{ marginBottom: '1rem', color: 'var(--primary)', fontSize: '1.35rem' }}>
+              ⚖️ DIY vs. Hiring a Professional: When to Call an Expert
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
+              <div style={{ padding: '1.25rem', background: 'rgba(16,185,129,0.08)', borderRadius: '10px', border: '1px solid rgba(16,185,129,0.2)' }}>
+                <h4 style={{ color: '#10b981', marginBottom: '0.5rem', fontSize: '1.05rem' }}>✓ Safe to DIY</h4>
+                <ul style={{ paddingLeft: '1.2rem', fontSize: '0.9rem', opacity: 0.9, margin: 0 }}>
+                  <li>Minor screw tightening or loose hinge lubrication</li>
+                  <li>Basic component replacement with matching dimensions</li>
+                  <li>Routine surface touch-ups and non-structural adjustments</li>
+                </ul>
+              </div>
+              <div style={{ padding: '1.25rem', background: 'rgba(245,158,11,0.08)', borderRadius: '10px', border: '1px solid rgba(245,158,11,0.2)' }}>
+                <h4 style={{ color: '#f59e0b', marginBottom: '0.5rem', fontSize: '1.05rem' }}>⚠️ Hire a Verified Pro</h4>
+                <ul style={{ paddingLeft: '1.2rem', fontSize: '0.9rem', opacity: 0.9, margin: 0 }}>
+                  <li>Structural woodwork warping, masonry drilling, or rotted frames</li>
+                  <li>High electrical voltages, MCB trips, or water line pipe bursts</li>
+                  <li>Multi-room installations requiring specialized power equipment</li>
+                </ul>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+              <Link
+                href={`/find-a-professional?category=${encodeURIComponent(post.category)}`}
+                className="btn btn-primary"
+                style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem' }}
+              >
+                Find Verified {post.category} Experts in Bangalore →
+              </Link>
+              <Link
+                href={`/services/${slugify(post.category)}`}
+                className="btn btn-secondary"
+                style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem' }}
+              >
+                View {post.category} Services &amp; Rates
+              </Link>
             </div>
           </div>
         </article>
