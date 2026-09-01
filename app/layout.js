@@ -20,11 +20,24 @@ const outfit = Outfit({
   display: "swap",
 });
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#0F172A',
+};
+
 export const metadata = {
   metadataBase: new URL("https://carpenterwala.com"),
-  title: "Carpenterwala | Professional Handyman Marketplace",
+  title: {
+    default: "Carpenterwala | Professional Handyman Marketplace",
+    template: "%s | Carpenterwala",
+  },
   description: "Find trusted and verified carpenters, painters, and handymen near you. Book services easily with transparent pricing and real reviews.",
   keywords: ["carpenter bangalore", "painter bangalore", "plumber bangalore", "electrician bangalore", "handyman services", "home repair"],
+  alternates: {
+    canonical: './',
+  },
   openGraph: {
     title: "Carpenterwala | Professional Handyman Marketplace",
     description: "Book verified carpenters, painters, and home improvement experts in Bangalore.",
@@ -56,6 +69,7 @@ export const metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": ["HomeAndConstructionBusiness", "LocalBusiness"],
+  "@id": "https://carpenterwala.com/#organization",
   "name": "Carpenterwala",
   "image": "https://carpenterwala.com/images/og-image.png",
   "logo": "https://carpenterwala.com/images/logo.png",
@@ -148,8 +162,9 @@ export default function RootLayout({ children }) {
         {/* End Meta Pixel Code */}
 
         {/* Google AdSense Script */}
-        <script
-          async
+        <Script
+          id="adsense-script"
+          strategy="afterInteractive"
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || 'ca-pub-9262530414302185'}`}
           crossOrigin="anonymous"
         />

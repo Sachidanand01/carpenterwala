@@ -9,9 +9,42 @@ export const metadata = {
   },
 };
 
+const contactJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": "https://carpenterwala.com/contact#webpage",
+  "name": "Contact Carpenterwala",
+  "url": "https://carpenterwala.com/contact",
+  "description": "Contact Carpenterwala customer support and head office in Bangalore.",
+  "mainEntity": {
+    "@type": "LocalBusiness",
+    "name": "Carpenterwala",
+    "telephone": "+91-809-555-1001",
+    "email": "contact@carpenterwala.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Thanisandra Main Road",
+      "addressLocality": "Bangalore",
+      "addressRegion": "Karnataka",
+      "postalCode": "560077",
+      "addressCountry": "IN"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "08:00",
+      "closes": "20:00"
+    }
+  }
+};
+
 export default function ContactUs() {
   return (
     <div className="container animate-fade-in" style={{ padding: "2rem 2rem 4rem 2rem" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactJsonLd) }}
+      />
       <Breadcrumbs items={[
         { name: "Home", url: "/" },
         { name: "Contact Us", url: "/contact" }

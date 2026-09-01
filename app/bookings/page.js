@@ -86,7 +86,7 @@ function ReviewModal({ booking, customerName, onClose, onSubmitted }) {
           display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem',
           background: 'rgba(255,255,255,0.05)', borderRadius: '10px', marginBottom: '1.5rem'
         }}>
-          <img src={booking.profiles?.avatar || `https://i.pravatar.cc/80?u=${booking.profiles?.name}`}
+          <img src={booking.profiles?.avatar || '/images/authors/editorial.jpg'}
             alt={booking.profiles?.name}
             style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover' }} />
           <div>
@@ -209,7 +209,7 @@ function RebookModal({ booking, customerName, customerPhone, onClose, onSubmitte
           display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem',
           background: 'rgba(255,255,255,0.05)', borderRadius: '10px', marginBottom: '1.5rem'
         }}>
-          <img src={booking.profiles?.avatar || `https://i.pravatar.cc/80?u=${booking.profiles?.name}`}
+          <img src={booking.profiles?.avatar || '/images/authors/editorial.jpg'}
             alt={booking.profiles?.name}
             style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover' }} />
           <div>
@@ -1066,7 +1066,7 @@ function BookingsDashboardContent() {
                         {/* Left: Pro info */}
                         <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', flex: 1 }}>
                           <img
-                            src={booking.profiles?.avatar || `https://i.pravatar.cc/150?u=${booking.profiles?.name || 'unknown'}`}
+                            src={booking.profiles?.avatar || '/images/authors/editorial.jpg'}
                             alt={booking.profiles?.name || 'Pro'}
                             style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--glass-border)', flexShrink: 0 }}
                           />

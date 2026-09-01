@@ -4,28 +4,28 @@ export async function generateMetadata({ searchParams }) {
   const resolvedParams = await searchParams;
   const lang = resolvedParams.lang;
  
-  let title = 'Pro Portal - Register as a Service Pro | Carpenterwala';
+  let title = 'Pro Portal - Register as a Service Pro';
   let description = 'Join Carpenterwala as a Carpenter, Plumber, Painter, or Electrician. Get direct leads with zero commission and zero platform charges.';
   let ogImage = '/images/pro-campaign-kn-fb.jpg';
   let altText = 'Carpenterwala Pro Registration';
  
   if (lang === 'hi') {
-    title = 'Pro Portal - रजिस्टर करें और ग्राहक पाएं | Carpenterwala';
+    title = 'Pro Portal - रजिस्टर करें और ग्राहक पाएं';
     description = 'बिना किसी कमीशन के सीधे ग्राहकों से जुड़ने के लिए आज ही रजिस्टर करें। रजिस्ट्रेशन बिल्कुल FREE है!';
     ogImage = '/images/pro-campaign-hi-fb.jpg';
     altText = 'Carpenterwala Pro Registration Hindi';
   } else if (lang === 'kn') {
-    title = 'Pro Portal - ನೋಂದಾಯಿಸಿ ಗ್ರಾಹಕರನ್ನು ಪಡೆಯಿರಿ | Carpenterwala';
+    title = 'Pro Portal - ನೋಂದಾಯಿಸಿ ಗ್ರಾಹಕರನ್ನು ಪಡೆಯಿರಿ';
     description = 'ಯಾವುದೇ ಕಮಿಷನ್ ಇಲ್ಲದೆ ನೇರವಾಗಿ ಗ್ರಾಹಕರನ್ನು ಸಂಪರ್ಕಿಸಲು ಇಂದೇ ಜಾಯಿನ್ ಆಗಿ. ರಿಜಿಸ್ಟ್ರೇಷನ್ ಸಂಪೂರ್ಣ FREE!';
     ogImage = '/images/pro-campaign-kn-fb.jpg';
     altText = 'Carpenterwala Pro Registration Kannada';
   } else if (lang === 'ta') {
-    title = 'Pro Portal - பதிவு செய்து வாடிக்கையாளர்களைப் பெறுங்கள் | Carpenterwala';
+    title = 'Pro Portal - பதிவு செய்து வாடிக்கையாளர்களைப் பெறுங்கள்';
     description = 'எந்தவொரு கமிஷனும் இல்லாமல் வாடிக்கையாளர்களுடன் நேரடியாக இணையுங்கள். பதிவு முற்றிலும் இலவசம்!';
     ogImage = '/images/pro-campaign-kn-fb.jpg';
     altText = 'Carpenterwala Pro Registration Tamil';
   } else if (lang === 'te') {
-    title = 'Pro Portal - నమోదు చేసుకోండి కస్టమర్లను పొందండి | Carpenterwala';
+    title = 'Pro Portal - నమోదు చేసుకోండి కస్టమర్లను పొందండి';
     description = 'ఎటువంటి కమిషన్ లేకుండా నేరుగా కస్టమర్లతో కనెక్ట్ అవ్వండి. రిజిస్ట్రేషన్ పూర్తిగా ఉచితం!';
     ogImage = '/images/pro-campaign-kn-fb.jpg';
     altText = 'Carpenterwala Pro Registration Telugu';
@@ -66,7 +66,15 @@ export async function generateMetadata({ searchParams }) {
       images: [ogImage],
     },
     alternates: {
-      canonical: ['hi', 'kn', 'ta', 'te'].includes(lang) ? `https://carpenterwala.com/pro/login?lang=${lang}` : 'https://carpenterwala.com/pro/login',
+      canonical: ['hi', 'kn', 'ta', 'te'].includes(lang) ? `/pro/login?lang=${lang}` : '/pro/login',
+      languages: {
+        'en': '/pro/login',
+        'hi': '/pro/login?lang=hi',
+        'kn': '/pro/login?lang=kn',
+        'ta': '/pro/login?lang=ta',
+        'te': '/pro/login?lang=te',
+        'x-default': '/pro/login',
+      },
     },
   };
 }

@@ -43,7 +43,7 @@ export async function generateMetadata({ params }) {
           alt: 'Carpenterwala Professional Services',
         }
       ],
-      locale: 'en_US',
+      locale: 'en_IN',
       type: 'profile',
     },
     twitter: {
@@ -113,16 +113,16 @@ export default async function ProProfile({ params }) {
     "@type": schemaType,
     "@id": `https://carpenterwala.com/${profile.slug}#localbusiness`,
     "name": profile.name,
-    "image": profile.avatar || "https://carpenterwala.com/images/default-avatar.png",
+    "image": profile.avatar || "https://carpenterwala.com/images/about-us-hero.png",
     "description": profile.about || `Verified ${profile.trade} in ${profile.location} with ${profile.experience} of experience.`,
-    "telephone": profile.phone || "+91-XXXXXXXXXX",
+    "telephone": profile.phone || "+91-809-555-1001",
     "url": `https://carpenterwala.com/${profile.slug}`,
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": profile.full_address || profile.location || "HSR Layout",
+      "streetAddress": profile.full_address || profile.location || "Bangalore",
       "addressLocality": "Bangalore",
       "addressRegion": "Karnataka",
-      "postalCode": "560102",
+      "postalCode": "560077",
       "addressCountry": "IN"
     },
     "priceRange": "₹₹",

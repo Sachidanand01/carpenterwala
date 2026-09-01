@@ -13,25 +13,25 @@ const AUTHORS_BY_CATEGORY = {
     name: 'Rajesh Sharma',
     role: 'Master Carpenter & Woodwork Consultant',
     bio: 'Over 15 years of custom woodworking, furniture restoration, and modular interior fittings experience in Bangalore.',
-    avatar: 'https://i.pravatar.cc/100?u=rajesh'
+    avatar: '/images/authors/rajesh.jpg'
   },
   'Painting': {
     name: 'Amit Verma',
     role: 'Lead Coating & Waterproofing Consultant',
     bio: 'Wall-coating expert specializing in tropical humidity damp-proofing and premium interior color visualizers.',
-    avatar: 'https://i.pravatar.cc/100?u=amit'
+    avatar: '/images/authors/amit.jpg'
   },
   'Plumbing': {
     name: 'Suresh Gowda',
     role: 'Senior Plumbing Engineer & Hydraulics Advisor',
     bio: 'Expert in high-pressure leak detection, municipal water lines, and residential plumbing diagnostics in South India.',
-    avatar: 'https://i.pravatar.cc/100?u=suresh'
+    avatar: '/images/authors/suresh.jpg'
   },
   'Electrical': {
     name: 'Vikram Rao',
     role: 'Certified Senior Electrical Systems Supervisor',
     bio: 'Licensed electrical inspector specializing in residential safety grids, MCB/ELCB diagnostics, and smart installations.',
-    avatar: 'https://i.pravatar.cc/100?u=vikram'
+    avatar: '/images/authors/vikram.jpg'
   }
 };
 
@@ -39,7 +39,7 @@ const DEFAULT_AUTHOR = {
   name: 'Carpenterwala Editorial Team',
   role: 'Home Improvement Advisors',
   bio: 'Our team of experienced coordinators and service verifiers writing expert tips for local Bangalore homes.',
-  avatar: 'https://i.pravatar.cc/100?u=editorial'
+  avatar: '/images/authors/editorial.jpg'
 };
 
 function extractTOCAndInjectIds(htmlContent) {
@@ -293,7 +293,7 @@ export default async function BlogPost({ params }) {
       "name": author.name,
       "jobTitle": author.role,
       "description": author.bio,
-      "image": author.avatar
+      "image": author.avatar.startsWith('http') ? author.avatar : `${siteUrl}${author.avatar}`
     },
     "publisher": {
       "@type": "Organization",

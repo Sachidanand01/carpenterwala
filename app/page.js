@@ -14,35 +14,36 @@ export default function Home() {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "ProfessionalService",
+        "@type": ["HomeAndConstructionBusiness", "ProfessionalService", "LocalBusiness"],
         "@id": "https://carpenterwala.com/#localbusiness",
         "name": "Carpenterwala",
         "image": "https://carpenterwala.com/images/og-image.png",
+        "logo": "https://carpenterwala.com/images/logo.png",
         "description": "India's trusted digital marketplace to book verified background-checked carpenters, painters, plumbers, and electricians in Bangalore.",
-        "telephone": "+91-XXXXXXXXXX",
+        "telephone": "+91-809-555-1001",
         "url": "https://carpenterwala.com",
         "priceRange": "₹₹",
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "HSR Layout",
+          "streetAddress": "Thanisandra Main Road",
           "addressLocality": "Bangalore",
           "addressRegion": "Karnataka",
-          "postalCode": "560102",
+          "postalCode": "560077",
           "addressCountry": "IN"
         },
         "geo": {
           "@type": "GeoCoordinates",
-          "latitude": 12.9141,
-          "longitude": 77.6413
+          "latitude": 13.055811,
+          "longitude": 77.625443
         },
         "areaServed": [
           {
-            "@type": "AdministrativeArea",
+            "@type": "City",
             "name": "Bangalore"
           },
           {
             "@type": "AdministrativeArea",
-            "name": "Bengaluru"
+            "name": "Karnataka"
           }
         ],
         "openingHoursSpecification": {
@@ -56,8 +57,8 @@ export default function Home() {
             "Saturday",
             "Sunday"
           ],
-          "opens": "00:00",
-          "closes": "23:59"
+          "opens": "08:00",
+          "closes": "20:00"
         },
         "aggregateRating": {
           "@type": "AggregateRating",
@@ -74,7 +75,7 @@ export default function Home() {
         "name": "Carpenterwala",
         "description": "Find verified carpenters, painters, plumbers, and handymen near you in Bangalore.",
         "publisher": {
-          "@id": "https://carpenterwala.com/#organization"
+          "@id": "https://carpenterwala.com/#localbusiness"
         },
         "potentialAction": {
           "@type": "SearchAction",
