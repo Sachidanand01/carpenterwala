@@ -92,6 +92,18 @@ async function runAll() {
     'Contains WebPage / ItemList schema': (t) => t.includes('"@type":"WebPage"') && t.includes('"ItemList"'),
     'Includes step definitions': (t) => t.includes('Browse & Discover') || t.includes('Browse &amp; Discover'),
   });
+
+  await testRoute('11. Programmatic Service-Location [Electrical in Electronic City]', 'http://localhost:3000/services/electrical/electronic-city', {
+    'Contains Local Landmark & Pincode': (t) => t.includes('Electronic City') && t.includes('560100'),
+    'Contains Rate Card': (t) => t.includes('Rate Card in') && t.includes('Switchboard'),
+    'Contains LocalBusiness & FAQPage schema': (t) => t.includes('"LocalBusiness"') && t.includes('"FAQPage"'),
+    'Contains Deep-linked Pro Filter CTA': (t) => t.includes('location=Electronic%20City') || t.includes('location=Electronic'),
+  });
+
+  await testRoute('12. Programmatic Blog Category Hub [/blog/category/carpentry]', 'http://localhost:3000/blog/category/carpentry', {
+    'Contains CollectionPage schema': (t) => t.includes('"CollectionPage"'),
+    'Contains BreadcrumbList schema': (t) => t.includes('"BreadcrumbList"'),
+  });
 }
 
 runAll();

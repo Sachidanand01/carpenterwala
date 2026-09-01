@@ -8,7 +8,15 @@ const LOCATIONS = {
   'indiranagar': { name: 'Indiranagar', postalCode: '560038', hubName: 'East Bangalore', landmarks: '100ft Road, 12th Main, CMH Road' },
   'whitefield': { name: 'Whitefield', postalCode: '560066', hubName: 'IT Corridor East', landmarks: 'ITPL, Hope Farm Junction, EPIP Zone' },
   'hsr-layout': { name: 'HSR Layout', postalCode: '560102', hubName: 'Southeast Tech Hub', landmarks: 'Sector 1 to 7, 27th Main, BDA Complex' },
-  'thanisandra': { name: 'Thanisandra', postalCode: '560077', hubName: 'North Bangalore', landmarks: 'Thanisandra Main Road, Manyata Tech Park, Bhartiya City' }
+  'thanisandra': { name: 'Thanisandra', postalCode: '560077', hubName: 'North Bangalore', landmarks: 'Thanisandra Main Road, Manyata Tech Park, Bhartiya City' },
+  'jayanagar': { name: 'Jayanagar', postalCode: '560041', hubName: 'South Heritage Hub', landmarks: '4th Block Complex, 11th Main, South End Circle' },
+  'jp-nagar': { name: 'JP Nagar', postalCode: '560078', hubName: 'South Residential Zone', landmarks: 'Phase 1 to 7, Dollar Layout, Outer Ring Road' },
+  'bellandur': { name: 'Bellandur', postalCode: '560103', hubName: 'ORR Tech Corridor', landmarks: 'EcoSpace, Green Glen Layout, Bellandur Lake Road' },
+  'marathahalli': { name: 'Marathahalli', postalCode: '560037', hubName: 'East Suburb Junction', landmarks: 'Spice Garden, Multiplex Junction, HAL Airport Road' },
+  'hebbal': { name: 'Hebbal', postalCode: '560024', hubName: 'North Gateway Hub', landmarks: 'Hebbal Flyover, Esteem Mall, Nagavara Outer Ring Road' },
+  'sarjapur-road': { name: 'Sarjapur Road', postalCode: '560035', hubName: 'Southeast Tech Belt', landmarks: 'Carmelaram, Wipro Corporate Office, Kaikondrahalli' },
+  'electronic-city': { name: 'Electronic City', postalCode: '560100', hubName: 'South Tech Hub', landmarks: 'Phase 1 & 2, Neeladri Road, Infosys Gate' },
+  'yelahanka': { name: 'Yelahanka', postalCode: '560064', hubName: 'North Satellite Hub', landmarks: 'Yelahanka New Town, Kogilu Cross, Judicial Layout' }
 };
 
 const RATE_CARDS = {

@@ -70,7 +70,21 @@ export default async function sitemap() {
   };
 
   const serviceNames = ['carpentry', 'painting', 'plumbing', 'electrical'];
-  const locations = ['koramangala', 'indiranagar', 'whitefield', 'hsr-layout', 'thanisandra'];
+  const locations = [
+    'koramangala',
+    'indiranagar',
+    'whitefield',
+    'hsr-layout',
+    'thanisandra',
+    'jayanagar',
+    'jp-nagar',
+    'bellandur',
+    'marathahalli',
+    'hebbal',
+    'sarjapur-road',
+    'electronic-city',
+    'yelahanka'
+  ];
 
   const services = serviceNames.map((service) => ({
     url: `${baseUrl}/services/${service}`,
