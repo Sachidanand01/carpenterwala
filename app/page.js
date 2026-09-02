@@ -1,5 +1,7 @@
 import Link from "next/link";
 import MagneticCTA from "@/components/MagneticCTA";
+import HeroLiveProCard from "@/components/HeroLiveProCard";
+import LandingFAQAccordion from "@/components/LandingFAQAccordion";
 
 export const metadata = {
   title: "Carpenterwala | Professional Handyman Marketplace",
@@ -128,113 +130,330 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
       />
-      <section className="flex flex-col items-center justify-center gap-8" style={{ padding: "4rem 0", textAlign: "center" }}>
+      
+      {/* ════════════════════════════════════════
+          HERO SECTION — Split Asymmetric Layout
+          ════════════════════════════════════════ */}
+      <section className="hero-split-layout">
+        <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+          
+          {/* Eyebrow badge */}
+          <div className="flex items-center gap-2" style={{ flexWrap: "wrap" }}>
+            <span 
+              style={{
+                fontSize: "0.8rem",
+                fontWeight: 700,
+                textTransform: "uppercase",
+                letterSpacing: "1px",
+                color: "var(--primary)",
+                background: "var(--primary-light)",
+                padding: "0.25rem 0.75rem",
+                borderRadius: "20px"
+              }}
+            >
+              Bangalore's Verified Handyman Network
+            </span>
+            <span style={{ fontSize: "0.85rem", opacity: 0.75, fontWeight: 500 }}>
+              ★ 4.85/5 (1,420+ Reviews)
+            </span>
+          </div>
 
-        <div className="animate-fade-in" style={{ maxWidth: "800px" }}>
-          <h1 style={{ fontSize: "4rem", marginBottom: "1.5rem", letterSpacing: "-0.02em" }}>
-            Your Trusted <span className="desktop-only"><br /></span>
-            <span className="text-gradient">Handyman & Home Services App</span>
+          {/* Display Headline */}
+          <h1 
+            style={{ 
+              fontSize: "clamp(2.4rem, 5vw, 3.75rem)", 
+              letterSpacing: "-0.03em", 
+              lineHeight: 1.15,
+              fontWeight: 800,
+              color: "var(--foreground)",
+              textWrap: "balance"
+            }}
+          >
+            Hire Verified Pros with <span className="text-gradient">Zero Commission.</span>
           </h1>
-          <p style={{ fontSize: "1.25rem", opacity: 0.8, marginBottom: "2rem" }}>
-            One of the best handyman apps in India to hire verified carpenters, painters, plumbers, and electricians near you. Experience the premium home services app in India with real reviews and transparent pricing.
+
+          {/* Subtext */}
+          <p 
+            style={{ 
+              fontSize: "1.15rem", 
+              lineHeight: 1.6,
+              color: "var(--foreground-muted)",
+              maxWidth: "54ch"
+            }}
+          >
+            Connect directly with Aadhaar background-checked carpenters, painters, plumbers, and electricians in Bangalore. Transparent pricing with 0% platform markups.
           </p>
 
-          <div className="flex gap-4 justify-center flex-mobile-col" style={{ alignItems: "center" }}>
+          {/* Trade Quick Chips */}
+          <div className="trade-chips-wrapper flex gap-2" style={{ flexWrap: "wrap", margin: "0.5rem 0" }}>
+            <Link href="/find-a-professional?category=Carpenter" className="trade-chip">
+              <span>🪚</span>
+              <span>Carpenters</span>
+            </Link>
+            <Link href="/find-a-professional?category=Painter" className="trade-chip">
+              <span>🎨</span>
+              <span>Painters</span>
+            </Link>
+            <Link href="/find-a-professional?category=Plumber" className="trade-chip">
+              <span>🔧</span>
+              <span>Plumbers</span>
+            </Link>
+            <Link href="/find-a-professional?category=Electrician" className="trade-chip">
+              <span>⚡</span>
+              <span>Electricians</span>
+            </Link>
+          </div>
+
+          {/* Hero CTAs */}
+          <div className="hero-actions flex gap-4 flex-mobile-col" style={{ alignItems: "center", marginTop: "0.5rem" }}>
             <MagneticCTA>
-              <Link href="/find-a-professional" className="btn btn-primary" style={{ fontSize: "1.1rem", padding: "1rem 2rem" }}>
+              <Link 
+                href="/find-a-professional" 
+                className="btn btn-primary" 
+                style={{ fontSize: "1.05rem", padding: "0.9rem 1.8rem", fontWeight: 600 }}
+              >
                 Find a Professional
               </Link>
             </MagneticCTA>
             <MagneticCTA>
-              <Link href="/pro/login" className="btn btn-secondary" style={{ fontSize: "1.1rem", padding: "1rem 2rem" }}>
+              <Link 
+                href="/pro/login" 
+                className="btn btn-secondary" 
+                style={{ fontSize: "1.05rem", padding: "0.9rem 1.8rem", fontWeight: 600 }}
+              >
                 Join as a Pro
               </Link>
             </MagneticCTA>
           </div>
-        </div>
 
-        <div className="glass animate-fade-in delay-200" style={{ width: "100%", padding: "2rem", marginTop: "3rem" }}>
-          <h2 style={{ fontSize: "2rem", marginBottom: "2rem" }}>Why Choose Carpenterwala?</h2>
-          <div className="flex justify-between gap-4" style={{ textAlign: "left", flexWrap: "wrap" }}>
-            <div className="flex-col gap-2" style={{ flex: "1", minWidth: "250px" }}>
-              <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🛡️</div>
-              <h3 style={{ fontSize: "1.25rem" }}>Verified Pros</h3>
-              <p style={{ opacity: 0.7 }}>Every handyman on our platform goes through a strict background check and skills verification process.</p>
-            </div>
-            <div className="flex-col gap-2" style={{ flex: "1", minWidth: "250px" }}>
-              <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>⭐</div>
-              <h3 style={{ fontSize: "1.25rem" }}>Real Reviews</h3>
-              <p style={{ opacity: 0.7 }}>Read genuine reviews and see portfolio photos from past clients before making your decision.</p>
-            </div>
-            <div className="flex-col gap-2" style={{ flex: "1", minWidth: "250px" }}>
-              <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>⚡</div>
-              <h3 style={{ fontSize: "1.25rem" }}>Instant Contact</h3>
-              <p style={{ opacity: 0.7 }}>Connect directly with professionals securely through our platform to get quotes fast.</p>
-            </div>
+          {/* Micro Trust Strip */}
+          <div className="flex items-center gap-4" style={{ fontSize: "0.82rem", color: "var(--foreground-muted)", marginTop: "0.5rem", flexWrap: "wrap" }}>
+            <span>✓ 100% Free Platform</span>
+            <span>✓ Direct WhatsApp/Call</span>
+            <span>✓ Warranty Manager Included</span>
           </div>
+
         </div>
 
-        <div className="glass animate-fade-in delay-300" style={{ width: "100%", padding: "2.5rem", marginTop: "3rem", textAlign: "left" }}>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "2.5rem", alignItems: "center" }}>
-            <div style={{ flex: "1 1 350px" }}>
-              <span style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "2px", color: "var(--primary)", fontWeight: "bold" }}>Flat Possession Solutions</span>
-              <h2 style={{ fontSize: "2.25rem", marginTop: "0.5rem", marginBottom: "1rem" }}>Carpenterwala for New Flat Owners</h2>
-              <p style={{ opacity: 0.85, lineHeight: "1.8", marginBottom: "1.5rem" }}>
-                Just got the keys to your new apartment? Finding a reliable carpenter for your <strong>home setup after possession</strong> can be stressful. From custom wardrobes to modular kitchens, our verified professionals make setting up your new flat easy. We handle all the woodwork with clear pricing, quality materials, and a complete safety guarantee.
-              </p>
-              <MagneticCTA>
-                <Link href="/find-a-professional?category=Carpenter" className="btn btn-primary">
-                  Get Carpenter for New Flat
-                </Link>
-              </MagneticCTA>
-            </div>
-            <div style={{ flex: "1 1 300px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
-              <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <h3 style={{ color: "var(--accent)", marginBottom: "0.5rem", fontSize: "1.1rem" }}>Modular Fitting</h3>
-                <p style={{ fontSize: "0.85rem", opacity: 0.7 }}>Perfect assembly of pre-fabricated kitchen and wardrobe panels.</p>
-              </div>
-              <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <h3 style={{ color: "var(--accent)", marginBottom: "0.5rem", fontSize: "1.1rem" }}>Teak Woodwork</h3>
-                <p style={{ fontSize: "0.85rem", opacity: 0.7 }}>Bespoke, high-end woodwork crafted custom on-site by Indian experts.</p>
-              </div>
-              <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <h3 style={{ color: "var(--accent)", marginBottom: "0.5rem", fontSize: "1.1rem" }}>Wall Panelings</h3>
-                <p style={{ fontSize: "0.85rem", opacity: 0.7 }}>Modern wood laminates, fluted panels, and television backdrops.</p>
-              </div>
-              <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <h3 style={{ color: "var(--accent)", marginBottom: "0.5rem", fontSize: "1.1rem" }}>Hassle-Free</h3>
-                <p style={{ fontSize: "0.85rem", opacity: 0.7 }}>Complete project milestones with transparent billing guarantees.</p>
-              </div>
-            </div>
-          </div>
+        {/* Visual Anchor: Interactive Pro Card */}
+        <div className="flex justify-center" style={{ width: "100%" }}>
+          <HeroLiveProCard />
         </div>
-
-        {/* Localized FAQ & Coverage Block */}
-        <div className="glass animate-fade-in delay-400" style={{ width: "100%", padding: "3rem", marginTop: "3rem", textAlign: "left", lineHeight: "1.7" }}>
-          <h2 style={{ fontSize: "2rem", marginBottom: "1.5rem" }}>Professional Handyman App in Bangalore: Frequently Asked Questions</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2rem" }}>
-            <div>
-              <h3 style={{ fontSize: "1.2rem", color: "var(--primary)", marginBottom: "0.5rem" }}>How does the Carpenterwala handyman app match me with local pros?</h3>
-              <p style={{ opacity: 0.8, fontSize: "0.95rem" }}>
-                Our <strong>handyman app in India</strong> utilizes geolocation routing to find verified carpenters, painters, plumbers, and electricians near your specific neighborhood in Bangalore. Whether you are in HSR Layout, Indiranagar, Whitefield, or Koramangala, the platform showcases the closest available service professionals to minimize travel time and ensure speedy dispatch.
-              </p>
-            </div>
-            <div>
-              <h3 style={{ fontSize: "1.2rem", color: "var(--primary)", marginBottom: "0.5rem" }}>What makes this the premium home services app in India?</h3>
-              <p style={{ opacity: 0.8, fontSize: "0.95rem" }}>
-                Unlike other platforms that charge hefty commissions, Carpenterwala is a <strong>100% free platform</strong> charging 0% fees from both customers and service professionals. You connect directly with verified experts, review their real portfolios, check actual reviews, and negotiate rates directly. There are no hidden fees or inflated service margins.
-              </p>
-            </div>
-            <div>
-              <h3 style={{ fontSize: "1.2rem", color: "var(--primary)", marginBottom: "0.5rem" }}>Which areas of Bangalore do your background-checked pros cover?</h3>
-              <p style={{ opacity: 0.8, fontSize: "0.95rem" }}>
-                Our network covers all zones of Bangalore, including Bangalore South (Jayanagar, JP Nagar, HSR Layout), Bangalore East (Whitefield, Marathahalli, Bellandur), Bangalore Central (Koramangala, Indiranagar, MG Road), and Bangalore North (Hebbal, Thanisandra, Yelahanka). Every professional undergoes strict Aadhaar identity verification and skills assessment before onboarding.
-              </p>
-            </div>
-          </div>
-        </div>
-
       </section>
+
+      {/* ════════════════════════════════════════
+          FEATURES — Asymmetric Bento Grid
+          ════════════════════════════════════════ */}
+      <section style={{ padding: "4rem 0" }}>
+        <div style={{ textAlign: "left", marginBottom: "2.5rem" }}>
+          <span style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1.5px", color: "var(--primary)", fontWeight: 700 }}>
+            Why Choose Carpenterwala
+          </span>
+          <h2 style={{ fontSize: "2.25rem", letterSpacing: "-0.02em", marginTop: "0.4rem", color: "var(--foreground)" }}>
+            Built for Trust. Zero Hidden Margins.
+          </h2>
+        </div>
+
+        <div className="bento-grid-features">
+          
+          {/* Bento Card 1 (Hero Card - Identity & Skill Checks) */}
+          <div className="bento-card bento-card-hero">
+            <div>
+              <div 
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "12px",
+                  background: "var(--primary-light)",
+                  color: "var(--primary)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: "1.25rem"
+                }}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+              <h3 style={{ fontSize: "1.45rem", marginBottom: "0.75rem", color: "var(--foreground)" }}>
+                Strict Background & Identity Verification
+              </h3>
+              <p style={{ color: "var(--foreground-muted)", fontSize: "0.95rem", lineHeight: "1.7", marginBottom: "1.5rem" }}>
+                We verify government Aadhaar credentials, police clearances, and real trade skill portfolios before any handyman can receive customer leads.
+              </p>
+            </div>
+
+            <div 
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "0.75rem",
+                padding: "1rem",
+                background: "var(--background)",
+                borderRadius: "var(--border-radius-sm)",
+                border: "1px solid var(--card-border)"
+              }}
+            >
+              <div style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--foreground)" }}>✓ Aadhaar ID Check</div>
+              <div style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--foreground)" }}>✓ Real Project Photos</div>
+              <div style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--foreground)" }}>✓ Background Clearances</div>
+              <div style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--foreground)" }}>✓ Skill Certification</div>
+            </div>
+          </div>
+
+          {/* Bento Card 2 (Real Portfolios & Reviews) */}
+          <div className="bento-card">
+            <div 
+              style={{
+                width: "44px",
+                height: "44px",
+                borderRadius: "12px",
+                background: "var(--accent-light)",
+                color: "var(--accent)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: "1rem"
+              }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </div>
+            <h3 style={{ fontSize: "1.25rem", marginBottom: "0.5rem", color: "var(--foreground)" }}>
+              Genuine Portfolios & Real Reviews
+            </h3>
+            <p style={{ color: "var(--foreground-muted)", fontSize: "0.9rem", lineHeight: "1.6" }}>
+              Inspect authentic on-site photos of finished wardrobes, paint finishes, and plumbing installations alongside verified client ratings.
+            </p>
+          </div>
+
+          {/* Bento Card 3 (Direct Contact & 0% Commission) */}
+          <div className="bento-card">
+            <div 
+              style={{
+                width: "44px",
+                height: "44px",
+                borderRadius: "12px",
+                background: "rgba(22, 163, 74, 0.12)",
+                color: "var(--success)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: "1rem"
+              }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </div>
+            <h3 style={{ fontSize: "1.25rem", marginBottom: "0.5rem", color: "var(--foreground)" }}>
+              Direct Contact · 0% Platform Commission
+            </h3>
+            <p style={{ color: "var(--foreground-muted)", fontSize: "0.9rem", lineHeight: "1.6" }}>
+              Connect directly over phone or WhatsApp without middleman markups. Negotiate terms directly and keep full project flexibility.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          FLAT POSSESSION & CRAFTSMANSHIP
+          ════════════════════════════════════════ */}
+      <section 
+        className="glass animate-fade-in" 
+        style={{ 
+          width: "100%", 
+          padding: "3rem", 
+          margin: "1rem 0 3rem 0", 
+          textAlign: "left",
+          borderRadius: "var(--border-radius-lg)"
+        }}
+      >
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "3rem", alignItems: "center" }}>
+          
+          {/* Left Narrative */}
+          <div>
+            <span style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1.5px", color: "var(--primary)", fontWeight: 700 }}>
+              New Flat Handover Solutions
+            </span>
+            <h2 style={{ fontSize: "2.25rem", letterSpacing: "-0.02em", marginTop: "0.4rem", marginBottom: "1rem", color: "var(--foreground)" }}>
+              Specialized Woodwork for New Flat Owners
+            </h2>
+            <p style={{ color: "var(--foreground-muted)", lineHeight: "1.8", marginBottom: "1.75rem", fontSize: "1rem" }}>
+              Just received the keys to your new apartment in Bangalore? Setting up bespoke carpentry and modular cabinetry doesn&apos;t have to be stressful. From pre-laminated kitchens to custom hydraulic beds and acoustic fluted panels, connect with verified master woodworkers.
+            </p>
+            <MagneticCTA>
+              <Link 
+                href="/find-a-professional?category=Carpenter" 
+                className="btn btn-primary"
+                style={{ padding: "0.85rem 1.6rem", fontWeight: 600 }}
+              >
+                Find Carpenters for New Flat
+              </Link>
+            </MagneticCTA>
+          </div>
+
+          {/* Right Capability Tiles */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            
+            <div className="possession-tile">
+              <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--primary)", textTransform: "uppercase" }}>Modular</span>
+              <h4 style={{ fontSize: "1.05rem", fontWeight: 700, color: "var(--foreground)" }}>Kitchen & Wardrobes</h4>
+              <p style={{ fontSize: "0.85rem", color: "var(--foreground-muted)", lineHeight: "1.5" }}>
+                Precision assembly of pre-fabricated kitchen units and soft-close storage.
+              </p>
+            </div>
+
+            <div className="possession-tile">
+              <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--accent)", textTransform: "uppercase" }}>Custom</span>
+              <h4 style={{ fontSize: "1.05rem", fontWeight: 700, color: "var(--foreground)" }}>Solid Teak Woodwork</h4>
+              <p style={{ fontSize: "0.85rem", color: "var(--foreground-muted)", lineHeight: "1.5" }}>
+                Bespoke on-site craftsmanship for main doors, puja units, and dining setups.
+              </p>
+            </div>
+
+            <div className="possession-tile">
+              <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--primary)", textTransform: "uppercase" }}>Aesthetics</span>
+              <h4 style={{ fontSize: "1.05rem", fontWeight: 700, color: "var(--foreground)" }}>Fluted Wall Paneling</h4>
+              <p style={{ fontSize: "0.85rem", color: "var(--foreground-muted)", lineHeight: "1.5" }}>
+                Modern TV backdrops, wooden louvers, and seamless veneer highlights.
+              </p>
+            </div>
+
+            <div className="possession-tile">
+              <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--success)", textTransform: "uppercase" }}>Guaranteed</span>
+              <h4 style={{ fontSize: "1.05rem", fontWeight: 700, color: "var(--foreground)" }}>Transparent Milestones</h4>
+              <p style={{ fontSize: "0.85rem", color: "var(--foreground-muted)", lineHeight: "1.5" }}>
+                Structured material billing and digital warranty management on dashboard.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          FAQ & LOCAL BANGALORE COVERAGE
+          ════════════════════════════════════════ */}
+      <section style={{ padding: "2rem 0 4rem 0", textAlign: "left" }}>
+        <div style={{ marginBottom: "2rem" }}>
+          <span style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1.5px", color: "var(--primary)", fontWeight: 700 }}>
+            Got Questions?
+          </span>
+          <h2 style={{ fontSize: "2.25rem", letterSpacing: "-0.02em", marginTop: "0.4rem", color: "var(--foreground)" }}>
+            Frequently Asked Questions & Local Coverage
+          </h2>
+        </div>
+
+        <LandingFAQAccordion />
+      </section>
+
     </div>
   );
 }
+
