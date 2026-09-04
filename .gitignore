@@ -45,3 +45,9 @@ next-env.d.ts
 
 # scratch files
 /scratch/
+
+# Google API and Service Account Keys
+.agents/*.json
+*service_account*.json
+*service-account*.json
+google-api*.json

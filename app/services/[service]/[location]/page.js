@@ -2,13 +2,26 @@ import Link from 'next/link';
 import MagneticCTA from "@/components/MagneticCTA";
 import { notFound } from 'next/navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { supabase } from '@/lib/supabase';
+import VerifiedBadge from '@/components/VerifiedBadge';
+
+export const dynamicParams = true;
 
 const LOCATIONS = {
+  // Core Bangalore Tech & Urban Hubs
   'koramangala': { name: 'Koramangala', postalCode: '560034', hubName: 'South Bangalore', landmarks: 'Sony World Junction, 5th Block, Forum Mall' },
   'indiranagar': { name: 'Indiranagar', postalCode: '560038', hubName: 'East Bangalore', landmarks: '100ft Road, 12th Main, CMH Road' },
   'whitefield': { name: 'Whitefield', postalCode: '560066', hubName: 'IT Corridor East', landmarks: 'ITPL, Hope Farm Junction, EPIP Zone' },
   'hsr-layout': { name: 'HSR Layout', postalCode: '560102', hubName: 'Southeast Tech Hub', landmarks: 'Sector 1 to 7, 27th Main, BDA Complex' },
   'thanisandra': { name: 'Thanisandra', postalCode: '560077', hubName: 'North Bangalore', landmarks: 'Thanisandra Main Road, Manyata Tech Park, Bhartiya City' },
+  'kothanur': { name: 'Kothanur', postalCode: '560077', hubName: 'North East Hub', landmarks: 'Hennur-Bagalur Main Road, Kristu Jayanti College' },
+  'hennur': { name: 'Hennur', postalCode: '560043', hubName: 'North East Bangalore', landmarks: 'Hennur Cross, Kalyan Nagar, HRBR Layout' },
+  'banashankari': { name: 'Banashankari', postalCode: '560085', hubName: 'South Bangalore', landmarks: '3rd Stage, BDA Complex, Kathriguppe' },
+  'nayandahalli': { name: 'Nayandahalli', postalCode: '560039', hubName: 'West Bangalore', landmarks: 'Mysore Road Metro, Vijayanagar, Chandra Layout' },
+  'solur': { name: 'Solur', postalCode: '562127', hubName: 'West Suburban Belt', landmarks: 'Nelamangala Highway, Solur Junction' },
+  'sheshagirihalli': { name: 'Sheshagirihalli', postalCode: '562109', hubName: 'Southwest Corridor', landmarks: 'Bidadi Industrial Area, Mysore Road' },
+  'jigani': { name: 'Jigani', postalCode: '560105', hubName: 'South Industrial Belt', landmarks: 'Jigani APC Circle, Bannerghatta Main Road' },
+  'rt-nagar': { name: 'RT Nagar', postalCode: '560032', hubName: 'North Heritage Hub', landmarks: '80ft Road, Ganganagar, Matadahalli' },
   'jayanagar': { name: 'Jayanagar', postalCode: '560041', hubName: 'South Heritage Hub', landmarks: '4th Block Complex, 11th Main, South End Circle' },
   'jp-nagar': { name: 'JP Nagar', postalCode: '560078', hubName: 'South Residential Zone', landmarks: 'Phase 1 to 7, Dollar Layout, Outer Ring Road' },
   'bellandur': { name: 'Bellandur', postalCode: '560103', hubName: 'ORR Tech Corridor', landmarks: 'EcoSpace, Green Glen Layout, Bellandur Lake Road' },
@@ -16,16 +29,23 @@ const LOCATIONS = {
   'hebbal': { name: 'Hebbal', postalCode: '560024', hubName: 'North Gateway Hub', landmarks: 'Hebbal Flyover, Esteem Mall, Nagavara Outer Ring Road' },
   'sarjapur-road': { name: 'Sarjapur Road', postalCode: '560035', hubName: 'Southeast Tech Belt', landmarks: 'Carmelaram, Wipro Corporate Office, Kaikondrahalli' },
   'electronic-city': { name: 'Electronic City', postalCode: '560100', hubName: 'South Tech Hub', landmarks: 'Phase 1 & 2, Neeladri Road, Infosys Gate' },
-  'yelahanka': { name: 'Yelahanka', postalCode: '560064', hubName: 'North Satellite Hub', landmarks: 'Yelahanka New Town, Kogilu Cross, Judicial Layout' }
+  'yelahanka': { name: 'Yelahanka', postalCode: '560064', hubName: 'North Satellite Hub', landmarks: 'Yelahanka New Town, Kogilu Cross, Judicial Layout' },
+  
+  // Metro Cities Across India
+  'mumbai': { name: 'Mumbai', postalCode: '400001', hubName: 'Mumbai Metropolitan Region', landmarks: 'Andheri, Bandra, Powai, South Mumbai' },
+  'delhi': { name: 'Delhi NCR', postalCode: '110001', hubName: 'National Capital Region', landmarks: 'Gurgaon, Noida, South Delhi, Dwarka' },
+  'hyderabad': { name: 'Hyderabad', postalCode: '500081', hubName: 'Cyberabad & Greater Hyderabad', landmarks: 'Gachibowli, Hitech City, Madhapur, Jubilee Hills' },
+  'pune': { name: 'Pune', postalCode: '411001', hubName: 'Pune Metropolis', landmarks: 'Hinjewadi, Baner, Kothrud, Viman Nagar' },
+  'chennai': { name: 'Chennai', postalCode: '600001', hubName: 'Greater Chennai', landmarks: 'OMR, Anna Nagar, Velachery, T. Nagar' }
 };
 
 const RATE_CARDS = {
   'carpentry': [
-    { task: 'Door Lock & Latch Fitting / Repair', price: '₹250 - ₹450', time: '30 - 45 mins' },
-    { task: 'Modular Kitchen Hinge / Hydraulic Strut Repair', price: '₹180 - ₹350', time: '20 - 40 mins' },
-    { task: 'Custom Wardrobe / Cupboard Assembly', price: '₹600 - ₹1,200', time: '1 - 2 hours' },
-    { task: 'Furniture Scratch Restoration & Polishing', price: '₹400 - ₹900', time: '1 - 3 hours' },
-    { task: 'General Custom Woodwork (Per Visit)', price: '₹250 - ₹400', time: 'Standard Visit' },
+    { task: 'Door Lock & Latch Fitting / Repair', price: '₹249 - ₹499', time: '30 - 45 mins' },
+    { task: 'Modular Kitchen Hinge / Hydraulic Repair', price: '₹199 - ₹450', time: '20 - 40 mins' },
+    { task: 'Bed & Wardrobe Knockdown Assembly', price: '₹699 - ₹1,799', time: '1 - 3 hours' },
+    { task: 'Furniture Restoration & Polish Touch-up', price: '₹399 - ₹899', time: '1 - 2 hours' },
+    { task: 'Custom Wardrobe Carpentry (Labour)', price: '₹280 - ₹450 / sq ft', time: 'Project' },
   ],
   'painting': [
     { task: '1 BHK Interior Wall Repaint (Labour)', price: '₹4,500 - ₹7,500', time: '1 - 2 days' },
@@ -35,18 +55,18 @@ const RATE_CARDS = {
     { task: 'Feature Accent Wall Texture Painting', price: '₹1,200 - ₹2,500', time: '3 - 5 hours' },
   ],
   'plumbing': [
-    { task: 'Tap & Faucet Leak Repair / Replacement', price: '₹150 - ₹300', time: '20 - 30 mins' },
-    { task: 'Flush Tank & Commode Leakage Fix', price: '₹250 - ₹500', time: '30 - 60 mins' },
-    { task: 'Kitchen Sink Drain Pipe Unclogging', price: '₹200 - ₹400', time: '25 - 45 mins' },
-    { task: 'Overhead Water Tank Cleaning (500L - 1000L)', price: '₹650 - ₹1,200', time: '1 - 2 hours' },
-    { task: 'Bathroom Sanitary Fitting Installation', price: '₹350 - ₹750', time: '45 - 90 mins' },
+    { task: 'Tap & Faucet Leak Repair / Replacement', price: '₹149 - ₹299', time: '20 - 30 mins' },
+    { task: 'Flush Tank & Commode Leakage Fix', price: '₹349 - ₹699', time: '30 - 60 mins' },
+    { task: 'Kitchen Sink Drain Pipe Unclogging', price: '₹249 - ₹449', time: '25 - 45 mins' },
+    { task: 'Overhead Water Tank Deep Cleaning (500L-1000L)', price: '₹699 - ₹1,299', time: '1 - 2 hours' },
+    { task: 'Bathroom Sanitary Fitting Installation', price: '₹349 - ₹749', time: '45 - 90 mins' },
   ],
   'electrical': [
-    { task: 'Switchboard / Power Socket Repair & Fitting', price: '₹120 - ₹250', time: '15 - 30 mins' },
-    { task: 'Ceiling Fan & Decorative Light Assembly', price: '₹150 - ₹300', time: '20 - 45 mins' },
-    { task: 'MCB Trip Diagnostics & Fuse Replacement', price: '₹250 - ₹500', time: '30 - 60 mins' },
-    { task: 'Inverter & Battery Wiring Setup', price: '₹450 - ₹850', time: '1 - 2 hours' },
-    { task: 'Heavy Appliance Wiring (Geyser / AC Line)', price: '₹350 - ₹700', time: '45 - 75 mins' },
+    { task: 'Switchboard / Power Socket Fitting', price: '₹99 - ₹180 / pt', time: '15 - 30 mins' },
+    { task: 'Ceiling Fan & BLDC Remote Fitting', price: '₹149 - ₹299', time: '20 - 45 mins' },
+    { task: 'MCB Trip Diagnostics & DB Repair', price: '₹349 - ₹699', time: '30 - 60 mins' },
+    { task: 'Inverter & Battery Wiring Setup', price: '₹499 - ₹999', time: '1 - 2 hours' },
+    { task: 'Heavy Appliance Line (Geyser / AC)', price: '₹349 - ₹699', time: '45 - 75 mins' },
   ]
 };
 
@@ -81,6 +101,25 @@ const SERVICES = {
   }
 };
 
+// Format slug into clean name
+function resolveLocation(slug) {
+  if (LOCATIONS[slug]) {
+    return LOCATIONS[slug];
+  }
+  // Dynamic fallback formatting: e.g. "kothanur-bangalore" -> "Kothanur Bangalore"
+  const formattedName = slug
+    .split('-')
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+
+  return {
+    name: formattedName,
+    postalCode: 'Local Area',
+    hubName: `${formattedName} Region`,
+    landmarks: `Localities and neighborhoods across ${formattedName}`
+  };
+}
+
 export async function generateStaticParams() {
   const paramsList = [];
   Object.keys(SERVICES).forEach((service) => {
@@ -93,16 +132,17 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { service, location } = await params;
-  const loc = LOCATIONS[location];
   const srv = SERVICES[service];
 
-  if (!loc || !srv) {
-    return { title: 'Service Not Found | Carpenterwala' };
+  if (!srv) {
+    return { title: 'Service Not Found | CarpenterWala' };
   }
 
+  const loc = resolveLocation(location);
+
   return {
-    title: `${srv.title} ${loc.name}, Bangalore | Carpenterwala`,
-    description: `${srv.description} Serving ${loc.name} (${loc.postalCode}), Bangalore with verified technicians and guaranteed upfront rates.`,
+    title: `${srv.title} ${loc.name} | Verified Doorstep Pros | CarpenterWala`,
+    description: `${srv.description} Direct contact with verified local ${srv.type.toLowerCase()}s in ${loc.name} with transparent rate cards and zero middleman fees.`,
     keywords: srv.keywords.map(k => `${k} ${loc.name}`),
     alternates: {
       canonical: `https://carpenterwala.com/services/${service}/${location}`,
@@ -112,15 +152,32 @@ export async function generateMetadata({ params }) {
 
 export default async function ServiceLocationPage({ params }) {
   const { service, location } = await params;
-  const loc = LOCATIONS[location];
   const srv = SERVICES[service];
 
-  if (!loc || !srv) {
+  if (!srv) {
     notFound();
   }
 
+  const loc = resolveLocation(location);
   const rateCard = RATE_CARDS[service] || [];
   const directFilterUrl = `/find-a-professional?category=${encodeURIComponent(srv.type)}&location=${encodeURIComponent(loc.name)}`;
+
+  // Query Supabase for verified pros in this trade
+  let verifiedPros = [];
+  try {
+    const { data: pros, error } = await supabase
+      .from('profiles')
+      .select('id, name, slug, avatar, trade, rating, review_count, experience_years, verified, city')
+      .eq('verified', true)
+      .eq('trade', srv.type)
+      .limit(6);
+
+    if (!error && pros) {
+      verifiedPros = pros;
+    }
+  } catch (err) {
+    console.error("Error fetching location pros:", err);
+  }
 
   const localFaqs = [
     {
@@ -153,13 +210,13 @@ export default async function ServiceLocationPage({ params }) {
         "priceRange": "₹₹",
         "areaServed": {
           "@type": "AdministrativeArea",
-          "name": `${loc.name}, Bangalore`
+          "name": loc.name
         },
         "address": {
           "@type": "PostalAddress",
           "streetAddress": `${loc.landmarks}, ${loc.name}`,
           "addressLocality": loc.name,
-          "addressRegion": "Bangalore, Karnataka",
+          "addressRegion": "India",
           "postalCode": loc.postalCode,
           "addressCountry": "IN"
         },
@@ -202,7 +259,7 @@ export default async function ServiceLocationPage({ params }) {
       {/* Hero Header */}
       <div style={{ textAlign: 'center', margin: '2rem 0 3.5rem 0' }}>
         <span style={{ fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--primary)', fontWeight: 'bold' }}>
-          📍 {loc.hubName} · Pincode: {loc.postalCode}
+          📍 {loc.hubName} · {loc.postalCode !== 'Local Area' ? `Pincode: ${loc.postalCode}` : 'Doorstep Service'}
         </span>
         <h1 className="text-gradient" style={{ fontSize: 'clamp(2.2rem, 4vw, 3.2rem)', margin: '0.75rem 0 1rem 0' }}>
           {srv.title} <span style={{ color: 'var(--accent)' }}>{loc.name}</span>
@@ -229,15 +286,88 @@ export default async function ServiceLocationPage({ params }) {
         </div>
       </div>
 
-      {/* Localized Transparent Rate Card (SXO Conversion Component) */}
+      {/* Verified Professionals Directory View */}
+      {verifiedPros.length > 0 && (
+        <div style={{ marginBottom: '4rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+            <div>
+              <h2 style={{ fontSize: '1.8rem', marginBottom: '0.3rem' }}>
+                Verified <span className="text-gradient">{srv.type}s</span> Available in {loc.name}
+              </h2>
+              <p style={{ opacity: 0.8, fontSize: '0.95rem' }}>
+                Background-checked local craftsmen ready for immediate dispatch in {loc.name}.
+              </p>
+            </div>
+            <Link href={directFilterUrl} style={{ color: 'var(--primary)', fontWeight: 'bold', textDecoration: 'none' }}>
+              See All Profiles →
+            </Link>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+            {verifiedPros.map((pro) => (
+              <div key={pro.id} className="glass" style={{ padding: '1.5rem', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                    <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'rgba(194, 65, 12, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', overflow: 'hidden' }}>
+                      {pro.avatar ? (
+                        <img src={pro.avatar} alt={pro.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        '👷'
+                      )}
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                        <h3 style={{ fontSize: '1.15rem', fontWeight: 600 }}>{pro.name}</h3>
+                        {pro.verified && <VerifiedBadge size={16} />}
+                      </div>
+                      <span style={{ fontSize: '0.85rem', opacity: 0.8 }}>{pro.trade} · {pro.experience_years ? `${pro.experience_years}+ Yrs Exp` : 'Verified Pro'}</span>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
+                    <span style={{ background: 'rgba(22, 163, 74, 0.12)', color: '#15803d', fontSize: '0.8rem', padding: '0.2rem 0.6rem', borderRadius: '12px', fontWeight: 600 }}>
+                      ✓ Servicing {loc.name}
+                    </span>
+                    {pro.rating && (
+                      <span style={{ background: 'rgba(217, 119, 6, 0.12)', color: 'var(--accent)', fontSize: '0.8rem', padding: '0.2rem 0.6rem', borderRadius: '12px', fontWeight: 600 }}>
+                        ★ {pro.rating} ({pro.review_count || 1})
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
+                  <Link
+                    href={`/${pro.slug || pro.id}`}
+                    className="btn btn-primary"
+                    style={{ flex: 1, textAlign: 'center', padding: '0.6rem 0.5rem', fontSize: '0.9rem' }}
+                  >
+                    View Profile
+                  </Link>
+                  <a
+                    href={`tel:+918095551001`}
+                    className="btn btn-secondary"
+                    style={{ padding: '0.6rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    title="Call Now"
+                  >
+                    📞 Call
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Localized Transparent Rate Card */}
       <div className="glass" style={{ padding: '2.5rem', borderRadius: '16px', marginBottom: '3.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
           <div>
             <h2 style={{ fontSize: '1.75rem', marginBottom: '0.3rem' }}>
-              Estimated {srv.serviceName} Rate Card in <span className="text-gradient">{loc.name}</span>
+              Standard {srv.serviceName} Rate Card in <span className="text-gradient">{loc.name}</span>
             </h2>
             <p style={{ opacity: 0.75, fontSize: '0.95rem' }}>
-              Standard baseline labor rates in Bangalore. 100% direct payment with 0% platform surcharge.
+              Transparent baseline labor charges. 100% direct payment with 0% platform commission.
             </p>
           </div>
           <span style={{ background: 'rgba(16,185,129,0.15)', color: '#10b981', padding: '0.4rem 0.9rem', borderRadius: '20px', fontWeight: '600', fontSize: '0.85rem' }}>
@@ -257,9 +387,9 @@ export default async function ServiceLocationPage({ params }) {
             </thead>
             <tbody>
               {rateCard.map((item, idx) => (
-                <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                <tr key={idx} style={{ borderBottom: '1px solid rgba(194, 65, 12, 0.12)' }}>
                   <td style={{ padding: '1rem', fontWeight: 500 }}>{item.task}</td>
-                  <td style={{ padding: '1rem', color: '#f59e0b', fontWeight: 600 }}>{item.price}</td>
+                  <td style={{ padding: '1rem', color: 'var(--accent)', fontWeight: 600 }}>{item.price}</td>
                   <td style={{ padding: '1rem', opacity: 0.8 }}>{item.time}</td>
                   <td style={{ padding: '1rem', textAlign: 'right' }}>
                     <Link
@@ -267,10 +397,11 @@ export default async function ServiceLocationPage({ params }) {
                       style={{
                         fontSize: '0.85rem',
                         padding: '0.4rem 0.8rem',
-                        background: 'rgba(255,255,255,0.08)',
+                        background: 'rgba(194, 65, 12, 0.1)',
                         borderRadius: '6px',
                         textDecoration: 'none',
-                        color: 'var(--foreground)'
+                        color: 'var(--primary)',
+                        fontWeight: 600
                       }}
                     >
                       Book Pro →
@@ -288,23 +419,23 @@ export default async function ServiceLocationPage({ params }) {
         <h2 style={{ marginBottom: '1.5rem', fontSize: '1.75rem' }}>
           Why {loc.name} Residents Choose <span className="text-gradient">Carpenterwala</span>
         </h2>
-        <div className="footer-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
-          <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '10px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
+          <div style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid rgba(194, 65, 12, 0.1)' }}>
             <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📍</div>
             <h3 style={{ fontSize: '1.15rem', marginBottom: '0.4rem' }}>60–90 Min Dispatch</h3>
             <p style={{ opacity: 0.8, fontSize: '0.9rem' }}>Nearby pros based around {loc.landmarks} ensure fast turnarounds.</p>
           </div>
-          <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '10px' }}>
+          <div style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid rgba(194, 65, 12, 0.1)' }}>
             <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🛡️</div>
             <h3 style={{ fontSize: '1.15rem', marginBottom: '0.4rem' }}>ID-Verified Craftsmen</h3>
             <p style={{ opacity: 0.8, fontSize: '0.9rem' }}>Every pro is KYC background-checked and skills-tested for household safety.</p>
           </div>
-          <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '10px' }}>
+          <div style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid rgba(194, 65, 12, 0.1)' }}>
             <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>💸</div>
             <h3 style={{ fontSize: '1.15rem', marginBottom: '0.4rem' }}>0% Commission Free</h3>
             <p style={{ opacity: 0.8, fontSize: '0.9rem' }}>No hidden customer fees or middlemen cuts. Transparent direct quotes.</p>
           </div>
-          <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '10px' }}>
+          <div style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid rgba(194, 65, 12, 0.1)' }}>
             <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⭐</div>
             <h3 style={{ fontSize: '1.15rem', marginBottom: '0.4rem' }}>Genuine Local Reviews</h3>
             <p style={{ opacity: 0.8, fontSize: '0.9rem' }}>Read real feedback and inspect past repair photos from neighbors in {loc.name}.</p>
@@ -330,10 +461,10 @@ export default async function ServiceLocationPage({ params }) {
       {/* Nearby Sibling Localities Internal Linking Hub */}
       <div style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--glass-border)' }}>
         <h3 style={{ fontSize: '1.15rem', marginBottom: '1rem', opacity: 0.9 }}>
-          Other Localities for {srv.serviceName} in Bangalore
+          Other Localities for {srv.serviceName}
         </h3>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
-          {Object.entries(LOCATIONS).map(([locKey, locObj]) => (
+          {Object.entries(LOCATIONS).slice(0, 16).map(([locKey, locObj]) => (
             <Link
               key={locKey}
               href={`/services/${service}/${locKey}`}
@@ -342,7 +473,7 @@ export default async function ServiceLocationPage({ params }) {
                 borderRadius: '20px',
                 fontSize: '0.88rem',
                 textDecoration: 'none',
-                background: locKey === location ? 'var(--primary)' : 'rgba(255,255,255,0.06)',
+                background: locKey === location ? 'var(--primary)' : 'rgba(194, 65, 12, 0.08)',
                 color: locKey === location ? '#ffffff' : 'inherit',
                 fontWeight: locKey === location ? 600 : 400,
                 transition: 'all 0.2s ease'

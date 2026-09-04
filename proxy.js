@@ -1,6 +1,25 @@
 import { NextResponse } from 'next/server';
 
 export function proxy(request) {
+  const host = request.headers.get('host') || '';
+  const proto = request.headers.get('x-forwarded-proto');
+
+  // 301 Permanent Redirect for www to root domain
+  if (host.startsWith('www.')) {
+    const cleanHost = host.replace(/^www\./, '');
+    const url = new URL(request.url);
+    url.host = cleanHost;
+    url.protocol = 'https:';
+    return NextResponse.redirect(url.toString(), 301);
+  }
+
+  // 301 Permanent Redirect for HTTP to HTTPS in production
+  if (proto === 'http' && !host.includes('localhost') && !host.includes('127.0.0.1')) {
+    const url = new URL(request.url);
+    url.protocol = 'https:';
+    return NextResponse.redirect(url.toString(), 301);
+  }
+
   const response = NextResponse.next();
 
   // Add security headers to all matched responses
