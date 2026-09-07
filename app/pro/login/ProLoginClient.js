@@ -114,9 +114,10 @@ export default function ProLogin({ lang }) {
   };
 
   // Handle Login OTP Verify
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    if (otp.trim().length !== 6) {
+  const handleVerifyOtp = async (e, otpVal = otp) => {
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    const cleanOtp = String(otpVal || '').trim();
+    if (cleanOtp.length !== 6) {
       setError(t.error_otp_digits); return;
     }
     setError('');
@@ -125,7 +126,7 @@ export default function ProLogin({ lang }) {
       const res = await fetch('/api/pro/otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'verify', email: email.trim().toLowerCase(), otp: otp.trim(), otpToken })
+        body: JSON.stringify({ action: 'verify', email: email.trim().toLowerCase(), otp: cleanOtp, otpToken })
       });
       const data = await res.json();
       if (!res.ok) {
@@ -217,9 +218,10 @@ export default function ProLogin({ lang }) {
   };
 
   // Handle Registration OTP Verify
-  const handleRegisterVerify = async (e) => {
-    e.preventDefault();
-    if (otp.trim().length !== 6) {
+  const handleRegisterVerify = async (e, otpVal = otp) => {
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    const cleanOtp = String(otpVal || '').trim();
+    if (cleanOtp.length !== 6) {
       setError(t.error_otp_digits); return;
     }
     setError('');
@@ -231,7 +233,7 @@ export default function ProLogin({ lang }) {
         body: JSON.stringify({
           action: 'register_verify',
           email: regEmail.trim().toLowerCase(),
-          otp: otp.trim(),
+          otp: cleanOtp,
           otpToken
         })
       });
@@ -251,6 +253,18 @@ export default function ProLogin({ lang }) {
     } catch (err) {
       setError('Verification failed. Please try again.');
       setLoading(false);
+    }
+  };
+
+  const handleOtpChange = (e) => {
+    const val = e.target.value.replace(/\D/g, '').slice(0, 6);
+    setOtp(val);
+    if (val.length === 6 && !loading) {
+      if (isRegister) {
+        handleRegisterVerify(null, val);
+      } else {
+        handleVerifyOtp(null, val);
+      }
     }
   };
 
@@ -571,7 +585,7 @@ export default function ProLogin({ lang }) {
                     </button>
                   </div>
                   <input type="text" placeholder="• • • • • •" required maxLength={6}
-                    value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                    value={otp} onChange={handleOtpChange} disabled={loading} autoFocus
                     style={{ ...inputStyle, textAlign: 'center', fontSize: '1.5rem', letterSpacing: '8px', fontWeight: 'bold' }} />
                 </div>
                 <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%' }}>

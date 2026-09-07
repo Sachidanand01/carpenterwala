@@ -224,8 +224,13 @@ function CustomerLoginContent() {
     }
   };
 
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
+  const handleVerifyOtp = async (e, otpVal = otp) => {
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    const cleanOtp = String(otpVal || '').trim();
+    if (cleanOtp.length !== 6) {
+      setError('Please enter a valid 6-digit OTP.');
+      return;
+    }
     setError('');
     setLoading(true);
 
@@ -237,7 +242,7 @@ function CustomerLoginContent() {
         body: JSON.stringify({
           action: 'verify',
           email: email.trim().toLowerCase(),
-          otp: otp.trim(),
+          otp: cleanOtp,
           otpToken
         })
       });
@@ -291,6 +296,14 @@ function CustomerLoginContent() {
       console.error("Final verification step error:", err);
       setError('Authentication server error. Please try again.');
       setLoading(false);
+    }
+  };
+
+  const handleOtpChange = (e) => {
+    const val = e.target.value.replace(/\D/g, '').slice(0, 6);
+    setOtp(val);
+    if (val.length === 6 && !loading) {
+      handleVerifyOtp(null, val);
     }
   };
 
@@ -601,7 +614,9 @@ function CustomerLoginContent() {
                     required
                     maxLength={6}
                     value={otp}
-                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                    disabled={loading}
+                    autoFocus
+                    onChange={handleOtpChange}
                     style={{
                       padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--glass-border)", background: "rgba(255,255,255,0.05)", color: "var(--foreground)", fontSize: "1.15rem", textAlign: "center", letterSpacing: "5px", fontWeight: "bold"
                     }}
