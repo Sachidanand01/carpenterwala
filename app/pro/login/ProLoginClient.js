@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { translations } from './translations';
 import AdSenseContainer from '@/components/AdSenseContainer';
+import { supabase } from '@/lib/supabase';
 
 export default function ProLogin({ lang }) {
   const [currentLang, setCurrentLang] = useState(lang || 'en');
@@ -28,6 +29,29 @@ export default function ProLogin({ lang }) {
   const [regLocation, setRegLocation] = useState('');
 
   const router = useRouter();
+
+  const handleGoogleSignIn = async () => {
+    setError('');
+    setErrorCode('');
+    setLoading(true);
+    try {
+      const origin = typeof window !== 'undefined' ? window.location.origin : '';
+      const { error: authError } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${origin}/auth/callback?role=pro`
+        }
+      });
+      if (authError) {
+        setError(authError.message || 'Failed to initialize Google Sign-in.');
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error('Google Sign-in error:', err);
+      setError('Could not connect to Google authentication service. Please try again.');
+      setLoading(false);
+    }
+  };
 
   const updateUrlParam = (newLang) => {
     if (typeof window !== 'undefined') {
@@ -516,61 +540,115 @@ export default function ProLogin({ lang }) {
               </div>
             )}
 
-            {/* Step 1: Login Form */}
-            {step === 1 && !isRegister && (
-              <form className="flex flex-col gap-4" onSubmit={handleSendOtp}>
-                <div className="flex flex-col gap-1">
-                  <label style={{ fontSize: '0.9rem', fontWeight: 500, opacity: 0.9 }}>{t.label_email}</label>
-                  <input type="email" placeholder={t.placeholder_email} required value={email}
-                    onChange={(e) => setEmail(e.target.value)} style={inputStyle} />
-                  <span style={{ fontSize: '0.75rem', opacity: 0.55 }}>{t.help_email}</span>
-                </div>
-                <button type="submit" disabled={loading} className="btn btn-primary"
-                  style={{ marginTop: '0.5rem', width: '100%' }}>
-                  {loading ? t.btn_sending_otp : t.btn_send_otp}
+            {/* Step 1 Forms */}
+            {step === 1 && (
+              <div>
+                {/* 1-Click Social Sign-In with Google */}
+                <button
+                  type="button"
+                  onClick={handleGoogleSignIn}
+                  disabled={loading}
+                  className="btn"
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.75rem",
+                    padding: "0.8rem",
+                    borderRadius: "8px",
+                    background: "rgba(255, 255, 255, 0.07)",
+                    border: "1px solid var(--glass-border)",
+                    color: "var(--foreground)",
+                    fontWeight: 600,
+                    fontSize: "0.95rem",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                    marginBottom: "1.25rem"
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.12)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.3)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.07)"; e.currentTarget.style.borderColor = "var(--glass-border)"; }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                  </svg>
+                  <span>{loading ? (t.btn_sending_otp || 'Connecting...') : (t.btn_google || 'Continue with Google')}</span>
                 </button>
-              </form>
-            )}
 
-            {/* Step 1: Register Form */}
-            {step === 1 && isRegister && (
-              <form className="flex flex-col gap-3" onSubmit={handleRegisterSend}>
-                <div className="flex flex-col gap-1">
-                  <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_name}</label>
-                  <input type="text" placeholder={t.placeholder_name} required value={regName}
-                    onChange={(e) => setRegName(e.target.value)} style={inputStyle} />
+                {/* Divider */}
+                <div style={{
+                  display: "flex",
+                  alignItems: "center",
+                  margin: "0 0 1.25rem 0",
+                  opacity: 0.6
+                }}>
+                  <div style={{ flex: 1, height: "1px", background: "var(--glass-border)" }} />
+                  <span style={{ padding: "0 0.75rem", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600 }}>
+                    {t.or_continue_with || 'or with email'}
+                  </span>
+                  <div style={{ flex: 1, height: "1px", background: "var(--glass-border)" }} />
                 </div>
-                <div className="flex flex-col gap-1">
-                  <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_reg_email}</label>
-                  <input type="email" placeholder={t.placeholder_email} required value={regEmail}
-                    onChange={(e) => setRegEmail(e.target.value)} style={inputStyle} />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_phone}</label>
-                  <input type="tel" placeholder={t.placeholder_phone} required maxLength={10} value={regPhone}
-                    onChange={(e) => setRegPhone(e.target.value.replace(/\D/g, ''))} style={inputStyle} />
-                </div>
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
-                  <div className="flex flex-col gap-1" style={{ flex: 1 }}>
-                    <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_trade}</label>
-                    <select value={regTrade} onChange={(e) => setRegTrade(e.target.value)} style={inputStyle}>
-                      <option value="Carpenter">{t.trades.Carpenter}</option>
-                      <option value="Painter">{t.trades.Painter}</option>
-                      <option value="Electrician">{t.trades.Electrician}</option>
-                      <option value="Plumber">{t.trades.Plumber}</option>
-                    </select>
-                  </div>
-                  <div className="flex flex-col gap-1" style={{ flex: 1.2 }}>
-                    <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_location}</label>
-                    <input type="text" placeholder={t.placeholder_location} required value={regLocation}
-                      onChange={(e) => setRegLocation(e.target.value)} style={inputStyle} />
-                  </div>
-                </div>
-                <button type="submit" disabled={loading} className="btn btn-primary"
-                  style={{ marginTop: '0.75rem', width: '100%' }}>
-                  {loading ? t.btn_sending_otp : t.btn_register_verify}
-                </button>
-              </form>
+
+                {/* Step 1: Login Form */}
+                {!isRegister && (
+                  <form className="flex flex-col gap-4" onSubmit={handleSendOtp}>
+                    <div className="flex flex-col gap-1">
+                      <label style={{ fontSize: '0.9rem', fontWeight: 500, opacity: 0.9 }}>{t.label_email}</label>
+                      <input type="email" placeholder={t.placeholder_email} required value={email}
+                        onChange={(e) => setEmail(e.target.value)} style={inputStyle} />
+                      <span style={{ fontSize: '0.75rem', opacity: 0.55 }}>{t.help_email}</span>
+                    </div>
+                    <button type="submit" disabled={loading} className="btn btn-primary"
+                      style={{ marginTop: '0.5rem', width: '100%' }}>
+                      {loading ? t.btn_sending_otp : t.btn_send_otp}
+                    </button>
+                  </form>
+                )}
+
+                {/* Step 1: Register Form */}
+                {isRegister && (
+                  <form className="flex flex-col gap-3" onSubmit={handleRegisterSend}>
+                    <div className="flex flex-col gap-1">
+                      <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_name}</label>
+                      <input type="text" placeholder={t.placeholder_name} required value={regName}
+                        onChange={(e) => setRegName(e.target.value)} style={inputStyle} />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_reg_email}</label>
+                      <input type="email" placeholder={t.placeholder_email} required value={regEmail}
+                        onChange={(e) => setRegEmail(e.target.value)} style={inputStyle} />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_phone}</label>
+                      <input type="tel" placeholder={t.placeholder_phone} required maxLength={10} value={regPhone}
+                        onChange={(e) => setRegPhone(e.target.value.replace(/\D/g, ''))} style={inputStyle} />
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.75rem' }}>
+                      <div className="flex flex-col gap-1" style={{ flex: 1 }}>
+                        <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_trade}</label>
+                        <select value={regTrade} onChange={(e) => setRegTrade(e.target.value)} style={inputStyle}>
+                          <option value="Carpenter">{t.trades.Carpenter}</option>
+                          <option value="Painter">{t.trades.Painter}</option>
+                          <option value="Electrician">{t.trades.Electrician}</option>
+                          <option value="Plumber">{t.trades.Plumber}</option>
+                        </select>
+                      </div>
+                      <div className="flex flex-col gap-1" style={{ flex: 1.2 }}>
+                        <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_location}</label>
+                        <input type="text" placeholder={t.placeholder_location} required value={regLocation}
+                          onChange={(e) => setRegLocation(e.target.value)} style={inputStyle} />
+                      </div>
+                    </div>
+                    <button type="submit" disabled={loading} className="btn btn-primary"
+                      style={{ marginTop: '0.75rem', width: '100%' }}>
+                      {loading ? t.btn_sending_otp : t.btn_register_verify}
+                    </button>
+                  </form>
+                )}
+              </div>
             )}
 
             {/* Step 2: OTP Input */}
