@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ProGuidedTour from '@/components/ProGuidedTour';
-import { processDocumentImage } from '@/lib/document-scanner';
+import { processDocumentImage, uploadImageToStorage } from '@/lib/document-scanner';
+import { resolveDisplayUrl } from '@/lib/storage';
 
 const TABS = [
   { id: 'overview', label: '📊 Overview' },
@@ -44,6 +45,7 @@ function DocUploadSlot({
   field,
   optional = false,
   value,
+  previewSrc,
   uploadingField,
   validation,
   onFileChange,
@@ -51,6 +53,7 @@ function DocUploadSlot({
   onPreview,
 }) {
   const isUploading = uploadingField === field;
+  const imageSource = previewSrc || (value ? resolveDisplayUrl(value, '') : '');
 
   return (
     <div
@@ -87,20 +90,20 @@ function DocUploadSlot({
             animation: 'doc-spin 0.8s linear infinite'
           }} />
           <span style={{ fontSize: '0.78rem', color: 'var(--primary)', fontWeight: 600 }}>
-            🔍 Scanning clarity & verifying document…
+            🔍 Scanning clarity & uploading to cloud…
           </span>
         </div>
-      ) : value ? (
+      ) : (value || previewSrc) ? (
         <div className="flex flex-col items-center gap-2">
           <div style={{ position: 'relative', width: '100%', maxWidth: '220px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--glass-border)' }}>
             <img
-              src={value}
+              src={imageSource}
               alt={title}
               style={{ width: '100%', height: '100px', objectFit: 'cover', display: 'block', background: 'rgba(0,0,0,0.2)' }}
             />
             <button
               type="button"
-              onClick={() => onPreview({ title, src: value })}
+              onClick={() => onPreview({ title, src: imageSource || value })}
               style={{
                 position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', border: 'none',
                 color: 'white', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer',
@@ -202,7 +205,27 @@ export default function ProDashboard() {
   const [uploadingField, setUploadingField] = useState(null);
   const [tourActive, setTourActive] = useState(false);
   const [docValidations, setDocValidations] = useState({});
+  const [docPreviews, setDocPreviews] = useState({});
   const [previewDocModal, setPreviewDocModal] = useState(null);
+
+  const handleOpenPreview = async ({ title, src }) => {
+    if (!src) return;
+    if (src.startsWith('data:') || src.startsWith('blob:') || src.startsWith('http://') || src.startsWith('https://')) {
+      setPreviewDocModal({ title, src });
+      return;
+    }
+    try {
+      const res = await fetch(`/api/docs/signed-url?path=${encodeURIComponent(src)}`);
+      const data = await res.json();
+      if (data?.signedUrl) {
+        setPreviewDocModal({ title, src: data.signedUrl });
+      } else {
+        setPreviewDocModal({ title, src: resolveDisplayUrl(src, '') });
+      }
+    } catch {
+      setPreviewDocModal({ title, src: resolveDisplayUrl(src, '') });
+    }
+  };
 
   useEffect(() => {
     const id = localStorage.getItem('pro_id');
@@ -325,16 +348,22 @@ export default function ProDashboard() {
       setPortfolioError(`Only ${availableSlots} more photo${availableSlots === 1 ? '' : 's'} can be added to stay within the 30-photo limit.`);
     }
 
-    setPortfolioProcessing(`Optimizing & adding ${filesToProcess.length} photo${filesToProcess.length === 1 ? '' : 's'}…`);
+    setPortfolioProcessing(`Optimizing & uploading ${filesToProcess.length} photo${filesToProcess.length === 1 ? '' : 's'} to storage…`);
 
     try {
       const processedList = [];
       for (const file of filesToProcess) {
         if (!file.type.startsWith('image/')) continue;
-        // Process work sample photo with watermark enabled (1200px @ 80% quality)
-        const res = await processDocumentImage(file, 1200, 0.80, true);
-        if (res?.dataUrl) {
-          processedList.push(res.dataUrl);
+        const res = await uploadImageToStorage({
+          file,
+          category: 'portfolio',
+          ownerId: proInfo?.id || 'pro',
+          maxDimension: 1200,
+          quality: 0.82,
+          watermark: true
+        });
+        if (res?.value) {
+          processedList.push(res.value);
         }
       }
 
@@ -346,7 +375,7 @@ export default function ProDashboard() {
       }
     } catch (err) {
       console.error(err);
-      setPortfolioError('Failed to process image(s). Please try again.');
+      setPortfolioError('Failed to upload image(s). Please try again.');
     } finally {
       setPortfolioProcessing('');
     }
@@ -385,10 +414,18 @@ export default function ProDashboard() {
 
     setUploadingField('pending_avatar');
     try {
-      const res = await processDocumentImage(file, 800, 0.85, true);
-      setForm(prev => ({ ...prev, pending_avatar: res.dataUrl }));
+      const res = await uploadImageToStorage({
+        file,
+        category: 'pending_avatar',
+        ownerId: proInfo?.id || 'pro',
+        maxDimension: 800,
+        quality: 0.85,
+        watermark: true
+      });
+      setForm(prev => ({ ...prev, pending_avatar: res.value }));
     } catch (err) {
-      alert('Failed to process profile photo.');
+      console.error(err);
+      alert('Failed to upload profile photo.');
     } finally {
       setUploadingField(null);
     }
@@ -411,7 +448,7 @@ export default function ProDashboard() {
     } catch { setPortfolioStatus('error'); }
   };
 
-  // Handle file uploads in wizard with High-Fidelity scanning & AI validation
+  // Handle file uploads in wizard with High-Fidelity scanning & direct storage upload
   const handleFileChange = async (e, field) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -426,16 +463,23 @@ export default function ProDashboard() {
     setOnboardError('');
     setUploadingField(field);
     try {
-      // 1. Process image: 800px with watermark for public avatar, 1600px clean for official KYC documents
+      // 1. Process image and upload to Supabase Storage
       const isPublicAvatar = field === 'avatar';
-      const processed = await processDocumentImage(file, isPublicAvatar ? 800 : 1600, 0.85, isPublicAvatar);
+      const uploadRes = await uploadImageToStorage({
+        file,
+        category: field,
+        ownerId: proInfo?.id || 'pro',
+        maxDimension: isPublicAvatar ? 800 : 1600,
+        quality: 0.85,
+        watermark: isPublicAvatar
+      });
 
-      if (processed.isBlurry) {
+      if (uploadRes.metrics.isBlurry) {
         setOnboardError('⚠️ Image appears blurry or out of focus. Please retake a sharp, clear photo in good lighting.');
         setUploadingField(null);
         return;
       }
-      if (processed.isTooDark) {
+      if (uploadRes.metrics.isTooDark) {
         setOnboardError('⚠️ Image is too dark. Please take photo with adequate lighting or flash.');
         setUploadingField(null);
         return;
@@ -448,7 +492,7 @@ export default function ProDashboard() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            imageBase64: processed.dataUrl,
+            imageBase64: uploadRes.dataUrl,
             documentType: field,
           }),
         });
@@ -472,8 +516,9 @@ export default function ProDashboard() {
         return;
       }
 
-      // Accept document!
-      setOnboardForm(prev => ({ ...prev, [field]: processed.dataUrl }));
+      // Accept document: save clean storage value and preview URL
+      setOnboardForm(prev => ({ ...prev, [field]: uploadRes.value }));
+      setDocPreviews(prev => ({ ...prev, [field]: uploadRes.previewUrl }));
       setDocValidations(prev => ({
         ...prev,
         [field]: {
@@ -485,7 +530,7 @@ export default function ProDashboard() {
       }));
     } catch (err) {
       console.error(err);
-      setOnboardError('Failed to process image. Please try another copy.');
+      setOnboardError('Failed to process and upload image. Please try again.');
     } finally {
       setUploadingField(null);
     }
@@ -795,11 +840,12 @@ export default function ProDashboard() {
                       subtitle="Photo & name side (Clear scan)"
                       field="aadhaar_front"
                       value={onboardForm.aadhaar_front}
+                      previewSrc={docPreviews.aadhaar_front}
                       uploadingField={uploadingField}
                       validation={docValidations.aadhaar_front}
                       onFileChange={handleFileChange}
                       onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
-                      onPreview={setPreviewDocModal}
+                      onPreview={handleOpenPreview}
                     />
                     <DocUploadSlot
                       id="tour-aadhaar-back"
@@ -808,11 +854,12 @@ export default function ProDashboard() {
                       subtitle="Address & QR code page"
                       field="aadhaar_back"
                       value={onboardForm.aadhaar_back}
+                      previewSrc={docPreviews.aadhaar_back}
                       uploadingField={uploadingField}
                       validation={docValidations.aadhaar_back}
                       onFileChange={handleFileChange}
                       onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
-                      onPreview={setPreviewDocModal}
+                      onPreview={handleOpenPreview}
                     />
                   </div>
                 </div>
@@ -828,11 +875,12 @@ export default function ProDashboard() {
                       subtitle="Front details & photo scan"
                       field="pan_front"
                       value={onboardForm.pan_front}
+                      previewSrc={docPreviews.pan_front}
                       uploadingField={uploadingField}
                       validation={docValidations.pan_front}
                       onFileChange={handleFileChange}
                       onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
-                      onPreview={setPreviewDocModal}
+                      onPreview={handleOpenPreview}
                     />
                     <DocUploadSlot
                       id="tour-pan-back"
@@ -842,11 +890,12 @@ export default function ProDashboard() {
                       field="pan_back"
                       optional={true}
                       value={onboardForm.pan_back}
+                      previewSrc={docPreviews.pan_back}
                       uploadingField={uploadingField}
                       validation={docValidations.pan_back}
                       onFileChange={handleFileChange}
                       onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
-                      onPreview={setPreviewDocModal}
+                      onPreview={handleOpenPreview}
                     />
                   </div>
                 </div>
@@ -873,8 +922,8 @@ export default function ProDashboard() {
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       overflow: 'hidden', flexShrink: 0
                     }}>
-                      {onboardForm.avatar ? (
-                        <img src={onboardForm.avatar} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      {(docPreviews.avatar || onboardForm.avatar) ? (
+                        <img src={docPreviews.avatar || resolveDisplayUrl(onboardForm.avatar)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       ) : (
                         <span style={{ fontSize: '2.5rem', opacity: 0.6 }}>👤</span>
                       )}
@@ -885,13 +934,13 @@ export default function ProDashboard() {
 
                       {uploadingField === 'avatar' ? (
                         <span style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: 600 }}>🔍 Processing & checking photo clarity…</span>
-                      ) : onboardForm.avatar ? (
+                      ) : (docPreviews.avatar || onboardForm.avatar) ? (
                         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                           <label className="btn btn-secondary" style={{ padding: '0.35rem 0.75rem', fontSize: '0.78rem', cursor: 'pointer' }}>
                             🔄 Change Photo
                             <input type="file" accept="image/*" onChange={e => handleFileChange(e, 'avatar')} style={{ display: 'none' }} />
                           </label>
-                          <button onClick={() => setOnboardForm(prev => ({ ...prev, avatar: '' }))} style={{ padding: '0.35rem 0.6rem', border: 'none', background: 'rgba(239,68,68,0.15)', color: '#f87171', fontSize: '0.75rem', borderRadius: '6px', cursor: 'pointer' }}>
+                          <button onClick={() => { setOnboardForm(prev => ({ ...prev, avatar: '' })); setDocPreviews(prev => ({ ...prev, avatar: '' })); }} style={{ padding: '0.35rem 0.6rem', border: 'none', background: 'rgba(239,68,68,0.15)', color: '#f87171', fontSize: '0.75rem', borderRadius: '6px', cursor: 'pointer' }}>
                             Remove
                           </button>
                         </div>
@@ -922,11 +971,12 @@ export default function ProDashboard() {
                       subtitle="Voter ID or Driving License"
                       field="voter_driving_front"
                       value={onboardForm.voter_driving_front}
+                      previewSrc={docPreviews.voter_driving_front}
                       uploadingField={uploadingField}
                       validation={docValidations.voter_driving_front}
                       onFileChange={handleFileChange}
                       onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
-                      onPreview={setPreviewDocModal}
+                      onPreview={handleOpenPreview}
                     />
                     <DocUploadSlot
                       id="tour-voter-back"
@@ -936,11 +986,12 @@ export default function ProDashboard() {
                       field="voter_driving_back"
                       optional={true}
                       value={onboardForm.voter_driving_back}
+                      previewSrc={docPreviews.voter_driving_back}
                       uploadingField={uploadingField}
                       validation={docValidations.voter_driving_back}
                       onFileChange={handleFileChange}
                       onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
-                      onPreview={setPreviewDocModal}
+                      onPreview={handleOpenPreview}
                     />
                   </div>
                 </div>
@@ -956,11 +1007,12 @@ export default function ProDashboard() {
                       subtitle="Certificate / Character verification scan"
                       field="police_verification"
                       value={onboardForm.police_verification}
+                      previewSrc={docPreviews.police_verification}
                       uploadingField={uploadingField}
                       validation={docValidations.police_verification}
                       onFileChange={handleFileChange}
                       onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
-                      onPreview={setPreviewDocModal}
+                      onPreview={handleOpenPreview}
                     />
                   </div>
                 </div>
@@ -1285,7 +1337,7 @@ export default function ProDashboard() {
               <div className="glass" style={{ padding: '1.5rem', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap', border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.01)' }}>
                 <div style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '50%', border: '2px solid var(--primary)', overflow: 'hidden', background: 'rgba(255,255,255,0.05)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {profile?.avatar ? (
-                    <img src={profile.avatar} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Avatar" />
+                    <img src={resolveDisplayUrl(profile.avatar)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Avatar" />
                   ) : (
                     <span style={{ fontSize: '2rem', opacity: 0.6 }}>👤</span>
                   )}
@@ -1320,7 +1372,7 @@ export default function ProDashboard() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderLeft: '1px solid var(--glass-border)', paddingLeft: '1.5rem' }}>
                     <div style={{ textAlign: 'center' }}>
                       <div style={{ width: '60px', height: '60px', borderRadius: '50%', border: '2.5px dashed var(--accent)', overflow: 'hidden', margin: '0 auto 0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <img src={form.pending_avatar} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Pending" />
+                        <img src={resolveDisplayUrl(form.pending_avatar)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Pending" />
                       </div>
                       <span style={{ fontSize: '0.72rem', color: 'var(--accent)', fontWeight: 700 }}>New Upload (Unsaved)</span>
                     </div>
@@ -1331,7 +1383,7 @@ export default function ProDashboard() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderLeft: '1px solid var(--glass-border)', paddingLeft: '1.5rem' }}>
                     <div style={{ textAlign: 'center' }}>
                       <div style={{ width: '60px', height: '60px', borderRadius: '50%', border: '2.5px dashed #f59e0b', overflow: 'hidden', margin: '0 auto 0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <img src={profile.pending_avatar} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Pending" />
+                        <img src={resolveDisplayUrl(profile.pending_avatar)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Pending" />
                       </div>
                       <span style={{ fontSize: '0.72rem', color: '#f59e0b', fontWeight: 700 }}>Under Review ⏳</span>
                     </div>
@@ -1591,7 +1643,7 @@ export default function ProDashboard() {
                       }}
                     >
                       <img
-                        src={url}
+                        src={resolveDisplayUrl(url)}
                         alt={`Portfolio Work ${i + 1}`}
                         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                         onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}

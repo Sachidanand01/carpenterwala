@@ -3,6 +3,8 @@ import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { uploadImageToStorage } from '@/lib/document-scanner';
+import { resolveDisplayUrl } from '@/lib/storage';
 
 function StarPicker({ value, onChange }) {
   const [hovered, setHovered] = useState(0);
@@ -314,27 +316,37 @@ function AddWarrantyModal({ customerPhone, onClose, onSaved }) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  // Handle local files compressor
+  // Handle local files optimization and cloud storage upload
   const handleFileChange = async (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
 
     setCompressing(true);
     try {
-      const result = await compressFile(file);
+      const categoryMap = { receipt: 'receipt_copy', invoice: 'invoice_copy', card: 'warranty_card_copy' };
+      const uploadRes = await uploadImageToStorage({
+        file,
+        category: categoryMap[type] || 'receipt_copy',
+        ownerId: customerPhone || 'customer',
+        maxDimension: 1200,
+        quality: 0.82
+      });
+
+      const sizeKb = Math.round((uploadRes.metrics?.fileSizeBytes || 0) / 1024);
+
       if (type === 'receipt') {
-        setReceiptBase64(result.base64);
-        setReceiptMeta({ name: file.name, sizeKb: result.sizeKb });
+        setReceiptBase64(uploadRes.value);
+        setReceiptMeta({ name: file.name, sizeKb });
       } else if (type === 'invoice') {
-        setInvoiceBase64(result.base64);
-        setInvoiceMeta({ name: file.name, sizeKb: result.sizeKb });
+        setInvoiceBase64(uploadRes.value);
+        setInvoiceMeta({ name: file.name, sizeKb });
       } else if (type === 'card') {
-        setWarrantyCardBase64(result.base64);
-        setWarrantyCardMeta({ name: file.name, sizeKb: result.sizeKb });
+        setWarrantyCardBase64(uploadRes.value);
+        setWarrantyCardMeta({ name: file.name, sizeKb });
       }
     } catch (err) {
       console.error(err);
-      setError('Could not process this file format. Please try standard image files (PNG/JPEG/WebP).');
+      setError('Could not process or upload this file format. Please try standard image files (PNG/JPEG/WebP).');
     } finally {
       setCompressing(false);
     }
@@ -708,12 +720,40 @@ function AddWarrantyModal({ customerPhone, onClose, onSaved }) {
   );
 }
 
-// Preview uploaded Base64 documents Modal
+// Preview uploaded documents Modal (supports Base64 and secure Cloud Storage paths)
 function ViewWarrantyDocumentModal({ title, base64Data, onClose }) {
+  const [displaySrc, setDisplaySrc] = useState(base64Data);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!base64Data) return;
+    if (base64Data.startsWith('data:') || base64Data.startsWith('http://') || base64Data.startsWith('https://')) {
+      setDisplaySrc(base64Data);
+      return;
+    }
+
+    let isMounted = true;
+    setLoading(true);
+    fetch(`/api/docs/signed-url?path=${encodeURIComponent(base64Data)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (isMounted && data?.signedUrl) {
+          setDisplaySrc(data.signedUrl);
+        }
+      })
+      .catch(console.error)
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => { isMounted = false; };
+  }, [base64Data]);
+
   const downloadFile = () => {
+    if (!displaySrc) return;
     const link = document.createElement('a');
-    link.href = base64Data;
-    // Format descriptive download name
+    link.href = displaySrc;
+    link.target = '_blank';
     const sanitizedTitle = title.replace(/\s+/g, '_').toLowerCase();
     link.download = `warranty_${sanitizedTitle}.jpg`;
     document.body.appendChild(link);
@@ -746,11 +786,18 @@ function ViewWarrantyDocumentModal({ title, base64Data, onClose }) {
             }}>×</button>
           </div>
         </div>
-        <div style={{ padding: '1.5rem', background: '#0e121a', display: 'flex', justifyContent: 'center', alignItems: 'center', maxHeight: '60vh', overflowY: 'auto' }}>
-          <img src={base64Data} alt={title} style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }} />
+        <div style={{ padding: '1.5rem', background: '#0e121a', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', maxHeight: '60vh', overflowY: 'auto' }}>
+          {loading ? (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem', padding: '2rem' }}>
+              <div style={{ border: '3px solid rgba(255,255,255,0.1)', borderTop: '3px solid var(--primary)', borderRadius: '50%', width: '32px', height: '32px', animation: 'spin 1s linear infinite' }} />
+              <span style={{ fontSize: '0.85rem', opacity: 0.8 }}>Generating secure time-limited document token…</span>
+            </div>
+          ) : (
+            <img src={displaySrc} alt={title} style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }} />
+          )}
         </div>
         <div style={{ padding: '1rem', borderTop: '1px solid var(--glass-border)', textAlign: 'center', opacity: 0.6, fontSize: '0.8rem' }}>
-          🔒 strictly confidential · available only to your personal Carpenterwala account
+          🔒 strictly confidential · encrypted cloud storage
         </div>
       </div>
     </div>

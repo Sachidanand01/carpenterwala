@@ -9,7 +9,11 @@
     "lint": "eslint",
     "export:blogs": "node scripts/export-blogs.mjs",
     "import:blogs": "node scripts/import-blogs.mjs",
-    "audit:blogs": "node scripts/audit-blog-skills.mjs"
+    "audit:blogs": "node scripts/audit-blog-skills.mjs",
+    "db:new": "supabase migration new",
+    "db:push": "supabase db push",
+    "db:status": "supabase migration list",
+    "db:link": "supabase link --project-ref abuaziyfhgmzeiqjtcas"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.512",

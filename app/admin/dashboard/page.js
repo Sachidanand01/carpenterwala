@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { resolveDisplayUrl } from '@/lib/storage';
 
 const REJECTION_PRESETS = [
   'Blurry / unreadable Aadhaar card front photo',
@@ -28,6 +29,25 @@ export default function AdminDashboardClient() {
   const [zoomedImage, setZoomedImage] = useState(null);
   const [actionStatus, setActionStatus] = useState({ type: '', message: '' });
   const [processingId, setProcessingId] = useState(null);
+
+  const handleZoomDoc = async ({ title, url }) => {
+    if (!url) return;
+    if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/')) {
+      setZoomedImage({ title, url });
+      return;
+    }
+    try {
+      const res = await fetch(`/api/docs/signed-url?path=${encodeURIComponent(url)}`);
+      const data = await res.json();
+      if (data?.signedUrl) {
+        setZoomedImage({ title, url: data.signedUrl });
+      } else {
+        setZoomedImage({ title, url: resolveDisplayUrl(url) });
+      }
+    } catch {
+      setZoomedImage({ title, url: resolveDisplayUrl(url) });
+    }
+  };
 
   // Rejection Dialog State
   const [rejectModalPro, setRejectModalPro] = useState(null);
@@ -1040,8 +1060,8 @@ export default function AdminDashboardClient() {
                       <div style={{ fontSize: '0.75rem', opacity: 0.6, marginBottom: '0.35rem', fontWeight: 600 }}>Front Side Scan</div>
                       {selectedPro.aadhaar_front ? (
                         <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'var(--card-bg)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                             onClick={() => setZoomedImage({ title: 'Aadhaar Card - Front Side', url: selectedPro.aadhaar_front })}>
-                          <img src={selectedPro.aadhaar_front} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px', transition: 'transform 0.2s' }} />
+                             onClick={() => handleZoomDoc({ title: 'Aadhaar Card - Front Side', url: selectedPro.aadhaar_front })}>
+                          <img src={resolveDisplayUrl(selectedPro.aadhaar_front)} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px', transition: 'transform 0.2s' }} />
                         </div>
                       ) : (
                         <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#b91c1c', fontSize: '0.78rem' }}>
@@ -1054,8 +1074,8 @@ export default function AdminDashboardClient() {
                       <div style={{ fontSize: '0.75rem', opacity: 0.6, marginBottom: '0.35rem', fontWeight: 600 }}>Back Side (Address) Scan</div>
                       {selectedPro.aadhaar_back ? (
                         <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'var(--card-bg)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                             onClick={() => setZoomedImage({ title: 'Aadhaar Card - Back Side', url: selectedPro.aadhaar_back })}>
-                          <img src={selectedPro.aadhaar_back} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
+                             onClick={() => handleZoomDoc({ title: 'Aadhaar Card - Back Side', url: selectedPro.aadhaar_back })}>
+                          <img src={resolveDisplayUrl(selectedPro.aadhaar_back)} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
                         </div>
                       ) : (
                         <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#b91c1c', fontSize: '0.78rem' }}>
@@ -1074,8 +1094,8 @@ export default function AdminDashboardClient() {
                     <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.75rem' }}>💳 PAN Card (Tax Identity)</h4>
                     {selectedPro.pan_front ? (
                       <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'var(--card-bg)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                           onClick={() => setZoomedImage({ title: 'PAN Card - Front', url: selectedPro.pan_front })}>
-                        <img src={selectedPro.pan_front} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
+                           onClick={() => handleZoomDoc({ title: 'PAN Card - Front', url: selectedPro.pan_front })}>
+                        <img src={resolveDisplayUrl(selectedPro.pan_front)} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
                       </div>
                     ) : (
                       <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#b91c1c', fontSize: '0.78rem' }}>
@@ -1089,8 +1109,8 @@ export default function AdminDashboardClient() {
                     <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.75rem' }}>🪪 Voter ID / License</h4>
                     {selectedPro.voter_driving_front ? (
                       <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'var(--card-bg)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                           onClick={() => setZoomedImage({ title: 'Voter ID / License Scan', url: selectedPro.voter_driving_front })}>
-                        <img src={selectedPro.voter_driving_front} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
+                           onClick={() => handleZoomDoc({ title: 'Voter ID / License Scan', url: selectedPro.voter_driving_front })}>
+                        <img src={resolveDisplayUrl(selectedPro.voter_driving_front)} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
                       </div>
                     ) : (
                       <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#b91c1c', fontSize: '0.78rem' }}>
@@ -1115,7 +1135,7 @@ export default function AdminDashboardClient() {
                           <div style={{ fontSize: '0.85rem', fontWeight: 700 }}>Official Certificate Scanned Image</div>
                           <div style={{ fontSize: '0.75rem', opacity: 0.6, marginTop: '0.15rem' }}>Audit and confirm clean records check.</div>
                           <button
-                            onClick={() => setZoomedImage({ title: 'Police Verification Certificate', url: selectedPro.police_verification })}
+                            onClick={() => handleZoomDoc({ title: 'Police Verification Certificate', url: selectedPro.police_verification })}
                             className="btn btn-secondary"
                             style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', marginTop: '0.5rem', display: 'inline-flex', gap: '0.3rem' }}
                           >
@@ -1123,7 +1143,7 @@ export default function AdminDashboardClient() {
                           </button>
                         </div>
                         <div style={{ width: '80px', height: '60px', borderRadius: '6px', overflow: 'hidden', border: '1px solid var(--glass-border)' }}>
-                          <img src={selectedPro.police_verification} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          <img src={resolveDisplayUrl(selectedPro.police_verification)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                       </div>
                     </div>
