@@ -149,9 +149,9 @@ function extractFAQSchema(post, canonicalUrl) {
     let li;
     while ((li = liRegex.exec(troubleMatch[1])) !== null) {
       const rawLi = li[1];
-      const qMatch = rawLi.match(/<strong>["“]?(.*?)["”?]?<\/strong>/i);
+      const qMatch = rawLi.match(/<strong>(.*?)<\/strong>/i);
       if (qMatch) {
-        let question = qMatch[1].replace(/<[^>]+>/g, '').trim();
+        let question = qMatch[1].replace(/<[^>]+>/g, '').replace(/^["“'«\s]+|["”'»\s.?]+$/g, '').trim();
         if (!question.endsWith('?')) question += '?';
         const answer = rawLi.replace(/<strong>.*?<\/strong>/i, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
         if (question && answer) {
