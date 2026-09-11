@@ -3,6 +3,21 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import MagneticCTA from "./MagneticCTA";
+import {
+  IconSearch,
+  IconTools,
+  IconBlog,
+  IconAbout,
+  IconCarpentry,
+  IconPainting,
+  IconPlumbing,
+  IconElectrical,
+  IconUser,
+  IconCalendar,
+  IconHardhat,
+  IconLock,
+  IconHandshake
+} from "@/components/icons";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,10 +51,10 @@ export default function Navbar() {
   };
 
   const coreServices = [
-    { title: "Carpentry", icon: "🪚", href: "/services/carpentry", desc: "Furniture, repairs & modular" },
-    { title: "Painting", icon: "🎨", href: "/services/painting", desc: "Interior, exterior & waterproofing" },
-    { title: "Plumbing", icon: "🔧", href: "/services/plumbing", desc: "Leaks, fittings & drainage" },
-    { title: "Electrical", icon: "⚡", href: "/services/electrical", desc: "Wiring, fixtures & safety grids" }
+    { title: "Carpentry", icon: <IconCarpentry size={22} color="var(--primary)" />, href: "/services/carpentry", desc: "Furniture, repairs & modular" },
+    { title: "Painting", icon: <IconPainting size={22} color="#f59e0b" />, href: "/services/painting", desc: "Interior, exterior & waterproofing" },
+    { title: "Plumbing", icon: <IconPlumbing size={22} color="#3b82f6" />, href: "/services/plumbing", desc: "Leaks, fittings & drainage" },
+    { title: "Electrical", icon: <IconElectrical size={22} color="#eab308" />, href: "/services/electrical", desc: "Wiring, fixtures & safety grids" }
   ];
 
   return (
@@ -103,17 +118,17 @@ export default function Navbar() {
         <div className="marquee-container">
           <div className="marquee-track">
             <div className="marquee-item">
-              <span>🔒 <strong>100% Free Platform:</strong> Carpenterwala is a pure facilitator. We charge <strong>0% fees/commissions</strong> from both Customers and Service Professionals.</span>
+              <span><IconLock size={15} color="var(--primary)" /> <strong>100% Free Platform:</strong> Carpenterwala is a pure facilitator. We charge <strong>0% fees/commissions</strong> from both Customers and Service Professionals.</span>
             </div>
             <div className="marquee-item">
-              <span>🤝 <strong>Direct Connection:</strong> Deal directly, pay directly. <strong>No hidden platform costs</strong> or service charges!</span>
+              <span><IconHandshake size={15} color="#10b981" /> <strong>Direct Connection:</strong> Deal directly, pay directly. <strong>No hidden platform costs</strong> or service charges!</span>
             </div>
             {/* Duplicate for seamless infinite loop */}
             <div className="marquee-item">
-              <span>🔒 <strong>100% Free Platform:</strong> Carpenterwala is a pure facilitator. We charge <strong>0% fees/commissions</strong> from both Customers and Service Professionals.</span>
+              <span><IconLock size={15} color="var(--primary)" /> <strong>100% Free Platform:</strong> Carpenterwala is a pure facilitator. We charge <strong>0% fees/commissions</strong> from both Customers and Service Professionals.</span>
             </div>
             <div className="marquee-item">
-              <span>🤝 <strong>Direct Connection:</strong> Deal directly, pay directly. <strong>No hidden platform costs</strong> or service charges!</span>
+              <span><IconHandshake size={15} color="#10b981" /> <strong>Direct Connection:</strong> Deal directly, pay directly. <strong>No hidden platform costs</strong> or service charges!</span>
             </div>
           </div>
         </div>
@@ -124,19 +139,31 @@ export default function Navbar() {
         {/* Core Nav Links */}
         <div className="mobile-menu-links">
           <Link href="/find-a-professional" className="mobile-menu-link" onClick={closeMenu}>
-            <span>🔍 Find a Professional</span>
+            <span className="mobile-menu-link-label">
+              <IconSearch size={19} color="var(--primary)" className="menu-icon" />
+              <span>Find a Professional</span>
+            </span>
             <span className="mobile-menu-arrow">→</span>
           </Link>
           <Link href="/services" className="mobile-menu-link" onClick={closeMenu}>
-            <span>🛠️ All Services</span>
+            <span className="mobile-menu-link-label">
+              <IconTools size={19} color="var(--primary)" className="menu-icon" />
+              <span>All Services</span>
+            </span>
             <span className="mobile-menu-arrow">→</span>
           </Link>
           <Link href="/blog" className="mobile-menu-link" onClick={closeMenu}>
-            <span>📰 Blog &amp; Guides</span>
+            <span className="mobile-menu-link-label">
+              <IconBlog size={19} color="var(--primary)" className="menu-icon" />
+              <span>Blog &amp; Guides</span>
+            </span>
             <span className="mobile-menu-arrow">→</span>
           </Link>
           <Link href="/about" className="mobile-menu-link" onClick={closeMenu}>
-            <span>ℹ️ About Us</span>
+            <span className="mobile-menu-link-label">
+              <IconAbout size={19} color="var(--primary)" className="menu-icon" />
+              <span>About Us</span>
+            </span>
             <span className="mobile-menu-arrow">→</span>
           </Link>
         </div>
@@ -167,7 +194,10 @@ export default function Navbar() {
           {customer ? (
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               <Link href="/bookings" className="mobile-menu-link" onClick={closeMenu}>
-                <span>📅 My Bookings</span>
+                <span className="mobile-menu-link-label">
+                  <IconCalendar size={19} color="var(--primary)" className="menu-icon" />
+                  <span>My Bookings</span>
+                </span>
                 <span className="mobile-menu-arrow">→</span>
               </Link>
               <button 
@@ -180,7 +210,10 @@ export default function Navbar() {
             </div>
           ) : (
             <Link href="/login" className="mobile-menu-link" onClick={closeMenu}>
-              <span>👤 My Account / Login</span>
+              <span className="mobile-menu-link-label">
+                <IconUser size={19} color="var(--primary)" className="menu-icon" />
+                <span>My Account / Login</span>
+              </span>
               <span className="mobile-menu-arrow">→</span>
             </Link>
           )}
@@ -188,8 +221,9 @@ export default function Navbar() {
 
         {/* Pro Portal Button */}
         <div className="mobile-menu-pro-cta">
-          <Link href="/pro/login" className="btn btn-primary" style={{ width: '100%', padding: '0.9rem' }} onClick={closeMenu}>
-            👷 Pro Portal (Join as a Pro)
+          <Link href="/pro/login" className="btn btn-primary" style={{ width: '100%', padding: '0.9rem', gap: '0.6rem' }} onClick={closeMenu}>
+            <IconHardhat size={20} color="#ffffff" />
+            <span>Pro Portal (Join as a Pro)</span>
           </Link>
         </div>
 
@@ -232,7 +266,7 @@ export default function Navbar() {
             </a>
           </div>
           <p className="mobile-menu-note">
-            🔒 100% Free Platform • 0% Commission
+            <IconLock size={13} color="var(--primary)" /> 100% Free Platform • 0% Commission
           </p>
         </div>
       </div>

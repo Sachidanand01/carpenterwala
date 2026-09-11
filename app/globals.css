@@ -380,6 +380,21 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateX(3px);
 }
 
+.mobile-menu-link-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.menu-icon {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.mobile-menu-link:hover .menu-icon {
+  transform: scale(1.15);
+}
+
 .mobile-menu-arrow {
   opacity: 0.5;
   font-size: 1.1rem;
@@ -433,10 +448,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .service-chip-icon {
-  font-size: 1.35rem;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  margin-top: 0.1rem;
+  margin-top: 0.15rem;
+}
+
+.service-chip-icon svg {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mobile-menu-service-chip:hover .service-chip-icon svg {
+  transform: scale(1.18);
+}
+
+.marquee-item svg {
+  margin-right: 4px;
 }
 
 .service-chip-text {
