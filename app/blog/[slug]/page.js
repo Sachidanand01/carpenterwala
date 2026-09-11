@@ -32,6 +32,18 @@ const AUTHORS_BY_CATEGORY = {
     role: 'Certified Senior Electrical Systems Supervisor',
     bio: 'Licensed electrical inspector specializing in residential safety grids, MCB/ELCB diagnostics, and smart installations.',
     avatar: '/images/authors/vikram.jpg'
+  },
+  'Pest Control': {
+    name: 'Kamal Yadav',
+    role: 'Senior Avian Control & Balcony Safety Specialist',
+    bio: 'Over 12 years of specialized expertise in high-rise bird netting, invisible stainless steel safety grills, and humane avian exclusion systems for apartments across Bangalore.',
+    avatar: '/images/authors/kamal.jpg'
+  },
+  'Bird Netting': {
+    name: 'Kamal Yadav',
+    role: 'Senior Avian Control & Balcony Safety Specialist',
+    bio: 'Over 12 years of specialized expertise in high-rise bird netting, invisible stainless steel safety grills, and humane avian exclusion systems for apartments across Bangalore.',
+    avatar: '/images/authors/kamal.jpg'
   }
 };
 
