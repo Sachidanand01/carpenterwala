@@ -10,14 +10,7 @@ const POSTS_PER_PAGE = 8;
 
 const slugify = (cat) => cat.toLowerCase().replace(/\s+/g, '-');
 
-const CATEGORY_ICONS = {
-  All: '📚',
-  Carpentry: '🪚',
-  Painting: '🎨',
-  Plumbing: '🔧',
-  Electrical: '⚡',
-  Maintenance: '🏡'
-};
+
 
 const CATEGORY_DESCRIPTIONS = {
   all: `
@@ -222,7 +215,6 @@ function BlogListingInner({ selectedCategorySlug = 'all' }) {
             const catSlug = slugify(cat);
             const href = cat === 'All' ? '/blog' : `/blog/category/${catSlug}`;
             const isActive = activeCategory === cat;
-            const icon = CATEGORY_ICONS[cat] || '📌';
             const count = categoryCounts[cat] || 0;
 
             return (
@@ -231,7 +223,7 @@ function BlogListingInner({ selectedCategorySlug = 'all' }) {
                 href={href}
                 className={`mobile-cat-pill ${isActive ? 'active' : ''}`}
               >
-                <span>{icon} {cat}</span>
+                <span>{cat}</span>
                 <span className="pill-count">({count})</span>
               </Link>
             );
@@ -285,7 +277,7 @@ function BlogListingInner({ selectedCategorySlug = 'all' }) {
                           className="card-image" 
                         />
                         <div className="category-tag">
-                          {CATEGORY_ICONS[post.category] || '📌'} {post.category}
+                          {post.category}
                         </div>
                       </div>
 
@@ -434,7 +426,6 @@ function BlogListingInner({ selectedCategorySlug = 'all' }) {
                     const catSlug = slugify(cat);
                     const href = cat === 'All' ? '/blog' : `/blog/category/${catSlug}`;
                     const isActive = activeCategory === cat;
-                    const icon = CATEGORY_ICONS[cat] || '📌';
                     const count = categoryCounts[cat] || 0;
 
                     return (
@@ -443,12 +434,8 @@ function BlogListingInner({ selectedCategorySlug = 'all' }) {
                         href={href}
                         className={`category-item-row ${isActive ? 'active' : ''}`}
                       >
-                        <div className="cat-left">
-                          <span className="cat-icon">{icon}</span>
-                          <span className="cat-name">{cat}</span>
-                        </div>
-                        <span className={`cat-count-badge ${isActive ? 'active' : ''}`}>
-                          {count}
+                        <span className="cat-name">
+                          {cat} <span className="cat-count">({count})</span>
                         </span>
                       </Link>
                     );
@@ -969,9 +956,8 @@ function BlogListingInner({ selectedCategorySlug = 'all' }) {
         }
         .category-item-row {
           display: flex;
-          justify-content: space-between;
           align-items: center;
-          padding: 0.7rem 0.9rem;
+          padding: 0.65rem 0.9rem;
           border-radius: 12px;
           text-decoration: none;
           color: var(--foreground);
@@ -982,7 +968,8 @@ function BlogListingInner({ selectedCategorySlug = 'all' }) {
         }
         .category-item-row:hover {
           background: rgba(194, 65, 12, 0.08);
-          transform: translateX(3px);
+          color: var(--primary, #C2410C);
+          transform: translateX(4px);
         }
         .category-item-row.active {
           background: var(--primary, #C2410C);
@@ -990,23 +977,18 @@ function BlogListingInner({ selectedCategorySlug = 'all' }) {
           font-weight: 700;
           box-shadow: 0 4px 14px var(--primary-glow);
         }
-        .cat-left {
-          display: flex;
+        .cat-name {
+          display: inline-flex;
           align-items: center;
-          gap: 0.6rem;
+          gap: 0.35rem;
         }
-        .cat-icon {
-          font-size: 1.1rem;
+        .cat-count {
+          font-weight: 500;
+          font-size: 0.88rem;
+          opacity: 0.75;
         }
-        .cat-count-badge {
-          font-size: 0.8rem;
-          padding: 0.2rem 0.55rem;
-          border-radius: 10px;
-          background: rgba(15, 23, 42, 0.06);
-          color: var(--foreground-muted);
-        }
-        .cat-count-badge.active {
-          background: rgba(255, 255, 255, 0.25);
+        .category-item-row.active .cat-count {
+          opacity: 0.95;
           color: #ffffff;
         }
 
