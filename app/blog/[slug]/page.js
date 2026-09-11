@@ -341,7 +341,7 @@ export default async function BlogPost({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredDataGraph) }}
       />
-      <div className="container" style={{ padding: "1.5rem 2rem 0 2rem", marginBottom: "-1.5rem", position: "relative", zIndex: 10 }}>
+      <div className="container" style={{ paddingTop: "1.5rem", marginBottom: "-1.5rem", position: "relative", zIndex: 10 }}>
         <Breadcrumbs items={breadcrumbItems} />
       </div>
 
@@ -429,10 +429,20 @@ export default async function BlogPost({ params }) {
       </div>
 
       {/* Content Section */}
-      <section className="container" style={{ padding: '2rem 0 6rem', display: 'flex', gap: '3.5rem', flexWrap: 'wrap' }}>
-        <article style={{ flex: '2 1 620px', minWidth: '300px', fontSize: '1.15rem', lineHeight: '1.85' }}>
+      <section className="container" style={{ paddingTop: '2rem', paddingBottom: '6rem', display: 'flex', gap: '3.5rem', flexWrap: 'wrap' }}>
+        <article className="blog-article-body" style={{ flex: '2 1 620px', minWidth: 0, fontSize: '1.125rem', lineHeight: '1.85' }}>
           <style dangerouslySetInnerHTML={{
             __html: `
+            .blog-article-body {
+              overflow-wrap: break-word;
+              word-break: break-word;
+            }
+            .blog-content {
+              overflow-wrap: break-word;
+              word-break: break-word;
+              font-size: 1.125rem;
+              line-height: 1.85;
+            }
             .blog-content h2 {
               font-size: 1.85rem;
               margin: 3.5rem 0 1.25rem;
@@ -445,10 +455,12 @@ export default async function BlogPost({ params }) {
               margin: 2.5rem 0 1rem;
               color: #c2410c;
               scroll-margin-top: 100px;
+              line-height: 1.35;
             }
             .blog-content p {
               margin-bottom: 1.5rem;
               opacity: 0.92;
+              line-height: 1.8;
             }
             .blog-content ul, .blog-content ol {
               margin-bottom: 2rem;
@@ -459,6 +471,36 @@ export default async function BlogPost({ params }) {
             }
             .blog-content strong {
               color: #c2410c;
+            }
+            .blog-content img {
+              max-width: 100%;
+              height: auto;
+              border-radius: 12px;
+              margin: 1.5rem 0;
+            }
+            .blog-content table {
+              width: 100%;
+              border-collapse: collapse;
+              margin: 2rem 0;
+              display: block;
+              overflow-x: auto;
+              max-width: 100%;
+            }
+            .blog-content th, .blog-content td {
+              padding: 0.75rem 1rem;
+              border: 1px solid var(--glass-border);
+              font-size: 0.95rem;
+            }
+            .blog-content th {
+              background: rgba(194, 65, 12, 0.1);
+              color: var(--primary);
+              font-weight: 600;
+              text-align: left;
+            }
+            .blog-content pre, .blog-content code {
+              max-width: 100%;
+              overflow-x: auto;
+              font-size: 0.9em;
             }
             .category-link {
               transition: all 0.3s ease;
@@ -488,6 +530,42 @@ export default async function BlogPost({ params }) {
             @media (max-width: 992px) {
               .toc-mobile {
                 display: block;
+              }
+            }
+            @media (max-width: 768px) {
+              .blog-article-body, .blog-content {
+                font-size: 1.05rem;
+                line-height: 1.75;
+              }
+              .blog-content h2 {
+                font-size: 1.45rem;
+                margin: 2.5rem 0 1rem;
+              }
+              .blog-content h3 {
+                font-size: 1.2rem;
+                margin: 2rem 0 0.75rem;
+              }
+              .blog-content p {
+                margin-bottom: 1.25rem;
+                line-height: 1.75;
+              }
+              .blog-content ul, .blog-content ol {
+                padding-left: 1.25rem;
+                margin-bottom: 1.5rem;
+              }
+              .blog-content li {
+                margin-bottom: 0.65rem;
+              }
+              .toc-mobile {
+                padding: 1.25rem;
+                margin-bottom: 2rem;
+              }
+              .author-card-eeat {
+                padding: 1.25rem !important;
+                margin-top: 3rem !important;
+              }
+              .decision-helper-card {
+                padding: 1.25rem !important;
               }
             }
             .toc-link {
@@ -542,7 +620,7 @@ export default async function BlogPost({ params }) {
           )}
 
           {/* Author Bio Card (E-E-A-T) */}
-          <div className="glass" style={{ display: 'flex', gap: '1.5rem', padding: '2rem', marginTop: '4rem', alignItems: 'center', flexWrap: 'wrap', borderRadius: '12px' }}>
+          <div className="glass author-card-eeat" style={{ display: 'flex', gap: '1.5rem', padding: '2rem', marginTop: '4rem', alignItems: 'center', flexWrap: 'wrap', borderRadius: '12px' }}>
             <img
               src={author.avatar}
               alt={author.name}
@@ -571,7 +649,7 @@ export default async function BlogPost({ params }) {
           />
 
           {/* DIY vs Professional Decision Helper (SXO Conversion Component) */}
-          <div style={{
+          <div className="decision-helper-card" style={{
             marginTop: '3.5rem',
             padding: '2rem',
             backgroundColor: 'rgba(255,255,255,0.03)',
