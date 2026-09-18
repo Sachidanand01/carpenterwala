@@ -73,6 +73,7 @@ export default function Footer() {
             <h4 style={{ marginBottom: "1.5rem" }}>Company</h4>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               <li><Link href="/about" style={{ opacity: 0.8, fontSize: "0.9rem" }}>About Us</Link></li>
+              <li><Link href="/diy-reels" style={{ opacity: 0.8, fontSize: "0.9rem", color: 'var(--primary)', fontWeight: 600 }}>DIY Reels &amp; Shorts</Link></li>
               <li><Link href="/how-it-works" style={{ opacity: 0.8, fontSize: "0.9rem" }}>How it Works</Link></li>
               <li><Link href="/pro/login" style={{ opacity: 0.8, fontSize: "0.9rem" }}>Join as a Pro</Link></li>
               <li><Link href="/blog" style={{ opacity: 0.8, fontSize: "0.9rem" }}>Home Tips Blog</Link></li>

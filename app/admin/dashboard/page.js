@@ -2,6 +2,17 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { resolveDisplayUrl } from '@/lib/storage';
+import {
+  getDiyReels,
+  getDiyCategories,
+  createCategory,
+  deleteCategory,
+  addDiyReel,
+  deleteDiyReel,
+  toggleReelPublish,
+  extractYouTubeId,
+  getYouTubeThumbnail
+} from '@/lib/reels';
 
 const REJECTION_PRESETS = [
   'Blurry / unreadable Aadhaar card front photo',
@@ -19,10 +30,28 @@ export default function AdminDashboardClient() {
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
 
-  const [activeTab, setActiveTab] = useState('overview'); // overview, pending, directory, leads
+  const [activeTab, setActiveTab] = useState('overview'); // overview, pending, directory, leads, reels
   const [leads, setLeads] = useState([]);
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // DIY Reels Admin State
+  const [adminReels, setAdminReels] = useState([]);
+  const [adminCategories, setAdminCategories] = useState([]);
+  const [syncChannelInput, setSyncChannelInput] = useState('@your-carpenterwala');
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncResultMsg, setSyncResultMsg] = useState(null);
+  const [newReelForm, setNewReelForm] = useState({
+    youtube_url: '',
+    title: '',
+    description: '',
+    category_name: '',
+    category_id: ''
+  });
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [isAddingReel, setIsAddingReel] = useState(false);
+  const [isCreatingCategory, setIsCreatingCategory] = useState(false);
+  const [reelActionStatus, setReelActionStatus] = useState({ type: '', message: '' });
   
   // Modal / Review state
   const [selectedPro, setSelectedPro] = useState(null);
@@ -94,6 +123,18 @@ export default function AdminDashboardClient() {
       const profilesResult = await profilesRes.json();
       if (!profilesRes.ok) throw new Error(profilesResult.error || 'Failed to sync profiles');
       setProfiles(profilesResult.profiles || []);
+
+      // 3. Fetch DIY Reels and Categories
+      try {
+        const [fetchedReels, fetchedCats] = await Promise.all([
+          getDiyReels({ includeUnpublished: true, limit: 200 }),
+          getDiyCategories()
+        ]);
+        setAdminReels(fetchedReels || []);
+        setAdminCategories(fetchedCats || []);
+      } catch (err) {
+        console.warn("Could not load reels into admin:", err);
+      }
     } catch (err) {
       console.error('Secure data sync failed:', err);
       setActionStatus({ type: 'error', message: err.message || 'Authentication or network sync failed.' });
@@ -521,6 +562,30 @@ export default function AdminDashboardClient() {
         >
           📋 Recent Leads
         </button>
+        <button
+          onClick={() => setActiveTab('reels')}
+          style={{
+            padding: '0.65rem 1.25rem', borderRadius: '8px', border: 'none', cursor: 'pointer',
+            fontWeight: 600, fontSize: '0.9rem', transition: 'all 0.2s',
+            background: activeTab === 'reels' ? 'var(--primary)' : 'transparent',
+            color: activeTab === 'reels' ? '#ffffff' : 'var(--foreground)',
+            opacity: activeTab === 'reels' ? 1 : 0.75,
+            boxShadow: activeTab === 'reels' ? '0 4px 12px var(--primary-glow)' : 'none',
+            display: 'flex', alignItems: 'center', gap: '0.45rem'
+          }}
+        >
+          🎬 DIY Reels
+          {adminReels.length > 0 && (
+            <span style={{
+              background: activeTab === 'reels' ? 'white' : 'var(--primary)',
+              color: activeTab === 'reels' ? 'var(--primary)' : 'white',
+              fontSize: '0.75rem', fontWeight: 800, padding: '0.1rem 0.45rem',
+              borderRadius: '20px', lineHeight: 1.2
+            }}>
+              {adminReels.length}
+            </span>
+          )}
+        </button>
       </div>
 
       {/* ── 1. TAB: OVERVIEW ── */}
@@ -830,6 +895,509 @@ export default function AdminDashboardClient() {
               </tbody>
             </table>
           </div>
+        </div>
+      )}
+
+      {/* ── 5. TAB: DIY REELS MANAGEMENT ── */}
+      {activeTab === 'reels' && (
+        <div className="flex flex-col gap-6 animate-fade-in">
+          
+          {/* Status Message */}
+          {reelActionStatus.message && (
+            <div style={{
+              background: reelActionStatus.type === 'success' ? 'rgba(22,163,74,0.1)' : 'rgba(220,38,38,0.1)',
+              border: `1px solid ${reelActionStatus.type === 'success' ? 'rgba(22,163,74,0.3)' : 'rgba(220,38,38,0.3)'}`,
+              color: reelActionStatus.type === 'success' ? '#15803d' : '#b91c1c',
+              padding: '0.85rem 1.2rem',
+              borderRadius: '10px',
+              fontSize: '0.88rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+            }}>
+              <span>{reelActionStatus.type === 'success' ? '✅' : '⚠️'}</span>
+              <span style={{ fontWeight: 600 }}>{reelActionStatus.message}</span>
+            </div>
+          )}
+
+          {/* Top Actions Row: 1-Click YouTube Sync + Link to Public Page */}
+          <div className="glass" style={{ padding: '1.5rem', borderRadius: '16px', display: 'flex', flexWrap: 'wrap', gap: '1.5rem', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ flex: '1 1 320px' }}>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, margin: '0 0 0.25rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ color: '#FF0000' }}>▶</span> Dynamic YouTube Channel Sync
+              </h3>
+              <p style={{ fontSize: '0.85rem', opacity: 0.7, margin: 0 }}>
+                Automatically scan your YouTube channel for latest video shorts and sync metadata to the database.
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
+              <input
+                type="text"
+                value={syncChannelInput}
+                onChange={(e) => setSyncChannelInput(e.target.value)}
+                placeholder="@your-channel-handle"
+                style={{
+                  padding: '0.55rem 0.9rem',
+                  borderRadius: '8px',
+                  border: '1px solid var(--glass-border)',
+                  background: 'var(--background)',
+                  fontSize: '0.85rem',
+                  width: '200px',
+                }}
+              />
+              <button
+                disabled={isSyncing}
+                onClick={async () => {
+                  setIsSyncing(true);
+                  setSyncResultMsg(null);
+                  try {
+                    const res = await fetch('/api/reels/sync', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ channelHandle: syncChannelInput })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                      setSyncResultMsg(data.message || 'YouTube sync finished successfully!');
+                      setReelActionStatus({ type: 'success', message: data.message });
+                      const updated = await getDiyReels({ includeUnpublished: true, limit: 200 });
+                      setAdminReels(updated || []);
+                    } else {
+                      throw new Error(data.error || 'Sync failed');
+                    }
+                  } catch (e) {
+                    setReelActionStatus({ type: 'error', message: e.message || 'Error syncing from YouTube' });
+                  } finally {
+                    setIsSyncing(false);
+                  }
+                }}
+                className="btn btn-primary"
+                style={{
+                  padding: '0.55rem 1.2rem',
+                  fontSize: '0.85rem',
+                  backgroundColor: '#FF0000',
+                  borderColor: '#FF0000',
+                  boxShadow: '0 4px 12px rgba(255,0,0,0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                }}
+              >
+                {isSyncing ? '⏳ Syncing Channel…' : '🔄 Sync YouTube Now'}
+              </button>
+              
+              <Link
+                href="/diy-reels"
+                target="_blank"
+                className="btn btn-secondary"
+                style={{ padding: '0.55rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}
+              >
+                👁️ View Live DIY Reels
+              </Link>
+            </div>
+          </div>
+
+          {/* Grid Layout: Add Reel Form + Manage Categories */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+            
+            {/* 1. Add Reel Manually */}
+            <div className="glass" style={{ padding: '1.5rem', borderRadius: '16px' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '0.2rem' }}>
+                ➕ Add DIY Reel Manually
+              </h3>
+              <p style={{ fontSize: '0.8rem', opacity: 0.6, marginBottom: '1.2rem' }}>
+                Paste any YouTube Shorts URL or video link to add directly.
+              </p>
+
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  if (!newReelForm.youtube_url || !newReelForm.title) {
+                    setReelActionStatus({ type: 'error', message: 'YouTube URL and Title are required.' });
+                    return;
+                  }
+                  setIsAddingReel(true);
+                  try {
+                    const added = await addDiyReel(newReelForm);
+                    setAdminReels(prev => [added, ...prev]);
+                    setNewReelForm({ youtube_url: '', title: '', description: '', category_name: '', category_id: '' });
+                    setReelActionStatus({ type: 'success', message: `Reel "${added.title}" added successfully!` });
+                  } catch (err) {
+                    setReelActionStatus({ type: 'error', message: err.message || 'Failed to add reel' });
+                  } finally {
+                    setIsAddingReel(false);
+                  }
+                }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}
+              >
+                <div>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 700, display: 'block', marginBottom: '0.3rem' }}>
+                    YouTube Shorts / Video URL *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="https://www.youtube.com/shorts/..."
+                    value={newReelForm.youtube_url}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setNewReelForm(prev => ({ ...prev, youtube_url: val }));
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '0.65rem 0.85rem',
+                      borderRadius: '8px',
+                      border: '1px solid var(--glass-border)',
+                      background: 'var(--background)',
+                      fontSize: '0.85rem',
+                    }}
+                  />
+                  {newReelForm.youtube_url && extractYouTubeId(newReelForm.youtube_url) && (
+                    <div style={{ marginTop: '0.4rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={getYouTubeThumbnail(extractYouTubeId(newReelForm.youtube_url), 'hq')}
+                        alt="Preview"
+                        style={{ width: '48px', height: '36px', objectFit: 'cover', borderRadius: '4px' }}
+                      />
+                      <span style={{ fontSize: '0.75rem', color: 'var(--success)', fontWeight: 600 }}>
+                        ✓ Valid YouTube ID: {extractYouTubeId(newReelForm.youtube_url)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 700, display: 'block', marginBottom: '0.3rem' }}>
+                    Reel Title *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. 30-Sec Wooden Door Hinge Quick Fix"
+                    value={newReelForm.title}
+                    onChange={(e) => setNewReelForm(prev => ({ ...prev, title: e.target.value }))}
+                    style={{
+                      width: '100%',
+                      padding: '0.65rem 0.85rem',
+                      borderRadius: '8px',
+                      border: '1px solid var(--glass-border)',
+                      background: 'var(--background)',
+                      fontSize: '0.85rem',
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 700, display: 'block', marginBottom: '0.3rem' }}>
+                    Category (Select or Leave Blank)
+                  </label>
+                  <select
+                    value={newReelForm.category_name}
+                    onChange={(e) => {
+                      const selectedName = e.target.value;
+                      const catObj = adminCategories.find(c => c.name === selectedName);
+                      setNewReelForm(prev => ({
+                        ...prev,
+                        category_name: selectedName,
+                        category_id: catObj ? catObj.id : null
+                      }));
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '0.65rem 0.85rem',
+                      borderRadius: '8px',
+                      border: '1px solid var(--glass-border)',
+                      background: 'var(--background)',
+                      fontSize: '0.85rem',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <option value="">No Category (Uncategorized)</option>
+                    {adminCategories.map((c) => (
+                      <option key={c.id} value={c.name}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 700, display: 'block', marginBottom: '0.3rem' }}>
+                    Description / DIY Tips
+                  </label>
+                  <textarea
+                    rows={2}
+                    placeholder="Brief description or carpentry instructions..."
+                    value={newReelForm.description}
+                    onChange={(e) => setNewReelForm(prev => ({ ...prev, description: e.target.value }))}
+                    style={{
+                      width: '100%',
+                      padding: '0.65rem 0.85rem',
+                      borderRadius: '8px',
+                      border: '1px solid var(--glass-border)',
+                      background: 'var(--background)',
+                      fontSize: '0.85rem',
+                      resize: 'vertical',
+                    }}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isAddingReel}
+                  className="btn btn-primary"
+                  style={{ marginTop: '0.4rem', padding: '0.65rem', fontSize: '0.88rem' }}
+                >
+                  {isAddingReel ? 'Adding Reel…' : 'Publish DIY Reel'}
+                </button>
+              </form>
+            </div>
+
+            {/* 2. Manage Custom Categories */}
+            <div className="glass" style={{ padding: '1.5rem', borderRadius: '16px', display: 'flex', flexDirection: 'column' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '0.2rem' }}>
+                🏷️ Custom Categories Manager
+              </h3>
+              <p style={{ fontSize: '0.8rem', opacity: 0.6, marginBottom: '1.2rem' }}>
+                Create custom category filters for the DIY Reels page dropdown.
+              </p>
+
+              {/* Add category form */}
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  if (!newCategoryName.trim()) return;
+                  setIsCreatingCategory(true);
+                  try {
+                    const created = await createCategory(newCategoryName);
+                    setAdminCategories(prev => [...prev, created]);
+                    setNewCategoryName('');
+                    setReelActionStatus({ type: 'success', message: `Category "${created.name}" created!` });
+                  } catch (err) {
+                    setReelActionStatus({ type: 'error', message: err.message || 'Could not create category' });
+                  } finally {
+                    setIsCreatingCategory(false);
+                  }
+                }}
+                style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.2rem' }}
+              >
+                <input
+                  type="text"
+                  required
+                  placeholder="New Category (e.g., Kitchen Fixes)"
+                  value={newCategoryName}
+                  onChange={(e) => setNewCategoryName(e.target.value)}
+                  style={{
+                    flex: 1,
+                    padding: '0.6rem 0.85rem',
+                    borderRadius: '8px',
+                    border: '1px solid var(--glass-border)',
+                    background: 'var(--background)',
+                    fontSize: '0.85rem',
+                  }}
+                />
+                <button
+                  type="submit"
+                  disabled={isCreatingCategory}
+                  className="btn btn-primary"
+                  style={{ padding: '0.6rem 1rem', fontSize: '0.85rem', whiteSpace: 'nowrap' }}
+                >
+                  {isCreatingCategory ? 'Adding…' : '➕ Add Category'}
+                </button>
+              </form>
+
+              {/* Categories List */}
+              <div style={{ flex: 1, overflowY: 'auto', maxHeight: '250px' }}>
+                <label style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', opacity: 0.6, display: 'block', marginBottom: '0.5rem' }}>
+                  Existing Categories ({adminCategories.length})
+                </label>
+                {adminCategories.length > 0 ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                    {adminCategories.map((cat) => {
+                      const countInCat = adminReels.filter(r => r.category_name?.toLowerCase() === cat.name.toLowerCase() || r.category_id === cat.id).length;
+                      return (
+                        <div
+                          key={cat.id}
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            padding: '0.5rem 0.75rem',
+                            backgroundColor: 'var(--background)',
+                            borderRadius: '8px',
+                            border: '1px solid var(--card-border)',
+                          }}
+                        >
+                          <div>
+                            <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>{cat.name}</span>
+                            <span style={{ fontSize: '0.75rem', opacity: 0.6, marginLeft: '6px' }}>({countInCat} reels)</span>
+                          </div>
+                          <button
+                            onClick={async () => {
+                              if (!confirm(`Delete category "${cat.name}"?`)) return;
+                              try {
+                                await deleteCategory(cat.id);
+                                setAdminCategories(prev => prev.filter(c => c.id !== cat.id));
+                                setReelActionStatus({ type: 'success', message: `Category "${cat.name}" deleted.` });
+                              } catch (err) {
+                                setReelActionStatus({ type: 'error', message: err.message || 'Could not delete category' });
+                              }
+                            }}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: '#ef4444',
+                              cursor: 'pointer',
+                              fontSize: '0.78rem',
+                              fontWeight: 600,
+                            }}
+                          >
+                            🗑️ Delete
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '1.5rem', opacity: 0.5, fontSize: '0.85rem' }}>
+                    No custom categories added yet. Add your first category above!
+                  </div>
+                )}
+              </div>
+            </div>
+
+          </div>
+
+          {/* 3. Existing DIY Reels Table */}
+          <div className="glass" style={{ padding: '2rem', borderRadius: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem', flexWrap: 'wrap', gap: '0.8rem' }}>
+              <div>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>
+                  🎬 Manage Published DIY Reels ({adminReels.length})
+                </h3>
+                <p style={{ fontSize: '0.82rem', opacity: 0.6, margin: '0.2rem 0 0 0' }}>
+                  Control visibility, update category assignments, and preview reels.
+                </p>
+              </div>
+            </div>
+
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', minWidth: '850px', borderCollapse: 'collapse', textAlign: 'left' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid var(--glass-border)', opacity: 0.6, fontSize: '0.8rem', textTransform: 'uppercase' }}>
+                    <th style={{ padding: '0.75rem 0.85rem', width: '70px' }}>Thumb</th>
+                    <th style={{ padding: '0.75rem 0.85rem' }}>Title & Video ID</th>
+                    <th style={{ padding: '0.75rem 0.85rem' }}>Category</th>
+                    <th style={{ padding: '0.75rem 0.85rem' }}>Engagement</th>
+                    <th style={{ padding: '0.75rem 0.85rem' }}>Status</th>
+                    <th style={{ padding: '0.75rem 0.85rem', textAlign: 'right' }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {adminReels.map((reel) => (
+                    <tr key={reel.id || reel.youtube_id} style={{ borderBottom: '1px solid var(--card-border)' }}>
+                      <td style={{ padding: '0.75rem 0.85rem' }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={reel.thumbnail_url || getYouTubeThumbnail(reel.youtube_id, 'hq')}
+                          alt={reel.title}
+                          style={{ width: '48px', height: '64px', objectFit: 'cover', borderRadius: '6px' }}
+                        />
+                      </td>
+                      <td style={{ padding: '0.75rem 0.85rem' }}>
+                        <span style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--foreground)' }}>
+                          {reel.title}
+                        </span>
+                        <div style={{ fontSize: '0.75rem', opacity: 0.6, fontFamily: 'monospace', marginTop: '2px' }}>
+                          ID: {reel.youtube_id}
+                        </div>
+                      </td>
+                      <td style={{ padding: '0.75rem 0.85rem' }}>
+                        <span style={{
+                          padding: '3px 8px',
+                          borderRadius: '6px',
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          backgroundColor: reel.category_name ? 'var(--primary-light)' : 'rgba(0,0,0,0.06)',
+                          color: reel.category_name ? 'var(--primary)' : 'var(--foreground-muted)'
+                        }}>
+                          {reel.category_name || 'Uncategorized'}
+                        </span>
+                      </td>
+                      <td style={{ padding: '0.75rem 0.85rem', fontSize: '0.82rem' }}>
+                        <div>👁️ {Number(reel.views_count || 0).toLocaleString()} views</div>
+                        <div style={{ opacity: 0.7, marginTop: '2px' }}>❤️ {reel.likes_count || 0} likes</div>
+                      </td>
+                      <td style={{ padding: '0.75rem 0.85rem' }}>
+                        <button
+                          onClick={async () => {
+                            try {
+                              const newStatus = !reel.is_published;
+                              await toggleReelPublish(reel.id, newStatus);
+                              setAdminReels(prev => prev.map(r => r.id === reel.id ? { ...r, is_published: newStatus } : r));
+                              setReelActionStatus({ type: 'success', message: `Reel status changed to ${newStatus ? 'Published' : 'Hidden'}.` });
+                            } catch (e) {
+                              setReelActionStatus({ type: 'error', message: 'Could not toggle status' });
+                            }
+                          }}
+                          style={{
+                            padding: '3px 10px',
+                            borderRadius: '9999px',
+                            border: 'none',
+                            fontSize: '0.75rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            backgroundColor: reel.is_published ? 'var(--success-bg)' : 'rgba(239,68,68,0.1)',
+                            color: reel.is_published ? 'var(--success)' : '#ef4444',
+                          }}
+                        >
+                          {reel.is_published ? '✓ Published' : 'Hidden / Draft'}
+                        </button>
+                      </td>
+                      <td style={{ padding: '0.75rem 0.85rem', textAlign: 'right' }}>
+                        <div style={{ display: 'inline-flex', gap: '0.4rem' }}>
+                          <a
+                            href={`https://www.youtube.com/shorts/${reel.youtube_id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-secondary"
+                            style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem' }}
+                            title="Open on YouTube"
+                          >
+                            YouTube ↗
+                          </a>
+                          <button
+                            onClick={async () => {
+                              if (!confirm(`Delete reel "${reel.title}"?`)) return;
+                              try {
+                                await deleteDiyReel(reel.id);
+                                setAdminReels(prev => prev.filter(r => r.id !== reel.id));
+                                setReelActionStatus({ type: 'success', message: `Reel deleted.` });
+                              } catch (e) {
+                                setReelActionStatus({ type: 'error', message: 'Could not delete reel' });
+                              }
+                            }}
+                            className="btn btn-secondary"
+                            style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', color: '#ef4444', borderColor: 'rgba(239,68,68,0.3)' }}
+                          >
+                            🗑️ Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {adminReels.length === 0 && (
+                    <tr>
+                      <td colSpan="6" style={{ padding: '2.5rem', textAlign: 'center', opacity: 0.5 }}>
+                        No DIY Reels in database. Click &ldquo;Sync YouTube Now&rdquo; or add one manually!
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
       )}
 

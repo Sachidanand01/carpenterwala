@@ -32,6 +32,12 @@ export default async function sitemap() {
       changeFrequency: 'daily',
       priority: 0.9,
     },
+    {
+      url: `${baseUrl}/diy-reels`,
+      lastModified: buildDate,
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
   ];
 
   // 2. Mid-priority informational & hub pages

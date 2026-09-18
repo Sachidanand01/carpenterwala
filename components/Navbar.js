@@ -16,7 +16,8 @@ import {
   IconCalendar,
   IconHardhat,
   IconLock,
-  IconHandshake
+  IconHandshake,
+  IconReels
 } from "@/components/icons";
 
 export default function Navbar() {
@@ -81,6 +82,9 @@ export default function Navbar() {
           <div className="desktop-only flex gap-6 items-center">
             <Link href="/find-a-professional" className="nav-link">Find a Pro</Link>
             <Link href="/services" className="nav-link">Services</Link>
+            <Link href="/diy-reels" className="nav-link" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ color: 'var(--primary)', fontWeight: 700 }}>●</span> DIY Reels
+            </Link>
             <Link href="/blog" className="nav-link">Blog</Link>
             <Link href="/about" className="nav-link">About</Link>
             {customer ? (
@@ -142,6 +146,13 @@ export default function Navbar() {
             <span className="mobile-menu-link-label">
               <IconSearch size={19} color="var(--primary)" className="menu-icon" />
               <span>Find a Professional</span>
+            </span>
+            <span className="mobile-menu-arrow">→</span>
+          </Link>
+          <Link href="/diy-reels" className="mobile-menu-link" onClick={closeMenu}>
+            <span className="mobile-menu-link-label">
+              <IconReels size={19} color="var(--primary)" className="menu-icon" />
+              <span>DIY Reels</span>
             </span>
             <span className="mobile-menu-arrow">→</span>
           </Link>
