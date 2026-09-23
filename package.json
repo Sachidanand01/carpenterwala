@@ -13,8 +13,9 @@
     "db:new": "supabase migration new",
     "db:push": "supabase db push",
     "db:status": "supabase migration list",
-    "db:link": "supabase link --project-ref abuaziyfhgmzeiqjtcas",
-    "test:setup": "node scripts/verify-setup.mjs"
+    "test:setup": "node scripts/verify-setup.mjs",
+    "gsc:insights": "node scripts/gsc-insights.mjs",
+    "gsc:analyze": "node scripts/analyze-gsc-export.mjs"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.512",

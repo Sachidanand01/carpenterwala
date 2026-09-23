@@ -4,21 +4,18 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
 
 export const metadata = {
-  title: 'Professional Carpentry Services Across India | CarpenterWala',
-  description: 'Hire verified local carpenters in India for furniture repair, custom wardrobes, and modular kitchen fittings. View standard rate cards and book online.',
+  title: 'Carpenter Services in Bangalore [2026 Rate Card & Daily Wages]',
+  description: 'Hire verified local carpenters in Bangalore. Transparent carpenter daily rates (₹900–₹1,300/day), furniture repairs, door lock fitting, and custom modular woodwork.',
   keywords: [
-    'carpenter services india',
-    'carpenter near me',
-    'how to find trusted carpenter',
-    'trusted carpenter near me',
-    'verified carpenter india',
+    'carpenter services in bangalore',
+    'carpenter near me bangalore',
+    'carpenter near me with phone number',
     'carpenter labour rate per sq ft',
-    'hire carpenter for office fit-out',
-    'furniture repair near me',
-    'modular kitchen carpenter',
-    'Carpenter Services in Bangalore',
-    'Carpenter in Mumbai',
-    'Best Carpenter in Delhi'
+    'furniture carpenter contractor bangalore',
+    'carpenter near jigani bangalore',
+    'carpenter services in rt nagar bangalore',
+    'carpenter near vijay nagar bangalore',
+    'modular kitchen carpenter bangalore'
   ],
   alternates: {
     canonical: 'https://carpenterwala.com/services/carpentry',
@@ -260,6 +257,53 @@ export default function CarpentryPage() {
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🏢</div>
             <h3 style={{ marginBottom: '1rem' }}>Office Fit-Out & Partitions</h3>
             <p style={{ opacity: 0.8 }}>Commercial glass-wood partitions, conference tables, workstation assembly, and acoustic paneling for modern corporate workspaces.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Bangalore Carpenter Rates & Daily Wage Guide */}
+      <section className="container" style={{ marginBottom: '4rem' }}>
+        <div className="glass" style={{ padding: '2.5rem', borderRadius: '16px', borderLeft: '4px solid var(--primary)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
+            <div>
+              <span style={{ fontSize: '0.85rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--primary)' }}>
+                📍 Local Bangalore Carpenter Rates (2026 Updated)
+              </span>
+              <h2 style={{ fontSize: '2rem', marginTop: '0.25rem', marginBottom: '0.5rem' }}>
+                Bangalore Carpenter Daily Wages &amp; Repair Charges
+              </h2>
+            </div>
+            <Link href="/find-a-professional?category=Carpenter&location=Bangalore" className="btn btn-primary" style={{ padding: '0.75rem 1.5rem' }}>
+              Book Bangalore Carpenters →
+            </Link>
+          </div>
+          <p style={{ opacity: 0.9, lineHeight: '1.7', marginBottom: '2rem' }}>
+            Need a local furniture carpenter contractor near Jigani, RT Nagar, Vijay Nagar, or Whitefield? Verified Carpenterwala carpenters provide upfront pricing with zero hidden commission:
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+              <div style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '0.5rem' }}>🪚 Daily Carpenter Wages (Per Day)</div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: 'var(--accent)', marginBottom: '0.5rem' }}>₹900 – ₹1,300<span style={{ fontSize: '0.9rem', color: 'inherit', fontWeight: 'normal' }}> / day</span></div>
+              <p style={{ fontSize: '0.9rem', opacity: 0.85, margin: 0 }}>Full 8-hour shift for master woodcraft, laminate pasting, and modular modifications.</p>
+            </div>
+
+            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+              <div style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '0.5rem' }}>🚪 Door Trimming &amp; Lock Fitting</div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: 'var(--primary)', marginBottom: '0.5rem' }}>₹249 – ₹499<span style={{ fontSize: '0.9rem', color: 'inherit', fontWeight: 'normal' }}> / job</span></div>
+              <p style={{ fontSize: '0.9rem', opacity: 0.85, margin: 0 }}>Mortise handles, Godrej/Yale cylinder locks, and swollen door bottom planing.</p>
+            </div>
+
+            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+              <div style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '0.5rem' }}>🗄️ Custom Furniture &amp; Wardrobes</div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: 'var(--accent)', marginBottom: '0.5rem' }}>₹280 – ₹450<span style={{ fontSize: '0.9rem', color: 'inherit', fontWeight: 'normal' }}> / sq ft</span></div>
+              <p style={{ fontSize: '0.9rem', opacity: 0.85, margin: 0 }}>BWP/BWR ply carcass fabrication with soft-close tandem drawers and hydraulic fittings.</p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)', fontSize: '0.95rem' }}>
+            <span style={{ fontWeight: '600' }}>Popular Bangalore Carpentry Hubs:</span>
+            <span>Jigani</span> • <span>RT Nagar</span> • <span>Vijay Nagar</span> • <span>Whitefield</span> • <span>HSR Layout</span> • <span>Koramangala</span> • <span>Thanisandra</span> • <span>Yelahanka</span>
           </div>
         </div>
       </section>

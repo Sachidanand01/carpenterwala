@@ -6,19 +6,18 @@ import AdSenseContainer from '@/components/AdSenseContainer';
 import PaintCalculator from '@/components/PaintCalculator';
 
 export const metadata = {
-  title: 'Professional House Painting Services in India | CarpenterWala',
-  description: 'Hire verified house painters in India for interior, exterior, and rental wall painting. View standard per sq ft rates, calculate costs, and book online.',
+  title: 'House Painting Services in Bangalore [2026 Per Sq Ft & Daily Rates]',
+  description: 'Hire verified house painters in Bangalore. Transparent painter cost per day (₹900–₹1,200/day) & per sq ft rates (₹11–₹35/sq ft) for 1BHK, 2BHK, 3BHK flats and villas.',
   keywords: [
-    'house painting services india',
-    'painter near me',
-    'home painting cost guide india',
-    'painter charges per sq ft',
-    'interior wall painting india',
-    'waterproofing painting contractors',
-    'exterior home painting cost',
-    'Painting Services in Bangalore',
-    'Painters in Mumbai',
-    'Best Painters in Delhi'
+    'house painting services in bangalore',
+    'painter cost per day in bangalore',
+    'painting charges per square foot in bangalore',
+    'painting cost per square foot in bangalore',
+    'house painting in bangalore cost',
+    'painter near me prices',
+    'interior wall painting bangalore',
+    'waterproofing painting contractors bangalore',
+    'asian paints royale painters bangalore'
   ],
   alternates: {
     canonical: 'https://carpenterwala.com/services/painting',
@@ -131,6 +130,22 @@ export default function PaintingPage() {
             "acceptedAnswer": {
               "@type": "Answer",
               "text": "In Indian apartments, total paintable surface area is standardly estimated by multiplying the flat's carpet area by 3.5. This formula accounts for 4 walls plus the ceiling in every room."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the painter cost per day in Bangalore?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The daily wage for a verified professional house painter in Bangalore ranges from ₹900 to ₹1,200 per day for an 8-hour shift. Specialized texture and stencil artisans charge ₹1,200 to ₹1,500/day, while sanding and helper labor costs ₹600 to ₹800/day."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What are standard painting charges per square foot in Bangalore?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "In Bangalore, interior wall repainting costs ₹11 to ₹22 per sq. ft. including labor and premium emulsion paint. Fresh painting with 2 coats acrylic putty and primer costs ₹18 to ₹35 per sq. ft. Exterior weather-proof painting ranges from ₹16 to ₹32 per sq. ft."
             }
           },
           {
@@ -265,6 +280,63 @@ export default function PaintingPage() {
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🏗️</div>
             <h3 style={{ marginBottom: '1rem' }}>Rental Turnover & Commercial Painting</h3>
             <p style={{ opacity: 0.8 }}>Fast-turnaround, budget-friendly distemper and economy plastic emulsion packages for tenants, landlords, and office workspaces.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Bangalore Painter Rates & Daily Wage Guide */}
+      <section className="container" style={{ marginBottom: '4rem' }}>
+        <div className="glass" style={{ padding: '2.5rem', borderRadius: '16px', borderLeft: '4px solid var(--primary)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
+            <div>
+              <span style={{ fontSize: '0.85rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--primary)' }}>
+                📍 Real Bangalore Market Pricing (2026 Updated)
+              </span>
+              <h2 style={{ fontSize: '2rem', marginTop: '0.25rem', marginBottom: '0.5rem' }}>
+                Bangalore Painter Cost Per Day &amp; Square Foot Rates
+              </h2>
+            </div>
+            <Link href="/find-a-professional?category=Painter&location=Bangalore" className="btn btn-primary" style={{ padding: '0.75rem 1.5rem' }}>
+              Book Bangalore Painters →
+            </Link>
+          </div>
+          <p style={{ opacity: 0.9, lineHeight: '1.7', marginBottom: '2rem' }}>
+            Looking for daily wage painters or turnkey contract painting in Bangalore? Whether you need 1 room repainted in Thanisandra or a full 3BHK villa painted in Whitefield, here are the current transparent rates charged by verified Carpenterwala painters:
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+              <div style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '0.5rem' }}>👷 Daily Painter Wages (Per Day)</div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: 'var(--accent)', marginBottom: '0.5rem' }}>₹900 – ₹1,200<span style={{ fontSize: '0.9rem', color: 'inherit', fontWeight: 'normal' }}> / day</span></div>
+              <p style={{ fontSize: '0.9rem', opacity: 0.85, margin: 0 }}>Standard 8-hour shift for verified master painters. Helper/sanding labor: ₹600 – ₹800/day.</p>
+            </div>
+
+            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+              <div style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '0.5rem' }}>📐 Interior Repainting (Per Sq Ft)</div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: 'var(--primary)', marginBottom: '0.5rem' }}>₹11 – ₹22<span style={{ fontSize: '0.9rem', color: 'inherit', fontWeight: 'normal' }}> / sq ft</span></div>
+              <p style={{ fontSize: '0.9rem', opacity: 0.85, margin: 0 }}>Includes crack touchup, 1 primer coat &amp; 2 coats premium washable emulsion (Labour + Paint).</p>
+            </div>
+
+            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+              <div style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '0.5rem' }}>✨ Fresh Putty Painting (Per Sq Ft)</div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: 'var(--accent)', marginBottom: '0.5rem' }}>₹18 – ₹35<span style={{ fontSize: '0.9rem', color: 'inherit', fontWeight: 'normal' }}> / sq ft</span></div>
+              <p style={{ fontSize: '0.9rem', opacity: 0.85, margin: 0 }}>2 coats Birla/JK acrylic putty + primer + 2 coats Asian Paints Royale or Berger Silk.</p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)', fontSize: '0.95rem' }}>
+            <span style={{ fontWeight: '600' }}>Explore Expert Paint Guides:</span>
+            <Link href="/blog/asian-paints-royale-vs-berger-silk-luxury-paint-comparison-guide" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
+              Asian Paints Royale vs Berger Silk 2026
+            </Link>
+            <span>•</span>
+            <Link href="/blog/how-to-calculate-paint-coverage-litres-needed-guide" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
+              Calculate Paint Litres Needed
+            </Link>
+            <span>•</span>
+            <Link href="/blog/how-to-choose-primer-vs-putty-when-to-skip-guide" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
+              Primer vs Putty Guide
+            </Link>
           </div>
         </div>
       </section>
