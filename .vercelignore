@@ -11,6 +11,9 @@ CLAUDE.md
 blogs_export.*
 *.xlsx
 *.csv
+**/*.csv
+*.zip
+gsc-export/
 
 # Temporary standalone voice/audio test files
 /voice.mp3
