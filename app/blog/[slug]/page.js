@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BLOG_POSTS } from '@/lib/blog-data';
+import { getAllBlogPosts, getBlogPostBySlug, getBlogCategories } from '@/lib/blog-service';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
 import BlogComments from '@/components/BlogComments';
@@ -201,15 +201,19 @@ function extractFAQSchema(post, canonicalUrl) {
   };
 }
 
+// Incremental Static Regeneration (1-hour background refresh + on-demand revalidation)
+export const revalidate = 3600;
+
 export async function generateStaticParams() {
-  return BLOG_POSTS.map((post) => ({
+  const posts = await getAllBlogPosts();
+  return posts.map((post) => ({
     slug: post.slug,
   }));
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const post = BLOG_POSTS.find((p) => p.slug === slug);
+  const post = await getBlogPostBySlug(slug);
   if (!post) return { title: 'Post Not Found' };
 
   const siteUrl = 'https://carpenterwala.com';
@@ -280,7 +284,10 @@ export async function generateMetadata({ params }) {
 
 export default async function BlogPost({ params }) {
   const { slug } = await params;
-  const post = BLOG_POSTS.find((p) => p.slug === slug);
+  const [post, allCategories] = await Promise.all([
+    getBlogPostBySlug(slug),
+    getBlogCategories()
+  ]);
 
   if (!post) {
     return (
@@ -799,7 +806,7 @@ export default async function BlogPost({ params }) {
 
               <h3 style={{ fontSize: '1.15rem', marginBottom: '1rem' }}>Browse Categories</h3>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                {Array.from(new Set(BLOG_POSTS.map(p => p.category))).map(cat => (
+                {allCategories.map(cat => (
                   <Link
                     key={cat}
                     href={`/blog/category/${slugify(cat)}`}

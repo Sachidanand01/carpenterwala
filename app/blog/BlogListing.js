@@ -50,7 +50,7 @@ const CATEGORY_DESCRIPTIONS = {
   `
 };
 
-function BlogListingInner({ selectedCategorySlug = 'all' }) {
+function BlogListingInner({ selectedCategorySlug = 'all', initialPosts }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const gridTopRef = useRef(null);
@@ -67,10 +67,12 @@ function BlogListingInner({ selectedCategorySlug = 'all' }) {
     setCurrentPage(isNaN(p) || p < 1 ? 1 : p);
   }, [searchParams]);
 
+  const postsSource = initialPosts && initialPosts.length > 0 ? initialPosts : BLOG_POSTS;
+
   // 1. Sort all articles chronologically (newest first)
   const sortedAllPosts = useMemo(() => {
-    return [...BLOG_POSTS].sort((a, b) => new Date(b.date) - new Date(a.date));
-  }, []);
+    return [...postsSource].sort((a, b) => new Date(b.date) - new Date(a.date));
+  }, [postsSource]);
 
   // 2. Extract distinct categories & count map
   const categoriesFromPosts = useMemo(() => {

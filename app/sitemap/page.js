@@ -1,5 +1,7 @@
 import Link from 'next/link';
-import { BLOG_POSTS } from '@/lib/blog-data';
+import { getAllBlogPosts } from '@/lib/blog-service';
+
+export const revalidate = 3600;
 
 export const metadata = {
   title: 'Sitemap | Carpenterwala Handyman Marketplace',
@@ -10,7 +12,9 @@ export const metadata = {
   },
 };
 
-export default function SitemapPage() {
+export default async function SitemapPage() {
+  const blogPosts = await getAllBlogPosts();
+
   // Define sitemap categories
   const categories = [
     {
@@ -145,7 +149,7 @@ export default function SitemapPage() {
             gap: '1.5rem'
           }}
         >
-          {BLOG_POSTS.map((post, postIdx) => (
+          {blogPosts.map((post, postIdx) => (
             <Link 
               href={`/blog/${post.slug}`} 
               key={postIdx}

@@ -1,4 +1,4 @@
-import { BLOG_POSTS } from '@/lib/blog-data';
+import { getAllBlogPosts } from '@/lib/blog-service';
 import { supabase } from '@/lib/supabase';
 
 function sanitizeImageUrl(url, baseUrl) {
@@ -142,7 +142,8 @@ export default async function sitemap() {
   });
 
   // 6. Dynamic Blog Articles with structured image tags & accurate publication dates
-  const blogPosts = BLOG_POSTS.map((post) => {
+  const allPosts = await getAllBlogPosts();
+  const blogPosts = allPosts.map((post) => {
     const img = sanitizeImageUrl(post.image, baseUrl);
     return {
       url: `${baseUrl}/blog/${post.slug}`,
@@ -154,7 +155,7 @@ export default async function sitemap() {
   });
 
   // 7. Dynamic Blog Categories
-  const categories = Array.from(new Set(BLOG_POSTS.map((post) => post.category)));
+  const categories = Array.from(new Set(allPosts.map((post) => post.category)));
   const blogCategories = categories.map((cat) => ({
     url: `${baseUrl}/blog/category/${cat.toLowerCase().replace(/\s+/g, '-')}`,
     lastModified: buildDate,
