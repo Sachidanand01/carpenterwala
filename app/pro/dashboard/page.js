@@ -218,6 +218,260 @@ function validateAddressDetails(addressStr) {
   };
 }
 
+export const TRADE_SKILL_PRESETS = {
+  Electrician: [
+    'Fan Installation & Repair',
+    'Switchboard & Socket Repair',
+    'Short Circuit & MCB Fix',
+    'Complete House Rewiring',
+    'Inverter & UPS Setup',
+    'Light & Chandelier Fitting',
+    'Geyser & Heater Wiring',
+    'Earthing & Surge Protection',
+    'Appliance Installation',
+    'Smart Home & IoT Fitting',
+  ],
+  Carpenter: [
+    'Furniture Assembly & Repair',
+    'Modular Kitchen Fitting',
+    'Door Lock & Latch Fitting',
+    'Wardrobe Sliding Track Fix',
+    'Wood Polish & Touch-up',
+    'Custom Shelves & Cabinets',
+    'Hinge Repair & Alignment',
+    'Bed & Sofa Frame Repair',
+    'Wooden Partition & Paneling',
+    'Window Mesh & Frame Fitting',
+  ],
+  Plumber: [
+    'Tap & Faucet Leak Repair',
+    'Drain Cleaning & Unclogging',
+    'Flush Tank & Commode Fix',
+    'Pipe Fitting & Leak Detection',
+    'Water Heater / Geyser Plumbing',
+    'Health Faucet & Jet Spray',
+    'Water Tank Cleaning & Fitting',
+    'RO Water Purifier Connection',
+    'Bathroom Hardware Fitting',
+    'Water Motor & Pump Setup',
+  ],
+  Painter: [
+    'Interior Wall Painting',
+    'Exterior Weatherproof Paint',
+    'Wall Putty & Crack Repair',
+    'Waterproofing & Seepage Fix',
+    'Stencil & Texture Painting',
+    'Wood Polish & Melamine',
+    'Metal Enamel & Grill Paint',
+    'Ceiling Whitewash & Distemper',
+    'Rental Express Repaint',
+    'Royale & Luxury Emulsion',
+  ],
+};
+
+export const TRADE_ICONS = {
+  Electrician: '⚡',
+  Carpenter: '🪚',
+  Plumber: '🔧',
+  Painter: '🎨',
+};
+
+export const TRADE_PLACEHOLDERS = {
+  Electrician: 'e.g. Fan Installation, Switchboard Repair, Inverter Wiring',
+  Carpenter: 'e.g. Furniture Assembly, Modular Kitchen, Wooden Polish',
+  Plumber: 'e.g. Tap Leak Repair, Drain Cleaning, Geyser Plumbing',
+  Painter: 'e.g. Interior Painting, Wall Putty, Waterproofing',
+};
+
+export function normalizeTrade(trade) {
+  if (!trade) return 'Carpenter';
+  const lower = trade.toLowerCase().trim();
+  if (lower.includes('electr')) return 'Electrician';
+  if (lower.includes('plumb')) return 'Plumber';
+  if (lower.includes('paint')) return 'Painter';
+  if (lower.includes('carpent')) return 'Carpenter';
+  return 'Carpenter';
+}
+
+export function parseSkillsList(skillsStr) {
+  if (!skillsStr || typeof skillsStr !== 'string') return [];
+  return skillsStr
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean);
+}
+
+function SkillPillsSelector({
+  trade,
+  skillsString = '',
+  onChange,
+  maxSkills = 10,
+}) {
+  const [skillWarning, setSkillWarning] = useState('');
+  const normalized = normalizeTrade(trade);
+  const presets = TRADE_SKILL_PRESETS[normalized] || TRADE_SKILL_PRESETS.Carpenter;
+  const icon = TRADE_ICONS[normalized] || '🔨';
+
+  const currentSkills = parseSkillsList(skillsString);
+  const count = currentSkills.length;
+
+  const handleTogglePill = (skill) => {
+    setSkillWarning('');
+    const existingIndex = currentSkills.findIndex(
+      s => s.toLowerCase() === skill.toLowerCase()
+    );
+
+    if (existingIndex >= 0) {
+      // Deselect / Remove
+      const updated = currentSkills.filter((_, idx) => idx !== existingIndex);
+      onChange(updated.join(', '));
+    } else {
+      // Add
+      if (currentSkills.length >= maxSkills) {
+        setSkillWarning(`Maximum ${maxSkills} skills allowed. Click an active skill to remove it first.`);
+        setTimeout(() => setSkillWarning(''), 4000);
+        return;
+      }
+      const updated = [...currentSkills, skill];
+      onChange(updated.join(', '));
+    }
+  };
+
+  return (
+    <div style={{ marginTop: '0.65rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      {/* Header with trade context and live counter badge */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8rem', opacity: 0.9, fontWeight: 500 }}>
+          <span>{icon}</span>
+          <span>Suggested for <strong>{normalized}</strong>:</span>
+          <span style={{ fontSize: '0.74rem', opacity: 0.6 }}>(tap to add/remove)</span>
+        </div>
+
+        {/* Counter Badge */}
+        <div style={{
+          fontSize: '0.74rem',
+          fontWeight: 700,
+          padding: '0.2rem 0.65rem',
+          borderRadius: '20px',
+          background: count > maxSkills 
+            ? 'rgba(239, 68, 68, 0.15)' 
+            : count === maxSkills 
+              ? 'rgba(245, 158, 11, 0.15)' 
+              : count > 0 
+                ? 'rgba(16, 185, 129, 0.12)' 
+                : 'rgba(255, 255, 255, 0.05)',
+          color: count > maxSkills 
+            ? '#f87171' 
+            : count === maxSkills 
+              ? '#f59e0b' 
+              : count > 0 
+                ? '#10b981' 
+                : 'inherit',
+          border: `1px solid ${
+            count > maxSkills 
+              ? 'rgba(239, 68, 68, 0.35)' 
+              : count === maxSkills 
+                ? 'rgba(245, 158, 11, 0.35)' 
+                : count > 0 
+                  ? 'rgba(16, 185, 129, 0.3)' 
+                  : 'rgba(255, 255, 255, 0.1)'
+          }`,
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.3rem',
+          transition: 'all 0.2s ease',
+        }}>
+          {count > maxSkills && <span>⚠️</span>}
+          {count === maxSkills && <span>⭐</span>}
+          {count > 0 && count < maxSkills && <span>✓</span>}
+          <span>{count} / {maxSkills} skills</span>
+        </div>
+      </div>
+
+      {/* Suggestion Pills */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
+        {presets.map((skill) => {
+          const isSelected = currentSkills.some(
+            s => s.toLowerCase() === skill.toLowerCase()
+          );
+
+          return (
+            <button
+              key={skill}
+              type="button"
+              onClick={() => handleTogglePill(skill)}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                padding: '0.35rem 0.75rem',
+                borderRadius: '9999px',
+                fontSize: '0.78rem',
+                fontWeight: isSelected ? 600 : 500,
+                cursor: 'pointer',
+                transition: 'all 0.18s cubic-bezier(0.4, 0, 0.2, 1)',
+                background: isSelected
+                  ? 'linear-gradient(135deg, rgba(194, 65, 12, 0.25), rgba(234, 88, 12, 0.15))'
+                  : 'rgba(255, 255, 255, 0.04)',
+                color: isSelected ? '#fed7aa' : 'var(--foreground)',
+                border: isSelected
+                  ? '1.5px solid var(--primary)'
+                  : '1px solid rgba(255, 255, 255, 0.12)',
+                boxShadow: isSelected ? '0 2px 8px rgba(194, 65, 12, 0.25)' : 'none',
+                transform: isSelected ? 'scale(1.02)' : 'scale(1)',
+              }}
+              onMouseEnter={(e) => {
+                if (!isSelected) {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isSelected) {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+                }
+              }}
+            >
+              <span style={{
+                fontSize: '0.75rem',
+                color: isSelected ? '#f97316' : 'rgba(255, 255, 255, 0.45)',
+                fontWeight: 700,
+              }}>
+                {isSelected ? '✓' : '+'}
+              </span>
+              <span>{skill}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Limit Exceeded Notice */}
+      {skillWarning && (
+        <div style={{
+          fontSize: '0.75rem',
+          color: '#f87171',
+          background: 'rgba(239, 68, 68, 0.1)',
+          border: '1px solid rgba(239, 68, 68, 0.25)',
+          padding: '0.35rem 0.65rem',
+          borderRadius: '6px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.35rem',
+        }}>
+          <span>⚠️</span>
+          <span>{skillWarning}</span>
+        </div>
+      )}
+
+      {/* Helpful Hint */}
+      <div style={{ fontSize: '0.72rem', opacity: 0.55, marginTop: '0.1rem', lineHeight: 1.4 }}>
+        💡 Tap suggestions above to select/deselect, or type custom skills directly into the input (separated by commas). Up to 10 skills.
+      </div>
+    </div>
+  );
+}
+
 export default function ProDashboard() {
   const [tab, setTab] = useState('overview');
   const [proInfo, setProInfo] = useState(null);
@@ -490,6 +744,11 @@ export default function ProDashboard() {
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
+    const skillsList = parseSkillsList(form.skills);
+    if (skillsList.length > 10) {
+      alert(`Please limit your skills to a maximum of 10 (currently ${skillsList.length} entered).`);
+      return;
+    }
     setSaveStatus('saving');
     try {
       const res = await fetch('/api/pro/profile', {
@@ -773,6 +1032,13 @@ export default function ProDashboard() {
       }
       if (onboardForm.about.trim().length > 350) {
         setOnboardError('About Me description cannot exceed 350 characters to ensure your public profile renders cleanly.'); return;
+      }
+      const skillsList = parseSkillsList(onboardForm.skills);
+      if (skillsList.length === 0) {
+        setOnboardError('Please select or type at least 1 skill or specialty.'); return;
+      }
+      if (skillsList.length > 10) {
+        setOnboardError(`Please limit your skills to a maximum of 10 (currently ${skillsList.length} entered).`); return;
       }
       saveWizardProgress(2);
     } else if (onboardStep === 2) {
@@ -1224,8 +1490,20 @@ export default function ProDashboard() {
 
                 <div className="flex flex-col gap-1">
                   <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>Skills & Specialties <span style={{ opacity: 0.55 }}>(comma-separated)</span></label>
-                  <input id="tour-skills" type="text" placeholder="e.g. Sofa Repairs, Modular Kitchens, Wooden Polish" value={onboardForm.skills}
-                    onChange={e => setOnboardForm({ ...onboardForm, skills: e.target.value })} style={inputStyle} />
+                  <input
+                    id="tour-skills"
+                    type="text"
+                    placeholder={TRADE_PLACEHOLDERS[normalizeTrade(displayTrade || profile?.trade || proInfo?.trade)] || 'e.g. Sofa Repairs, Modular Kitchens, Wooden Polish'}
+                    value={onboardForm.skills}
+                    onChange={e => setOnboardForm({ ...onboardForm, skills: e.target.value })}
+                    style={inputStyle}
+                  />
+                  <SkillPillsSelector
+                    trade={displayTrade || profile?.trade || proInfo?.trade}
+                    skillsString={onboardForm.skills}
+                    onChange={(newSkills) => setOnboardForm(prev => ({ ...prev, skills: newSkills }))}
+                    maxSkills={10}
+                  />
                 </div>
               </div>
             )}
@@ -1895,8 +2173,19 @@ export default function ProDashboard() {
               </div>
               <div className="flex flex-col gap-1">
                 <label style={{ fontSize: '0.88rem', fontWeight: 500, opacity: 0.8 }}>Skills <span style={{ opacity: 0.5 }}>(comma separated)</span></label>
-                <input type="text" placeholder="e.g. Interior Painting, Wall Texture, Waterproofing"
-                  value={form.skills} onChange={e => setForm({ ...form, skills: e.target.value })} style={inputStyle} />
+                <input
+                  type="text"
+                  placeholder={TRADE_PLACEHOLDERS[normalizeTrade(form.trade || displayTrade || profile?.trade)] || 'e.g. Interior Painting, Wall Texture, Waterproofing'}
+                  value={form.skills}
+                  onChange={e => setForm({ ...form, skills: e.target.value })}
+                  style={inputStyle}
+                />
+                <SkillPillsSelector
+                  trade={form.trade || displayTrade || profile?.trade}
+                  skillsString={form.skills}
+                  onChange={(newSkills) => setForm(prev => ({ ...prev, skills: newSkills }))}
+                  maxSkills={10}
+                />
               </div>
               
               <div className="glass" style={{ 
