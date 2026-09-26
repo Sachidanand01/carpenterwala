@@ -1,6 +1,24 @@
 import { BLOG_POSTS } from '@/lib/blog-data';
 import { supabase } from '@/lib/supabase';
 
+function sanitizeImageUrl(url, baseUrl) {
+  if (!url || typeof url !== 'string') return undefined;
+  const trimmed = url.trim();
+  // Filter out base64 data URIs completely - Google Search Console rejects data: URIs in XML sitemaps
+  if (trimmed.startsWith('data:') || trimmed.length > 2048) {
+    return undefined;
+  }
+  // Convert relative URLs to absolute HTTPS URLs
+  if (trimmed.startsWith('/')) {
+    return `${baseUrl}${trimmed}`;
+  }
+  // Must be valid HTTP or HTTPS
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    return trimmed;
+  }
+  return undefined;
+}
+
 export default async function sitemap() {
   const baseUrl = 'https://carpenterwala.com';
   const buildDate = new Date('2026-09-01T00:00:00.000Z');
@@ -12,7 +30,7 @@ export default async function sitemap() {
       lastModified: buildDate,
       changeFrequency: 'daily',
       priority: 1.0,
-      images: [`${baseUrl}/images/og-image.png`],
+      images: [sanitizeImageUrl('/images/og-image.png', baseUrl)].filter(Boolean),
     },
     {
       url: `${baseUrl}/services`,
@@ -93,13 +111,16 @@ export default async function sitemap() {
     'yelahanka'
   ];
 
-  const services = serviceNames.map((service) => ({
-    url: `${baseUrl}/services/${service}`,
-    lastModified: buildDate,
-    changeFrequency: 'weekly',
-    priority: 0.8,
-    images: serviceImages[service] ? [serviceImages[service]] : undefined,
-  }));
+  const services = serviceNames.map((service) => {
+    const img = sanitizeImageUrl(serviceImages[service], baseUrl);
+    return {
+      url: `${baseUrl}/services/${service}`,
+      lastModified: buildDate,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+      images: img ? [img] : undefined,
+    };
+  });
 
   // 5. Localized Trade + Locality Hub Pages
   const locationServices = [];
@@ -115,13 +136,16 @@ export default async function sitemap() {
   });
 
   // 6. Dynamic Blog Articles with structured image tags & accurate publication dates
-  const blogPosts = BLOG_POSTS.map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: post.date ? new Date(post.date) : buildDate,
-    changeFrequency: 'monthly',
-    priority: 0.6,
-    images: post.image ? [post.image] : undefined,
-  }));
+  const blogPosts = BLOG_POSTS.map((post) => {
+    const img = sanitizeImageUrl(post.image, baseUrl);
+    return {
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: post.date ? new Date(post.date) : buildDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+      images: img ? [img] : undefined,
+    };
+  });
 
   // 7. Dynamic Blog Categories
   const categories = Array.from(new Set(BLOG_POSTS.map((post) => post.category)));
@@ -142,13 +166,16 @@ export default async function sitemap() {
     if (!error && profiles) {
       profileRoutes = profiles
         .filter((profile) => profile && profile.slug)
-        .map((profile) => ({
-          url: `${baseUrl}/${profile.slug}`,
-          lastModified: profile.created_at ? new Date(profile.created_at) : buildDate,
-          changeFrequency: 'daily',
-          priority: 0.8,
-          images: profile.avatar ? [profile.avatar] : undefined,
-        }));
+        .map((profile) => {
+          const avatar = sanitizeImageUrl(profile.avatar, baseUrl);
+          return {
+            url: `${baseUrl}/${profile.slug}`,
+            lastModified: profile.created_at ? new Date(profile.created_at) : buildDate,
+            changeFrequency: 'daily',
+            priority: 0.8,
+            images: avatar ? [avatar] : undefined,
+          };
+        });
     }
   } catch (err) {
     console.error("Error fetching profiles for sitemap:", err);
