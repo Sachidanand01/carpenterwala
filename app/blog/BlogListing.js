@@ -42,6 +42,11 @@ const CATEGORY_DESCRIPTIONS = {
     <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">Seasonal Home Maintenance Checklists & Contractor Vetting</h2>
     <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Prevention is always more cost-effective than emergency repair. Follow our year-round Bangalore home maintenance checklist, detailing roof waterproofing tasks in April, false ceiling repair guides, and prep work before the festive Diwali season.</p>
     <p style="opacity: 0.85; line-height: 1.7;">We also provide practical tips on how to vet local handymen, listing the top screening questions to ask potential contractors about service warranties and material grades before you commit to booking.</p>
+  `,
+  'how-to': `
+    <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">How-To DIY Guides & Quick Home Repairs</h2>
+    <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Practical, step-by-step DIY tutorials and quick fix guides crafted by Carpenterwala's master technicians. From fixing sagging doors and squeaky hinges to clearing minor drain clogs and tightening loose fixtures, learn how to handle everyday household maintenance with confidence.</p>
+    <p style="opacity: 0.85; line-height: 1.7;">Save time and money with field-tested methods specifically tailored for Indian homes, apartments, and local hardware materials. Follow our illustrated safety checklists and expert pro-tips to execute clean, professional repairs yourself.</p>
   `
 };
 

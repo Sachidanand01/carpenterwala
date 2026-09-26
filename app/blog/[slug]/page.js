@@ -44,6 +44,18 @@ const AUTHORS_BY_CATEGORY = {
     role: 'Senior Avian Control & Balcony Safety Specialist',
     bio: 'Over 12 years of specialized expertise in high-rise bird netting, invisible stainless steel safety grills, and humane avian exclusion systems for apartments across Bangalore.',
     avatar: '/images/authors/kamal.jpg'
+  },
+  'How to': {
+    name: 'Rajesh Sharma',
+    role: 'Master Carpenter & Woodwork Consultant',
+    bio: 'Over 15 years of custom woodworking, furniture restoration, and modular interior fittings experience in Bangalore.',
+    avatar: '/images/authors/rajesh.jpg'
+  },
+  'How To': {
+    name: 'Rajesh Sharma',
+    role: 'Master Carpenter & Woodwork Consultant',
+    bio: 'Over 15 years of custom woodworking, furniture restoration, and modular interior fittings experience in Bangalore.',
+    avatar: '/images/authors/rajesh.jpg'
   }
 };
 
@@ -102,7 +114,7 @@ function extractHowToSchema(post, canonicalUrl) {
 
   while ((olMatch = olRegex.exec(post.content)) !== null) {
     const listContent = olMatch[1];
-    const liRegex = /<li>(.*?)<\/li>/gis;
+    const liRegex = /<li[^>]*>(.*?)<\/li>/gis;
     let liMatch;
     while ((liMatch = liRegex.exec(listContent)) !== null) {
       const fullText = liMatch[1].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -128,7 +140,7 @@ function extractHowToSchema(post, canonicalUrl) {
   const supplyItems = [];
   const suppliesMatch = post.content.match(/<h2>What You Will Need<\/h2>\s*(?:<p>.*?<\/p>)?\s*<ul[^>]*>(.*?)<\/ul>/is);
   if (suppliesMatch) {
-    const supplyLiRegex = /<li>(.*?)<\/li>/gis;
+    const supplyLiRegex = /<li[^>]*>(.*?)<\/li>/gis;
     let sMatch;
     while ((sMatch = supplyLiRegex.exec(suppliesMatch[1])) !== null) {
       const supplyText = sMatch[1].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -155,9 +167,9 @@ function extractHowToSchema(post, canonicalUrl) {
 
 function extractFAQSchema(post, canonicalUrl) {
   const faqItems = [];
-  const troubleMatch = post.content.match(/<h2>Troubleshooting(?: Common Mistakes)?<\/h2>\s*<ul[^>]*>(.*?)<\/ul>/is);
+  const troubleMatch = post.content.match(/<h2>Troubleshooting(?: Common Mistakes)?<\/h2>\s*(?:<p>.*?<\/p>)?\s*<ul[^>]*>(.*?)<\/ul>/is);
   if (troubleMatch) {
-    const liRegex = /<li>(.*?)<\/li>/gis;
+    const liRegex = /<li[^>]*>(.*?)<\/li>/gis;
     let li;
     while ((li = liRegex.exec(troubleMatch[1])) !== null) {
       const rawLi = li[1];
