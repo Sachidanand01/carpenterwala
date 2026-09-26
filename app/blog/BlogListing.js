@@ -474,14 +474,36 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts }) {
                 </h3>
                 <div className="featured-posts-list">
                   {featuredGuides.map((guide, idx) => (
-                    <Link href={`/blog/${guide.slug}`} key={guide.slug} className="featured-post-item">
-                      <div className="featured-thumb-wrap">
-                        <img src={guide.image} alt={guide.title} loading="lazy" />
+                    <Link
+                      href={`/blog/${guide.slug}`}
+                      key={guide.slug}
+                      className="featured-post-item"
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: '0.85rem',
+                        textDecoration: 'none',
+                        color: 'inherit',
+                        padding: '0.5rem',
+                        borderRadius: '10px',
+                        transition: 'background 0.2s ease',
+                      }}
+                    >
+                      <div className="featured-thumb-wrap" style={{ width: '65px', height: '65px', flexShrink: 0, position: 'relative', borderRadius: '8px', overflow: 'hidden' }}>
+                        <img
+                          src={guide.image}
+                          alt={guide.title}
+                          loading="lazy"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        />
                         <span className="featured-rank">{idx + 1}</span>
                       </div>
-                      <div className="featured-content">
-                        <h4 className="featured-title">{guide.title}</h4>
-                        <div className="featured-meta">
+                      <div className="featured-content" style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <h4 className="featured-title" style={{ fontSize: '0.88rem', fontWeight: 700, lineHeight: 1.35, marginBottom: '0.35rem', color: 'var(--foreground)' }}>
+                          {guide.title}
+                        </h4>
+                        <div className="featured-meta" style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 600, display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
                           <span>{guide.category}</span>
                           <span>•</span>
                           <span>{guide.readTime}</span>
@@ -1062,19 +1084,21 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts }) {
         .featured-posts-list {
           display: flex;
           flex-direction: column;
-          gap: 1rem;
+          gap: 0.75rem;
         }
-        .featured-post-item {
-          display: flex;
-          gap: 0.85rem;
-          text-decoration: none;
-          color: inherit;
-          padding: 0.4rem;
-          border-radius: 10px;
+        :global(.featured-post-item) {
+          display: flex !important;
+          flex-direction: row !important;
+          align-items: center !important;
+          gap: 0.85rem !important;
+          text-decoration: none !important;
+          color: inherit !important;
+          padding: 0.5rem !important;
+          border-radius: 10px !important;
           transition: var(--transition);
         }
-        .featured-post-item:hover {
-          background: rgba(194, 65, 12, 0.06);
+        :global(.featured-post-item:hover) {
+          background: rgba(194, 65, 12, 0.08) !important;
         }
         .featured-thumb-wrap {
           width: 65px;
