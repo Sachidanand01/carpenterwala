@@ -3,20 +3,26 @@ import { supabase } from '@/lib/supabase';
 
 function sanitizeImageUrl(url, baseUrl) {
   if (!url || typeof url !== 'string') return undefined;
-  const trimmed = url.trim();
+  let trimmed = url.trim();
   // Filter out base64 data URIs completely - Google Search Console rejects data: URIs in XML sitemaps
   if (trimmed.startsWith('data:') || trimmed.length > 2048) {
     return undefined;
   }
   // Convert relative URLs to absolute HTTPS URLs
   if (trimmed.startsWith('/')) {
-    return `${baseUrl}${trimmed}`;
+    trimmed = `${baseUrl}${trimmed}`;
   }
   // Must be valid HTTP or HTTPS
-  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
-    return trimmed;
+  if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://')) {
+    return undefined;
   }
-  return undefined;
+  // XML-escape reserved characters because Next.js template string injects directly into <image:loc>${image}</image:loc> without XML escaping
+  return trimmed
+    .replace(/&(?!amp;|lt;|gt;|quot;|apos;)/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
 }
 
 export default async function sitemap() {
