@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ProGuidedTour from '@/components/ProGuidedTour';
@@ -167,6 +167,57 @@ function DocUploadSlot({
   );
 }
 
+function validateAddressDetails(addressStr) {
+  if (!addressStr || typeof addressStr !== 'string') {
+    return {
+      isValid: false,
+      hasHouseNo: false,
+      hasStreetArea: false,
+      hasCityState: false,
+      hasPincode: false,
+      missing: ['House / Flat / Building No.', 'Street / Area name', 'City / State', '6-digit PIN code'],
+    };
+  }
+  const str = addressStr.trim();
+
+  // 1. PIN code: Indian 6-digit pin code
+  const pinMatch = str.match(/\b([1-9][0-9]{5})\b/);
+  const hasPincode = !!pinMatch;
+
+  // 2. House / Flat / Plot / Door / Building No:
+  const houseRegex = /(?:#\s*\d+|(?:\b(?:house|flat|no|door|plot|apt|apartment|villa|bldg|building|shop|room|suite|h\.no)\b[\s.:#-]*[a-z0-9/-]+)|\b\d+[\s,/-]+[a-z]?(?=\s*(?:st|nd|rd|th|cross|main|street|road|block|sector|lane|floor|avenue|layout|[a-z]+))|^\s*\d+[\w/-]*[\s,])/i;
+  const hasHouseNo = houseRegex.test(str);
+
+  // 3. Street / Road / Area:
+  const wordsWithoutNumbers = str
+    .replace(/\b[1-9][0-9]{5}\b/g, '')
+    .replace(/[0-9]+/g, '')
+    .split(/[,\s]+/)
+    .filter(w => w.trim().length >= 3);
+  const hasStreetArea = wordsWithoutNumbers.length >= 2;
+
+  // 4. City / State:
+  const commonCitiesStates = /(bangalore|bengaluru|karnataka|delhi|mumbai|chennai|hyderabad|pune|kolkata|mysore|noida|gurgaon|ghaziabad|faridabad|ahmedabad|india)/i;
+  const hasCityState = commonCitiesStates.test(str) || wordsWithoutNumbers.length >= 3;
+
+  const missing = [];
+  if (!hasHouseNo) missing.push('House / Flat / Building No.');
+  if (!hasStreetArea) missing.push('Street / Area name');
+  if (!hasCityState) missing.push('City / State');
+  if (!hasPincode) missing.push('6-digit PIN code');
+
+  const isValid = hasHouseNo && hasStreetArea && hasCityState && hasPincode && str.length >= 18;
+
+  return {
+    isValid,
+    hasHouseNo,
+    hasStreetArea,
+    hasCityState,
+    hasPincode,
+    missing,
+  };
+}
+
 export default function ProDashboard() {
   const [tab, setTab] = useState('overview');
   const [proInfo, setProInfo] = useState(null);
@@ -207,6 +258,72 @@ export default function ProDashboard() {
   const [docValidations, setDocValidations] = useState({});
   const [docPreviews, setDocPreviews] = useState({});
   const [previewDocModal, setPreviewDocModal] = useState(null);
+
+  // Address Autocomplete & Suggestion State
+  const [addressSuggestions, setAddressSuggestions] = useState([]);
+  const [loadingAddressSuggestions, setLoadingAddressSuggestions] = useState(false);
+  const [showAddressDropdown, setShowAddressDropdown] = useState(false);
+  const addressDebounceRef = useRef(null);
+  const addressContainerRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (addressContainerRef.current && !addressContainerRef.current.contains(e.target)) {
+        setShowAddressDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleAddressInputChange = (val) => {
+    setOnboardForm(prev => ({ ...prev, full_address: val }));
+    if (addressDebounceRef.current) clearTimeout(addressDebounceRef.current);
+
+    if (val.trim().length < 3) {
+      setAddressSuggestions([]);
+      setShowAddressDropdown(false);
+      return;
+    }
+
+    addressDebounceRef.current = setTimeout(async () => {
+      setLoadingAddressSuggestions(true);
+      try {
+        const res = await fetch(`/api/address/suggest?q=${encodeURIComponent(val.trim())}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.suggestions) && data.suggestions.length > 0) {
+            setAddressSuggestions(data.suggestions);
+            setShowAddressDropdown(true);
+          } else {
+            setAddressSuggestions([]);
+            setShowAddressDropdown(false);
+          }
+        }
+      } catch (err) {
+        console.error('Address suggestion lookup failed:', err);
+      } finally {
+        setLoadingAddressSuggestions(false);
+      }
+    }, 400);
+  };
+
+  const handleSelectAddressSuggestion = (sug) => {
+    const current = onboardForm.full_address || '';
+    const houseMatch = current.match(/(?:#\s*\d+|(?:\b(?:house|flat|no|door|plot|apt|apartment|villa|building|shop)\b[\s.:#-]*[a-z0-9/-]+)|^\s*\d+[\w/-]*[\s,])/i);
+    const existingHouseNo = houseMatch ? houseMatch[0].trim().replace(/,$/, '') : '';
+
+    let formatted = sug.formatted || sug.displayName;
+    if (existingHouseNo && !formatted.toLowerCase().includes(existingHouseNo.toLowerCase())) {
+      formatted = `${existingHouseNo}, ${formatted}`;
+    } else if (!existingHouseNo && !/(house|flat|#|plot|door|apt)/i.test(formatted)) {
+      formatted = `Flat/House No: ___, ${formatted}`;
+    }
+
+    setOnboardForm(prev => ({ ...prev, full_address: formatted }));
+    setShowAddressDropdown(false);
+    setAddressSuggestions([]);
+  };
 
   const handleOpenPreview = async ({ title, src }) => {
     if (!src) return;
@@ -580,8 +697,10 @@ export default function ProDashboard() {
       if (!onboardForm.phone || !/^[6-9]\d{9}$/.test(onboardForm.phone.trim())) {
         setOnboardError('Please enter a valid 10-digit mobile number.'); return;
       }
-      if (!onboardForm.full_address || onboardForm.full_address.trim().length < 10) {
-        setOnboardError('Please enter a complete, detailed current address (min 10 characters).'); return;
+      const addrCheck = validateAddressDetails(onboardForm.full_address);
+      if (!addrCheck.isValid) {
+        setOnboardError(`Please enter a complete address with all details. Missing: ${addrCheck.missing.join(', ')}.`);
+        return;
       }
       if (!onboardForm.experience || onboardForm.experience.trim() === '') {
         setOnboardError('Please specify your years of experience.'); return;
@@ -797,12 +916,159 @@ export default function ProDashboard() {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-1">
-                  <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>Full Address with Zipcode (Current Location for Booking Ranges)</label>
-                  <textarea id="tour-address" rows={2} placeholder="Enter your full home or office address..." value={onboardForm.full_address}
-                    onChange={e => setOnboardForm({ ...onboardForm, full_address: e.target.value })} style={{ ...inputStyle, resize: 'vertical' }} />
-                  <span style={{ fontSize: '0.75rem', opacity: 0.5 }}>This remains strictly private and is never shown in your public listing.</span>
-                </div>
+                {(() => {
+                  const addrValidation = validateAddressDetails(onboardForm.full_address);
+                  return (
+                    <div className="flex flex-col gap-1" ref={addressContainerRef} style={{ position: 'relative' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>Full Address with Zipcode (Current Location for Booking Ranges)</label>
+                        {loadingAddressSuggestions && (
+                          <span style={{ fontSize: '0.75rem', opacity: 0.7, color: 'var(--primary)' }}>🔍 Finding suggestions…</span>
+                        )}
+                      </div>
+                      <textarea
+                        id="tour-address"
+                        rows={2}
+                        placeholder="e.g. House No: 123, 3rd Cross, Indiranagar, Bengaluru, Karnataka 560038"
+                        value={onboardForm.full_address}
+                        onChange={e => handleAddressInputChange(e.target.value)}
+                        onFocus={() => {
+                          if (addressSuggestions.length > 0) setShowAddressDropdown(true);
+                        }}
+                        style={{ ...inputStyle, resize: 'vertical' }}
+                      />
+
+                      {/* Floating Recommendation Dropdown (Absolute overlay - does not change layout) */}
+                      {showAddressDropdown && addressSuggestions.length > 0 && (
+                        <div style={{
+                          position: 'absolute',
+                          top: 'calc(100% - 25px)',
+                          left: 0,
+                          right: 0,
+                          zIndex: 60,
+                          background: 'rgba(15, 23, 42, 0.97)',
+                          border: '1px solid rgba(255, 255, 255, 0.18)',
+                          borderRadius: '8px',
+                          boxShadow: '0 16px 36px rgba(0,0,0,0.6)',
+                          backdropFilter: 'blur(10px)',
+                          WebkitBackdropFilter: 'blur(10px)',
+                          maxHeight: '220px',
+                          overflowY: 'auto'
+                        }}>
+                          <div style={{
+                            padding: '0.4rem 0.75rem',
+                            fontSize: '0.72rem',
+                            opacity: 0.7,
+                            borderBottom: '1px solid rgba(255,255,255,0.08)',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            background: 'rgba(255,255,255,0.02)'
+                          }}>
+                            <span>📍 Recommended Addresses (Click to apply)</span>
+                            <button
+                              type="button"
+                              onClick={() => setShowAddressDropdown(false)}
+                              style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', fontSize: '0.85rem' }}
+                            >
+                              ✕
+                            </button>
+                          </div>
+                          {addressSuggestions.map((sug, sIdx) => (
+                            <div
+                              key={sIdx}
+                              onClick={() => handleSelectAddressSuggestion(sug)}
+                              style={{
+                                padding: '0.6rem 0.75rem',
+                                fontSize: '0.82rem',
+                                cursor: 'pointer',
+                                borderBottom: sIdx === addressSuggestions.length - 1 ? 'none' : '1px solid rgba(255,255,255,0.05)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '0.15rem',
+                                transition: 'background 0.15s ease'
+                              }}
+                              onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
+                              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                            >
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                <span style={{ fontWeight: 600, color: 'var(--primary)' }}>
+                                  {sug.area || sug.city}
+                                </span>
+                                {sug.postcode && (
+                                  <span style={{ fontSize: '0.72rem', background: 'rgba(255,255,255,0.1)', padding: '0.1rem 0.35rem', borderRadius: '4px' }}>
+                                    PIN {sug.postcode}
+                                  </span>
+                                )}
+                              </div>
+                              <span style={{ opacity: 0.8, fontSize: '0.76rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {sug.formatted}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Real-time Address Parameter Status Badges */}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginTop: '0.2rem' }}>
+                        <span style={{
+                          fontSize: '0.72rem',
+                          padding: '0.15rem 0.5rem',
+                          borderRadius: '4px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.25rem',
+                          background: addrValidation.hasHouseNo ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.05)',
+                          color: addrValidation.hasHouseNo ? '#10b981' : 'rgba(255,255,255,0.45)',
+                          border: `1px solid ${addrValidation.hasHouseNo ? 'rgba(16, 185, 129, 0.3)' : 'rgba(255,255,255,0.08)'}`
+                        }}>
+                          {addrValidation.hasHouseNo ? '✓' : '○'} House / Flat No
+                        </span>
+                        <span style={{
+                          fontSize: '0.72rem',
+                          padding: '0.15rem 0.5rem',
+                          borderRadius: '4px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.25rem',
+                          background: addrValidation.hasStreetArea ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.05)',
+                          color: addrValidation.hasStreetArea ? '#10b981' : 'rgba(255,255,255,0.45)',
+                          border: `1px solid ${addrValidation.hasStreetArea ? 'rgba(16, 185, 129, 0.3)' : 'rgba(255,255,255,0.08)'}`
+                        }}>
+                          {addrValidation.hasStreetArea ? '✓' : '○'} Street / Area
+                        </span>
+                        <span style={{
+                          fontSize: '0.72rem',
+                          padding: '0.15rem 0.5rem',
+                          borderRadius: '4px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.25rem',
+                          background: addrValidation.hasCityState ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.05)',
+                          color: addrValidation.hasCityState ? '#10b981' : 'rgba(255,255,255,0.45)',
+                          border: `1px solid ${addrValidation.hasCityState ? 'rgba(16, 185, 129, 0.3)' : 'rgba(255,255,255,0.08)'}`
+                        }}>
+                          {addrValidation.hasCityState ? '✓' : '○'} City / State
+                        </span>
+                        <span style={{
+                          fontSize: '0.72rem',
+                          padding: '0.15rem 0.5rem',
+                          borderRadius: '4px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.25rem',
+                          background: addrValidation.hasPincode ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.05)',
+                          color: addrValidation.hasPincode ? '#10b981' : 'rgba(255,255,255,0.45)',
+                          border: `1px solid ${addrValidation.hasPincode ? 'rgba(16, 185, 129, 0.3)' : 'rgba(255,255,255,0.08)'}`
+                        }}>
+                          {addrValidation.hasPincode ? '✓' : '○'} 6-Digit PIN
+                        </span>
+                      </div>
+
+                      <span style={{ fontSize: '0.75rem', opacity: 0.5 }}>This remains strictly private and is never shown in your public listing.</span>
+                    </div>
+                  );
+                })()}
 
                 <div className="flex flex-col gap-1">
                   <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>About Me / Description</label>
