@@ -55,7 +55,7 @@ export async function PUT(request) {
     if (name !== undefined) updateData.name = name;
     if (trade !== undefined) updateData.trade = trade;
     if (location !== undefined) updateData.location = location;
-    if (about !== undefined) updateData.about = about;
+    if (about !== undefined) updateData.about = typeof about === 'string' ? about.slice(0, 350) : about;
     if (avatar !== undefined) updateData.avatar = avatar;
     if (experience !== undefined) updateData.experience = experience;
     if (skills !== undefined) {

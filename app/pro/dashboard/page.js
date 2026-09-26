@@ -325,6 +325,69 @@ export default function ProDashboard() {
     setAddressSuggestions([]);
   };
 
+  // About Me AI Rephrase State
+  const [rephrasingAbout, setRephrasingAbout] = useState(false);
+  const [previousAboutDraft, setPreviousAboutDraft] = useState('');
+  const [rephraseError, setRephraseError] = useState('');
+  const [rephraseSuccess, setRephraseSuccess] = useState(false);
+
+  const handleRephraseAbout = async (targetField = 'onboard') => {
+    const isProfileTab = targetField === 'profile';
+    const text = isProfileTab ? (form.about || '').trim() : (onboardForm.about || '').trim();
+    if (text.length < 50) return;
+
+    setRephrasingAbout(true);
+    setRephraseError('');
+    setRephraseSuccess(false);
+
+    try {
+      const res = await fetch('/api/pro/rephrase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text,
+          trade: displayTrade || form.trade || '',
+          experience: onboardForm.experience || form.experience || ''
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setRephraseError(data.error || 'Failed to rephrase. Please try again.');
+        return;
+      }
+
+      if (data.rephrased) {
+        if (isProfileTab) {
+          setPreviousAboutDraft(form.about || '');
+          setForm(prev => ({ ...prev, about: data.rephrased }));
+        } else {
+          setPreviousAboutDraft(onboardForm.about || '');
+          setOnboardForm(prev => ({ ...prev, about: data.rephrased }));
+        }
+        setRephraseSuccess(true);
+        setTimeout(() => setRephraseSuccess(false), 4000);
+      }
+    } catch (err) {
+      console.error('Rephrase error:', err);
+      setRephraseError('Network error. Could not connect to AI rephrase service.');
+    } finally {
+      setRephrasingAbout(false);
+    }
+  };
+
+  const handleUndoRephrase = (targetField = 'onboard') => {
+    if (previousAboutDraft) {
+      if (targetField === 'profile') {
+        setForm(prev => ({ ...prev, about: previousAboutDraft }));
+      } else {
+        setOnboardForm(prev => ({ ...prev, about: previousAboutDraft }));
+      }
+      setPreviousAboutDraft('');
+      setRephraseSuccess(false);
+    }
+  };
+
   const handleOpenPreview = async ({ title, src }) => {
     if (!src) return;
     if (src.startsWith('data:') || src.startsWith('blob:') || src.startsWith('http://') || src.startsWith('https://')) {
@@ -708,6 +771,9 @@ export default function ProDashboard() {
       if (!onboardForm.about || onboardForm.about.trim().length < 15) {
         setOnboardError('Please write a brief about section so customers get to know you (min 15 characters).'); return;
       }
+      if (onboardForm.about.trim().length > 350) {
+        setOnboardError('About Me description cannot exceed 350 characters to ensure your public profile renders cleanly.'); return;
+      }
       saveWizardProgress(2);
     } else if (onboardStep === 2) {
       if (!onboardForm.aadhaar_front) {
@@ -1071,9 +1137,89 @@ export default function ProDashboard() {
                 })()}
 
                 <div className="flex flex-col gap-1">
-                  <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>About Me / Description</label>
-                  <textarea id="tour-about" rows={3} placeholder="Tell customers about your skills, specialties, and why they should hire you..." value={onboardForm.about}
-                    onChange={e => setOnboardForm({ ...onboardForm, about: e.target.value })} style={{ ...inputStyle, resize: 'vertical' }} />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>About Me / Description</label>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      {previousAboutDraft && (
+                        <button
+                          type="button"
+                          onClick={() => handleUndoRephrase('onboard')}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'rgba(255,255,255,0.7)',
+                            fontSize: '0.75rem',
+                            cursor: 'pointer',
+                            textDecoration: 'underline'
+                          }}
+                        >
+                          ↩ Undo
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        id="tour-ai-rephrase-btn"
+                        onClick={() => handleRephraseAbout('onboard')}
+                        disabled={rephrasingAbout || (onboardForm.about || '').trim().length < 50}
+                        title={(onboardForm.about || '').trim().length < 50 ? 'Enter at least 50 characters to use AI rephrase' : 'Click to polish with AI'}
+                        style={{
+                          background: (onboardForm.about || '').trim().length >= 50
+                            ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.25))'
+                            : 'rgba(255,255,255,0.05)',
+                          border: `1px solid ${(onboardForm.about || '').trim().length >= 50 ? 'rgba(168, 85, 247, 0.5)' : 'rgba(255,255,255,0.08)'}`,
+                          color: (onboardForm.about || '').trim().length >= 50 ? '#c084fc' : 'rgba(255,255,255,0.3)',
+                          padding: '0.2rem 0.6rem',
+                          borderRadius: '6px',
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          cursor: (onboardForm.about || '').trim().length >= 50 ? 'pointer' : 'not-allowed',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.3rem',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        {rephrasingAbout ? '✨ Polishing…' : '✨ Rephrase with AI'}
+                      </button>
+                    </div>
+                  </div>
+
+                  <textarea
+                    id="tour-about"
+                    rows={3}
+                    maxLength={350}
+                    placeholder="Tell customers about your skills, specialties, and why they should hire you (min 50 chars for AI rephrase)..."
+                    value={onboardForm.about}
+                    onChange={e => {
+                      setOnboardForm({ ...onboardForm, about: e.target.value });
+                      if (rephraseError) setRephraseError('');
+                    }}
+                    style={{ ...inputStyle, resize: 'vertical' }}
+                  />
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.15rem' }}>
+                    <span style={{ fontSize: '0.72rem', opacity: 0.5 }}>
+                      {(onboardForm.about || '').trim().length < 50
+                        ? `Enter at least 50 characters (${Math.max(0, 50 - (onboardForm.about || '').trim().length)} more needed) to enable AI Rephrase`
+                        : rephraseSuccess
+                          ? '✨ Polished with AI! (350 max limit enforced)'
+                          : 'Max 350 characters ensures clean layout on your public profile'}
+                    </span>
+                    <span style={{
+                      fontSize: '0.72rem',
+                      fontWeight: 600,
+                      opacity: (onboardForm.about || '').length > 320 ? 1 : 0.6,
+                      color: (onboardForm.about || '').length >= 350 ? '#f87171' : (onboardForm.about || '').length > 320 ? '#f59e0b' : 'inherit'
+                    }}>
+                      {(onboardForm.about || '').length} / 350
+                    </span>
+                  </div>
+
+                  {rephraseError && (
+                    <div style={{ fontSize: '0.75rem', color: '#f87171', marginTop: '0.15rem' }}>
+                      ⚠️ {rephraseError}
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-col gap-1">
@@ -1678,9 +1824,74 @@ export default function ProDashboard() {
                 </div>
               </div>
               <div className="flex flex-col gap-1">
-                <label style={{ fontSize: '0.88rem', fontWeight: 500, opacity: 0.8 }}>About Me</label>
-                <textarea rows={4} value={form.about} onChange={e => setForm({ ...form, about: e.target.value })}
-                  style={{ ...inputStyle, resize: 'vertical' }} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <label style={{ fontSize: '0.88rem', fontWeight: 500, opacity: 0.8 }}>About Me</label>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    {previousAboutDraft && (
+                      <button
+                        type="button"
+                        onClick={() => handleUndoRephrase('profile')}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: 'rgba(255,255,255,0.7)',
+                          fontSize: '0.75rem',
+                          cursor: 'pointer',
+                          textDecoration: 'underline'
+                        }}
+                      >
+                        ↩ Undo
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => handleRephraseAbout('profile')}
+                      disabled={rephrasingAbout || (form.about || '').trim().length < 50}
+                      title={(form.about || '').trim().length < 50 ? 'Enter at least 50 characters to use AI rephrase' : 'Click to polish with AI'}
+                      style={{
+                        background: (form.about || '').trim().length >= 50
+                          ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.25))'
+                          : 'rgba(255,255,255,0.05)',
+                        border: `1px solid ${(form.about || '').trim().length >= 50 ? 'rgba(168, 85, 247, 0.5)' : 'rgba(255,255,255,0.08)'}`,
+                        color: (form.about || '').trim().length >= 50 ? '#c084fc' : 'rgba(255,255,255,0.3)',
+                        padding: '0.2rem 0.6rem',
+                        borderRadius: '6px',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        cursor: (form.about || '').trim().length >= 50 ? 'pointer' : 'not-allowed',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.3rem',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {rephrasingAbout ? '✨ Polishing…' : '✨ Rephrase with AI'}
+                    </button>
+                  </div>
+                </div>
+                <textarea
+                  rows={4}
+                  maxLength={350}
+                  placeholder="Tell customers about your skills, specialties, and why they should hire you (min 50 chars for AI rephrase)..."
+                  value={form.about}
+                  onChange={e => setForm({ ...form, about: e.target.value })}
+                  style={{ ...inputStyle, resize: 'vertical' }}
+                />
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.15rem' }}>
+                  <span style={{ fontSize: '0.72rem', opacity: 0.5 }}>
+                    {(form.about || '').trim().length < 50
+                      ? `Enter at least 50 characters (${Math.max(0, 50 - (form.about || '').trim().length)} more needed) to enable AI Rephrase`
+                      : 'Max 350 characters ensures clean layout on your public profile'}
+                  </span>
+                  <span style={{
+                    fontSize: '0.72rem',
+                    fontWeight: 600,
+                    opacity: (form.about || '').length > 320 ? 1 : 0.6,
+                    color: (form.about || '').length >= 350 ? '#f87171' : (form.about || '').length > 320 ? '#f59e0b' : 'inherit'
+                  }}>
+                    {(form.about || '').length} / 350
+                  </span>
+                </div>
               </div>
               <div className="flex flex-col gap-1">
                 <label style={{ fontSize: '0.88rem', fontWeight: 500, opacity: 0.8 }}>Skills <span style={{ opacity: 0.5 }}>(comma separated)</span></label>
