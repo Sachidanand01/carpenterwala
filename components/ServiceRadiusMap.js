@@ -109,10 +109,9 @@ export default function ServiceRadiusMap({
         scrollWheelZoom: false,
       });
 
-      // Add CartoDB Voyager tiles (crisp, modern street map with clear labels)
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd',
+      // Add OpenStreetMap standard tiles (100% free, public, no API key required)
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 19,
       }).addTo(map);
 
