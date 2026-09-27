@@ -546,31 +546,31 @@ function SkillPillsSelector({
                 cursor: 'pointer',
                 transition: 'all 0.18s cubic-bezier(0.4, 0, 0.2, 1)',
                 background: isSelected
-                  ? 'linear-gradient(135deg, rgba(194, 65, 12, 0.25), rgba(234, 88, 12, 0.15))'
-                  : 'rgba(255, 255, 255, 0.04)',
-                color: isSelected ? '#fed7aa' : 'var(--foreground)',
+                  ? 'rgba(194, 65, 12, 0.12)'
+                  : '#FFFFFF',
+                color: isSelected ? '#9A3412' : '#334155',
                 border: isSelected
-                  ? '1.5px solid var(--primary)'
-                  : '1px solid rgba(255, 255, 255, 0.12)',
-                boxShadow: isSelected ? '0 2px 8px rgba(194, 65, 12, 0.25)' : 'none',
+                  ? '1.5px solid #C2410C'
+                  : '1px solid #CBD5E1',
+                boxShadow: isSelected ? '0 2px 6px rgba(194, 65, 12, 0.2)' : '0 1px 2px rgba(0, 0, 0, 0.04)',
                 transform: isSelected ? 'scale(1.02)' : 'scale(1)',
               }}
               onMouseEnter={(e) => {
                 if (!isSelected) {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+                  e.currentTarget.style.background = '#F8FAFC';
+                  e.currentTarget.style.borderColor = '#94A3B8';
                 }
               }}
               onMouseLeave={(e) => {
                 if (!isSelected) {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+                  e.currentTarget.style.background = '#FFFFFF';
+                  e.currentTarget.style.borderColor = '#CBD5E1';
                 }
               }}
             >
               <span style={{
                 fontSize: '0.75rem',
-                color: isSelected ? '#f97316' : 'rgba(255, 255, 255, 0.45)',
+                color: isSelected ? '#C2410C' : '#64748B',
                 fontWeight: 700,
               }}>
                 {isSelected ? '✓' : '+'}
@@ -1405,7 +1405,7 @@ export default function ProDashboard() {
                         style={{ ...inputStyle, resize: 'vertical' }}
                       />
 
-                      {/* Floating Recommendation Dropdown (Absolute overlay - does not change layout) */}
+                      {/* Floating Recommendation Dropdown (Absolute overlay - matches site theme) */}
                       {showAddressDropdown && addressSuggestions.length > 0 && (
                         <div style={{
                           position: 'absolute',
@@ -1413,30 +1413,31 @@ export default function ProDashboard() {
                           left: 0,
                           right: 0,
                           zIndex: 60,
-                          background: 'rgba(15, 23, 42, 0.97)',
-                          border: '1px solid rgba(255, 255, 255, 0.18)',
-                          borderRadius: '8px',
-                          boxShadow: '0 16px 36px rgba(0,0,0,0.6)',
-                          backdropFilter: 'blur(10px)',
-                          WebkitBackdropFilter: 'blur(10px)',
+                          background: '#FFFFFF',
+                          border: '1px solid rgba(194, 65, 12, 0.25)',
+                          borderRadius: '10px',
+                          boxShadow: '0 12px 32px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.08)',
                           maxHeight: '220px',
                           overflowY: 'auto'
                         }}>
                           <div style={{
-                            padding: '0.4rem 0.75rem',
+                            padding: '0.45rem 0.75rem',
                             fontSize: '0.72rem',
-                            opacity: 0.7,
-                            borderBottom: '1px solid rgba(255,255,255,0.08)',
+                            borderBottom: '1px solid #E2E8F0',
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
-                            background: 'rgba(255,255,255,0.02)'
+                            background: '#F8FAFC',
+                            color: '#475569',
+                            fontWeight: 600
                           }}>
                             <span>📍 Recommended Addresses (Click to apply)</span>
                             <button
                               type="button"
                               onClick={() => setShowAddressDropdown(false)}
-                              style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', fontSize: '0.85rem' }}
+                              style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', fontSize: '0.9rem', lineHeight: 1 }}
+                              onMouseEnter={e => e.currentTarget.style.color = '#0F172A'}
+                              onMouseLeave={e => e.currentTarget.style.color = '#94A3B8'}
                             >
                               ✕
                             </button>
@@ -1446,29 +1447,29 @@ export default function ProDashboard() {
                               key={sIdx}
                               onClick={() => handleSelectAddressSuggestion(sug)}
                               style={{
-                                padding: '0.6rem 0.75rem',
+                                padding: '0.65rem 0.75rem',
                                 fontSize: '0.82rem',
                                 cursor: 'pointer',
-                                borderBottom: sIdx === addressSuggestions.length - 1 ? 'none' : '1px solid rgba(255,255,255,0.05)',
+                                borderBottom: sIdx === addressSuggestions.length - 1 ? 'none' : '1px solid #F1F5F9',
                                 display: 'flex',
                                 flexDirection: 'column',
-                                gap: '0.15rem',
+                                gap: '0.2rem',
                                 transition: 'background 0.15s ease'
                               }}
-                              onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
+                              onMouseEnter={e => e.currentTarget.style.background = 'rgba(194, 65, 12, 0.05)'}
                               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                             >
                               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                <span style={{ fontWeight: 600, color: 'var(--primary)' }}>
+                                <span style={{ fontWeight: 600, color: '#C2410C' }}>
                                   {sug.area || sug.city}
                                 </span>
                                 {sug.postcode && (
-                                  <span style={{ fontSize: '0.72rem', background: 'rgba(255,255,255,0.1)', padding: '0.1rem 0.35rem', borderRadius: '4px' }}>
+                                  <span style={{ fontSize: '0.72rem', background: 'rgba(194, 65, 12, 0.08)', color: '#9A3412', border: '1px solid rgba(194, 65, 12, 0.15)', padding: '0.1rem 0.35rem', borderRadius: '4px', fontWeight: 600 }}>
                                     PIN {sug.postcode}
                                   </span>
                                 )}
                               </div>
-                              <span style={{ opacity: 0.8, fontSize: '0.76rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              <span style={{ color: '#475569', fontSize: '0.76rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                 {sug.formatted}
                               </span>
                             </div>
@@ -1485,9 +1486,9 @@ export default function ProDashboard() {
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: '0.25rem',
-                          background: addrValidation.hasHouseNo ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.05)',
-                          color: addrValidation.hasHouseNo ? '#10b981' : 'rgba(255,255,255,0.45)',
-                          border: `1px solid ${addrValidation.hasHouseNo ? 'rgba(16, 185, 129, 0.3)' : 'rgba(255,255,255,0.08)'}`
+                          background: addrValidation.hasHouseNo ? 'rgba(16, 185, 129, 0.15)' : '#E2E8F0',
+                          color: addrValidation.hasHouseNo ? '#10b981' : '#64748B',
+                          border: `1px solid ${addrValidation.hasHouseNo ? 'rgba(16, 185, 129, 0.3)' : '#CBD5E1'}`
                         }}>
                           {addrValidation.hasHouseNo ? '✓' : '○'} House / Flat No
                         </span>
@@ -1498,9 +1499,9 @@ export default function ProDashboard() {
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: '0.25rem',
-                          background: addrValidation.hasStreetArea ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.05)',
-                          color: addrValidation.hasStreetArea ? '#10b981' : 'rgba(255,255,255,0.45)',
-                          border: `1px solid ${addrValidation.hasStreetArea ? 'rgba(16, 185, 129, 0.3)' : 'rgba(255,255,255,0.08)'}`
+                          background: addrValidation.hasStreetArea ? 'rgba(16, 185, 129, 0.15)' : '#E2E8F0',
+                          color: addrValidation.hasStreetArea ? '#10b981' : '#64748B',
+                          border: `1px solid ${addrValidation.hasStreetArea ? 'rgba(16, 185, 129, 0.3)' : '#CBD5E1'}`
                         }}>
                           {addrValidation.hasStreetArea ? '✓' : '○'} Street / Area
                         </span>
@@ -1511,9 +1512,9 @@ export default function ProDashboard() {
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: '0.25rem',
-                          background: addrValidation.hasCityState ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.05)',
-                          color: addrValidation.hasCityState ? '#10b981' : 'rgba(255,255,255,0.45)',
-                          border: `1px solid ${addrValidation.hasCityState ? 'rgba(16, 185, 129, 0.3)' : 'rgba(255,255,255,0.08)'}`
+                          background: addrValidation.hasCityState ? 'rgba(16, 185, 129, 0.15)' : '#E2E8F0',
+                          color: addrValidation.hasCityState ? '#10b981' : '#64748B',
+                          border: `1px solid ${addrValidation.hasCityState ? 'rgba(16, 185, 129, 0.3)' : '#CBD5E1'}`
                         }}>
                           {addrValidation.hasCityState ? '✓' : '○'} City / State
                         </span>
@@ -1524,9 +1525,9 @@ export default function ProDashboard() {
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: '0.25rem',
-                          background: addrValidation.hasPincode ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.05)',
-                          color: addrValidation.hasPincode ? '#10b981' : 'rgba(255,255,255,0.45)',
-                          border: `1px solid ${addrValidation.hasPincode ? 'rgba(16, 185, 129, 0.3)' : 'rgba(255,255,255,0.08)'}`
+                          background: addrValidation.hasPincode ? 'rgba(16, 185, 129, 0.15)' : '#E2E8F0',
+                          color: addrValidation.hasPincode ? '#10b981' : '#64748B',
+                          border: `1px solid ${addrValidation.hasPincode ? 'rgba(16, 185, 129, 0.3)' : '#CBD5E1'}`
                         }}>
                           {addrValidation.hasPincode ? '✓' : '○'} 6-Digit PIN
                         </span>
