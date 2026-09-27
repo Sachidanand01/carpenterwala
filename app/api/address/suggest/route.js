@@ -119,7 +119,9 @@ export async function GET(request) {
         city,
         state,
         postcode,
-        formatted: formatted || item.display_name
+        formatted: formatted || item.display_name,
+        lat: item.lat ? parseFloat(item.lat) : null,
+        lon: item.lon ? parseFloat(item.lon) : null
       };
     });
 

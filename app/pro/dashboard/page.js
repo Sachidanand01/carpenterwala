@@ -2,9 +2,31 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import ProGuidedTour from '@/components/ProGuidedTour';
 import { processDocumentImage, uploadImageToStorage } from '@/lib/document-scanner';
 import { resolveDisplayUrl } from '@/lib/storage';
+
+const ServiceRadiusMap = dynamic(() => import('@/components/ServiceRadiusMap'), {
+  ssr: false,
+  loading: () => (
+    <div style={{
+      height: '280px',
+      background: '#F8FAFC',
+      border: '1px solid rgba(194, 65, 12, 0.2)',
+      borderRadius: '12px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#64748B',
+      fontSize: '0.88rem',
+      gap: '0.5rem',
+      margin: '0.75rem 0 1rem'
+    }}>
+      <span>🗺️</span> Loading service radius map…
+    </div>
+  )
+});
 
 const TABS = [
   { id: 'overview', label: '📊 Overview' },
@@ -628,6 +650,10 @@ export default function ProDashboard() {
   const [onboardForm, setOnboardForm] = useState({
     phone: '',
     full_address: '',
+    latitude: 12.9716,
+    longitude: 77.5946,
+    service_radius_km: 5,
+    radius_updated_at: null,
     experience: '',
     about: '',
     skills: '',
@@ -665,8 +691,12 @@ export default function ProDashboard() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleAddressInputChange = (val) => {
-    setOnboardForm(prev => ({ ...prev, full_address: val }));
+  const handleAddressInputChange = (val, isProfileTab = false) => {
+    if (isProfileTab) {
+      setForm(prev => ({ ...prev, full_address: val }));
+    } else {
+      setOnboardForm(prev => ({ ...prev, full_address: val }));
+    }
     if (addressDebounceRef.current) clearTimeout(addressDebounceRef.current);
 
     if (val.trim().length < 3) {
@@ -684,6 +714,14 @@ export default function ProDashboard() {
           if (Array.isArray(data.suggestions) && data.suggestions.length > 0) {
             setAddressSuggestions(data.suggestions);
             setShowAddressDropdown(true);
+            const first = data.suggestions[0];
+            if (first && first.lat && first.lon) {
+              if (isProfileTab) {
+                setForm(p => ({ ...p, latitude: first.lat, longitude: first.lon }));
+              } else {
+                setOnboardForm(p => ({ ...p, latitude: first.lat, longitude: first.lon }));
+              }
+            }
           } else {
             setAddressSuggestions([]);
             setShowAddressDropdown(false);
@@ -697,8 +735,8 @@ export default function ProDashboard() {
     }, 400);
   };
 
-  const handleSelectAddressSuggestion = (sug) => {
-    const current = onboardForm.full_address || '';
+  const handleSelectAddressSuggestion = (sug, isProfileTab = false) => {
+    const current = (isProfileTab ? form.full_address : onboardForm.full_address) || '';
     const houseMatch = current.match(/(?:#\s*\d+|(?:\b(?:house|flat|no|door|plot|apt|apartment|villa|building|shop)\b[\s.:#-]*[a-z0-9/-]+)|^\s*\d+[\w/-]*[\s,])/i);
     const existingHouseNo = houseMatch ? houseMatch[0].trim().replace(/,$/, '') : '';
 
@@ -709,7 +747,21 @@ export default function ProDashboard() {
       formatted = `Flat/House No: ___, ${formatted}`;
     }
 
-    setOnboardForm(prev => ({ ...prev, full_address: formatted }));
+    if (isProfileTab) {
+      setForm(prev => ({
+        ...prev,
+        full_address: formatted,
+        latitude: sug.lat || prev.latitude || 12.9716,
+        longitude: sug.lon || prev.longitude || 77.5946
+      }));
+    } else {
+      setOnboardForm(prev => ({
+        ...prev,
+        full_address: formatted,
+        latitude: sug.lat || prev.latitude || 12.9716,
+        longitude: sug.lon || prev.longitude || 77.5946
+      }));
+    }
     setShowAddressDropdown(false);
     setAddressSuggestions([]);
   };
@@ -836,6 +888,11 @@ export default function ProDashboard() {
           trade: profData.profile.trade || '',
           experience: profData.profile.experience || '',
           location: profData.profile.location || '',
+          full_address: profData.profile.full_address || '',
+          service_radius_km: profData.profile.service_radius_km || 5,
+          latitude: profData.profile.latitude || 12.9716,
+          longitude: profData.profile.longitude || 77.5946,
+          radius_updated_at: profData.profile.radius_updated_at || null,
           about: profData.profile.about || '',
           skills: Array.isArray(profData.profile.skills) ? profData.profile.skills.join(', ') : '',
           accepting_leads: profData.profile.accepting_leads !== false,
@@ -846,6 +903,10 @@ export default function ProDashboard() {
         setOnboardForm({
           phone: profData.profile.phone || '',
           full_address: profData.profile.full_address || '',
+          service_radius_km: profData.profile.service_radius_km || 5,
+          latitude: profData.profile.latitude || 12.9716,
+          longitude: profData.profile.longitude || 77.5946,
+          radius_updated_at: profData.profile.radius_updated_at || null,
           experience: profData.profile.experience || '',
           about: profData.profile.about || '',
           skills: Array.isArray(profData.profile.skills) ? profData.profile.skills.join(', ') : '',
@@ -1383,6 +1444,113 @@ export default function ProDashboard() {
                   </div>
                 </div>
 
+                {/* 2. ABOUT ME / DESCRIPTION */}
+                <div className="flex flex-col gap-1">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>About Me / Description</label>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      {previousAboutDraft && (
+                        <button
+                          type="button"
+                          onClick={() => handleUndoRephrase('onboard')}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'rgba(255,255,255,0.7)',
+                            fontSize: '0.75rem',
+                            cursor: 'pointer',
+                            textDecoration: 'underline'
+                          }}
+                        >
+                          ↩ Undo
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        id="tour-ai-rephrase-btn"
+                        onClick={() => handleRephraseAbout('onboard')}
+                        disabled={rephrasingAbout || (onboardForm.about || '').trim().length < 50}
+                        title={(onboardForm.about || '').trim().length < 50 ? 'Enter at least 50 characters to use AI rephrase' : 'Click to polish with AI'}
+                        style={{
+                          background: (onboardForm.about || '').trim().length >= 50
+                            ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.25))'
+                            : 'rgba(255,255,255,0.05)',
+                          border: `1px solid ${(onboardForm.about || '').trim().length >= 50 ? 'rgba(168, 85, 247, 0.5)' : 'rgba(255,255,255,0.08)'}`,
+                          color: (onboardForm.about || '').trim().length >= 50 ? '#c084fc' : 'rgba(255,255,255,0.3)',
+                          padding: '0.2rem 0.6rem',
+                          borderRadius: '6px',
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          cursor: (onboardForm.about || '').trim().length >= 50 ? 'pointer' : 'not-allowed',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.3rem',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        {rephrasingAbout ? '✨ Polishing…' : '✨ Rephrase with AI'}
+                      </button>
+                    </div>
+                  </div>
+
+                  <textarea
+                    id="tour-about"
+                    rows={3}
+                    maxLength={350}
+                    placeholder="Tell customers about your skills, specialties, and why they should hire you (min 50 chars for AI rephrase)..."
+                    value={onboardForm.about}
+                    onChange={e => {
+                      setOnboardForm({ ...onboardForm, about: e.target.value });
+                      if (rephraseError) setRephraseError('');
+                    }}
+                    style={{ ...inputStyle, resize: 'vertical' }}
+                  />
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.15rem' }}>
+                    <span style={{ fontSize: '0.72rem', opacity: 0.5 }}>
+                      {(onboardForm.about || '').trim().length < 50
+                        ? `Enter at least 50 characters (${Math.max(0, 50 - (onboardForm.about || '').trim().length)} more needed) to enable AI Rephrase`
+                        : rephraseSuccess
+                          ? '✨ Polished with AI! (350 max limit enforced)'
+                          : 'Max 350 characters ensures clean layout on your public profile'}
+                    </span>
+                    <span style={{
+                      fontSize: '0.72rem',
+                      fontWeight: 600,
+                      opacity: (onboardForm.about || '').length > 320 ? 1 : 0.6,
+                      color: (onboardForm.about || '').length >= 350 ? '#f87171' : (onboardForm.about || '').length > 320 ? '#f59e0b' : 'inherit'
+                    }}>
+                      {(onboardForm.about || '').length} / 350
+                    </span>
+                  </div>
+
+                  {rephraseError && (
+                    <div style={{ fontSize: '0.75rem', color: '#f87171', marginTop: '0.15rem' }}>
+                      ⚠️ {rephraseError}
+                    </div>
+                  )}
+                </div>
+
+                {/* 3. SKILLS & SPECIALTIES */}
+                <div className="flex flex-col gap-1">
+                  <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>Skills & Specialties <span style={{ opacity: 0.55 }}>(comma-separated)</span></label>
+                  <input
+                    id="tour-skills"
+                    type="text"
+                    placeholder={TRADE_PLACEHOLDERS[normalizeTrade(displayTrade || profile?.trade || proInfo?.trade)] || 'e.g. Sofa Repairs, Modular Kitchens, Wooden Polish'}
+                    value={onboardForm.skills}
+                    onChange={e => setOnboardForm({ ...onboardForm, skills: e.target.value })}
+                    style={inputStyle}
+                  />
+                  <SkillPillsSelector
+                    trade={displayTrade || profile?.trade || proInfo?.trade}
+                    skillsString={onboardForm.skills}
+                    onChange={(newSkills) => setOnboardForm(prev => ({ ...prev, skills: newSkills }))}
+                    maxSkills={10}
+                  />
+                </div>
+
+                {/* 4. FULL ADDRESS WITH ZIPCODE (Moved below skills) */}
                 {(() => {
                   const addrValidation = validateAddressDetails(onboardForm.full_address);
                   return (
@@ -1538,109 +1706,15 @@ export default function ProDashboard() {
                   );
                 })()}
 
-                <div className="flex flex-col gap-1">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>About Me / Description</label>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      {previousAboutDraft && (
-                        <button
-                          type="button"
-                          onClick={() => handleUndoRephrase('onboard')}
-                          style={{
-                            background: 'none',
-                            border: 'none',
-                            color: 'rgba(255,255,255,0.7)',
-                            fontSize: '0.75rem',
-                            cursor: 'pointer',
-                            textDecoration: 'underline'
-                          }}
-                        >
-                          ↩ Undo
-                        </button>
-                      )}
-                      <button
-                        type="button"
-                        id="tour-ai-rephrase-btn"
-                        onClick={() => handleRephraseAbout('onboard')}
-                        disabled={rephrasingAbout || (onboardForm.about || '').trim().length < 50}
-                        title={(onboardForm.about || '').trim().length < 50 ? 'Enter at least 50 characters to use AI rephrase' : 'Click to polish with AI'}
-                        style={{
-                          background: (onboardForm.about || '').trim().length >= 50
-                            ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.25))'
-                            : 'rgba(255,255,255,0.05)',
-                          border: `1px solid ${(onboardForm.about || '').trim().length >= 50 ? 'rgba(168, 85, 247, 0.5)' : 'rgba(255,255,255,0.08)'}`,
-                          color: (onboardForm.about || '').trim().length >= 50 ? '#c084fc' : 'rgba(255,255,255,0.3)',
-                          padding: '0.2rem 0.6rem',
-                          borderRadius: '6px',
-                          fontSize: '0.75rem',
-                          fontWeight: 600,
-                          cursor: (onboardForm.about || '').trim().length >= 50 ? 'pointer' : 'not-allowed',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '0.3rem',
-                          transition: 'all 0.2s ease'
-                        }}
-                      >
-                        {rephrasingAbout ? '✨ Polishing…' : '✨ Rephrase with AI'}
-                      </button>
-                    </div>
-                  </div>
-
-                  <textarea
-                    id="tour-about"
-                    rows={3}
-                    maxLength={350}
-                    placeholder="Tell customers about your skills, specialties, and why they should hire you (min 50 chars for AI rephrase)..."
-                    value={onboardForm.about}
-                    onChange={e => {
-                      setOnboardForm({ ...onboardForm, about: e.target.value });
-                      if (rephraseError) setRephraseError('');
-                    }}
-                    style={{ ...inputStyle, resize: 'vertical' }}
-                  />
-
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.15rem' }}>
-                    <span style={{ fontSize: '0.72rem', opacity: 0.5 }}>
-                      {(onboardForm.about || '').trim().length < 50
-                        ? `Enter at least 50 characters (${Math.max(0, 50 - (onboardForm.about || '').trim().length)} more needed) to enable AI Rephrase`
-                        : rephraseSuccess
-                          ? '✨ Polished with AI! (350 max limit enforced)'
-                          : 'Max 350 characters ensures clean layout on your public profile'}
-                    </span>
-                    <span style={{
-                      fontSize: '0.72rem',
-                      fontWeight: 600,
-                      opacity: (onboardForm.about || '').length > 320 ? 1 : 0.6,
-                      color: (onboardForm.about || '').length >= 350 ? '#f87171' : (onboardForm.about || '').length > 320 ? '#f59e0b' : 'inherit'
-                    }}>
-                      {(onboardForm.about || '').length} / 350
-                    </span>
-                  </div>
-
-                  {rephraseError && (
-                    <div style={{ fontSize: '0.75rem', color: '#f87171', marginTop: '0.15rem' }}>
-                      ⚠️ {rephraseError}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>Skills & Specialties <span style={{ opacity: 0.55 }}>(comma-separated)</span></label>
-                  <input
-                    id="tour-skills"
-                    type="text"
-                    placeholder={TRADE_PLACEHOLDERS[normalizeTrade(displayTrade || profile?.trade || proInfo?.trade)] || 'e.g. Sofa Repairs, Modular Kitchens, Wooden Polish'}
-                    value={onboardForm.skills}
-                    onChange={e => setOnboardForm({ ...onboardForm, skills: e.target.value })}
-                    style={inputStyle}
-                  />
-                  <SkillPillsSelector
-                    trade={displayTrade || profile?.trade || proInfo?.trade}
-                    skillsString={onboardForm.skills}
-                    onChange={(newSkills) => setOnboardForm(prev => ({ ...prev, skills: newSkills }))}
-                    maxSkills={10}
-                  />
-                </div>
+                {/* 5. INTERACTIVE SERVICE RADIUS MAP (Center pin on pro's address, 1-50km slider) */}
+                <ServiceRadiusMap
+                  latitude={onboardForm.latitude || 12.9716}
+                  longitude={onboardForm.longitude || 77.5946}
+                  radiusKm={onboardForm.service_radius_km || 5}
+                  isOnboarding={true}
+                  onChangeRadius={(newRad) => setOnboardForm(prev => ({ ...prev, service_radius_km: newRad }))}
+                  onChangeCoords={({ lat, lng }) => setOnboardForm(prev => ({ ...prev, latitude: lat, longitude: lng }))}
+                />
               </div>
             )}
 
@@ -2323,6 +2397,170 @@ export default function ProDashboard() {
                   maxSkills={10}
                 />
               </div>
+
+              {/* Full Address & Location with Suggestions for Profile Tab */}
+              {(() => {
+                const addrValidation = validateAddressDetails(form.full_address || '');
+                return (
+                  <div className="flex flex-col gap-1" style={{ position: 'relative' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <label style={{ fontSize: '0.88rem', fontWeight: 500, opacity: 0.8 }}>Full Base Address with Zipcode</label>
+                      {loadingAddressSuggestions && (
+                        <span style={{ fontSize: '0.75rem', opacity: 0.7, color: 'var(--primary)' }}>🔍 Finding suggestions…</span>
+                      )}
+                    </div>
+                    <textarea
+                      rows={2}
+                      placeholder="e.g. House No: 123, 3rd Cross, Indiranagar, Bengaluru, Karnataka 560038"
+                      value={form.full_address || ''}
+                      onChange={e => handleAddressInputChange(e.target.value, true)}
+                      onFocus={() => {
+                        if (addressSuggestions.length > 0) setShowAddressDropdown(true);
+                      }}
+                      style={{ ...inputStyle, resize: 'vertical' }}
+                    />
+
+                    {/* Floating Recommendation Dropdown (Profile Tab) */}
+                    {showAddressDropdown && addressSuggestions.length > 0 && (
+                      <div style={{
+                        position: 'absolute',
+                        top: 'calc(100% - 25px)',
+                        left: 0,
+                        right: 0,
+                        zIndex: 60,
+                        background: '#FFFFFF',
+                        border: '1px solid rgba(194, 65, 12, 0.25)',
+                        borderRadius: '10px',
+                        boxShadow: '0 12px 32px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.08)',
+                        maxHeight: '220px',
+                        overflowY: 'auto'
+                      }}>
+                        <div style={{
+                          padding: '0.45rem 0.75rem',
+                          fontSize: '0.72rem',
+                          borderBottom: '1px solid #E2E8F0',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          background: '#F8FAFC',
+                          color: '#475569',
+                          fontWeight: 600
+                        }}>
+                          <span>📍 Recommended Addresses (Click to apply)</span>
+                          <button
+                            type="button"
+                            onClick={() => setShowAddressDropdown(false)}
+                            style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', fontSize: '0.9rem', lineHeight: 1 }}
+                            onMouseEnter={e => e.currentTarget.style.color = '#0F172A'}
+                            onMouseLeave={e => e.currentTarget.style.color = '#94A3B8'}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                        {addressSuggestions.map((sug, sIdx) => (
+                          <div
+                            key={sIdx}
+                            onClick={() => handleSelectAddressSuggestion(sug, true)}
+                            style={{
+                              padding: '0.65rem 0.75rem',
+                              fontSize: '0.82rem',
+                              cursor: 'pointer',
+                              borderBottom: sIdx === addressSuggestions.length - 1 ? 'none' : '1px solid #F1F5F9',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              gap: '0.2rem',
+                              transition: 'background 0.15s ease'
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(194, 65, 12, 0.05)'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                              <span style={{ fontWeight: 600, color: '#C2410C' }}>
+                                {sug.area || sug.city}
+                              </span>
+                              {sug.postcode && (
+                                <span style={{ fontSize: '0.72rem', background: 'rgba(194, 65, 12, 0.08)', color: '#9A3412', border: '1px solid rgba(194, 65, 12, 0.15)', padding: '0.1rem 0.35rem', borderRadius: '4px', fontWeight: 600 }}>
+                                  PIN {sug.postcode}
+                                </span>
+                              )}
+                            </div>
+                            <span style={{ color: '#475569', fontSize: '0.76rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              {sug.formatted}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Parameter Validation Badges */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginTop: '0.2rem' }}>
+                      <span style={{
+                        fontSize: '0.72rem',
+                        padding: '0.15rem 0.5rem',
+                        borderRadius: '4px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.25rem',
+                        background: addrValidation.hasHouseNo ? 'rgba(16, 185, 129, 0.15)' : '#E2E8F0',
+                        color: addrValidation.hasHouseNo ? '#10b981' : '#64748B',
+                        border: `1px solid ${addrValidation.hasHouseNo ? 'rgba(16, 185, 129, 0.3)' : '#CBD5E1'}`
+                      }}>
+                        {addrValidation.hasHouseNo ? '✓' : '○'} House / Flat No
+                      </span>
+                      <span style={{
+                        fontSize: '0.72rem',
+                        padding: '0.15rem 0.5rem',
+                        borderRadius: '4px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.25rem',
+                        background: addrValidation.hasStreetArea ? 'rgba(16, 185, 129, 0.15)' : '#E2E8F0',
+                        color: addrValidation.hasStreetArea ? '#10b981' : '#64748B',
+                        border: `1px solid ${addrValidation.hasStreetArea ? 'rgba(16, 185, 129, 0.3)' : '#CBD5E1'}`
+                      }}>
+                        {addrValidation.hasStreetArea ? '✓' : '○'} Street / Area
+                      </span>
+                      <span style={{
+                        fontSize: '0.72rem',
+                        padding: '0.15rem 0.5rem',
+                        borderRadius: '4px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.25rem',
+                        background: addrValidation.hasCityState ? 'rgba(16, 185, 129, 0.15)' : '#E2E8F0',
+                        color: addrValidation.hasCityState ? '#10b981' : '#64748B',
+                        border: `1px solid ${addrValidation.hasCityState ? 'rgba(16, 185, 129, 0.3)' : '#CBD5E1'}`
+                      }}>
+                        {addrValidation.hasCityState ? '✓' : '○'} City / State
+                      </span>
+                      <span style={{
+                        fontSize: '0.72rem',
+                        padding: '0.15rem 0.5rem',
+                        borderRadius: '4px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.25rem',
+                        background: addrValidation.hasPincode ? 'rgba(16, 185, 129, 0.15)' : '#E2E8F0',
+                        color: addrValidation.hasPincode ? '#10b981' : '#64748B',
+                        border: `1px solid ${addrValidation.hasPincode ? 'rgba(16, 185, 129, 0.3)' : '#CBD5E1'}`
+                      }}>
+                        {addrValidation.hasPincode ? '✓' : '○'} 6-Digit PIN
+                      </span>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Service Radius Map in Profile Tab with 24-Hour Cooldown Rule */}
+              <ServiceRadiusMap
+                latitude={form.latitude || 12.9716}
+                longitude={form.longitude || 77.5946}
+                radiusKm={form.service_radius_km || 5}
+                radiusUpdatedAt={form.radius_updated_at || profile?.radius_updated_at}
+                isOnboarding={false}
+                onChangeRadius={(newRad) => setForm(prev => ({ ...prev, service_radius_km: newRad }))}
+                onChangeCoords={({ lat, lng }) => setForm(prev => ({ ...prev, latitude: lat, longitude: lng }))}
+              />
               
               <div className="glass" style={{ 
                 padding: '1.25rem', 

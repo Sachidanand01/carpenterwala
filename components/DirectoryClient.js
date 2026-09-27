@@ -150,19 +150,25 @@ function DirectoryContent() {
       });
     }
 
-    // 3. Filter by Distance
-    if (maxDistance !== "Any" && userLocation) {
-      const radius = parseFloat(maxDistance);
-      result = result.filter((p) => {
-        const dist = getDistanceFromLatLonInKm(
-          userLocation.lat,
-          userLocation.lng,
-          p.latitude,
-          p.longitude
-        );
-        if (dist === null) return false;
-        return dist <= radius;
-      });
+    // 3. Filter & Sort by Distance & Pro Service Radius
+    if (userLocation) {
+      if (maxDistance !== "Any") {
+        const radius = parseFloat(maxDistance);
+        result = result.filter((p) => {
+          const dist = getDistanceFromLatLonInKm(
+            userLocation.lat,
+            userLocation.lng,
+            p.latitude,
+            p.longitude
+          );
+          if (dist === null) return false;
+          const proRadius = p.service_radius_km || 
+            (p.languages?.find(l => typeof l === 'string' && l.startsWith('radius:'))
+              ? parseInt(p.languages.find(l => l.startsWith('radius:')).replace('radius:', ''), 10)
+              : 5);
+          return dist <= Math.max(radius, proRadius);
+        });
+      }
     }
 
     // 4. Sort
