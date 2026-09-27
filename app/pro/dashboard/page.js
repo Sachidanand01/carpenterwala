@@ -267,6 +267,114 @@ export const TRADE_SKILL_PRESETS = {
     'Rental Express Repaint',
     'Royale & Luxury Emulsion',
   ],
+  'AC Technician': [
+    'Split AC Installation & Fitting',
+    'AC Jet Pump Foam Cleaning',
+    'Refrigerant Gas Refill & Leak Fix',
+    'AC PCB Circuit Board Repair',
+    'Compressor Replacement',
+    'Inverter AC Diagnostic',
+    'Water Leakage & Drain Pipe Fix',
+    'Window AC Mounting',
+    'Copper Piping & Insulation',
+    'Annual Maintenance Service (AMC)',
+  ],
+  Mason: [
+    'Tile & Marble Laying',
+    'Wall Plastering & Crack Repair',
+    'Brickwork & Partition Walls',
+    'Bathroom Waterproofing Screed',
+    'Concrete Slab Casting',
+    'Granite Countertop Fitting',
+    'Parapet & Boundary Wall Masonry',
+    'Tile Grouting & Re-grouting',
+    'Civil Demolition & Disposal',
+    'Paver Block Installation',
+  ],
+  Welder: [
+    'Main Gate & Grill Fabrication',
+    'Inverter Arc & TIG Welding',
+    'Terrace Metal Shed & Truss',
+    'Balcony Railing Repair',
+    'Staircase Handrail Installation',
+    'Window Guard Fitting',
+    'Rolling Shutter Repair',
+    'Metal Furniture Fabrication',
+    'Rust Removal & Primer Prep',
+    'Structural Steel Fitting',
+  ],
+  Gardener: [
+    'Lawn Mowing & Turf Care',
+    'Hedge & Bush Trimming',
+    'Potted Plants Repotting & Soil',
+    'Organic Fertilizer Treatment',
+    'Drip Irrigation Fitting',
+    'Terrace & Balcony Garden Setup',
+    'Garden Weeding & Hoeing',
+    'Flowering Plant Care',
+    'Pest & Fungus Spray for Plants',
+    'Seasonal Tree Pruning',
+  ],
+  Barber: [
+    'Classic & Modern Men Haircuts',
+    'Beard Styling & Line-up',
+    'Hot Towel Razor Shave',
+    'Head & Shoulder Massage',
+    'Hair Dye & Grey Coverage',
+    'Face Cleanup & De-tan',
+    'Hair Spa & Scalp Therapy',
+    'Kids Haircut at Home',
+    'Grooming Package',
+    'Doorstep Salon Service',
+  ],
+  'Pest Control': [
+    'Herbal Gel Cockroach Treatment',
+    'Drill-Fill-Seal Termite Defense',
+    'Bedbug Chemical & Heat Treatment',
+    'Mosquito Fogging & Larva Control',
+    'Rat & Rodent Management',
+    'Ant Colony Treatment',
+    'Wood Borer Eradication',
+    'Disinfection Spray',
+    'Kitchen & Pantry Pest Shield',
+    'Commercial Pest Control',
+  ],
+  'Deep Cleaning': [
+    'Full Home Deep Cleaning',
+    'Modular Kitchen Degreasing',
+    'Bathroom Descaling & Scrubbing',
+    'Sofa & Mattress Foam Wash',
+    'Floor Machine Polishing',
+    'Balcony & Window Cleaning',
+    'Move-in / Move-out Cleaning',
+    'Carpet Vacuum Extraction',
+    'Cabinet Disinfection',
+    'Water Tank Scrubbing',
+  ],
+  Roofer: [
+    'Terrace Waterproofing Coating',
+    'Metal & Polycarbonate Shed',
+    'Mangalore Tile Roof Repair',
+    'Rainwater Gutter Fitting',
+    'Ceiling Crack Seepage Injection',
+    'Corrugated Sheet Replacement',
+    'False Ceiling Installation',
+    'Heat Reflective Roof Paint',
+    'Flashing & Edge Sealing',
+    'Emergency Roof Leak Patching',
+  ],
+  'Flooring Expert': [
+    'Italian Marble Polishing',
+    'Hardwood & Engineered Wood Flooring',
+    'Seamless Epoxy Floor Coating',
+    'Granite Floor Honing',
+    'Vinyl & LVT Plank Laying',
+    'Mosaic Floor Restoration',
+    'Tile Grout Epoxy Sealing',
+    'Carpet Tile Installation',
+    'Staircase Nosing Fitting',
+    'Self-Leveling Floor Screed',
+  ],
 };
 
 export const TRADE_ICONS = {
@@ -274,6 +382,15 @@ export const TRADE_ICONS = {
   Carpenter: '🪚',
   Plumber: '🔧',
   Painter: '🎨',
+  'AC Technician': '❄️',
+  Mason: '🧱',
+  Welder: '👨‍🏭',
+  Gardener: '🌿',
+  Barber: '✂️',
+  'Pest Control': '🐜',
+  'Deep Cleaning': '🧹',
+  Roofer: '🏠',
+  'Flooring Expert': '🪵',
 };
 
 export const TRADE_PLACEHOLDERS = {
@@ -281,6 +398,15 @@ export const TRADE_PLACEHOLDERS = {
   Carpenter: 'e.g. Furniture Assembly, Modular Kitchen, Wooden Polish',
   Plumber: 'e.g. Tap Leak Repair, Drain Cleaning, Geyser Plumbing',
   Painter: 'e.g. Interior Painting, Wall Putty, Waterproofing',
+  'AC Technician': 'e.g. Split AC Installation, Gas Refill, Jet Cleaning',
+  Mason: 'e.g. Tile Laying, Plastering, Brickwork, Concrete Repair',
+  Welder: 'e.g. Gate Fabrication, Grill Welding, Railing Repair',
+  Gardener: 'e.g. Lawn Mowing, Hedge Trimming, Plant Repotting',
+  Barber: 'e.g. Haircut at Home, Beard Styling, Head Massage',
+  'Pest Control': 'e.g. Cockroach Gel, Termite Treatment, Bedbug Spray',
+  'Deep Cleaning': 'e.g. Full Home Deep Clean, Kitchen Chimney, Sofa Shampoo',
+  Roofer: 'e.g. Terrace Waterproofing, Shed Fitting, Roof Leak Patch',
+  'Flooring Expert': 'e.g. Marble Polishing, Wooden Flooring, Vinyl Laying',
 };
 
 export function normalizeTrade(trade) {
@@ -290,7 +416,16 @@ export function normalizeTrade(trade) {
   if (lower.includes('plumb')) return 'Plumber';
   if (lower.includes('paint')) return 'Painter';
   if (lower.includes('carpent')) return 'Carpenter';
-  return 'Carpenter';
+  if (lower.includes('ac ') || lower.includes('air cond') || lower.includes('ac techn')) return 'AC Technician';
+  if (lower.includes('mason') || lower.includes('mistri')) return 'Mason';
+  if (lower.includes('weld') || lower.includes('fabricat')) return 'Welder';
+  if (lower.includes('gard') || lower.includes('mali')) return 'Gardener';
+  if (lower.includes('barber') || lower.includes('hair') || lower.includes('salon')) return 'Barber';
+  if (lower.includes('pest')) return 'Pest Control';
+  if (lower.includes('clean')) return 'Deep Cleaning';
+  if (lower.includes('roof')) return 'Roofer';
+  if (lower.includes('floor')) return 'Flooring Expert';
+  return trade;
 }
 
 export function parseSkillsList(skillsStr) {

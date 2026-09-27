@@ -26,6 +26,7 @@ export default function ProLogin({ lang }) {
   const [regEmail, setRegEmail] = useState('');
   const [regPhone, setRegPhone] = useState('');
   const [regTrade, setRegTrade] = useState('Carpenter');
+  const [customTrade, setCustomTrade] = useState('');
   const [regLocation, setRegLocation] = useState('');
 
   const router = useRouter();
@@ -191,6 +192,16 @@ export default function ProLogin({ lang }) {
       setError(t.error_location_length); return;
     }
 
+    const finalTrade = regTrade === 'Other' ? customTrade.trim() : regTrade;
+    if (!finalTrade) {
+      setError(t.error_custom_trade || 'Please specify your trade (max 30 characters).');
+      return;
+    }
+    if (finalTrade.length > 30) {
+      setError(t.error_custom_trade || 'Trade name cannot exceed 30 characters.');
+      return;
+    }
+
     setError('');
     setLoading(true);
     try {
@@ -202,7 +213,7 @@ export default function ProLogin({ lang }) {
           name: regName.trim(),
           email: regEmail.trim().toLowerCase(),
           phone: regPhone.trim(),
-          trade: regTrade,
+          trade: finalTrade,
           location: regLocation.trim()
         })
       });
@@ -304,6 +315,7 @@ export default function ProLogin({ lang }) {
   const resetFlow = () => {
     setStep(1); setOtp(''); setGeneratedOtp(''); setOtpToken('');
     setOtpSentAlert(false); setMatchedProfiles([]); setError(''); setErrorCode('');
+    setCustomTrade('');
   };
 
   const toggleTab = (registerMode) => {
@@ -634,6 +646,16 @@ export default function ProLogin({ lang }) {
                           <option value="Painter">{t.trades.Painter}</option>
                           <option value="Electrician">{t.trades.Electrician}</option>
                           <option value="Plumber">{t.trades.Plumber}</option>
+                          <option value="AC Technician">{t.trades['AC Technician']}</option>
+                          <option value="Mason">{t.trades.Mason}</option>
+                          <option value="Welder">{t.trades.Welder}</option>
+                          <option value="Gardener">{t.trades.Gardener}</option>
+                          <option value="Barber">{t.trades.Barber}</option>
+                          <option value="Pest Control">{t.trades['Pest Control']}</option>
+                          <option value="Deep Cleaning">{t.trades['Deep Cleaning']}</option>
+                          <option value="Roofer">{t.trades.Roofer}</option>
+                          <option value="Flooring Expert">{t.trades['Flooring Expert']}</option>
+                          <option value="Other">✨ {t.trades.Other}</option>
                         </select>
                       </div>
                       <div className="flex flex-col gap-1" style={{ flex: 1.2 }}>
@@ -642,6 +664,23 @@ export default function ProLogin({ lang }) {
                           onChange={(e) => setRegLocation(e.target.value)} style={inputStyle} />
                       </div>
                     </div>
+                    {regTrade === 'Other' && (
+                      <div className="flex flex-col gap-1" style={{ marginTop: '0.5rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <label style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9 }}>{t.label_custom_trade || 'Specify Your Trade / Service'}</label>
+                          <span style={{ fontSize: '0.75rem', opacity: 0.6 }}>{customTrade.length}/30</span>
+                        </div>
+                        <input
+                          type="text"
+                          placeholder={t.placeholder_custom_trade || 'e.g. Appliance Repair, Solar Tech (max 30 chars)'}
+                          required
+                          maxLength={30}
+                          value={customTrade}
+                          onChange={(e) => setCustomTrade(e.target.value.slice(0, 30))}
+                          style={inputStyle}
+                        />
+                      </div>
+                    )}
                     <button type="submit" disabled={loading} className="btn btn-primary"
                       style={{ marginTop: '0.75rem', width: '100%' }}>
                       {loading ? t.btn_sending_otp : t.btn_register_verify}

@@ -17,6 +17,7 @@ function CompleteProfileContent() {
   const [email] = useState(initialEmail);
   const [phone, setPhone] = useState('');
   const [trade, setTrade] = useState('Carpenter');
+  const [customTrade, setCustomTrade] = useState('');
   const [location, setLocation] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -47,7 +48,16 @@ function CompleteProfileContent() {
       return;
     }
 
+    const finalTrade = trade === 'Other' ? customTrade.trim() : trade;
     if (role === 'pro') {
+      if (!finalTrade) {
+        setError('Please specify your trade (max 30 characters).');
+        return;
+      }
+      if (finalTrade.length > 30) {
+        setError('Trade name cannot exceed 30 characters.');
+        return;
+      }
       if (!location.trim() || location.trim().length < 3) {
         setError('Please enter a valid location / city (at least 3 characters).');
         return;
@@ -62,7 +72,7 @@ function CompleteProfileContent() {
         name: name.trim(),
         email: email.trim().toLowerCase(),
         phone: cleanPhone,
-        trade: role === 'pro' ? trade : undefined,
+        trade: role === 'pro' ? finalTrade : undefined,
         location: role === 'pro' ? location.trim() : undefined,
         avatar: role === 'pro' ? avatar : undefined
       };
@@ -265,8 +275,36 @@ function CompleteProfileContent() {
                   <option value="Painter">Painter (पेंटर / ಪೇಂಟರ್)</option>
                   <option value="Electrician">Electrician (इलेक्ट्रीशियन / ಎಲೆಕ್ಟ್ರೀಷಿಯನ್)</option>
                   <option value="Plumber">Plumber (प्लंबर / ಪ್ಲಂಬರ್)</option>
+                  <option value="AC Technician">AC Technician (एसी तकनीशियन / ಎಸಿ ಟೆಕ್ನಿಷಿಯನ್)</option>
+                  <option value="Mason">Mason (राजमिस्त्री / ಮೇಸ್ತ್ರಿ)</option>
+                  <option value="Welder">Welder (वेल्डर / ವೆಲ್ಡರ್)</option>
+                  <option value="Gardener">Gardener (माली / ತೋಟಗಾರ)</option>
+                  <option value="Barber">Barber (नाई / ಕ್ಷೌರಿಕ)</option>
+                  <option value="Pest Control">Pest Control (पेस्ट कंट्रोल / ಕೀಟ ನಿಯಂತ್ರಣ)</option>
+                  <option value="Deep Cleaning">Deep Cleaning (डीप क्लीनिंग / ಡೀಪ್ ಕ್ಲೀನಿಂಗ್)</option>
+                  <option value="Roofer">Roofer (रूफर / ಛಾವಣಿ)</option>
+                  <option value="Flooring Expert">Flooring Expert (फ्लोरिंग एक्सपर्ट / ಫ್ಲೋರಿಂಗ್ ತಜ್ಞ)</option>
+                  <option value="Other">✨ Other / Custom Trade</option>
                 </select>
               </div>
+
+              {trade === 'Other' && (
+                <div className="flex flex-col gap-1">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>Specify Your Trade</label>
+                    <span style={{ fontSize: '0.75rem', opacity: 0.6 }}>{customTrade.length}/30</span>
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    maxLength={30}
+                    value={customTrade}
+                    onChange={(e) => setCustomTrade(e.target.value.slice(0, 30))}
+                    placeholder="e.g. Appliance Repair, Solar Tech (max 30 chars)"
+                    style={inputStyle}
+                  />
+                </div>
+              )}
 
               <div className="flex flex-col gap-1">
                 <label style={{ fontSize: '0.88rem', fontWeight: 600, opacity: 0.9 }}>Location / City</label>

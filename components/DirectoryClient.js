@@ -255,6 +255,22 @@ function DirectoryContent() {
               <option value="Painter">Painters</option>
               <option value="Electrician">Electricians</option>
               <option value="Plumber">Plumbers</option>
+              <option value="AC Technician">AC Technicians</option>
+              <option value="Mason">Masons</option>
+              <option value="Welder">Welders</option>
+              <option value="Gardener">Gardeners</option>
+              <option value="Barber">Barbers</option>
+              <option value="Pest Control">Pest Control</option>
+              <option value="Deep Cleaning">Deep Cleaning</option>
+              <option value="Roofer">Roofers</option>
+              <option value="Flooring Expert">Flooring Experts</option>
+              {Array.from(new Set(
+                (allProfiles || [])
+                  .map(p => p.trade)
+                  .filter(t => t && !['Carpenter', 'Painter', 'Electrician', 'Plumber', 'AC Technician', 'Mason', 'Welder', 'Gardener', 'Barber', 'Pest Control', 'Deep Cleaning', 'Roofer', 'Flooring Expert'].includes(t))
+              )).map(customCat => (
+                <option key={customCat} value={customCat}>{customCat}</option>
+              ))}
             </select>
           </div>
 

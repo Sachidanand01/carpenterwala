@@ -40,8 +40,11 @@ export async function POST(request) {
       if (!cleanPhone || !/^[6-9]\d{9}$/.test(cleanPhone)) {
         return NextResponse.json({ error: 'Please enter a valid 10-digit mobile number starting with 6-9.' }, { status: 400 });
       }
-      if (!trade || trade === '') {
-        return NextResponse.json({ error: 'Please select a valid trade.' }, { status: 400 });
+      if (!trade || typeof trade !== 'string' || trade.trim() === '') {
+        return NextResponse.json({ error: 'Please select or specify a valid trade.' }, { status: 400 });
+      }
+      if (trade.trim().length > 30) {
+        return NextResponse.json({ error: 'Trade name cannot exceed 30 characters.' }, { status: 400 });
       }
       if (!location || location.trim().length < 3) {
         return NextResponse.json({ error: 'Please enter a valid location.' }, { status: 400 });

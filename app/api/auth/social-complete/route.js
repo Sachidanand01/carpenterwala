@@ -104,8 +104,11 @@ export async function POST(request) {
       if (!trimmedName || trimmedName.length < 2) {
         return NextResponse.json({ error: 'Name must be at least 2 characters.' }, { status: 400 });
       }
-      if (!trade) {
-        return NextResponse.json({ error: 'Please select your trade.' }, { status: 400 });
+      if (!trade || typeof trade !== 'string' || trade.trim() === '') {
+        return NextResponse.json({ error: 'Please select or specify your trade.' }, { status: 400 });
+      }
+      if (trade.trim().length > 30) {
+        return NextResponse.json({ error: 'Trade name cannot exceed 30 characters.' }, { status: 400 });
       }
       if (!location || location.trim().length < 3) {
         return NextResponse.json({ error: 'Please enter a valid location (min 3 characters).' }, { status: 400 });
