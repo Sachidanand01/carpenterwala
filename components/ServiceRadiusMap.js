@@ -109,10 +109,11 @@ export default function ServiceRadiusMap({
         scrollWheelZoom: false,
       });
 
-      // Add OpenStreetMap tiles
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 18,
+      // Add CartoDB Voyager tiles (crisp, modern street map with clear labels)
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19,
       }).addTo(map);
 
       // Custom terracotta pin icon
@@ -182,12 +183,23 @@ export default function ServiceRadiusMap({
       markerRef.current = marker;
       circleRef.current = circle;
 
-      // Fit map bounds to circle
+      // Fit map bounds to circle and invalidate size to ensure tiles render immediately
       try {
         map.fitBounds(circle.getBounds(), { padding: [25, 25], maxZoom: 13 });
       } catch (e) {
         // ignore bounds fit error
       }
+
+      setTimeout(() => {
+        if (mapInstanceRef.current) {
+          mapInstanceRef.current.invalidateSize();
+        }
+      }, 100);
+      setTimeout(() => {
+        if (mapInstanceRef.current) {
+          mapInstanceRef.current.invalidateSize();
+        }
+      }, 450);
     }
 
     initMap();
@@ -312,6 +324,14 @@ export default function ServiceRadiusMap({
           zIndex: 1,
         }}
       />
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .leaflet-container img {
+            max-width: none !important;
+            max-height: none !important;
+          }
+        `
+      }} />
 
       {/* Slider & Description Controls */}
       <div style={{ padding: '1rem 1.25rem 1.1rem' }}>
