@@ -73,9 +73,18 @@ function DocUploadSlot({
   onFileChange,
   onDelete,
   onPreview,
+  hasLinkedBack = false
 }) {
   const isUploading = uploadingField === field;
+  const isAvatar = field === 'avatar';
+  const acceptedTypes = isAvatar ? 'image/*' : 'image/*,application/pdf';
   const imageSource = previewSrc || (value ? resolveDisplayUrl(value, '') : '');
+
+  const isPdf = !isAvatar && (
+    (typeof value === 'string' && (value.toLowerCase().endsWith('.pdf') || value.toLowerCase().includes('.pdf?'))) ||
+    (typeof previewSrc === 'string' && (previewSrc.toLowerCase().includes('.pdf') || previewSrc.startsWith('data:application/pdf'))) ||
+    Boolean(validation?.isPdf)
+  );
 
   return (
     <div
@@ -117,27 +126,64 @@ function DocUploadSlot({
         </div>
       ) : (value || previewSrc) ? (
         <div className="flex flex-col items-center gap-2">
-          <div style={{ position: 'relative', width: '100%', maxWidth: '220px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--glass-border)' }}>
-            <img
-              src={imageSource}
-              alt={title}
-              style={{ width: '100%', height: '100px', objectFit: 'cover', display: 'block', background: 'rgba(0,0,0,0.2)' }}
-            />
-            <button
-              type="button"
-              onClick={() => onPreview({ title, src: imageSource || value })}
+          {isPdf ? (
+            <div
+              onClick={() => onPreview({ title, src: imageSource || value, isPdf: true })}
               style={{
-                position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', border: 'none',
-                color: 'white', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem',
-                opacity: 0, transition: 'opacity 0.2s'
+                width: '100%', maxWidth: '220px', height: '100px', borderRadius: '8px',
+                background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(185, 28, 28, 0.22))',
+                border: '1px solid rgba(239, 68, 68, 0.35)',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                gap: '0.35rem', padding: '0.5rem', cursor: 'pointer', position: 'relative',
+                transition: 'transform 0.2s, box-shadow 0.2s'
               }}
-              onMouseEnter={e => e.currentTarget.style.opacity = '1'}
-              onMouseLeave={e => e.currentTarget.style.opacity = '0'}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(239,68,68,0.2)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
             >
-              👁️ View Full Size
-            </button>
-          </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <span style={{ fontSize: '1.6rem' }}>📄</span>
+                <span style={{ fontSize: '0.68rem', fontWeight: 800, background: '#ef4444', color: 'white', padding: '0.12rem 0.4rem', borderRadius: '4px', letterSpacing: '0.05em' }}>
+                  PDF
+                </span>
+              </div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--foreground)', maxWidth: '90%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {title}
+              </div>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); onPreview({ title, src: imageSource || value, isPdf: true }); }}
+                style={{
+                  fontSize: '0.72rem', fontWeight: 600, color: '#dc2626', background: 'rgba(255,255,255,0.92)',
+                  border: 'none', borderRadius: '4px', padding: '0.2rem 0.55rem', cursor: 'pointer',
+                  display: 'inline-flex', alignItems: 'center', gap: '0.25rem'
+                }}
+              >
+                👁️ View Document
+              </button>
+            </div>
+          ) : (
+            <div style={{ position: 'relative', width: '100%', maxWidth: '220px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--glass-border)' }}>
+              <img
+                src={imageSource}
+                alt={title}
+                style={{ width: '100%', height: '100px', objectFit: 'cover', display: 'block', background: 'rgba(0,0,0,0.2)' }}
+              />
+              <button
+                type="button"
+                onClick={() => onPreview({ title, src: imageSource || value, isPdf: false })}
+                style={{
+                  position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', border: 'none',
+                  color: 'white', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem',
+                  opacity: 0, transition: 'opacity 0.2s'
+                }}
+                onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+                onMouseLeave={e => e.currentTarget.style.opacity = '0'}
+              >
+                👁️ View Full Size
+              </button>
+            </div>
+          )}
 
           {/* Validation Status Badge */}
           {validation && validation.status === 'verified' && (
@@ -145,7 +191,7 @@ function DocUploadSlot({
               fontSize: '0.72rem', color: '#10b981', background: 'rgba(16,185,129,0.12)',
               padding: '0.25rem 0.6rem', borderRadius: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.3rem'
             }}>
-              ✓ {validation.detectedType || 'Clear & Sharp Scan'}
+              ✓ {validation.detectedType || (isPdf ? 'Verified PDF Document' : 'Clear & Sharp Scan')}
             </div>
           )}
 
@@ -154,14 +200,24 @@ function DocUploadSlot({
               fontSize: '0.72rem', color: '#f59e0b', background: 'rgba(245,158,11,0.12)',
               padding: '0.25rem 0.6rem', borderRadius: '8px', fontWeight: 500, lineHeight: 1.3
             }}>
-              ⚠️ {validation.reason || 'Clear scan saved for manual verification'}
+              ⚠️ {validation.reason || 'Document saved for manual admin verification'}
+            </div>
+          )}
+
+          {/* Unified PDF Front & Back Sync Badge */}
+          {hasLinkedBack && (
+            <div style={{
+              fontSize: '0.7rem', color: '#0284c7', background: 'rgba(14,165,233,0.1)',
+              padding: '0.2rem 0.5rem', borderRadius: '6px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.25rem'
+            }}>
+              🔗 Both Front & Back satisfied by PDF
             </div>
           )}
 
           <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.25rem' }}>
             <label className="btn btn-secondary" style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', cursor: 'pointer' }}>
               🔄 Retake
-              <input type="file" accept="image/*" onChange={e => onFileChange(e, field)} style={{ display: 'none' }} />
+              <input type="file" accept={acceptedTypes} onChange={e => onFileChange(e, field)} style={{ display: 'none' }} />
             </label>
             <button
               type="button"
@@ -180,8 +236,8 @@ function DocUploadSlot({
             <input type="file" accept="image/*" capture="environment" onChange={e => onFileChange(e, field)} style={{ display: 'none' }} />
           </label>
           <label className="btn btn-secondary" style={{ padding: '0.45rem 0.8rem', fontSize: '0.78rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
-            📁 Upload
-            <input type="file" accept="image/*" onChange={e => onFileChange(e, field)} style={{ display: 'none' }} />
+            📁 Upload {isAvatar ? '' : '(Image/PDF)'}
+            <input type="file" accept={acceptedTypes} onChange={e => onFileChange(e, field)} style={{ display: 'none' }} />
           </label>
         </div>
       )}
@@ -829,22 +885,23 @@ export default function ProDashboard() {
     }
   };
 
-  const handleOpenPreview = async ({ title, src }) => {
+  const handleOpenPreview = async ({ title, src, isPdf = false }) => {
     if (!src) return;
+    const detectedPdf = isPdf || (typeof src === 'string' && (src.toLowerCase().includes('.pdf') || src.startsWith('data:application/pdf')));
     if (src.startsWith('data:') || src.startsWith('blob:') || src.startsWith('http://') || src.startsWith('https://')) {
-      setPreviewDocModal({ title, src });
+      setPreviewDocModal({ title, src, isPdf: detectedPdf });
       return;
     }
     try {
       const res = await fetch(`/api/docs/signed-url?path=${encodeURIComponent(src)}`);
       const data = await res.json();
       if (data?.signedUrl) {
-        setPreviewDocModal({ title, src: data.signedUrl });
+        setPreviewDocModal({ title, src: data.signedUrl, isPdf: detectedPdf });
       } else {
-        setPreviewDocModal({ title, src: resolveDisplayUrl(src, '') });
+        setPreviewDocModal({ title, src: resolveDisplayUrl(src, ''), isPdf: detectedPdf });
       }
     } catch {
-      setPreviewDocModal({ title, src: resolveDisplayUrl(src, '') });
+      setPreviewDocModal({ title, src: resolveDisplayUrl(src, ''), isPdf: detectedPdf });
     }
   };
 
@@ -1083,22 +1140,29 @@ export default function ProDashboard() {
     } catch { setPortfolioStatus('error'); }
   };
 
-  // Handle file uploads in wizard with High-Fidelity scanning & direct storage upload
+  // Handle file uploads in wizard with High-Fidelity scanning, PDF support & direct storage upload
   const handleFileChange = async (e, field) => {
     const file = e.target.files?.[0];
     if (!file) return;
     e.target.value = '';
 
-    // Must be image
-    if (!file.type.startsWith('image/')) {
-      setOnboardError('Please select a valid image file (PNG, JPG, JPEG, WebP).');
+    const isPdf = file.type === 'application/pdf' || (typeof file.name === 'string' && file.name.toLowerCase().endsWith('.pdf'));
+    const isImage = file.type.startsWith('image/');
+
+    if (field === 'avatar' && !isImage) {
+      setOnboardError('Profile avatar must be an image file (PNG, JPG, WebP).');
+      return;
+    }
+
+    if (!isImage && !isPdf) {
+      setOnboardError('Please select a valid image file (PNG, JPG, JPEG, WebP) or PDF document.');
       return;
     }
 
     setOnboardError('');
     setUploadingField(field);
     try {
-      // 1. Process image and upload to Supabase Storage
+      // 1. Process image or PDF and upload to Supabase Storage
       const isPublicAvatar = field === 'avatar';
       const uploadRes = await uploadImageToStorage({
         file,
@@ -1109,19 +1173,19 @@ export default function ProDashboard() {
         watermark: isPublicAvatar
       });
 
-      if (uploadRes.metrics.isBlurry) {
+      if (!isPdf && uploadRes.metrics?.isBlurry) {
         setOnboardError('⚠️ Image appears blurry or out of focus. Please retake a sharp, clear photo in good lighting.');
         setUploadingField(null);
         return;
       }
-      if (uploadRes.metrics.isTooDark) {
+      if (!isPdf && uploadRes.metrics?.isTooDark) {
         setOnboardError('⚠️ Image is too dark. Please take photo with adequate lighting or flash.');
         setUploadingField(null);
         return;
       }
 
       // 2. AI Document & Readability Verification
-      let validation = { valid: true, readable: true, detectedType: field, isStateFormat: false };
+      let validation = { valid: true, readable: true, detectedType: field, isStateFormat: false, bothSidesIncluded: false };
       try {
         const res = await fetch('/api/pro/verify-doc', {
           method: 'POST',
@@ -1129,6 +1193,7 @@ export default function ProDashboard() {
           body: JSON.stringify({
             imageBase64: uploadRes.dataUrl,
             documentType: field,
+            mimeType: uploadRes.mimeType || (isPdf ? 'application/pdf' : 'image/jpeg')
           }),
         });
         if (res.ok) {
@@ -1138,34 +1203,78 @@ export default function ProDashboard() {
         console.warn('API verification check skipped:', apiErr);
       }
 
+      if (validation.isLocked) {
+        setOnboardError(`⚠️ ${validation.reason || 'This PDF is password-protected. Please upload an unlocked PDF copy.'}`);
+        setUploadingField(null);
+        return;
+      }
+
       if (!validation.readable) {
-        setOnboardError(`⚠️ Readability check failed: ${validation.reason || 'Document text is not clearly readable. Please retake photo.'}`);
+        setOnboardError(`⚠️ Readability check failed: ${validation.reason || 'Document text is not clearly readable. Please retake photo or upload clear PDF.'}`);
         setUploadingField(null);
         return;
       }
 
       // If document format is completely wrong for national IDs (Aadhaar, PAN)
       if (!validation.valid && !validation.isStateFormat && ['aadhaar_front', 'aadhaar_back', 'pan_front'].includes(field)) {
-        setOnboardError(`⚠️ Document Mismatch: Uploaded photo was detected as "${validation.detectedType}". Please upload your authentic ${field.replace(/_/g, ' ').toUpperCase()}.`);
+        setOnboardError(`⚠️ Document Mismatch: Uploaded document was detected as "${validation.detectedType}". Please upload your authentic ${field.replace(/_/g, ' ').toUpperCase()}.`);
         setUploadingField(null);
         return;
       }
 
       // Accept document: save clean storage value and preview URL
-      setOnboardForm(prev => ({ ...prev, [field]: uploadRes.value }));
-      setDocPreviews(prev => ({ ...prev, [field]: uploadRes.previewUrl }));
-      setDocValidations(prev => ({
-        ...prev,
-        [field]: {
-          status: validation.isStateFormat || !validation.valid ? 'warning' : 'verified',
-          detectedType: validation.detectedType,
+      setOnboardForm(prev => {
+        const updated = { ...prev, [field]: uploadRes.value };
+        // Smart unified PDF: If pro uploads a PDF for Aadhaar or PAN front, auto-link to back if not already filled or if bothSidesIncluded
+        if (isPdf && (field === 'aadhaar_front' || field === 'pan_front')) {
+          const backKey = field.replace('_front', '_back');
+          if (!prev[backKey] || validation.bothSidesIncluded) {
+            updated[backKey] = uploadRes.value;
+          }
+        }
+        return updated;
+      });
+
+      setDocPreviews(prev => {
+        const updated = { ...prev, [field]: uploadRes.previewUrl };
+        if (isPdf && (field === 'aadhaar_front' || field === 'pan_front')) {
+          const backKey = field.replace('_front', '_back');
+          if (!prev[backKey] || validation.bothSidesIncluded) {
+            updated[backKey] = uploadRes.previewUrl;
+          }
+        }
+        return updated;
+      });
+
+      setDocValidations(prev => {
+        const statusVal = validation.isStateFormat || !validation.valid ? 'warning' : 'verified';
+        const docObj = {
+          status: statusVal,
+          detectedType: validation.detectedType || (isPdf ? 'PDF Document' : 'Verified Scan'),
           reason: validation.reason,
           isStateFormat: validation.isStateFormat,
+          isPdf,
+          bothSidesIncluded: validation.bothSidesIncluded
+        };
+        const updated = { ...prev, [field]: docObj };
+        if (isPdf && (field === 'aadhaar_front' || field === 'pan_front')) {
+          const backKey = field.replace('_front', '_back');
+          if (!prev[backKey] || validation.bothSidesIncluded) {
+            updated[backKey] = {
+              status: statusVal,
+              detectedType: `${validation.detectedType || 'PDF Document'} (Back Included)`,
+              reason: 'Included in Front PDF document',
+              isStateFormat: validation.isStateFormat,
+              isPdf: true,
+              bothSidesIncluded: true
+            };
+          }
         }
-      }));
+        return updated;
+      });
     } catch (err) {
       console.error(err);
-      setOnboardError('Failed to process and upload image. Please try again.');
+      setOnboardError(err.message || 'Failed to process and upload file. Please try again.');
     } finally {
       setUploadingField(null);
     }
@@ -1737,21 +1846,22 @@ export default function ProDashboard() {
                       id="tour-aadhaar-front"
                       icon="📇"
                       title="Aadhaar Front Side"
-                      subtitle="Photo & name side (Clear scan)"
+                      subtitle="Photo & name side (Clear scan or full PDF)"
                       field="aadhaar_front"
                       value={onboardForm.aadhaar_front}
                       previewSrc={docPreviews.aadhaar_front}
                       uploadingField={uploadingField}
                       validation={docValidations.aadhaar_front}
                       onFileChange={handleFileChange}
-                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
+                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '', ...(prev.aadhaar_back === prev[f] ? { aadhaar_back: '' } : {}) }))}
                       onPreview={handleOpenPreview}
+                      hasLinkedBack={Boolean(onboardForm.aadhaar_front && onboardForm.aadhaar_front === onboardForm.aadhaar_back)}
                     />
                     <DocUploadSlot
                       id="tour-aadhaar-back"
                       icon="📇"
                       title="Aadhaar Back Side"
-                      subtitle="Address & QR code page"
+                      subtitle="Address & QR code page (or included in PDF)"
                       field="aadhaar_back"
                       value={onboardForm.aadhaar_back}
                       previewSrc={docPreviews.aadhaar_back}
@@ -1760,6 +1870,7 @@ export default function ProDashboard() {
                       onFileChange={handleFileChange}
                       onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
                       onPreview={handleOpenPreview}
+                      hasLinkedBack={Boolean(onboardForm.aadhaar_front && onboardForm.aadhaar_front === onboardForm.aadhaar_back)}
                     />
                   </div>
                 </div>
@@ -1772,21 +1883,22 @@ export default function ProDashboard() {
                       id="tour-pan-front"
                       icon="💳"
                       title="PAN Front Side"
-                      subtitle="Front details & photo scan"
+                      subtitle="Front details & photo scan (or full e-PAN PDF)"
                       field="pan_front"
                       value={onboardForm.pan_front}
                       previewSrc={docPreviews.pan_front}
                       uploadingField={uploadingField}
                       validation={docValidations.pan_front}
                       onFileChange={handleFileChange}
-                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
+                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '', ...(prev.pan_back === prev[f] ? { pan_back: '' } : {}) }))}
                       onPreview={handleOpenPreview}
+                      hasLinkedBack={Boolean(onboardForm.pan_front && onboardForm.pan_front === onboardForm.pan_back)}
                     />
                     <DocUploadSlot
                       id="tour-pan-back"
                       icon="💳"
                       title="PAN Back Side"
-                      subtitle="Signature & back scan"
+                      subtitle="Signature & back scan (or included in PDF)"
                       field="pan_back"
                       optional={true}
                       value={onboardForm.pan_back}
@@ -1796,6 +1908,7 @@ export default function ProDashboard() {
                       onFileChange={handleFileChange}
                       onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
                       onPreview={handleOpenPreview}
+                      hasLinkedBack={Boolean(onboardForm.pan_front && onboardForm.pan_front === onboardForm.pan_back)}
                     />
                   </div>
                 </div>
@@ -1868,21 +1981,22 @@ export default function ProDashboard() {
                       id="tour-voter-front"
                       icon="🪪"
                       title="Front Side Scan"
-                      subtitle="Voter ID or Driving License"
+                      subtitle="Voter ID or Driving License (Scan or PDF)"
                       field="voter_driving_front"
                       value={onboardForm.voter_driving_front}
                       previewSrc={docPreviews.voter_driving_front}
                       uploadingField={uploadingField}
                       validation={docValidations.voter_driving_front}
                       onFileChange={handleFileChange}
-                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
+                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '', ...(prev.voter_driving_back === prev[f] ? { voter_driving_back: '' } : {}) }))}
                       onPreview={handleOpenPreview}
+                      hasLinkedBack={Boolean(onboardForm.voter_driving_front && onboardForm.voter_driving_front === onboardForm.voter_driving_back)}
                     />
                     <DocUploadSlot
                       id="tour-voter-back"
                       icon="🪪"
                       title="Back Side Scan"
-                      subtitle="Address & details back scan"
+                      subtitle="Address & details back scan (or included in PDF)"
                       field="voter_driving_back"
                       optional={true}
                       value={onboardForm.voter_driving_back}
@@ -1892,6 +2006,7 @@ export default function ProDashboard() {
                       onFileChange={handleFileChange}
                       onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
                       onPreview={handleOpenPreview}
+                      hasLinkedBack={Boolean(onboardForm.voter_driving_front && onboardForm.voter_driving_front === onboardForm.voter_driving_back)}
                     />
                   </div>
                 </div>
@@ -1904,7 +2019,7 @@ export default function ProDashboard() {
                       id="tour-police"
                       icon="👮‍♂️"
                       title="Police Verification Certificate"
-                      subtitle="Certificate / Character verification scan"
+                      subtitle="Certificate / Character verification scan or PDF"
                       field="police_verification"
                       value={onboardForm.police_verification}
                       previewSrc={docPreviews.police_verification}
@@ -2946,18 +3061,47 @@ export default function ProDashboard() {
             display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', backdropFilter: 'blur(5px)'
           }}>
             <div className="glass animate-fade-in" style={{
-              width: '100%', maxWidth: '750px', borderRadius: '16px', overflow: 'hidden',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.7)', maxHeight: '90vh', display: 'flex', flexDirection: 'column'
+              width: '100%', maxWidth: '850px', borderRadius: '16px', overflow: 'hidden',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.7)', maxHeight: '92vh', display: 'flex', flexDirection: 'column'
             }}>
               <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={{ fontSize: '1rem', fontWeight: 700 }}>🔍 {previewDocModal.title}</h3>
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span>{previewDocModal.isPdf ? '📄' : '🔍'}</span>
+                  <span>{previewDocModal.title}</span>
+                  {previewDocModal.isPdf && (
+                    <span style={{ fontSize: '0.7rem', background: '#ef4444', color: 'white', padding: '0.15rem 0.45rem', borderRadius: '4px', fontWeight: 800 }}>
+                      PDF
+                    </span>
+                  )}
+                </h3>
                 <button onClick={() => setPreviewDocModal(null)} style={{ background: 'none', border: 'none', color: 'var(--foreground)', fontSize: '1.5rem', cursor: 'pointer', lineHeight: 1 }}>×</button>
               </div>
-              <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'auto', background: 'rgba(0,0,0,0.3)' }}>
-                <img src={previewDocModal.src} alt={previewDocModal.title} style={{ maxWidth: '100%', maxHeight: '65vh', objectFit: 'contain', borderRadius: '8px' }} />
+              <div style={{ padding: previewDocModal.isPdf ? '0' : '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', background: previewDocModal.isPdf ? '#ffffff' : 'rgba(0,0,0,0.3)', minHeight: '380px' }}>
+                {previewDocModal.isPdf ? (
+                  <iframe
+                    src={previewDocModal.src}
+                    title={previewDocModal.title}
+                    style={{ width: '100%', height: '65vh', border: 'none', display: 'block' }}
+                  />
+                ) : (
+                  <img src={previewDocModal.src} alt={previewDocModal.title} style={{ maxWidth: '100%', maxHeight: '65vh', objectFit: 'contain', borderRadius: '8px' }} />
+                )}
               </div>
-              <div style={{ padding: '0.75rem 1.5rem', borderTop: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'flex-end' }}>
-                <button onClick={() => setPreviewDocModal(null)} className="btn btn-secondary" style={{ padding: '0.4rem 1rem', fontSize: '0.85rem' }}>Close Preview</button>
+              <div style={{ padding: '0.75rem 1.5rem', borderTop: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+                {previewDocModal.isPdf ? (
+                  <a
+                    href={previewDocModal.src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary"
+                    style={{ padding: '0.45rem 1.1rem', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none' }}
+                  >
+                    ↗️ Open Fullscreen / Download
+                  </a>
+                ) : <span />}
+                <button onClick={() => setPreviewDocModal(null)} className="btn btn-secondary" style={{ padding: '0.45rem 1.1rem', fontSize: '0.85rem' }}>
+                  Close Preview
+                </button>
               </div>
             </div>
           </div>

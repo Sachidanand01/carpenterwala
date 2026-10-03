@@ -61,20 +61,21 @@ export default function AdminDashboardClient() {
 
   const handleZoomDoc = async ({ title, url }) => {
     if (!url) return;
+    const isPdf = typeof url === 'string' && (url.toLowerCase().endsWith('.pdf') || url.toLowerCase().includes('.pdf?'));
     if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/')) {
-      setZoomedImage({ title, url });
+      setZoomedImage({ title, url, isPdf });
       return;
     }
     try {
       const res = await fetch(`/api/docs/signed-url?path=${encodeURIComponent(url)}`);
       const data = await res.json();
       if (data?.signedUrl) {
-        setZoomedImage({ title, url: data.signedUrl });
+        setZoomedImage({ title, url: data.signedUrl, isPdf });
       } else {
-        setZoomedImage({ title, url: resolveDisplayUrl(url) });
+        setZoomedImage({ title, url: resolveDisplayUrl(url), isPdf });
       }
     } catch {
-      setZoomedImage({ title, url: resolveDisplayUrl(url) });
+      setZoomedImage({ title, url: resolveDisplayUrl(url), isPdf });
     }
   };
 
@@ -1627,10 +1628,25 @@ export default function AdminDashboardClient() {
                     <div style={{ flex: 1, minWidth: '160px' }}>
                       <div style={{ fontSize: '0.75rem', opacity: 0.6, marginBottom: '0.35rem', fontWeight: 600 }}>Front Side Scan</div>
                       {selectedPro.aadhaar_front ? (
-                        <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'var(--card-bg)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                             onClick={() => handleZoomDoc({ title: 'Aadhaar Card - Front Side', url: selectedPro.aadhaar_front })}>
-                          <img src={resolveDisplayUrl(selectedPro.aadhaar_front)} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px', transition: 'transform 0.2s' }} />
-                        </div>
+                        (() => {
+                          const isPdf = typeof selectedPro.aadhaar_front === 'string' && selectedPro.aadhaar_front.toLowerCase().includes('.pdf');
+                          return (
+                            <div style={{ border: isPdf ? '1px solid rgba(239,68,68,0.35)' : '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: isPdf ? 'linear-gradient(135deg, rgba(239,68,68,0.08), rgba(220,38,38,0.18))' : 'var(--card-bg)', cursor: 'pointer', overflow: 'hidden', height: '120px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}
+                                 onClick={() => handleZoomDoc({ title: 'Aadhaar Card - Front Side', url: selectedPro.aadhaar_front })}>
+                              {isPdf ? (
+                                <>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                                    <span style={{ fontSize: '1.8rem' }}>📄</span>
+                                    <span style={{ fontSize: '0.68rem', fontWeight: 800, background: '#ef4444', color: 'white', padding: '0.12rem 0.35rem', borderRadius: '4px' }}>PDF</span>
+                                  </div>
+                                  <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--foreground)' }}>Inspect PDF</span>
+                                </>
+                              ) : (
+                                <img src={resolveDisplayUrl(selectedPro.aadhaar_front)} alt="Aadhaar Front" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
+                              )}
+                            </div>
+                          );
+                        })()
                       ) : (
                         <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#b91c1c', fontSize: '0.78rem' }}>
                           ⚠️ File Missing
@@ -1641,10 +1657,25 @@ export default function AdminDashboardClient() {
                     <div style={{ flex: 1, minWidth: '160px' }}>
                       <div style={{ fontSize: '0.75rem', opacity: 0.6, marginBottom: '0.35rem', fontWeight: 600 }}>Back Side (Address) Scan</div>
                       {selectedPro.aadhaar_back ? (
-                        <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'var(--card-bg)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                             onClick={() => handleZoomDoc({ title: 'Aadhaar Card - Back Side', url: selectedPro.aadhaar_back })}>
-                          <img src={resolveDisplayUrl(selectedPro.aadhaar_back)} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
-                        </div>
+                        (() => {
+                          const isPdf = typeof selectedPro.aadhaar_back === 'string' && selectedPro.aadhaar_back.toLowerCase().includes('.pdf');
+                          return (
+                            <div style={{ border: isPdf ? '1px solid rgba(239,68,68,0.35)' : '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: isPdf ? 'linear-gradient(135deg, rgba(239,68,68,0.08), rgba(220,38,38,0.18))' : 'var(--card-bg)', cursor: 'pointer', overflow: 'hidden', height: '120px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}
+                                 onClick={() => handleZoomDoc({ title: 'Aadhaar Card - Back Side', url: selectedPro.aadhaar_back })}>
+                              {isPdf ? (
+                                <>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                                    <span style={{ fontSize: '1.8rem' }}>📄</span>
+                                    <span style={{ fontSize: '0.68rem', fontWeight: 800, background: '#ef4444', color: 'white', padding: '0.12rem 0.35rem', borderRadius: '4px' }}>PDF</span>
+                                  </div>
+                                  <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--foreground)' }}>Inspect PDF</span>
+                                </>
+                              ) : (
+                                <img src={resolveDisplayUrl(selectedPro.aadhaar_back)} alt="Aadhaar Back" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
+                              )}
+                            </div>
+                          );
+                        })()
                       ) : (
                         <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#b91c1c', fontSize: '0.78rem' }}>
                           ⚠️ File Missing
@@ -1661,10 +1692,25 @@ export default function AdminDashboardClient() {
                   <div style={{ flex: 1, minWidth: '180px' }}>
                     <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.75rem' }}>💳 PAN Card (Tax Identity)</h4>
                     {selectedPro.pan_front ? (
-                      <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'var(--card-bg)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                           onClick={() => handleZoomDoc({ title: 'PAN Card - Front', url: selectedPro.pan_front })}>
-                        <img src={resolveDisplayUrl(selectedPro.pan_front)} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
-                      </div>
+                      (() => {
+                        const isPdf = typeof selectedPro.pan_front === 'string' && selectedPro.pan_front.toLowerCase().includes('.pdf');
+                        return (
+                          <div style={{ border: isPdf ? '1px solid rgba(239,68,68,0.35)' : '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: isPdf ? 'linear-gradient(135deg, rgba(239,68,68,0.08), rgba(220,38,38,0.18))' : 'var(--card-bg)', cursor: 'pointer', overflow: 'hidden', height: '120px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}
+                               onClick={() => handleZoomDoc({ title: 'PAN Card - Front', url: selectedPro.pan_front })}>
+                            {isPdf ? (
+                              <>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                                  <span style={{ fontSize: '1.8rem' }}>📄</span>
+                                  <span style={{ fontSize: '0.68rem', fontWeight: 800, background: '#ef4444', color: 'white', padding: '0.12rem 0.35rem', borderRadius: '4px' }}>PDF</span>
+                                </div>
+                                <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--foreground)' }}>Inspect PDF</span>
+                              </>
+                            ) : (
+                              <img src={resolveDisplayUrl(selectedPro.pan_front)} alt="PAN Front" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
+                            )}
+                          </div>
+                        );
+                      })()
                     ) : (
                       <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#b91c1c', fontSize: '0.78rem' }}>
                         ⚠️ File Missing
@@ -1676,10 +1722,25 @@ export default function AdminDashboardClient() {
                   <div style={{ flex: 1, minWidth: '180px' }}>
                     <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.75rem' }}>🪪 Voter ID / License</h4>
                     {selectedPro.voter_driving_front ? (
-                      <div style={{ border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: 'var(--card-bg)', cursor: 'zoom-in', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                           onClick={() => handleZoomDoc({ title: 'Voter ID / License Scan', url: selectedPro.voter_driving_front })}>
-                        <img src={resolveDisplayUrl(selectedPro.voter_driving_front)} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
-                      </div>
+                      (() => {
+                        const isPdf = typeof selectedPro.voter_driving_front === 'string' && selectedPro.voter_driving_front.toLowerCase().includes('.pdf');
+                        return (
+                          <div style={{ border: isPdf ? '1px solid rgba(239,68,68,0.35)' : '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.25rem', background: isPdf ? 'linear-gradient(135deg, rgba(239,68,68,0.08), rgba(220,38,38,0.18))' : 'var(--card-bg)', cursor: 'pointer', overflow: 'hidden', height: '120px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}
+                               onClick={() => handleZoomDoc({ title: 'Voter ID / License Scan', url: selectedPro.voter_driving_front })}>
+                            {isPdf ? (
+                              <>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                                  <span style={{ fontSize: '1.8rem' }}>📄</span>
+                                  <span style={{ fontSize: '0.68rem', fontWeight: 800, background: '#ef4444', color: 'white', padding: '0.12rem 0.35rem', borderRadius: '4px' }}>PDF</span>
+                                </div>
+                                <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--foreground)' }}>Inspect PDF</span>
+                              </>
+                            ) : (
+                              <img src={resolveDisplayUrl(selectedPro.voter_driving_front)} alt="Voter ID Front" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }} />
+                            )}
+                          </div>
+                        );
+                      })()
                     ) : (
                       <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '8px', color: '#b91c1c', fontSize: '0.78rem' }}>
                         ⚠️ File Missing
@@ -1693,28 +1754,40 @@ export default function AdminDashboardClient() {
                 <div>
                   <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.75rem' }}>👮 Police Verification Certificate (Safety Standard)</h4>
                   {selectedPro.police_verification ? (
-                    <div style={{
-                      border: '1px dashed var(--glass-border)', borderRadius: '12px', padding: '1rem',
-                      background: 'var(--card-bg)', position: 'relative'
-                    }}>
-                      <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
-                        <div style={{ fontSize: '2.2rem' }}>📄</div>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: '0.85rem', fontWeight: 700 }}>Official Certificate Scanned Image</div>
-                          <div style={{ fontSize: '0.75rem', opacity: 0.6, marginTop: '0.15rem' }}>Audit and confirm clean records check.</div>
-                          <button
-                            onClick={() => handleZoomDoc({ title: 'Police Verification Certificate', url: selectedPro.police_verification })}
-                            className="btn btn-secondary"
-                            style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', marginTop: '0.5rem', display: 'inline-flex', gap: '0.3rem' }}
-                          >
-                            🔎 View Full size Scan
-                          </button>
+                    (() => {
+                      const isPdf = typeof selectedPro.police_verification === 'string' && selectedPro.police_verification.toLowerCase().includes('.pdf');
+                      return (
+                        <div style={{
+                          border: '1px dashed var(--glass-border)', borderRadius: '12px', padding: '1rem',
+                          background: 'var(--card-bg)', position: 'relative'
+                        }}>
+                          <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+                            <div style={{ fontSize: '2.2rem' }}>{isPdf ? '📄' : '🛡️'}</div>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                <span>Official Certificate {isPdf ? 'PDF Document' : 'Scanned Image'}</span>
+                                {isPdf && <span style={{ fontSize: '0.65rem', background: '#ef4444', color: 'white', padding: '0.1rem 0.35rem', borderRadius: '3px', fontWeight: 800 }}>PDF</span>}
+                              </div>
+                              <div style={{ fontSize: '0.75rem', opacity: 0.6, marginTop: '0.15rem' }}>Audit and confirm clean records check.</div>
+                              <button
+                                onClick={() => handleZoomDoc({ title: 'Police Verification Certificate', url: selectedPro.police_verification })}
+                                className="btn btn-secondary"
+                                style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', marginTop: '0.5rem', display: 'inline-flex', gap: '0.3rem' }}
+                              >
+                                🔎 {isPdf ? 'Inspect PDF Document' : 'View Full size Scan'}
+                              </button>
+                            </div>
+                            <div style={{ width: '80px', height: '60px', borderRadius: '6px', overflow: 'hidden', border: isPdf ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', background: isPdf ? 'rgba(239,68,68,0.08)' : 'transparent' }}>
+                              {isPdf ? (
+                                <span style={{ fontSize: '1.6rem' }}>📄</span>
+                              ) : (
+                                <img src={resolveDisplayUrl(selectedPro.police_verification)} alt="Police Verification" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              )}
+                            </div>
+                          </div>
                         </div>
-                        <div style={{ width: '80px', height: '60px', borderRadius: '6px', overflow: 'hidden', border: '1px solid var(--glass-border)' }}>
-                          <img src={resolveDisplayUrl(selectedPro.police_verification)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                        </div>
-                      </div>
-                    </div>
+                      );
+                    })()
                   ) : (
                     <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'rgba(239,68,68,0.06)', border: '1px dashed rgba(239,68,68,0.25)', borderRadius: '12px', color: '#b91c1c' }}>
                       <span style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>⚠️</span>
@@ -1783,8 +1856,22 @@ export default function AdminDashboardClient() {
           display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
           zIndex: 2000, padding: '1rem'
         }} onClick={() => setZoomedImage(null)}>
-          <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center', color: 'white' }}>
-            <span style={{ fontWeight: 600, fontSize: '0.95rem', opacity: 0.8 }}>{zoomedImage.title}</span>
+          <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center', color: 'white' }} onClick={e => e.stopPropagation()}>
+            <span style={{ fontWeight: 600, fontSize: '0.95rem', opacity: 0.9 }}>
+              {zoomedImage.isPdf ? '📄 ' : '🔍 '}
+              {zoomedImage.title}
+            </span>
+            {zoomedImage.isPdf && (
+              <a
+                href={zoomedImage.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary"
+                style={{ padding: '0.35rem 0.8rem', fontSize: '0.8rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}
+              >
+                ↗️ Open in New Tab
+              </a>
+            )}
             <button
               style={{
                 background: 'rgba(255,255,255,0.15)', border: 'none', color: 'white',
@@ -1797,12 +1884,20 @@ export default function AdminDashboardClient() {
             </button>
           </div>
           
-          <div style={{ maxWidth: '90%', maxHeight: '85%', overflow: 'hidden', borderRadius: '8px', boxShadow: '0 10px 40px rgba(0,0,0,0.5)', background: '#1e293b', padding: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          <div style={{ width: zoomedImage.isPdf ? '90%' : 'auto', maxWidth: '950px', maxHeight: '85%', overflow: 'hidden', borderRadius: '8px', boxShadow: '0 10px 40px rgba(0,0,0,0.5)', background: zoomedImage.isPdf ? '#ffffff' : '#1e293b', padding: zoomedImage.isPdf ? '0' : '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                onClick={e => e.stopPropagation()}>
-            <img src={zoomedImage.url} style={{ maxWidth: '100%', maxHeight: '80vh', objectFit: 'contain', borderRadius: '4px' }} />
+            {zoomedImage.isPdf ? (
+              <iframe
+                src={zoomedImage.url}
+                title={zoomedImage.title}
+                style={{ width: '100%', height: '78vh', border: 'none', display: 'block' }}
+              />
+            ) : (
+              <img src={zoomedImage.url} alt={zoomedImage.title} style={{ maxWidth: '100%', maxHeight: '80vh', objectFit: 'contain', borderRadius: '4px' }} />
+            )}
           </div>
-          <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem', marginTop: '1.5rem' }}>
-            Click anywhere outside the image to return to audit panel
+          <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem', marginTop: '1.25rem' }}>
+            Click anywhere outside the {zoomedImage.isPdf ? 'document' : 'image'} to return to audit panel
           </div>
         </div>
       )}

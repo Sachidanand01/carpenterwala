@@ -11,7 +11,13 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Upload category is required' }, { status: 400 });
     }
 
-    const extension = fileType.includes('png') ? 'png' : fileType.includes('jpeg') || fileType.includes('jpg') ? 'jpg' : 'webp';
+    const extension = fileType.includes('pdf')
+      ? 'pdf'
+      : fileType.includes('png')
+        ? 'png'
+        : fileType.includes('jpeg') || fileType.includes('jpg')
+          ? 'jpg'
+          : 'webp';
     const { bucket, path, isPublic } = generateStoragePath(category, ownerId, extension);
 
     // Create signed upload URL for secure direct client-to-storage transfer
