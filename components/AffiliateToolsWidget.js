@@ -102,28 +102,6 @@ const BLINKIT_CATALOG = {
 export default function AffiliateToolsWidget({ category = 'plumbing' }) {
   const tools = BLINKIT_CATALOG[category] || BLINKIT_CATALOG.plumbing;
 
-  const productSchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": `Recommended DIY Tools on Blinkit for ${category.toUpperCase()}`,
-    "itemListElement": tools.map((tool, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "item": {
-        "@type": "Product",
-        "name": tool.name,
-        "description": tool.tag,
-        "offers": {
-          "@type": "Offer",
-          "price": tool.price.replace(/[^0-9]/g, ''),
-          "priceCurrency": "INR",
-          "availability": "https://schema.org/InStock",
-          "url": tool.blinkitUrl
-        }
-      }
-    }))
-  };
-
   return (
     <div style={{
       margin: '2.5rem 0',
@@ -132,11 +110,6 @@ export default function AffiliateToolsWidget({ category = 'plumbing' }) {
       border: '1px solid rgba(255, 255, 255, 0.1)',
       borderRadius: '16px'
     }} className="glass">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
-      />
-      
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
         <div>
           <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
