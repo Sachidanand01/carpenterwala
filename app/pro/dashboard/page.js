@@ -59,6 +59,70 @@ function Stars({ rating }) {
   );
 }
 
+function UniversalPreviewModal({ modal, onClose }) {
+  if (!modal) return null;
+  const isPdf = Boolean(
+    modal.isPdf ||
+    (typeof modal.src === 'string' && (
+      modal.src.toLowerCase().includes('.pdf') ||
+      modal.src.startsWith('data:application/pdf') ||
+      modal.src.includes('/pdf')
+    ))
+  );
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 300,
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', backdropFilter: 'blur(5px)'
+    }}>
+      <div className="glass animate-fade-in" style={{
+        width: '100%', maxWidth: '850px', borderRadius: '16px', overflow: 'hidden',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.7)', maxHeight: '92vh', display: 'flex', flexDirection: 'column'
+      }}>
+        <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span>{isPdf ? '📄' : '🔍'}</span>
+            <span>{modal.title}</span>
+            {isPdf && (
+              <span style={{ fontSize: '0.7rem', background: '#ef4444', color: 'white', padding: '0.15rem 0.45rem', borderRadius: '4px', fontWeight: 800 }}>
+                PDF
+              </span>
+            )}
+          </h3>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'var(--foreground)', fontSize: '1.5rem', cursor: 'pointer', lineHeight: 1 }}>×</button>
+        </div>
+        <div style={{ padding: isPdf ? '0' : '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', background: isPdf ? '#ffffff' : 'rgba(0,0,0,0.3)', minHeight: '380px' }}>
+          {isPdf ? (
+            <iframe
+              src={modal.src}
+              title={modal.title}
+              style={{ width: '100%', height: '65vh', border: 'none', display: 'block' }}
+            />
+          ) : (
+            <img src={modal.src} alt={modal.title} style={{ maxWidth: '100%', maxHeight: '65vh', objectFit: 'contain', borderRadius: '8px' }} />
+          )}
+        </div>
+        <div style={{ padding: '0.75rem 1.5rem', borderTop: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+          {isPdf ? (
+            <a
+              href={modal.src}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary"
+              style={{ padding: '0.45rem 1.1rem', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none' }}
+            >
+              ↗️ Open Fullscreen / Download
+            </a>
+          ) : <span />}
+          <button onClick={onClose} className="btn btn-secondary" style={{ padding: '0.45rem 1.1rem', fontSize: '0.85rem' }}>
+            Close Preview
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function DocUploadSlot({
   id,
   icon,
@@ -903,6 +967,44 @@ export default function ProDashboard() {
     } catch {
       setPreviewDocModal({ title, src: resolveDisplayUrl(src, ''), isPdf: detectedPdf });
     }
+  };
+
+  const handleDeleteDoc = (field) => {
+    const isFrontField = typeof field === 'string' && field.endsWith('_front');
+    const linkedBackKey = isFrontField ? field.replace('_front', '_back') : null;
+
+    // Check if back was linked to this front
+    const isLinkedBack = Boolean(
+      isFrontField && linkedBackKey && (
+        (onboardForm[field] && onboardForm[field] === onboardForm[linkedBackKey]) ||
+        (docPreviews[field] && docPreviews[field] === docPreviews[linkedBackKey])
+      )
+    );
+
+    setOnboardForm(prev => {
+      const next = { ...prev, [field]: '' };
+      if (isLinkedBack && linkedBackKey) {
+        next[linkedBackKey] = '';
+      }
+      return next;
+    });
+
+    setDocPreviews(prev => {
+      const next = { ...prev, [field]: '' };
+      if (isLinkedBack && linkedBackKey) {
+        next[linkedBackKey] = '';
+      }
+      return next;
+    });
+
+    setDocValidations(prev => {
+      const next = { ...prev };
+      delete next[field];
+      if (isLinkedBack && linkedBackKey) {
+        delete next[linkedBackKey];
+      }
+      return next;
+    });
   };
 
   useEffect(() => {
@@ -1853,7 +1955,7 @@ export default function ProDashboard() {
                       uploadingField={uploadingField}
                       validation={docValidations.aadhaar_front}
                       onFileChange={handleFileChange}
-                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '', ...(prev.aadhaar_back === prev[f] ? { aadhaar_back: '' } : {}) }))}
+                      onDelete={handleDeleteDoc}
                       onPreview={handleOpenPreview}
                       hasLinkedBack={Boolean(onboardForm.aadhaar_front && onboardForm.aadhaar_front === onboardForm.aadhaar_back)}
                     />
@@ -1868,7 +1970,7 @@ export default function ProDashboard() {
                       uploadingField={uploadingField}
                       validation={docValidations.aadhaar_back}
                       onFileChange={handleFileChange}
-                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
+                      onDelete={handleDeleteDoc}
                       onPreview={handleOpenPreview}
                       hasLinkedBack={Boolean(onboardForm.aadhaar_front && onboardForm.aadhaar_front === onboardForm.aadhaar_back)}
                     />
@@ -1890,7 +1992,7 @@ export default function ProDashboard() {
                       uploadingField={uploadingField}
                       validation={docValidations.pan_front}
                       onFileChange={handleFileChange}
-                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '', ...(prev.pan_back === prev[f] ? { pan_back: '' } : {}) }))}
+                      onDelete={handleDeleteDoc}
                       onPreview={handleOpenPreview}
                       hasLinkedBack={Boolean(onboardForm.pan_front && onboardForm.pan_front === onboardForm.pan_back)}
                     />
@@ -1906,7 +2008,7 @@ export default function ProDashboard() {
                       uploadingField={uploadingField}
                       validation={docValidations.pan_back}
                       onFileChange={handleFileChange}
-                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
+                      onDelete={handleDeleteDoc}
                       onPreview={handleOpenPreview}
                       hasLinkedBack={Boolean(onboardForm.pan_front && onboardForm.pan_front === onboardForm.pan_back)}
                     />
@@ -1988,7 +2090,7 @@ export default function ProDashboard() {
                       uploadingField={uploadingField}
                       validation={docValidations.voter_driving_front}
                       onFileChange={handleFileChange}
-                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '', ...(prev.voter_driving_back === prev[f] ? { voter_driving_back: '' } : {}) }))}
+                      onDelete={handleDeleteDoc}
                       onPreview={handleOpenPreview}
                       hasLinkedBack={Boolean(onboardForm.voter_driving_front && onboardForm.voter_driving_front === onboardForm.voter_driving_back)}
                     />
@@ -2004,7 +2106,7 @@ export default function ProDashboard() {
                       uploadingField={uploadingField}
                       validation={docValidations.voter_driving_back}
                       onFileChange={handleFileChange}
-                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
+                      onDelete={handleDeleteDoc}
                       onPreview={handleOpenPreview}
                       hasLinkedBack={Boolean(onboardForm.voter_driving_front && onboardForm.voter_driving_front === onboardForm.voter_driving_back)}
                     />
@@ -2026,7 +2128,7 @@ export default function ProDashboard() {
                       uploadingField={uploadingField}
                       validation={docValidations.police_verification}
                       onFileChange={handleFileChange}
-                      onDelete={(f) => setOnboardForm(prev => ({ ...prev, [f]: '' }))}
+                      onDelete={handleDeleteDoc}
                       onPreview={handleOpenPreview}
                     />
                   </div>
@@ -2127,29 +2229,8 @@ export default function ProDashboard() {
           </div>
         </div>
 
-        {/* Full Screen Document Preview Modal */}
-        {previewDocModal && (
-          <div style={{
-            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 300,
-            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', backdropFilter: 'blur(5px)'
-          }}>
-            <div className="glass animate-fade-in" style={{
-              width: '100%', maxWidth: '720px', borderRadius: '16px', overflow: 'hidden',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.7)', maxHeight: '90vh', display: 'flex', flexDirection: 'column'
-            }}>
-              <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={{ fontSize: '1rem', fontWeight: 700 }}>🔍 {previewDocModal.title}</h3>
-                <button onClick={() => setPreviewDocModal(null)} style={{ background: 'none', border: 'none', color: 'var(--foreground)', fontSize: '1.5rem', cursor: 'pointer', lineHeight: 1 }}>×</button>
-              </div>
-              <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'auto', background: 'rgba(0,0,0,0.3)' }}>
-                <img src={previewDocModal.src} alt={previewDocModal.title} style={{ maxWidth: '100%', maxHeight: '65vh', objectFit: 'contain', borderRadius: '8px' }} />
-              </div>
-              <div style={{ padding: '0.75rem 1.5rem', borderTop: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'flex-end' }}>
-                <button onClick={() => setPreviewDocModal(null)} className="btn btn-secondary" style={{ padding: '0.4rem 1rem', fontSize: '0.85rem' }}>Close Preview</button>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Universal Full Screen Document / Portfolio Preview Modal */}
+        <UniversalPreviewModal modal={previewDocModal} onClose={() => setPreviewDocModal(null)} />
 
       </div>
     );
@@ -3055,57 +3136,7 @@ export default function ProDashboard() {
         )}
 
         {/* Universal Full Screen Document / Portfolio Preview Modal */}
-        {previewDocModal && (
-          <div style={{
-            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 300,
-            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', backdropFilter: 'blur(5px)'
-          }}>
-            <div className="glass animate-fade-in" style={{
-              width: '100%', maxWidth: '850px', borderRadius: '16px', overflow: 'hidden',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.7)', maxHeight: '92vh', display: 'flex', flexDirection: 'column'
-            }}>
-              <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={{ fontSize: '1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span>{previewDocModal.isPdf ? '📄' : '🔍'}</span>
-                  <span>{previewDocModal.title}</span>
-                  {previewDocModal.isPdf && (
-                    <span style={{ fontSize: '0.7rem', background: '#ef4444', color: 'white', padding: '0.15rem 0.45rem', borderRadius: '4px', fontWeight: 800 }}>
-                      PDF
-                    </span>
-                  )}
-                </h3>
-                <button onClick={() => setPreviewDocModal(null)} style={{ background: 'none', border: 'none', color: 'var(--foreground)', fontSize: '1.5rem', cursor: 'pointer', lineHeight: 1 }}>×</button>
-              </div>
-              <div style={{ padding: previewDocModal.isPdf ? '0' : '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', background: previewDocModal.isPdf ? '#ffffff' : 'rgba(0,0,0,0.3)', minHeight: '380px' }}>
-                {previewDocModal.isPdf ? (
-                  <iframe
-                    src={previewDocModal.src}
-                    title={previewDocModal.title}
-                    style={{ width: '100%', height: '65vh', border: 'none', display: 'block' }}
-                  />
-                ) : (
-                  <img src={previewDocModal.src} alt={previewDocModal.title} style={{ maxWidth: '100%', maxHeight: '65vh', objectFit: 'contain', borderRadius: '8px' }} />
-                )}
-              </div>
-              <div style={{ padding: '0.75rem 1.5rem', borderTop: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
-                {previewDocModal.isPdf ? (
-                  <a
-                    href={previewDocModal.src}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-primary"
-                    style={{ padding: '0.45rem 1.1rem', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none' }}
-                  >
-                    ↗️ Open Fullscreen / Download
-                  </a>
-                ) : <span />}
-                <button onClick={() => setPreviewDocModal(null)} className="btn btn-secondary" style={{ padding: '0.45rem 1.1rem', fontSize: '0.85rem' }}>
-                  Close Preview
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        <UniversalPreviewModal modal={previewDocModal} onClose={() => setPreviewDocModal(null)} />
 
       </div>
     </div>
