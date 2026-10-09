@@ -82,5 +82,7 @@ export async function generateMetadata({ searchParams }) {
 export default async function Page({ searchParams }) {
   const resolvedParams = await searchParams;
   const lang = resolvedParams.lang;
-  return <ProLogin lang={lang} />;
+  const session = resolvedParams.session;
+  const mode = resolvedParams.mode;
+  return <ProLogin lang={lang} session={session} mode={mode} />;
 }

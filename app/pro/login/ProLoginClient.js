@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { translations } from './translations';
 import { supabase } from '@/lib/supabase';
 
-export default function ProLogin({ lang }) {
+export default function ProLogin({ lang, session, mode }) {
   const [currentLang, setCurrentLang] = useState(lang || 'en');
-  const [isRegister, setIsRegister] = useState(false); // false = signin, true = register
+  const [isRegister, setIsRegister] = useState(mode === 'register' || !!session); // false = signin, true = register
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState(1); // 1 = input details, 2 = otp verify, 3 = select profile (signin only)
@@ -96,6 +96,39 @@ export default function ProLogin({ lang }) {
       if (localStorage.getItem('pro_id')) router.push('/pro/dashboard');
     }
   }, [router]);
+
+  // Handle AI Onboarding Session & Deep Link Pre-fill
+  useEffect(() => {
+    if (mode === 'register') {
+      setIsRegister(true);
+    }
+
+    if (session) {
+      setIsRegister(true);
+      fetch(`/api/pro/ai-session?session=${encodeURIComponent(session)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.data) {
+            if (data.data.name) setRegName(data.data.name);
+            if (data.data.phone) setRegPhone(data.data.phone);
+            if (data.data.location) setRegLocation(data.data.location);
+            if (data.data.trade) {
+              const standardTrades = ['Carpenter', 'Painter', 'Plumber', 'Electrician'];
+              const matched = standardTrades.find(t => t.toLowerCase() === data.data.trade.toLowerCase());
+              if (matched) {
+                setRegTrade(matched);
+              } else {
+                setRegTrade('Other');
+                setCustomTrade(data.data.trade);
+              }
+            }
+          }
+        })
+        .catch(err => {
+          console.error('[AI Onboarding] Failed to load session pre-fill:', err);
+        });
+    }
+  }, [session, mode]);
 
   const t = translations[currentLang] || translations.en;
   const offer = t.offer || translations.en.offer;

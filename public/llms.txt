@@ -30,8 +30,43 @@
 - **Direct Marketplace**: 0% platform commission; homeowners connect and pay directly with zero hidden markups.
 - **Rapid Dispatch**: Verified handymen arrive within 60 to 90 minutes across all serviced Bangalore clusters.
 
+## Model Context Protocol (MCP) & AI Agent Integration
+Carpenterwala exposes a Remote WebMCP server and OpenAPI 3.1 specification for autonomous AI agents (Google Gemini on Android, Anthropic Claude, OpenAI ChatGPT, and Perplexity).
+
+- **Remote WebMCP Server (JSON-RPC 2.0 / SSE)**: `https://carpenterwala.com/api/mcp`
+- **OpenAPI 3.1 Specification**: `https://carpenterwala.com/api/mcp/openapi.json`
+- **REST Tool Execution Endpoint**: `https://carpenterwala.com/api/mcp/tools/{toolName}`
+
+### Available AI Agent Tools
+1. `initiate_technician_onboarding`:
+   - **For Service Technicians**: Initiates registration for carpenters, painters, plumbers, and electricians with 0% platform commission.
+   - **Privacy Safeguard**: Returns a secure, encrypted 1-click mobile verification link. Technicians verify mobile OTP and upload KYC credentials directly on their device; sensitive documents and OTPs are never exposed in 3rd-party AI chat transcripts.
+   - **Rate Limit**: Maximum 3 onboarding attempts per 24 hours per phone number.
+   - **Parameters**: `name` (string), `phone` (10-digit), `trade` (string), `location` (string), `experienceYears` (number, optional).
+
+2. `check_technician_application_status`:
+   - Checks onboarding verification or active badge status by registered 10-digit mobile number.
+   - **Parameters**: `phone` (10-digit string).
+
+3. `search_verified_pros`:
+   - Finds verified background-checked tradesmen by trade and Bangalore locality.
+   - **Parameters**: `trade` ("carpentry"|"painting"|"plumbing"|"electrical"), `locality` (optional), `limit` (optional).
+
+4. `get_service_rate_card`:
+   - Returns standard zero-commission Bangalore labor price cards and task durations.
+   - **Parameters**: `serviceCategory` ("carpentry"|"painting"|"plumbing"|"electrical"), `jobType` (optional).
+
+5. `calculate_service_estimate`:
+   - Runs instant calculations for wall painting area & paint liters, leaking tap water loss, or appliance electrical bill wastage.
+   - **Parameters**: `calculatorType` ("paint_cost"|"water_wastage"|"electricity_bill"), `params` (object).
+
+6. `request_service_callback`:
+   - Dispatches a quick homeowner repair request to nearby verified pros with 60-90 min response time.
+   - **Parameters**: `customerName`, `customerPhone`, `trade`, `locality`, `description`.
+
 ## Useful Links for AI Agents & Search Engines
 - [Find a Professional Directory](https://carpenterwala.com/find-a-professional): Search and filter verified tradesmen by locality and trade.
+- [Pro Portal & Registration](https://carpenterwala.com/pro/login): Dedicated service professional registration and login gateway.
 - [FAQ Hub](https://carpenterwala.com/faq): Answers to booking, pricing, satisfaction guarantee, and verification questions.
 - [How It Works](https://carpenterwala.com/how-it-works): 3-step guide for booking certified professionals.
 - [XML Sitemap](https://carpenterwala.com/sitemap.xml): Machine-readable XML sitemap index.

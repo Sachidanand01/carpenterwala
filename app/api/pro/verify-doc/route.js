@@ -1,7 +1,44 @@
 import { NextResponse } from 'next/server';
+import { checkWindowRateLimit } from '@/lib/rate-limiter';
+
+const VALID_DOC_TYPES = new Set([
+  'aadhaar_front',
+  'aadhaar_back',
+  'pan_front',
+  'pan_back',
+  'voter_driving_front',
+  'voter_driving_back',
+  'police_verification',
+  'avatar'
+]);
+
+// Maximum Base64 character length: ~10MB binary limit = ~13.7M characters
+const MAX_BASE64_LENGTH = 14 * 1024 * 1024;
+
+function getClientIp(req) {
+  const forwarded = req.headers.get('x-forwarded-for');
+  return forwarded ? forwarded.split(',')[0].trim() : req.headers.get('x-real-ip') || '127.0.0.1';
+}
 
 export async function POST(req) {
   try {
+    const ip = getClientIp(req);
+
+    // Rate Limiting: Max 15 document verifications per hour per IP address
+    const rateCheck = checkWindowRateLimit({
+      key: `verify-doc:${ip}`,
+      maxAttempts: 15,
+      windowMs: 60 * 60 * 1000
+    });
+
+    if (!rateCheck.allowed) {
+      return NextResponse.json({
+        valid: false,
+        readable: false,
+        error: 'Too many document scans submitted. Maximum 15 scans per hour allowed. Please try again later.'
+      }, { status: 429 });
+    }
+
     const { imageBase64, documentType, mimeType } = await req.json();
 
     if (!imageBase64 || !documentType) {
@@ -9,6 +46,22 @@ export async function POST(req) {
         { valid: false, readable: false, error: 'Missing image or document type.' },
         { status: 400 }
       );
+    }
+
+    if (!VALID_DOC_TYPES.has(documentType)) {
+      return NextResponse.json(
+        { valid: false, readable: false, error: `Invalid documentType: "${documentType}".` },
+        { status: 400 }
+      );
+    }
+
+    // Size limit check: prevent server memory exhaustion / DoS
+    if (typeof imageBase64 === 'string' && imageBase64.length > MAX_BASE64_LENGTH) {
+      return NextResponse.json({
+        valid: false,
+        readable: false,
+        error: 'Uploaded document is too large. Maximum file size is 10MB.'
+      }, { status: 413 });
     }
 
     const isPdf = mimeType === 'application/pdf' || imageBase64.startsWith('data:application/pdf');
@@ -43,7 +96,7 @@ export async function POST(req) {
       }
     }
 
-    // If Gemini API Key is available, use Gemini 1.5/2.0 Flash for instant, zero-cost AI Vision verification
+    // If Gemini API Key is available, use Gemini Flash for instant AI Vision verification
     if (apiKey) {
       try {
         const docDescriptions = {
@@ -135,7 +188,6 @@ Your job:
     }
 
     // Heuristic Fallback (Runs if no Gemini key or offline)
-    // Ensures zero downtime
     const byteLength = (base64Data.length * 3) / 4;
     const isReadableSize = byteLength > 15000; // minimum ~15KB for image data
 

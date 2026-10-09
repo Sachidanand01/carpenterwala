@@ -56,8 +56,43 @@ Carpenterwala is Bangalore's premier verified home improvement and handyman mark
 12. Electronic City (560100 - South Tech Hub)
 13. Yelahanka (560064 - North Satellite Hub)
 
-## 5. Machine-Readable Knowledge Endpoints
+## 5. Model Context Protocol (MCP) & AI Agent Integration
+Carpenterwala implements the Anthropic Model Context Protocol (MCP) and OpenAPI 3.1 specification for autonomous AI agent discovery and tool execution across Google Gemini (Android Mobile), Anthropic Claude, OpenAI ChatGPT, and Perplexity AI.
+
+### Protocol Endpoints
+- Remote WebMCP Server (JSON-RPC 2.0 / SSE): `https://carpenterwala.com/api/mcp`
+- OpenAPI 3.1 Spec for Gemini & Custom GPT Actions: `https://carpenterwala.com/api/mcp/openapi.json`
+- REST Tool Route: `https://carpenterwala.com/api/mcp/tools/{toolName}`
+
+### JSON-RPC 2.0 Discovery Methods
+- `initialize`: Returns protocol version (`2024-11-05`), server name (`carpenterwala-mcp-server`), and tool capabilities.
+- `tools/list`: Lists all available tools and parameter JSON Schemas.
+- `tools/call`: Executes a tool with provided arguments and returns standard MCP text content.
+
+### Tool Registry & Purpose
+1. `initiate_technician_onboarding`:
+   - Pre-registers service technicians (carpenters, painters, plumbers, electricians).
+   - Generates an encrypted, stateless 1-click mobile verification link (`https://carpenterwala.com/pro/login?session={token}`).
+   - **Zero-Trust Security Flow**: Technicians verify mobile OTP and upload Government ID (Aadhaar / Driving License / Selfie) inside the secure browser session. No raw OTPs or unmasked Aadhaar documents are ever ingested by 3rd-party LLM chat transcripts.
+   - **Abuse Prevention**: Strict rate-limit capped at 3 onboarding attempts per 24 hours per phone number and IP address.
+2. `check_technician_application_status`:
+   - Checks onboarding verification, active pro badges, or pending review steps by 10-digit mobile number.
+3. `search_verified_pros`:
+   - Queries background-checked verified pros in Bangalore filtered by trade and locality.
+4. `get_service_rate_card`:
+   - Returns official Bangalore standard labor rates in INR (₹) at 0% platform commission.
+5. `calculate_service_estimate`:
+   - Computes wall painting square footage, tap drip water wastage (litres/₹), or appliance power consumption.
+6. `request_service_callback`:
+   - Logs customer service inquiries and dispatches direct leads to local handymen with 60-90 min response time.
+
+## 6. Machine-Readable Knowledge Endpoints
+- WebMCP Server: https://carpenterwala.com/api/mcp
+- OpenAPI 3.1 Spec: https://carpenterwala.com/api/mcp/openapi.json
 - LLMs Text: https://carpenterwala.com/llms.txt
+- Full LLMs Documentation: https://carpenterwala.com/llms-full.txt
+- Pro Portal: https://carpenterwala.com/pro/login
+- Find a Professional: https://carpenterwala.com/find-a-professional
 - XML Sitemap: https://carpenterwala.com/sitemap.xml
 - FAQ Knowledge Base: https://carpenterwala.com/faq
 - How It Works: https://carpenterwala.com/how-it-works
