@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { translations } from './translations';
-import AdSenseContainer from '@/components/AdSenseContainer';
 import { supabase } from '@/lib/supabase';
 
 export default function ProLogin({ lang }) {
@@ -99,6 +98,7 @@ export default function ProLogin({ lang }) {
   }, [router]);
 
   const t = translations[currentLang] || translations.en;
+  const offer = t.offer || translations.en.offer;
 
   // Handle Login OTP Send
   const handleSendOtp = async (e) => {
@@ -334,47 +334,428 @@ export default function ProLogin({ lang }) {
   return (
     <div className="container flex items-center justify-center" style={{ minHeight: 'calc(100vh - var(--navbar-height))', padding: '2rem 1rem' }}>
       <style dangerouslySetInnerHTML={{__html: `
-        .login-wrapper {
+        @keyframes subtlePulse {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.15); opacity: 0.75; }
+        }
+        .pro-split-container {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;
-          gap: 2rem;
+          gap: 1.75rem;
           width: 100%;
-          max-width: 1200px;
+          max-width: 520px;
+          margin: 0 auto;
         }
-        .ads-sidebar {
+        .pro-showcase-sidebar {
           display: none;
           flex-direction: column;
-          gap: 1.5rem;
-          width: 300px;
+          width: 100%;
+        }
+        .mobile-offer-strip {
+          display: block;
+          width: 100%;
+          margin-bottom: 0.5rem;
+        }
+        .pro-form-column {
+          width: 100%;
+          max-width: 500px;
           flex-shrink: 0;
         }
+        .promise-card {
+          transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .promise-card:hover {
+          transform: translateY(-2px);
+          border-color: rgba(59, 130, 246, 0.4) !important;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+        }
         @media (min-width: 1024px) {
-          .login-wrapper {
-            flex-direction: row;
+          .pro-split-container {
+            display: grid;
+            grid-template-columns: 1.15fr 0.88fr;
+            gap: 3.5rem;
+            align-items: start;
+            max-width: 1180px;
           }
-          .ads-sidebar {
+          .pro-showcase-sidebar {
             display: flex;
+          }
+          .mobile-offer-strip {
+            display: none;
+          }
+          .pro-form-column {
+            position: sticky;
+            top: 2rem;
+            max-width: 480px;
           }
         }
       `}} />
-      <div className="login-wrapper">
+      <div className="pro-split-container">
 
-        {/* Left Ads Column */}
-        <div className="ads-sidebar">
-          <AdSenseContainer 
-            slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_PRO_LOGIN_1 || "1234567890"} 
-            style={{ margin: 0, minHeight: '280px', height: '280px' }}
-          />
-          <AdSenseContainer 
-            slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_PRO_LOGIN_3 || "3456789012"} 
-            style={{ margin: 0, minHeight: '280px', height: '280px' }}
-          />
+        {/* Left Column: Pro Value Proposition Showcase (Desktop & Large Screens) */}
+        <div className="pro-showcase-sidebar">
+          {/* Top Badge */}
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            padding: '0.4rem 0.95rem',
+            borderRadius: '9999px',
+            background: 'linear-gradient(90deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15))',
+            border: '1px solid rgba(16, 185, 129, 0.35)',
+            marginBottom: '0.85rem',
+            width: 'fit-content'
+          }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981', animation: 'subtlePulse 2s infinite' }}></span>
+            <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#34d399', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              {offer.badge}
+            </span>
+          </div>
+
+          {/* Bilingual Micro Tag */}
+          <div style={{ fontSize: '0.88rem', color: '#f59e0b', fontWeight: 600, marginBottom: '0.45rem', letterSpacing: '0.02em' }}>
+            {currentLang === 'hi' 
+              ? '✨ 100% Free Registration • 0% Middleman Cut • Direct Calls'
+              : '🇮🇳 100% मुफ़्त रजिस्ट्रेशन • 0% कमीशन • सीधे ग्राहक कॉल्स'}
+          </div>
+
+          {/* Main Headline */}
+          <h2 style={{
+            fontSize: 'clamp(1.75rem, 2.5vw, 2.35rem)',
+            fontWeight: 800,
+            lineHeight: 1.25,
+            marginBottom: '0.75rem',
+            color: 'var(--foreground)',
+            letterSpacing: '-0.02em'
+          }}>
+            {offer.headline_main}
+          </h2>
+
+          <p style={{
+            fontSize: '0.98rem',
+            lineHeight: 1.6,
+            color: 'var(--foreground)',
+            opacity: 0.8,
+            marginBottom: '1.5rem'
+          }}>
+            {offer.headline_sub}
+          </p>
+
+          {/* 3 Core Promises Cards */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem', marginBottom: '1.5rem' }}>
+            {/* Promise 1 */}
+            <div className="glass promise-card" style={{
+              display: 'flex',
+              gap: '1rem',
+              padding: '1.1rem',
+              borderRadius: '14px',
+              border: '1px solid rgba(59, 130, 246, 0.25)',
+              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(255,255,255,0.02))'
+            }}>
+              <div style={{
+                width: '44px',
+                height: '44px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.3rem',
+                flexShrink: 0,
+                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.35)'
+              }}>
+                📞
+              </div>
+              <div>
+                <h3 style={{ fontSize: '1.02rem', fontWeight: 700, marginBottom: '0.25rem', color: 'var(--foreground)' }}>
+                  {offer.promise1_title}
+                </h3>
+                <p style={{ fontSize: '0.88rem', opacity: 0.8, lineHeight: 1.45, margin: 0 }}>
+                  {offer.promise1_desc}
+                </p>
+              </div>
+            </div>
+
+            {/* Promise 2 */}
+            <div className="glass promise-card" style={{
+              display: 'flex',
+              gap: '1rem',
+              padding: '1.1rem',
+              borderRadius: '14px',
+              border: '1px solid rgba(16, 185, 129, 0.25)',
+              background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(255,255,255,0.02))'
+            }}>
+              <div style={{
+                width: '44px',
+                height: '44px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #10b981, #059669)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.3rem',
+                flexShrink: 0,
+                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.35)'
+              }}>
+                💰
+              </div>
+              <div>
+                <h3 style={{ fontSize: '1.02rem', fontWeight: 700, marginBottom: '0.25rem', color: 'var(--foreground)' }}>
+                  {offer.promise2_title}
+                </h3>
+                <p style={{ fontSize: '0.88rem', opacity: 0.8, lineHeight: 1.45, margin: 0 }}>
+                  {offer.promise2_desc}
+                </p>
+              </div>
+            </div>
+
+            {/* Promise 3 */}
+            <div className="glass promise-card" style={{
+              display: 'flex',
+              gap: '1rem',
+              padding: '1.1rem',
+              borderRadius: '14px',
+              border: '1px solid rgba(245, 158, 11, 0.25)',
+              background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(255,255,255,0.02))'
+            }}>
+              <div style={{
+                width: '44px',
+                height: '44px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.3rem',
+                flexShrink: 0,
+                boxShadow: '0 4px 12px rgba(245, 158, 11, 0.35)'
+              }}>
+                ⭐
+              </div>
+              <div>
+                <h3 style={{ fontSize: '1.02rem', fontWeight: 700, marginBottom: '0.25rem', color: 'var(--foreground)' }}>
+                  {offer.promise3_title}
+                </h3>
+                <p style={{ fontSize: '0.88rem', opacity: 0.8, lineHeight: 1.45, margin: 0 }}>
+                  {offer.promise3_desc}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Trust Metrics Bar */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '0.75rem',
+            padding: '0.85rem',
+            borderRadius: '14px',
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid var(--glass-border)',
+            marginBottom: '1.5rem',
+            textAlign: 'center'
+          }}>
+            <div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#34d399' }}>{offer.stat_commission}</div>
+              <div style={{ fontSize: '0.74rem', opacity: 0.75, marginTop: '0.15rem' }}>{offer.stat_commission_label}</div>
+            </div>
+            <div style={{ borderLeft: '1px solid var(--glass-border)', borderRight: '1px solid var(--glass-border)' }}>
+              <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#60a5fa' }}>{offer.stat_direct}</div>
+              <div style={{ fontSize: '0.74rem', opacity: 0.75, marginTop: '0.15rem' }}>{offer.stat_direct_label}</div>
+            </div>
+            <div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#fbbf24' }}>{offer.stat_verified}</div>
+              <div style={{ fontSize: '0.74rem', opacity: 0.75, marginTop: '0.15rem' }}>{offer.stat_verified_label}</div>
+            </div>
+          </div>
+
+          {/* Sample Pro Profile Preview Card */}
+          <div style={{
+            borderRadius: '16px',
+            padding: '1.25rem',
+            background: 'linear-gradient(145deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95))',
+            border: '1px solid rgba(255, 255, 255, 0.12)',
+            boxShadow: '0 12px 30px rgba(0, 0, 0, 0.35)',
+            position: 'relative'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '0.85rem',
+              paddingBottom: '0.65rem',
+              borderBottom: '1px solid rgba(255,255,255,0.08)'
+            }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#94a3b8' }}>
+                {offer.preview_badge}
+              </span>
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                fontSize: '0.75rem',
+                color: '#34d399',
+                background: 'rgba(16, 185, 129, 0.15)',
+                padding: '0.2rem 0.6rem',
+                borderRadius: '999px',
+                fontWeight: 600
+              }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#34d399' }}></span>
+                {offer.preview_status}
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '0.85rem' }}>
+              <div style={{
+                width: '50px',
+                height: '50px',
+                borderRadius: '14px',
+                background: 'linear-gradient(135deg, #f59e0b, #ea580c)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.5rem',
+                boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
+                flexShrink: 0
+              }}>
+                🪚
+              </div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <h4 style={{ margin: 0, fontSize: '1.02rem', fontWeight: 700, color: '#f8fafc' }}>
+                    {offer.preview_name}
+                  </h4>
+                  <span style={{ color: '#38bdf8', fontSize: '0.85rem', fontWeight: 700 }} title="Verified Pro">✓</span>
+                </div>
+                <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '0.15rem' }}>
+                  {offer.preview_trade}
+                </div>
+                <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.15rem' }}>
+                  📍 {offer.preview_loc}
+                </div>
+              </div>
+            </div>
+
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: 'rgba(0,0,0,0.25)',
+              padding: '0.55rem 0.8rem',
+              borderRadius: '10px',
+              marginBottom: '0.85rem'
+            }}>
+              <span style={{ fontSize: '0.84rem', fontWeight: 600, color: '#fbbf24' }}>
+                {offer.preview_rating}
+              </span>
+              <span style={{ fontSize: '0.78rem', color: '#a7f3d0', fontWeight: 600 }}>
+                ✓ {offer.preview_verified}
+              </span>
+            </div>
+
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              width: '100%',
+              padding: '0.65rem',
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #10b981, #059669)',
+              color: '#ffffff',
+              fontWeight: 700,
+              fontSize: '0.88rem',
+              boxShadow: '0 4px 14px rgba(16, 185, 129, 0.3)'
+            }}>
+              <span>📞</span> {offer.preview_call_btn}
+            </div>
+
+            <p style={{ margin: '0.65rem 0 0', fontSize: '0.75rem', color: '#94a3b8', textAlign: 'center', fontStyle: 'italic' }}>
+              {offer.preview_note}
+            </p>
+          </div>
+
+          {/* Guarantee footer */}
+          <div style={{ marginTop: '1.25rem', textAlign: 'center', fontSize: '0.82rem', color: '#34d399', fontWeight: 600, opacity: 0.9 }}>
+            {offer.guarantee}
+          </div>
         </div>
 
-        {/* Center Login Column */}
-        <div style={{ width: '100%', maxWidth: '480px', flexShrink: 0 }}>
+        {/* Right Form Column */}
+        <div className="pro-form-column">
+          {/* Mobile Top Offer Strip (Shown on mobile screens for instant 5-second hook) */}
+          <div className="mobile-offer-strip">
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.45rem',
+              padding: '0.55rem 0.85rem',
+              borderRadius: '12px',
+              background: 'linear-gradient(90deg, rgba(16, 185, 129, 0.18), rgba(59, 130, 246, 0.18))',
+              border: '1px solid rgba(16, 185, 129, 0.35)',
+              marginBottom: '0.75rem'
+            }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', animation: 'subtlePulse 2s infinite' }}></span>
+              <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#34d399', textAlign: 'center', letterSpacing: '0.02em' }}>
+                {offer.bilingual_badge || offer.badge}
+              </span>
+            </div>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '0.45rem',
+              marginBottom: '1rem'
+            }}>
+              <div style={{
+                background: 'rgba(16, 185, 129, 0.08)',
+                border: '1px solid rgba(16, 185, 129, 0.2)',
+                padding: '0.55rem 0.25rem',
+                borderRadius: '8px',
+                textAlign: 'center',
+                fontSize: '0.74rem',
+                fontWeight: 700,
+                color: '#34d399',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                {offer.mobile_pill_1}
+              </div>
+              <div style={{
+                background: 'rgba(59, 130, 246, 0.08)',
+                border: '1px solid rgba(59, 130, 246, 0.2)',
+                padding: '0.55rem 0.25rem',
+                borderRadius: '8px',
+                textAlign: 'center',
+                fontSize: '0.74rem',
+                fontWeight: 700,
+                color: '#60a5fa',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                {offer.mobile_pill_2}
+              </div>
+              <div style={{
+                background: 'rgba(245, 158, 11, 0.08)',
+                border: '1px solid rgba(245, 158, 11, 0.2)',
+                padding: '0.55rem 0.25rem',
+                borderRadius: '8px',
+                textAlign: 'center',
+                fontSize: '0.74rem',
+                fontWeight: 700,
+                color: '#fbbf24',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                {offer.mobile_pill_3}
+              </div>
+            </div>
+          </div>
           {/* Simulated/Real Email Banner */}
           {otpSentAlert && isSimulated && (
             <div className="glass animate-fade-in" style={{
@@ -753,18 +1134,6 @@ export default function ProLogin({ lang }) {
               <Link href="/login" style={{ color: 'var(--primary)', fontWeight: 600 }}>{t.footer_link}</Link>
             </div>
           </div>
-        </div>
-
-        {/* Right Ads Column */}
-        <div className="ads-sidebar">
-          <AdSenseContainer 
-            slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_PRO_LOGIN_2 || "2345678901"} 
-            style={{ margin: 0, minHeight: '280px', height: '280px' }}
-          />
-          <AdSenseContainer 
-            slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_PRO_LOGIN_4 || "4567890123"} 
-            style={{ margin: 0, minHeight: '280px', height: '280px' }}
-          />
         </div>
 
       </div>
