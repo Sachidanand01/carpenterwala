@@ -70,34 +70,37 @@ const RATE_CARDS = {
   ]
 };
 
+const SERVICE_OG_IMAGES = {
+  carpentry: '/images/carpentry-hero.png',
+  painting: '/images/painting-hero.png',
+  electrical: '/images/electrical-hero.jpg',
+  plumbing: '/images/plumbing-hero.jpg',
+};
+
 const SERVICES = {
   'carpentry': {
     title: 'Professional Carpenters in',
     type: 'Carpenter',
     serviceName: 'Carpentry',
     description: 'Find top-rated, background-verified carpenters near you for furniture repair, modular kitchen setup, door lock fitting, and custom woodwork.',
-    keywords: ['carpenter near me', 'custom carpentry', 'furniture repair']
   },
   'painting': {
     title: 'Expert Home Painters in',
     type: 'Painter',
     serviceName: 'Painting',
     description: 'Book verified interior and exterior painters with transparent pricing, wall putty prep, and clean post-painting finish.',
-    keywords: ['painters near me', 'house painting', 'wall painting cost']
   },
   'plumbing': {
     title: 'Certified Plumbers in',
     type: 'Plumber',
     serviceName: 'Plumbing',
     description: 'Fast local plumbers for tap leak repairs, pipe fitting, water tank cleaning, and bathroom sanitary installations.',
-    keywords: ['plumber near me', 'leak repair', 'emergency plumber']
   },
   'electrical': {
     title: 'Certified Electricians in',
     type: 'Electrician',
     serviceName: 'Electrical',
     description: 'Experienced electricians for house rewiring, MCB trip fixes, switchboard installation, and appliance setup.',
-    keywords: ['electrician near me', 'electrical repair', 'wiring electrician']
   }
 };
 
@@ -139,13 +142,38 @@ export async function generateMetadata({ params }) {
   }
 
   const loc = resolveLocation(location);
+  const pageTitle = `${srv.title} ${loc.name} | Verified Doorstep Pros | CarpenterWala`;
+  const pageDescription = `${srv.description} Direct contact with verified local ${srv.type.toLowerCase()}s in ${loc.name} with transparent rate cards and zero middleman fees.`;
+  const pageUrl = `https://carpenterwala.com/services/${service}/${location}`;
+  const ogImage = SERVICE_OG_IMAGES[service] || '/images/carpentry-hero.png';
 
   return {
-    title: `${srv.title} ${loc.name} | Verified Doorstep Pros | CarpenterWala`,
-    description: `${srv.description} Direct contact with verified local ${srv.type.toLowerCase()}s in ${loc.name} with transparent rate cards and zero middleman fees.`,
-    keywords: srv.keywords.map(k => `${k} ${loc.name}`),
+    title: pageTitle,
+    description: pageDescription,
     alternates: {
-      canonical: `https://carpenterwala.com/services/${service}/${location}`,
+      canonical: pageUrl,
+    },
+    openGraph: {
+      title: pageTitle,
+      description: pageDescription,
+      url: pageUrl,
+      siteName: 'Carpenterwala',
+      locale: 'en_IN',
+      type: 'website',
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: `${srv.title} in ${loc.name}`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: pageTitle,
+      description: pageDescription,
+      images: [ogImage],
     },
   };
 }

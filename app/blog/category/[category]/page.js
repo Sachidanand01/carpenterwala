@@ -32,8 +32,12 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function CategoryPage({ params }) {
+export default async function CategoryPage({ params, searchParams }) {
   const { category } = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const pageParam = parseInt(resolvedSearchParams?.page || '1', 10);
+  const currentPage = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+
   const [posts, categories] = await Promise.all([
     getAllBlogPosts(),
     getBlogCategories()
@@ -94,7 +98,7 @@ export default async function CategoryPage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(categorySchema) }}
       />
-      <BlogListing selectedCategorySlug={category} initialPosts={posts} />
+      <BlogListing selectedCategorySlug={category} initialPosts={posts} initialPage={currentPage} />
     </>
   );
 }

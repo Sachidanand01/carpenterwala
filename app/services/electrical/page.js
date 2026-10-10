@@ -7,20 +7,30 @@ import ElectricityCalculator from '@/components/ElectricityCalculator';
 export const metadata = {
   title: 'Verified Electrician Services for Home & Office | CarpenterWala',
   description: 'Book certified electricians in India for fan installation, switchboard repair, MCB tripping issues, and home rewiring. Safe, verified doorstep assistance.',
-  keywords: [
-    'electrician services india',
-    'electrician near me',
-    'hire electrician India',
-    'house wiring electrician',
-    'MCB tripping repair',
-    'switchboard repair near me',
-    'electrical repairs india',
-    'Electrician in Bangalore',
-    'Electrician in Mumbai',
-    'Best Electrician in Delhi'
-  ],
   alternates: {
     canonical: 'https://carpenterwala.com/services/electrical',
+  },
+  openGraph: {
+    title: 'Verified Electrician Services for Home & Office | CarpenterWala',
+    description: 'Book certified electricians in India for fan installation, switchboard repair, MCB tripping issues, and home rewiring. Safe, verified doorstep assistance.',
+    url: 'https://carpenterwala.com/services/electrical',
+    siteName: 'Carpenterwala',
+    locale: 'en_IN',
+    type: 'website',
+    images: [
+      {
+        url: '/images/electrical-hero.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Certified Electricians for Home & Office',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Verified Electrician Services for Home & Office | CarpenterWala',
+    description: 'Book certified electricians in India for fan installation, switchboard repair, MCB tripping issues, and home rewiring.',
+    images: ['/images/electrical-hero.jpg'],
   },
 };
 

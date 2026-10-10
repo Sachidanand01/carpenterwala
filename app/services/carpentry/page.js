@@ -6,19 +6,30 @@ import AdSenseContainer from '@/components/AdSenseContainer';
 export const metadata = {
   title: 'Carpenter Services in Bangalore [2026 Rate Card & Daily Wages]',
   description: 'Hire verified local carpenters in Bangalore. Transparent carpenter daily rates (₹900–₹1,300/day), furniture repairs, door lock fitting, and custom modular woodwork.',
-  keywords: [
-    'carpenter services in bangalore',
-    'carpenter near me bangalore',
-    'carpenter near me with phone number',
-    'carpenter labour rate per sq ft',
-    'furniture carpenter contractor bangalore',
-    'carpenter near jigani bangalore',
-    'carpenter services in rt nagar bangalore',
-    'carpenter near vijay nagar bangalore',
-    'modular kitchen carpenter bangalore'
-  ],
   alternates: {
     canonical: 'https://carpenterwala.com/services/carpentry',
+  },
+  openGraph: {
+    title: 'Carpenter Services in Bangalore [2026 Rate Card & Daily Wages]',
+    description: 'Hire verified local carpenters in Bangalore. Transparent carpenter daily rates (₹900–₹1,300/day), furniture repairs, door lock fitting, and custom modular woodwork.',
+    url: 'https://carpenterwala.com/services/carpentry',
+    siteName: 'Carpenterwala',
+    locale: 'en_IN',
+    type: 'website',
+    images: [
+      {
+        url: '/images/carpentry-hero.png',
+        width: 1200,
+        height: 630,
+        alt: 'Bangalore Carpenter Services & Rate Card',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Carpenter Services in Bangalore [2026 Rate Card & Daily Wages]',
+    description: 'Hire verified local carpenters in Bangalore. Transparent carpenter daily rates (₹900–₹1,300/day), furniture repairs, and woodwork.',
+    images: ['/images/carpentry-hero.png'],
   },
 };
 

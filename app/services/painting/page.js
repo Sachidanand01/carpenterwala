@@ -8,19 +8,30 @@ import PaintCalculator from '@/components/PaintCalculator';
 export const metadata = {
   title: 'House Painting Services in Bangalore [2026 Per Sq Ft & Daily Rates]',
   description: 'Hire verified house painters in Bangalore. Transparent painter cost per day (₹900–₹1,200/day) & per sq ft rates (₹11–₹35/sq ft) for 1BHK, 2BHK, 3BHK flats and villas.',
-  keywords: [
-    'house painting services in bangalore',
-    'painter cost per day in bangalore',
-    'painting charges per square foot in bangalore',
-    'painting cost per square foot in bangalore',
-    'house painting in bangalore cost',
-    'painter near me prices',
-    'interior wall painting bangalore',
-    'waterproofing painting contractors bangalore',
-    'asian paints royale painters bangalore'
-  ],
   alternates: {
     canonical: 'https://carpenterwala.com/services/painting',
+  },
+  openGraph: {
+    title: 'House Painting Services in Bangalore [2026 Per Sq Ft & Daily Rates]',
+    description: 'Hire verified house painters in Bangalore. Transparent painter cost per day (₹900–₹1,200/day) & per sq ft rates (₹11–₹35/sq ft) for 1BHK, 2BHK, 3BHK flats and villas.',
+    url: 'https://carpenterwala.com/services/painting',
+    siteName: 'Carpenterwala',
+    locale: 'en_IN',
+    type: 'website',
+    images: [
+      {
+        url: '/images/painting-hero.png',
+        width: 1200,
+        height: 630,
+        alt: 'Bangalore House Painting Services & Per Sq Ft Rates',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'House Painting Services in Bangalore [2026 Per Sq Ft & Daily Rates]',
+    description: 'Hire verified house painters in Bangalore. Transparent painter cost per day & per sq ft rates for flats and villas.',
+    images: ['/images/painting-hero.png'],
   },
 };
 

@@ -7,20 +7,30 @@ import DripCalculator from '@/components/DripCalculator';
 export const metadata = {
   title: 'Professional Plumber Services & Leak Repair | CarpenterWala',
   description: 'Hire verified local plumbers in India for pipe leakage repair, bathroom sanitary fittings, and drain unblocking. View standard rate cards and book online.',
-  keywords: [
-    'plumbing services india',
-    'plumber near me',
-    'emergency plumber near me',
-    'leak repair plumber',
-    'bathroom sanitary fitting',
-    'drain unclogging service',
-    'plumber repair services',
-    'Plumber Services in Bangalore',
-    'Plumber in Mumbai',
-    'Best Plumber in Delhi'
-  ],
   alternates: {
     canonical: 'https://carpenterwala.com/services/plumbing',
+  },
+  openGraph: {
+    title: 'Professional Plumber Services & Leak Repair | CarpenterWala',
+    description: 'Hire verified local plumbers in India for pipe leakage repair, bathroom sanitary fittings, and drain unblocking. View standard rate cards and book online.',
+    url: 'https://carpenterwala.com/services/plumbing',
+    siteName: 'Carpenterwala',
+    locale: 'en_IN',
+    type: 'website',
+    images: [
+      {
+        url: '/images/plumbing-hero.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Professional Plumber Services & Leak Repair',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Professional Plumber Services & Leak Repair | CarpenterWala',
+    description: 'Hire verified local plumbers in India for pipe leakage repair, bathroom sanitary fittings, and drain unblocking.',
+    images: ['/images/plumbing-hero.jpg'],
   },
 };
 

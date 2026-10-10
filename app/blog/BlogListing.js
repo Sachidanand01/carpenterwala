@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useMemo, useEffect, useRef, Suspense } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { BLOG_POSTS } from '@/lib/blog-data';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
@@ -50,22 +50,21 @@ const CATEGORY_DESCRIPTIONS = {
   `
 };
 
-function BlogListingInner({ selectedCategorySlug = 'all', initialPosts }) {
+function BlogListingInner({ selectedCategorySlug = 'all', initialPosts, initialPage = 1 }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const gridTopRef = useRef(null);
 
   const [searchQuery, setSearchQuery] = useState('');
   
-  // Read page from URL params if present
-  const pageParam = parseInt(searchParams.get('page') || '1', 10);
-  const [currentPage, setCurrentPage] = useState(isNaN(pageParam) || pageParam < 1 ? 1 : pageParam);
+  // Read initial page from server prop
+  const [currentPage, setCurrentPage] = useState(initialPage);
 
-  // Sync state when URL page param changes
+  // Sync state when initialPage prop changes
   useEffect(() => {
-    const p = parseInt(searchParams.get('page') || '1', 10);
-    setCurrentPage(isNaN(p) || p < 1 ? 1 : p);
-  }, [searchParams]);
+    if (initialPage) {
+      setCurrentPage(initialPage);
+    }
+  }, [initialPage]);
 
   const postsSource = initialPosts && initialPosts.length > 0 ? initialPosts : BLOG_POSTS;
 
@@ -135,17 +134,16 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts }) {
     }
   };
 
-  const handlePageChange = (newPage) => {
-    if (newPage < 1 || newPage > totalPages || newPage === safeCurrentPage) return;
-    setCurrentPage(newPage);
-
-    // Update URL with page query parameter without full reload
+  const getPageUrl = (page) => {
     const currentPath = activeCategory === 'All' 
       ? '/blog' 
       : `/blog/category/${selectedCategorySlug}`;
-    const newUrl = newPage === 1 ? currentPath : `${currentPath}?page=${newPage}`;
-    router.push(newUrl, { scroll: false });
+    return page === 1 ? currentPath : `${currentPath}?page=${page}`;
+  };
 
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > totalPages || newPage === safeCurrentPage) return;
+    setCurrentPage(newPage);
     scrollToGridTop();
   };
 
@@ -330,14 +328,20 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts }) {
             {/* Pagination Controls */}
             {totalPages > 1 && (
               <div className="pagination-wrapper glass">
-                <button
-                  onClick={() => handlePageChange(safeCurrentPage - 1)}
-                  disabled={safeCurrentPage === 1}
-                  className={`pagination-nav-btn ${safeCurrentPage === 1 ? 'disabled' : ''}`}
-                  aria-label="Previous page"
-                >
-                  ← Previous
-                </button>
+                {safeCurrentPage > 1 ? (
+                  <Link
+                    href={getPageUrl(safeCurrentPage - 1)}
+                    onClick={() => handlePageChange(safeCurrentPage - 1)}
+                    className="pagination-nav-btn"
+                    aria-label="Previous page"
+                  >
+                    ← Previous
+                  </Link>
+                ) : (
+                  <span className="pagination-nav-btn disabled" aria-disabled="true">
+                    ← Previous
+                  </span>
+                )}
 
                 <div className="pagination-numbers">
                   {paginationItems.map((item, idx) => {
@@ -351,27 +355,34 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts }) {
 
                     const isCurrent = item === safeCurrentPage;
                     return (
-                      <button
+                      <Link
                         key={item}
+                        href={getPageUrl(item)}
                         onClick={() => handlePageChange(item)}
                         className={`pagination-num-btn ${isCurrent ? 'active' : ''}`}
                         aria-label={`Go to page ${item}`}
                         aria-current={isCurrent ? 'page' : undefined}
                       >
                         {item}
-                      </button>
+                      </Link>
                     );
                   })}
                 </div>
 
-                <button
-                  onClick={() => handlePageChange(safeCurrentPage + 1)}
-                  disabled={safeCurrentPage === totalPages}
-                  className={`pagination-nav-btn ${safeCurrentPage === totalPages ? 'disabled' : ''}`}
-                  aria-label="Next page"
-                >
-                  Next →
-                </button>
+                {safeCurrentPage < totalPages ? (
+                  <Link
+                    href={getPageUrl(safeCurrentPage + 1)}
+                    onClick={() => handlePageChange(safeCurrentPage + 1)}
+                    className="pagination-nav-btn"
+                    aria-label="Next page"
+                  >
+                    Next →
+                  </Link>
+                ) : (
+                  <span className="pagination-nav-btn disabled" aria-disabled="true">
+                    Next →
+                  </span>
+                )}
               </div>
             )}
 
@@ -841,6 +852,9 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts }) {
           font-size: 0.9rem;
           cursor: pointer;
           transition: var(--transition);
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
         }
         .pagination-nav-btn:hover:not(.disabled) {
           background: var(--primary);
@@ -870,6 +884,7 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts }) {
           font-size: 0.92rem;
           cursor: pointer;
           transition: var(--transition);
+          text-decoration: none;
         }
         .pagination-num-btn:hover:not(.active) {
           background: rgba(194, 65, 12, 0.1);
@@ -1200,15 +1215,4 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts }) {
   );
 }
 
-export default function BlogListing(props) {
-  return (
-    <Suspense fallback={
-      <div className="container" style={{ padding: '6rem 2rem', textAlign: 'center' }}>
-        <div style={{ fontSize: '2rem', color: 'var(--primary)', marginBottom: '1rem' }}>Loading Articles...</div>
-        <p style={{ opacity: 0.7 }}>Preparing Bangalore's master repair guides...</p>
-      </div>
-    }>
-      <BlogListingInner {...props} />
-    </Suspense>
-  );
-}
+export default BlogListingInner;
