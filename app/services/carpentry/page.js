@@ -3,44 +3,52 @@ import MagneticCTA from "@/components/MagneticCTA";
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
 
-export const metadata = {
-  title: 'Carpenter Services in Bangalore [2026 Rate Card & Daily Wages]',
-  description: 'Hire verified local carpenters in Bangalore. Transparent carpenter daily rates (₹900–₹1,300/day), furniture repairs, door lock fitting, and custom modular woodwork.',
-  alternates: {
-    canonical: 'https://carpenterwala.com/services/carpentry',
-  },
-  openGraph: {
-    title: 'Carpenter Services in Bangalore [2026 Rate Card & Daily Wages]',
-    description: 'Hire verified local carpenters in Bangalore. Transparent carpenter daily rates (₹900–₹1,300/day), furniture repairs, door lock fitting, and custom modular woodwork.',
-    url: 'https://carpenterwala.com/services/carpentry',
-    siteName: 'Carpenterwala',
-    locale: 'en_IN',
-    type: 'website',
-    images: [
-      {
-        url: '/images/carpentry-hero.png',
-        width: 1200,
-        height: 630,
-        alt: 'Bangalore Carpenter Services & Rate Card',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Carpenter Services in Bangalore [2026 Rate Card & Daily Wages]',
-    description: 'Hire verified local carpenters in Bangalore. Transparent carpenter daily rates (₹900–₹1,300/day), furniture repairs, and woodwork.',
-    images: ['/images/carpentry-hero.png'],
-  },
-};
+export function generateMetadata() {
+  const currentYear = new Date().getFullYear();
+  const pageTitle = `Carpenter Services & Rate Card in India [${currentYear} Metro Wages] | Carpenterwala`;
+  const pageDescription = `Hire verified local carpenters across Bangalore, Mumbai, Delhi NCR, Hyderabad, Pune, & Chennai. Compare ${currentYear} daily wages (₹850–₹1,500/day), task rate cards, and modular woodwork.`;
+  const pageUrl = 'https://carpenterwala.com/services/carpentry';
+
+  return {
+    title: pageTitle,
+    description: pageDescription,
+    alternates: {
+      canonical: pageUrl,
+    },
+    openGraph: {
+      title: pageTitle,
+      description: pageDescription,
+      url: pageUrl,
+      siteName: 'Carpenterwala',
+      locale: 'en_IN',
+      type: 'website',
+      images: [
+        {
+          url: '/images/carpentry-hero.png',
+          width: 1200,
+          height: 630,
+          alt: `India Metro Carpenter Services & Rate Card ${currentYear}`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: pageTitle,
+      description: pageDescription,
+      images: ['/images/carpentry-hero.png'],
+    },
+  };
+}
 
 export default function CarpentryPage() {
+  const currentYear = new Date().getFullYear();
   const serviceJsonLd = {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Service",
         "@id": "https://carpenterwala.com/services/carpentry#service",
-        "name": "Professional Carpentry Services in India",
+        "name": `Professional Carpentry Services & Rate Card in India ${currentYear}`,
         "serviceType": "Carpentry",
         "provider": {
           "@type": "Organization",
@@ -202,7 +210,7 @@ export default function CarpentryPage() {
         <div className="container" style={{ textAlign: 'center' }}>
           <div className="hero-backdrop-card animate-fade-in">
             <h1 style={{ fontSize: '3.25rem', marginBottom: '1.25rem', color: '#0F172A' }}>
-              Professional <span className="text-gradient">Carpentry</span> Services Across India
+              Professional <span className="text-gradient">Carpentry</span> Services &amp; Rate Card in India [{currentYear}]
             </h1>
             <p style={{ fontSize: '1.2rem', maxWidth: '680px', margin: '0 auto 2rem' }}>
               From bespoke furniture fabrication to quick hinge fixes and modular kitchen setups, connect directly with background-verified local carpenters.
@@ -272,49 +280,162 @@ export default function CarpentryPage() {
         </div>
       </section>
 
-      {/* Bangalore Carpenter Rates & Daily Wage Guide */}
-      <section className="container" style={{ marginBottom: '4rem' }}>
-        <div className="glass" style={{ padding: '2.5rem', borderRadius: '16px', borderLeft: '4px solid var(--primary)' }}>
+      {/* Multi-City Metro Carpenter Rate Card & Daily Wages Matrix */}
+      <section className="container" style={{ marginBottom: '6rem' }}>
+        <div className="glass" style={{ padding: '3rem', borderRadius: '16px', borderLeft: '4px solid var(--primary)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
             <div>
               <span style={{ fontSize: '0.85rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--primary)' }}>
-                📍 Local Bangalore Carpenter Rates (2026 Updated)
+                📍 Metro Wage Benchmarks ({currentYear} Updated)
               </span>
-              <h2 style={{ fontSize: '2rem', marginTop: '0.25rem', marginBottom: '0.5rem' }}>
-                Bangalore Carpenter Daily Wages &amp; Repair Charges
+              <h2 style={{ fontSize: '2.25rem', marginTop: '0.25rem', marginBottom: '0.5rem' }}>
+                Carpenter Rates &amp; Daily Wages Across Major Indian Metros
               </h2>
             </div>
-            <Link href="/find-a-professional?category=Carpenter&location=Bangalore" className="btn btn-primary" style={{ padding: '0.75rem 1.5rem' }}>
-              Book Bangalore Carpenters →
+            <Link href="/find-a-professional?category=Carpenter" className="btn btn-primary" style={{ padding: '0.75rem 1.5rem' }}>
+              Find Verified Carpenters Nearby →
             </Link>
           </div>
-          <p style={{ opacity: 0.9, lineHeight: '1.7', marginBottom: '2rem' }}>
-            Need a local furniture carpenter contractor near Jigani, RT Nagar, Vijay Nagar, or Whitefield? Verified Carpenterwala carpenters provide upfront pricing with zero hidden commission:
+          <p style={{ opacity: 0.9, lineHeight: '1.7', marginBottom: '2.5rem', maxWidth: '850px' }}>
+            Carpentry labour charges vary across Indian metropolitan cities based on living indices, transportation, and specialized woodwork demand. Below is our verified {currentYear} rate comparison benchmark across India&apos;s top 6 metro cities:
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
-            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
-              <div style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '0.5rem' }}>🪚 Daily Carpenter Wages (Per Day)</div>
-              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: 'var(--accent)', marginBottom: '0.5rem' }}>₹900 – ₹1,300<span style={{ fontSize: '0.9rem', color: 'inherit', fontWeight: 'normal' }}> / day</span></div>
-              <p style={{ fontSize: '0.9rem', opacity: 0.85, margin: 0 }}>Full 8-hour shift for master woodcraft, laminate pasting, and modular modifications.</p>
-            </div>
-
-            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
-              <div style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '0.5rem' }}>🚪 Door Trimming &amp; Lock Fitting</div>
-              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: 'var(--primary)', marginBottom: '0.5rem' }}>₹249 – ₹499<span style={{ fontSize: '0.9rem', color: 'inherit', fontWeight: 'normal' }}> / job</span></div>
-              <p style={{ fontSize: '0.9rem', opacity: 0.85, margin: 0 }}>Mortise handles, Godrej/Yale cylinder locks, and swollen door bottom planing.</p>
-            </div>
-
-            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
-              <div style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '0.5rem' }}>🗄️ Custom Furniture &amp; Wardrobes</div>
-              <div style={{ fontSize: '1.75rem', fontWeight: 'bold', color: 'var(--accent)', marginBottom: '0.5rem' }}>₹280 – ₹450<span style={{ fontSize: '0.9rem', color: 'inherit', fontWeight: 'normal' }}> / sq ft</span></div>
-              <p style={{ fontSize: '0.9rem', opacity: 0.85, margin: 0 }}>BWP/BWR ply carcass fabrication with soft-close tandem drawers and hydraulic fittings.</p>
-            </div>
+          <div style={{ overflowX: 'auto', marginBottom: '2.5rem' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '820px' }}>
+              <thead>
+                <tr style={{ borderBottom: '2px solid var(--primary)', color: 'var(--primary)', background: 'rgba(194, 65, 12, 0.05)' }}>
+                  <th style={{ padding: '1rem 1.25rem' }}>Carpentry Task / Metric</th>
+                  <th style={{ padding: '1rem 1.25rem' }}>Bangalore</th>
+                  <th style={{ padding: '1rem 1.25rem' }}>Mumbai</th>
+                  <th style={{ padding: '1rem 1.25rem' }}>Delhi NCR</th>
+                  <th style={{ padding: '1rem 1.25rem' }}>Hyderabad</th>
+                  <th style={{ padding: '1rem 1.25rem' }}>Pune</th>
+                  <th style={{ padding: '1rem 1.25rem' }}>Chennai</th>
+                </tr>
+              </thead>
+              <tbody style={{ fontSize: '0.92rem' }}>
+                <tr style={{ borderBottom: '1px solid rgba(194, 65, 12, 0.12)' }}>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: '600' }}>Master Carpenter Daily Wage (8 hrs)</td>
+                  <td style={{ padding: '1rem 1.25rem', color: 'var(--accent)', fontWeight: 'bold' }}>₹900 – ₹1,300</td>
+                  <td style={{ padding: '1rem 1.25rem', color: 'var(--accent)', fontWeight: 'bold' }}>₹1,000 – ₹1,500</td>
+                  <td style={{ padding: '1rem 1.25rem', color: 'var(--accent)', fontWeight: 'bold' }}>₹950 – ₹1,400</td>
+                  <td style={{ padding: '1rem 1.25rem', color: 'var(--accent)', fontWeight: 'bold' }}>₹850 – ₹1,250</td>
+                  <td style={{ padding: '1rem 1.25rem', color: 'var(--accent)', fontWeight: 'bold' }}>₹900 – ₹1,300</td>
+                  <td style={{ padding: '1rem 1.25rem', color: 'var(--accent)', fontWeight: 'bold' }}>₹850 – ₹1,250</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid rgba(194, 65, 12, 0.12)' }}>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: '600' }}>Custom Wardrobe Carcass (per sq ft)</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹280 – ₹450</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹320 – ₹500</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹300 – ₹480</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹260 – ₹420</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹280 – ₹440</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹260 – ₹420</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid rgba(194, 65, 12, 0.12)' }}>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: '600' }}>Modular Kitchen Shutter / Hinge Repair</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹199 – ₹450</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹249 – ₹499</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹229 – ₹479</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹189 – ₹420</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹199 – ₹450</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹189 – ₹420</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid rgba(194, 65, 12, 0.12)' }}>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: '600' }}>Door Planing &amp; Alignment (per door)</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹199 – ₹399</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹249 – ₹449</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹229 – ₹429</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹189 – ₹379</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹199 – ₹399</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹189 – ₹379</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid rgba(194, 65, 12, 0.12)' }}>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: '600' }}>Mortise / Digital Lock Installation</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹249 – ₹499</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹299 – ₹549</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹279 – ₹499</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹249 – ₹449</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹249 – ₹479</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹249 – ₹449</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid rgba(194, 65, 12, 0.12)' }}>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: '600' }}>Knockdown Furniture Assembly (Bed/Unit)</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹699 – ₹1,799</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹799 – ₹1,999</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹749 – ₹1,899</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹649 – ₹1,699</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹699 – ₹1,799</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>₹649 – ₹1,699</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: '600' }}>Local City Directory</td>
+                  <td style={{ padding: '1rem 1.25rem' }}>
+                    <Link href="/services/carpentry/bangalore" style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.85rem' }}>Bangalore Pros →</Link>
+                  </td>
+                  <td style={{ padding: '1rem 1.25rem' }}>
+                    <Link href="/services/carpentry/mumbai" style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.85rem' }}>Mumbai Pros →</Link>
+                  </td>
+                  <td style={{ padding: '1rem 1.25rem' }}>
+                    <Link href="/services/carpentry/delhi" style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.85rem' }}>Delhi Pros →</Link>
+                  </td>
+                  <td style={{ padding: '1rem 1.25rem' }}>
+                    <Link href="/services/carpentry/hyderabad" style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.85rem' }}>Hyderabad Pros →</Link>
+                  </td>
+                  <td style={{ padding: '1rem 1.25rem' }}>
+                    <Link href="/services/carpentry/pune" style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.85rem' }}>Pune Pros →</Link>
+                  </td>
+                  <td style={{ padding: '1rem 1.25rem' }}>
+                    <Link href="/services/carpentry/chennai" style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.85rem' }}>Chennai Pros →</Link>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)', fontSize: '0.95rem' }}>
-            <span style={{ fontWeight: '600' }}>Popular Bangalore Carpentry Hubs:</span>
-            <span>Jigani</span> • <span>RT Nagar</span> • <span>Vijay Nagar</span> • <span>Whitefield</span> • <span>HSR Layout</span> • <span>Koramangala</span> • <span>Thanisandra</span> • <span>Yelahanka</span>
+          {/* Quick Metro City Summary Cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem' }}>
+            <div style={{ padding: '1.25rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+              <h4 style={{ color: 'var(--primary)', marginBottom: '0.4rem', fontSize: '1.05rem' }}>📍 Bangalore</h4>
+              <div style={{ fontSize: '1.35rem', fontWeight: 'bold', color: 'var(--accent)', marginBottom: '0.35rem' }}>₹900 – ₹1,300<span style={{ fontSize: '0.8rem', fontWeight: 'normal' }}> / day</span></div>
+              <p style={{ fontSize: '0.85rem', opacity: 0.85, margin: '0 0 0.75rem 0' }}>Whitefield, HSR Layout, Indiranagar, Koramangala, Bellandur, &amp; Electronic City.</p>
+              <Link href="/services/carpentry/bangalore" style={{ color: 'var(--primary)', fontWeight: '600', fontSize: '0.85rem' }}>View Bangalore Rates →</Link>
+            </div>
+
+            <div style={{ padding: '1.25rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+              <h4 style={{ color: 'var(--primary)', marginBottom: '0.4rem', fontSize: '1.05rem' }}>📍 Mumbai</h4>
+              <div style={{ fontSize: '1.35rem', fontWeight: 'bold', color: 'var(--accent)', marginBottom: '0.35rem' }}>₹1,000 – ₹1,500<span style={{ fontSize: '0.8rem', fontWeight: 'normal' }}> / day</span></div>
+              <p style={{ fontSize: '0.85rem', opacity: 0.85, margin: '0 0 0.75rem 0' }}>Andheri, Bandra, Powai, Thane, Navi Mumbai, &amp; South Mumbai.</p>
+              <Link href="/services/carpentry/mumbai" style={{ color: 'var(--primary)', fontWeight: '600', fontSize: '0.85rem' }}>View Mumbai Rates →</Link>
+            </div>
+
+            <div style={{ padding: '1.25rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+              <h4 style={{ color: 'var(--primary)', marginBottom: '0.4rem', fontSize: '1.05rem' }}>📍 Delhi NCR</h4>
+              <div style={{ fontSize: '1.35rem', fontWeight: 'bold', color: 'var(--accent)', marginBottom: '0.35rem' }}>₹950 – ₹1,400<span style={{ fontSize: '0.8rem', fontWeight: 'normal' }}> / day</span></div>
+              <p style={{ fontSize: '0.85rem', opacity: 0.85, margin: '0 0 0.75rem 0' }}>Gurgaon, Noida, Greater Noida, Dwarka, &amp; South Delhi.</p>
+              <Link href="/services/carpentry/delhi" style={{ color: 'var(--primary)', fontWeight: '600', fontSize: '0.85rem' }}>View Delhi Rates →</Link>
+            </div>
+
+            <div style={{ padding: '1.25rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+              <h4 style={{ color: 'var(--primary)', marginBottom: '0.4rem', fontSize: '1.05rem' }}>📍 Hyderabad</h4>
+              <div style={{ fontSize: '1.35rem', fontWeight: 'bold', color: 'var(--accent)', marginBottom: '0.35rem' }}>₹850 – ₹1,250<span style={{ fontSize: '0.8rem', fontWeight: 'normal' }}> / day</span></div>
+              <p style={{ fontSize: '0.85rem', opacity: 0.85, margin: '0 0 0.75rem 0' }}>Gachibowli, Hitech City, Madhapur, Jubilee Hills, &amp; Kondapur.</p>
+              <Link href="/services/carpentry/hyderabad" style={{ color: 'var(--primary)', fontWeight: '600', fontSize: '0.85rem' }}>View Hyderabad Rates →</Link>
+            </div>
+
+            <div style={{ padding: '1.25rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+              <h4 style={{ color: 'var(--primary)', marginBottom: '0.4rem', fontSize: '1.05rem' }}>📍 Pune</h4>
+              <div style={{ fontSize: '1.35rem', fontWeight: 'bold', color: 'var(--accent)', marginBottom: '0.35rem' }}>₹900 – ₹1,300<span style={{ fontSize: '0.8rem', fontWeight: 'normal' }}> / day</span></div>
+              <p style={{ fontSize: '0.85rem', opacity: 0.85, margin: '0 0 0.75rem 0' }}>Hinjewadi, Wakad, Baner, Kothrud, Viman Nagar, &amp; Magarpatta.</p>
+              <Link href="/services/carpentry/pune" style={{ color: 'var(--primary)', fontWeight: '600', fontSize: '0.85rem' }}>View Pune Rates →</Link>
+            </div>
+
+            <div style={{ padding: '1.25rem', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
+              <h4 style={{ color: 'var(--primary)', marginBottom: '0.4rem', fontSize: '1.05rem' }}>📍 Chennai</h4>
+              <div style={{ fontSize: '1.35rem', fontWeight: 'bold', color: 'var(--accent)', marginBottom: '0.35rem' }}>₹850 – ₹1,250<span style={{ fontSize: '0.8rem', fontWeight: 'normal' }}> / day</span></div>
+              <p style={{ fontSize: '0.85rem', opacity: 0.85, margin: '0 0 0.75rem 0' }}>OMR IT Corridor, Velachery, Anna Nagar, T. Nagar, &amp; Adyar.</p>
+              <Link href="/services/carpentry/chennai" style={{ color: 'var(--primary)', fontWeight: '600', fontSize: '0.85rem' }}>View Chennai Rates →</Link>
+            </div>
           </div>
         </div>
       </section>
@@ -468,8 +589,28 @@ export default function CarpentryPage() {
               <p style={{ opacity: 0.8, fontSize: '0.95rem', marginBottom: '1.5rem' }}>
                 Book skilled carpenters in Hyderabad for modular kitchen installation, bed assembly, and woodwork in Gachibowli, Madhapur, and Kukatpally.
               </p>
-              <Link href="/find-a-professional?category=Carpenter&location=Hyderabad" style={{ color: 'var(--primary)', fontWeight: 'bold', textDecoration: 'none' }}>
+              <Link href="/services/carpentry/hyderabad" style={{ color: 'var(--primary)', fontWeight: 'bold', textDecoration: 'none' }}>
                 Find Carpenters in Hyderabad →
+              </Link>
+            </div>
+
+            <div className="glass" style={{ padding: '2rem', borderLeft: '4px solid var(--primary)' }}>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>📍 Pune</h3>
+              <p style={{ opacity: 0.8, fontSize: '0.95rem', marginBottom: '1.5rem' }}>
+                Hire certified <strong>Carpenters in Pune</strong> for custom wardrobes, furniture repairs, and kitchen installations in Hinjewadi, Wakad, Baner, and Kothrud.
+              </p>
+              <Link href="/services/carpentry/pune" style={{ color: 'var(--primary)', fontWeight: 'bold', textDecoration: 'none' }}>
+                Find Carpenters in Pune →
+              </Link>
+            </div>
+
+            <div className="glass" style={{ padding: '2rem', borderLeft: '4px solid var(--primary)' }}>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>📍 Chennai</h3>
+              <p style={{ opacity: 0.8, fontSize: '0.95rem', marginBottom: '1.5rem' }}>
+                Book master <strong>Carpenters in Chennai</strong> for door framing, teakwood restoration, and modular interior fittings across OMR, Velachery, and Anna Nagar.
+              </p>
+              <Link href="/services/carpentry/chennai" style={{ color: 'var(--primary)', fontWeight: 'bold', textDecoration: 'none' }}>
+                Find Carpenters in Chennai →
               </Link>
             </div>
           </div>
