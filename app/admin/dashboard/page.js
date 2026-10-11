@@ -1586,6 +1586,48 @@ export default function AdminDashboardClient() {
                     <span style={{ opacity: 0.6, fontSize: '0.85rem' }}>Private Home Address</span>
                     <span style={{ fontSize: '0.82rem', lineHeight: 1.4 }}>🏠 {selectedPro.full_address || 'Address missing'}</span>
                   </div>
+
+                  {/* T-Shirt Claim Info (if claimed) */}
+                  {(() => {
+                    const proLangs = Array.isArray(selectedPro.languages) ? selectedPro.languages : [];
+                    const isClaimed = proLangs.some(l => typeof l === 'string' && l.startsWith('tshirt_claimed:true'));
+                    const size = proLangs.find(l => typeof l === 'string' && l.startsWith('tshirt_size:'))?.replace('tshirt_size:', '');
+                    const pin = proLangs.find(l => typeof l === 'string' && l.startsWith('tshirt_pincode:'))?.replace('tshirt_pincode:', '');
+                    const date = proLangs.find(l => typeof l === 'string' && l.startsWith('tshirt_date:'))?.replace('tshirt_date:', '');
+
+                    if (!isClaimed) return null;
+
+                    return (
+                      <div style={{
+                        marginTop: '0.5rem',
+                        padding: '0.85rem',
+                        borderRadius: '10px',
+                        background: 'rgba(245, 158, 11, 0.1)',
+                        border: '1px solid rgba(245, 158, 11, 0.35)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '0.35rem'
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                            👕 Welcome T-Shirt Claim
+                          </span>
+                          <span style={{ fontSize: '0.72rem', background: '#f59e0b', color: '#000', padding: '0.15rem 0.5rem', borderRadius: '4px', fontWeight: 800 }}>
+                            Size: {size || 'Standard'}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: '0.78rem', opacity: 0.85 }}>
+                          <strong>Courier Address:</strong> {selectedPro.full_address || 'Same as profile'}
+                        </div>
+                        {pin && <div style={{ fontSize: '0.75rem', opacity: 0.75 }}>PIN: {pin}</div>}
+                        {date && (
+                          <div style={{ fontSize: '0.7rem', opacity: 0.6 }}>
+                            Claimed: {new Date(date).toLocaleDateString()}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>

@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import ProGuidedTour from '@/components/ProGuidedTour';
 import { processDocumentImage, uploadImageToStorage } from '@/lib/document-scanner';
 import { resolveDisplayUrl } from '@/lib/storage';
+import TshirtClaimCard from '@/components/TshirtClaimCard';
 
 const ServiceRadiusMap = dynamic(() => import('@/components/ServiceRadiusMap'), {
   ssr: false,
@@ -2305,6 +2306,14 @@ export default function ProDashboard() {
         {/* ── OVERVIEW TAB ── */}
         {tab === 'overview' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+
+            {/* Campaign T-Shirt Claim & Status Card */}
+            <TshirtClaimCard
+              profile={profile}
+              onClaimSuccess={() => {
+                if (proInfo?.id) fetchData(proInfo.id);
+              }}
+            />
 
             {/* Pending Verification Notice */}
             {!profile?.verified && (

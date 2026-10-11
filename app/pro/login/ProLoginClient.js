@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { translations } from './translations';
 import { supabase } from '@/lib/supabase';
+import { PRO_TSHIRT_CAMPAIGN } from '@/lib/proCampaign';
 
 export default function ProLogin({ lang, session, mode }) {
   const [currentLang, setCurrentLang] = useState(lang || 'en');
@@ -132,6 +133,7 @@ export default function ProLogin({ lang, session, mode }) {
 
   const t = translations[currentLang] || translations.en;
   const offer = t.offer || translations.en.offer;
+  const campaignText = PRO_TSHIRT_CAMPAIGN.translations[currentLang] || PRO_TSHIRT_CAMPAIGN.translations.en;
 
   // Handle Login OTP Send
   const handleSendOtp = async (e) => {
@@ -365,7 +367,7 @@ export default function ProLogin({ lang, session, mode }) {
   const activeEmail = isRegister ? regEmail : email;
 
   return (
-    <div className="container flex items-center justify-center" style={{ minHeight: 'calc(100vh - var(--navbar-height))', padding: '2rem 1rem' }}>
+    <div className="container" style={{ minHeight: 'calc(100vh - var(--navbar-height))', padding: '1.5rem 1rem 3rem' }}>
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes subtlePulse {
           0%, 100% { transform: scale(1); opacity: 1; }
@@ -424,6 +426,46 @@ export default function ProLogin({ lang, session, mode }) {
           }
         }
       `}} />
+
+      {/* Top Campaign Announcement Bar */}
+      {PRO_TSHIRT_CAMPAIGN.isActive && (
+        <div style={{
+          maxWidth: '1180px',
+          margin: '0 auto 1.5rem',
+          padding: '0.85rem 1.25rem',
+          borderRadius: '14px',
+          background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.15), rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15))',
+          border: '1px solid rgba(245, 158, 11, 0.35)',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '0.75rem'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flex: 1, minWidth: '260px' }}>
+            <span style={{ fontSize: '1.4rem', lineHeight: 1 }}>🎁</span>
+            <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--foreground)', lineHeight: 1.45 }}>
+              {campaignText.bar_text}
+            </div>
+          </div>
+          <span style={{
+            fontSize: '0.72rem',
+            fontWeight: 800,
+            background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+            color: '#1e293b',
+            padding: '0.35rem 0.75rem',
+            borderRadius: '999px',
+            whiteSpace: 'nowrap',
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+            boxShadow: '0 2px 8px rgba(245, 158, 11, 0.4)'
+          }}>
+            {campaignText.badge}
+          </span>
+        </div>
+      )}
+
       <div className="pro-split-container">
 
         {/* Left Column: Pro Value Proposition Showcase (Desktop & Large Screens) */}
@@ -826,6 +868,128 @@ export default function ProLogin({ lang, session, mode }) {
                 <div style={{ marginTop: '0.3rem', fontSize: '0.8rem', opacity: 0.8 }}>
                   {t.banner_otp_sent_help}
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* Campaign Welcome Gift Card (Visible on both Mobile & Desktop) */}
+          {PRO_TSHIRT_CAMPAIGN.isActive && (
+            <div className="glass animate-fade-in" style={{
+              borderRadius: '16px',
+              padding: '1.2rem',
+              marginBottom: '1.25rem',
+              background: 'linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98))',
+              border: '1.5px solid rgba(245, 158, 11, 0.35)',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.35)',
+              overflow: 'hidden'
+            }}>
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                padding: '0.25rem 0.65rem',
+                borderRadius: '999px',
+                background: 'rgba(245, 158, 11, 0.15)',
+                border: '1px solid rgba(245, 158, 11, 0.3)',
+                color: '#fbbf24',
+                fontSize: '0.72rem',
+                fontWeight: 700,
+                letterSpacing: '0.04em',
+                marginBottom: '0.75rem',
+                textTransform: 'uppercase'
+              }}>
+                <span>👕</span>
+                <span>{campaignText.badge}</span>
+              </div>
+
+              <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                <div style={{
+                  position: 'relative',
+                  width: '88px',
+                  height: '88px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  flexShrink: 0,
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
+                  background: '#0f172a'
+                }}>
+                  <img
+                    src={PRO_TSHIRT_CAMPAIGN.image}
+                    alt="Carpenterwala Verified Pro T-Shirt"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    background: 'rgba(0,0,0,0.75)',
+                    fontSize: '0.58rem',
+                    textAlign: 'center',
+                    color: '#34d399',
+                    fontWeight: 800,
+                    padding: '2px 0'
+                  }}>
+                    VERIFIED PRO
+                  </div>
+                </div>
+
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ margin: '0 0 0.3rem', fontSize: '1.05rem', fontWeight: 800, color: '#f8fafc' }}>
+                    {campaignText.title}
+                  </h3>
+                  <p style={{ margin: 0, fontSize: '0.78rem', color: '#cbd5e1', lineHeight: 1.45 }}>
+                    {campaignText.subtitle}
+                  </p>
+                </div>
+              </div>
+
+              {/* Perks Badges */}
+              <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '0.45rem',
+                marginTop: '0.85rem',
+                paddingTop: '0.75rem',
+                borderTop: '1px solid rgba(255,255,255,0.08)'
+              }}>
+                <span style={{
+                  fontSize: '0.72rem',
+                  color: '#34d399',
+                  background: 'rgba(16, 185, 129, 0.12)',
+                  border: '1px solid rgba(16, 185, 129, 0.25)',
+                  padding: '0.2rem 0.55rem',
+                  borderRadius: '6px',
+                  fontWeight: 600
+                }}>
+                  ✓ {campaignText.tag_zero_cost}
+                </span>
+                <span style={{
+                  fontSize: '0.72rem',
+                  color: '#60a5fa',
+                  background: 'rgba(59, 130, 246, 0.12)',
+                  border: '1px solid rgba(59, 130, 246, 0.25)',
+                  padding: '0.2rem 0.55rem',
+                  borderRadius: '6px',
+                  fontWeight: 600
+                }}>
+                  ✓ {campaignText.tag_premium_fit}
+                </span>
+              </div>
+
+              {/* Eligibility info notice */}
+              <div style={{
+                marginTop: '0.65rem',
+                fontSize: '0.73rem',
+                color: '#fbbf24',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                fontWeight: 500
+              }}>
+                <span>ℹ️</span>
+                <span>{campaignText.eligibility_pill}</span>
               </div>
             </div>
           )}
