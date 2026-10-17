@@ -7,6 +7,7 @@ import ProGuidedTour from '@/components/ProGuidedTour';
 import { processDocumentImage, uploadImageToStorage } from '@/lib/document-scanner';
 import { resolveDisplayUrl } from '@/lib/storage';
 import TshirtClaimCard from '@/components/TshirtClaimCard';
+import { getProUrl, getProShortUrl } from '@/lib/pro-slug';
 
 const ServiceRadiusMap = dynamic(() => import('@/components/ServiceRadiusMap'), {
   ssr: false,
@@ -2272,11 +2273,18 @@ export default function ProDashboard() {
                     padding: '0.2rem 0.7rem', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600
                   }}>⏳ Verification Pending</span>
                 )}
+                {proInfo?.pro_code && (
+                  <span style={{
+                    background: 'rgba(234, 88, 12, 0.15)', border: '1px solid rgba(234, 88, 12, 0.3)',
+                    color: 'var(--primary)', padding: '0.2rem 0.6rem', borderRadius: '6px',
+                    fontSize: '0.8rem', fontWeight: 600, fontFamily: 'monospace'
+                  }}>ID: {proInfo.pro_code}</span>
+                )}
               </div>
             </div>
           </div>
           <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-            <Link href={`/${proInfo?.slug}`} target="_blank" style={{
+            <Link href={getProUrl(proInfo)} target="_blank" style={{
               padding: '0.5rem 1rem', borderRadius: '8px', border: '1px solid var(--glass-border)',
               fontSize: '0.85rem', fontWeight: 500, opacity: 0.8
             }}>View Public Profile ↗</Link>
@@ -2434,7 +2442,7 @@ export default function ProDashboard() {
           <div className="glass" style={{ padding: '2rem', borderRadius: '14px' }}>
             <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.4rem' }}>Edit My Profile</h2>
             <p style={{ opacity: 0.6, fontSize: '0.9rem', marginBottom: '1.75rem' }}>
-              Changes will appear on your public listing at <Link href={`/${proInfo?.slug}`} style={{ color: 'var(--primary)' }}>carpenterwala.com/{proInfo?.slug}</Link>
+              Changes will appear on your public listing at <Link href={getProUrl(proInfo)} style={{ color: 'var(--primary)' }}>carpenterwala.com{getProUrl(proInfo)}</Link>
             </p>
             <form className="flex flex-col gap-4" onSubmit={handleSaveProfile}>
               

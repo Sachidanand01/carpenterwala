@@ -1,5 +1,6 @@
 import { getAllBlogPosts } from '@/lib/blog-service';
 import { supabase } from '@/lib/supabase';
+import { getProUrl } from '@/lib/pro-slug';
 
 function sanitizeImageUrl(url, baseUrl) {
   if (!url || typeof url !== 'string') return undefined;
@@ -168,15 +169,15 @@ export default async function sitemap() {
   try {
     const { data: profiles, error } = await supabase
       .from('profiles')
-      .select('slug, created_at, avatar, verified')
+      .select('id, pro_code, trade, name, slug, created_at, avatar, verified')
       .eq('verified', true);
     if (!error && profiles) {
       profileRoutes = profiles
-        .filter((profile) => profile && profile.slug)
+        .filter((profile) => profile && (profile.slug || profile.pro_code))
         .map((profile) => {
           const avatar = sanitizeImageUrl(profile.avatar, baseUrl);
           return {
-            url: `${baseUrl}/${profile.slug}`,
+            url: `${baseUrl}${getProUrl(profile)}`,
             lastModified: profile.created_at ? new Date(profile.created_at) : buildDate,
             changeFrequency: 'daily',
             priority: 0.8,

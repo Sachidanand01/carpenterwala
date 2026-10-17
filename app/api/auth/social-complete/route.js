@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { generateProCode, toUrlSlug } from '@/lib/pro-slug';
 
 export async function POST(request) {
   try {
@@ -141,33 +142,46 @@ export async function POST(request) {
         }, { status: 400 });
       }
 
-      // Generate unique slug
-      const baseSlug = trimmedName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'pro';
-      let slug = baseSlug;
-      let counter = 1;
-      while (true) {
-        const { data: existing } = await supabase.from('profiles').select('id').eq('slug', slug).maybeSingle();
-        if (!existing) break;
-        slug = `${baseSlug}-${counter}`;
-        counter++;
+      // Generate unique Pro Code & slug
+      let proCode = generateProCode();
+      for (let attempt = 0; attempt < 5; attempt++) {
+        const { data: existingCode } = await supabase.from('profiles').select('id').eq('pro_code', proCode).maybeSingle();
+        if (!existingCode) break;
+        proCode = generateProCode();
       }
 
-      const { data: newProfile, error: insertErr } = await supabase
+      const slug = toUrlSlug(trimmedName);
+
+      const proPayload = {
+        pro_code: proCode,
+        slug,
+        name: trimmedName,
+        email: cleanEmail,
+        phone: cleanPhone,
+        trade: trade,
+        location: location.trim(),
+        avatar: avatar || null,
+        verified: false,
+        onboarding_completed: false,
+        onboarding_step: 1
+      };
+
+      let { data: newProfile, error: insertErr } = await supabase
         .from('profiles')
-        .insert([{
-          slug,
-          name: trimmedName,
-          email: cleanEmail,
-          phone: cleanPhone,
-          trade: trade,
-          location: location.trim(),
-          avatar: avatar || null,
-          verified: false,
-          onboarding_completed: false,
-          onboarding_step: 1
-        }])
-        .select('id, slug, name, trade, location, email, phone')
+        .insert([proPayload])
+        .select('*')
         .single();
+
+      if (insertErr && (insertErr.message?.includes('pro_code') || insertErr.code === '42703')) {
+        delete proPayload.pro_code;
+        const retry = await supabase
+          .from('profiles')
+          .insert([proPayload])
+          .select('*')
+          .single();
+        newProfile = retry.data;
+        insertErr = retry.error;
+      }
 
       if (insertErr) {
         console.error('Pro profile insert error:', insertErr);

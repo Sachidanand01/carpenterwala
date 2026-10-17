@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { generateProCode } from '@/lib/pro-slug';
 
 // GET /api/pro/profile?id=1
 export async function GET(request) {
@@ -11,7 +12,7 @@ export async function GET(request) {
   try {
     let { data: profile, error } = await supabase
       .from('profiles')
-      .select(`id, slug, name, email, trade, experience, location, avatar, about, skills, portfolio, languages, verified, created_at,
+      .select(`id, pro_code, slug, name, email, trade, experience, location, avatar, about, skills, portfolio, languages, verified, created_at,
         latitude, longitude,
         phone, full_address, aadhaar_front, aadhaar_back, pan_front, pan_back, 
         voter_driving_front, voter_driving_back, police_verification, onboarding_completed, onboarding_step, accepting_leads, pending_avatar, rejection_reason,
@@ -20,7 +21,7 @@ export async function GET(request) {
       .eq('id', id)
       .single();
 
-    if (error && (error.code === '42703' || error.message?.includes('service_radius_km') || error.message?.includes('rejection_reason') || error.code === 'PGRST204')) {
+    if (error && (error.code === '42703' || error.message?.includes('pro_code') || error.message?.includes('service_radius_km') || error.message?.includes('rejection_reason') || error.code === 'PGRST204')) {
       const fallbackRes = await supabase
         .from('profiles')
         .select(`id, slug, name, email, trade, experience, location, avatar, about, skills, portfolio, languages, verified, created_at,
@@ -37,6 +38,14 @@ export async function GET(request) {
     if (error) throw error;
 
     if (profile) {
+      // Auto-assign pro_code if missing
+      if (!profile.pro_code) {
+        try {
+          const generated = generateProCode();
+          const { error: codeErr } = await supabase.from('profiles').update({ pro_code: generated }).eq('id', id);
+          if (!codeErr) profile.pro_code = generated;
+        } catch (_) {}
+      }
       // Parse fallback radius & timestamp if dedicated columns aren't present yet
       if (profile.service_radius_km === undefined || profile.service_radius_km === null) {
         const radiusTag = (profile.languages || []).find(l => typeof l === 'string' && l.startsWith('radius:'));

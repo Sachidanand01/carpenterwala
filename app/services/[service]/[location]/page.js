@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { supabase } from '@/lib/supabase';
 import VerifiedBadge from '@/components/VerifiedBadge';
+import { getProUrl } from '@/lib/pro-slug';
 
 export const dynamicParams = true;
 
@@ -195,7 +196,7 @@ export default async function ServiceLocationPage({ params }) {
   try {
     const { data: pros, error } = await supabase
       .from('profiles')
-      .select('id, name, slug, avatar, trade, rating, review_count, experience_years, verified, city')
+      .select('id, name, slug, pro_code, avatar, trade, rating, review_count, experience_years, verified, city')
       .eq('verified', true)
       .eq('trade', srv.type)
       .limit(6);
@@ -366,7 +367,7 @@ export default async function ServiceLocationPage({ params }) {
 
                 <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
                   <Link
-                    href={`/${pro.slug || pro.id}`}
+                    href={getProUrl(pro)}
                     className="btn btn-primary"
                     style={{ flex: 1, textAlign: 'center', padding: '0.6rem 0.5rem', fontSize: '0.9rem' }}
                   >

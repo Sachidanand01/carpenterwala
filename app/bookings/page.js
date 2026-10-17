@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { uploadImageToStorage } from '@/lib/document-scanner';
 import { resolveDisplayUrl } from '@/lib/storage';
+import { getProUrl } from '@/lib/pro-slug';
 
 function StarPicker({ value, onChange }) {
   const [hovered, setHovered] = useState(0);
@@ -1151,8 +1152,8 @@ function BookingsDashboardContent() {
                           </span>
 
                           {/* View Pro Profile */}
-                          {booking.profiles?.slug && (
-                            <Link href={`/${booking.profiles.slug}`}
+                          {booking.profiles && (
+                            <Link href={getProUrl(booking.profiles)}
                               style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: 500 }}>
                               View Profile ↗
                             </Link>

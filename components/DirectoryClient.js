@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import VerifiedBadge from "@/components/VerifiedBadge";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { getProUrl } from "@/lib/pro-slug";
 
 // Helper for distance calculation
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
@@ -391,7 +392,7 @@ function DirectoryContent() {
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.5rem" }}>
               {filteredProfiles.map((pro) => (
-                <Link href={`/${pro.slug}`} key={pro.id} style={{ textDecoration: "none", color: "inherit" }}>
+                <Link href={getProUrl(pro)} key={pro.id} style={{ textDecoration: "none", color: "inherit" }}>
                   <div className="glass" style={{ padding: "1.5rem", transition: "transform 0.2s", cursor: "pointer", height: "100%", display: "flex", flexDirection: "column" }} 
                        onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-5px)"}
                        onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0px)"}>
@@ -408,7 +409,14 @@ function DirectoryContent() {
                         <h3 style={{ fontSize: "1.1rem", margin: 0, display: "flex", alignItems: "center", gap: "0.5rem" }}>
                           {pro.name} {pro.verified && <VerifiedBadge />}
                         </h3>
-                        <p style={{ margin: 0, opacity: 0.75, fontSize: "0.9rem", color: "var(--foreground-muted)" }}>{pro.trade}</p>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.2rem" }}>
+                          <span style={{ margin: 0, opacity: 0.75, fontSize: "0.85rem", color: "var(--foreground-muted)" }}>{pro.trade}</span>
+                          {pro.pro_code && (
+                            <span style={{ fontSize: "0.75rem", fontFamily: "monospace", padding: "0.1rem 0.4rem", borderRadius: "4px", background: "rgba(234, 88, 12, 0.12)", color: "var(--primary)" }}>
+                              {pro.pro_code}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
 

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { Resend } from 'resend';
 import { encryptToken, decryptToken } from '@/lib/crypto';
+import { generateProCode, toUrlSlug } from '@/lib/pro-slug';
 
 const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder_key_for_build');
 
@@ -230,33 +231,46 @@ export async function POST(request) {
         }
       }
 
-      // Generate unique slug
-      const baseSlug = decrypted.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-      let slug = baseSlug;
-      let counter = 1;
-      while (true) {
-        const { data: existing } = await supabase.from('profiles').select('id').eq('slug', slug).maybeSingle();
-        if (!existing) break;
-        slug = `${baseSlug}-${counter}`;
-        counter++;
+      // Generate unique Pro Code & slug
+      let proCode = generateProCode();
+      for (let attempt = 0; attempt < 5; attempt++) {
+        const { data: existingCode } = await supabase.from('profiles').select('id').eq('pro_code', proCode).maybeSingle();
+        if (!existingCode) break;
+        proCode = generateProCode();
       }
 
-      // Insert profile
-      const { data: newProfile, error: insertError } = await supabase
+      const slug = toUrlSlug(decrypted.name);
+
+      // Insert profile (with fallback if pro_code column not yet migrated)
+      const profilePayload = {
+        pro_code: proCode,
+        slug,
+        name: decrypted.name,
+        email: cleanEmail,
+        phone: cleanDecryptedPhone || decrypted.phone,
+        trade: decrypted.trade,
+        location: decrypted.location,
+        verified: false,
+        onboarding_completed: false,
+        onboarding_step: 1
+      };
+
+      let { data: newProfile, error: insertError } = await supabase
         .from('profiles')
-        .insert({
-          slug,
-          name: decrypted.name,
-          email: cleanEmail,
-          phone: cleanDecryptedPhone || decrypted.phone,
-          trade: decrypted.trade,
-          location: decrypted.location,
-          verified: false,
-          onboarding_completed: false,
-          onboarding_step: 1
-        })
+        .insert(profilePayload)
         .select()
         .single();
+
+      if (insertError && (insertError.message?.includes('pro_code') || insertError.code === '42703')) {
+        delete profilePayload.pro_code;
+        const retry = await supabase
+          .from('profiles')
+          .insert(profilePayload)
+          .select()
+          .single();
+        newProfile = retry.data;
+        insertError = retry.error;
+      }
 
       if (insertError) {
         console.error('Failed to create profile:', insertError);

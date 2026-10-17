@@ -1,5 +1,6 @@
 import { getProfileBySlug } from '@/lib/supabase';
-import { notFound } from 'next/navigation';
+import { getProUrl } from '@/lib/pro-slug';
+import { notFound, redirect } from 'next/navigation';
 import VerifiedBadge from '@/components/VerifiedBadge';
 import LeadCaptureModal from '@/components/LeadCaptureModal';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -10,7 +11,7 @@ export async function generateMetadata({ params }) {
   if (!profile) return { title: 'Not Found' };
   
   const siteUrl = 'https://carpenterwala.com';
-  const canonicalUrl = `${siteUrl}/${profile.slug}`;
+  const canonicalUrl = `${siteUrl}${getProUrl(profile)}`;
   const pageTitle = `${profile.name} - Verified ${profile.trade} in ${profile.location} | Carpenterwala`;
   const pageDescription = `Hire ${profile.name}, a verified ${profile.trade} in ${profile.location} with ${profile.experience} of experience. Specializing in ${profile.skills ? profile.skills.slice(0, 3).join(', ') : ''}. Book now on Carpenterwala.`;
   
@@ -62,6 +63,9 @@ export default async function ProProfile({ params }) {
   if (!profile) {
     notFound();
   }
+
+  // Redirect legacy root profile URL to new canonical /pro/[trade]/[proCode]/[name] URL
+  redirect(getProUrl(profile));
 
   // Map trade to Schema.org LocalBusiness sub-types
   let schemaType = "ProfessionalService";

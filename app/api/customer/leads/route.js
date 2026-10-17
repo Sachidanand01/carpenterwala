@@ -18,7 +18,7 @@ export async function GET(request) {
         phone,
         task,
         created_at,
-        profiles ( id, slug, name, trade, avatar, location )
+        profiles ( id, pro_code, slug, name, trade, avatar, location )
       `)
       .eq('phone', phone)
       .order('created_at', { ascending: false });
