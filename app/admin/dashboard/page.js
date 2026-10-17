@@ -58,6 +58,7 @@ export default function AdminDashboardClient() {
   const [zoomedImage, setZoomedImage] = useState(null);
   const [actionStatus, setActionStatus] = useState({ type: '', message: '' });
   const [processingId, setProcessingId] = useState(null);
+  const [isSyncingReviews, setIsSyncingReviews] = useState(false);
 
   const handleZoomDoc = async ({ title, url }) => {
     if (!url) return;
@@ -409,7 +410,56 @@ export default function AdminDashboardClient() {
           <h1 style={{ fontSize: '2.2rem', fontWeight: 800, marginTop: '0.2rem' }}>Admin Control Center</h1>
         </div>
         
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <button 
+            onClick={async () => {
+              if (!adminToken) return;
+              setIsSyncingReviews(true);
+              try {
+                const response = await fetch('/api/reviews/sync', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${adminToken}`
+                  }
+                });
+                const data = await response.json();
+                if (response.ok && data.success) {
+                  setActionStatus({
+                    type: 'success',
+                    message: data.message || `Successfully synced ${data.syncedCount || 0} reviews!`
+                  });
+                } else {
+                  throw new Error(data.error || 'Failed to sync Google reviews');
+                }
+              } catch (err) {
+                setActionStatus({
+                  type: 'error',
+                  message: err.message || 'Error syncing Google reviews'
+                });
+              } finally {
+                setIsSyncingReviews(false);
+                setTimeout(() => setActionStatus({ type: '', message: '' }), 6000);
+              }
+            }}
+            disabled={isSyncingReviews}
+            className="btn btn-secondary" 
+            style={{ 
+              padding: '0.5rem 1rem', 
+              fontSize: '0.85rem', 
+              display: 'flex', 
+              gap: '0.4rem', 
+              alignItems: 'center',
+              border: '1px solid rgba(245, 158, 11, 0.4)',
+              background: 'rgba(245, 158, 11, 0.08)',
+              color: '#d97706',
+              fontWeight: 600,
+              cursor: isSyncingReviews ? 'not-allowed' : 'pointer'
+            }}
+          >
+            {isSyncingReviews ? '⏳ Syncing Reviews…' : '⭐ Sync Google Reviews'}
+          </button>
+
           <button 
             onClick={() => fetchData(adminToken)} 
             className="btn btn-secondary" 

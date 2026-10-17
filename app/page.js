@@ -2,6 +2,7 @@ import Link from "next/link";
 import MagneticCTA from "@/components/MagneticCTA";
 import HeroLiveProCard from "@/components/HeroLiveProCard";
 import LandingFAQAccordion from "@/components/LandingFAQAccordion";
+import { getLiveReviewStats } from "@/lib/reviews";
 
 export const metadata = {
   title: "Carpenterwala | Professional Handyman Marketplace",
@@ -14,7 +15,9 @@ export const metadata = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
+  const stats = await getLiveReviewStats();
+
   const homeJsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -67,8 +70,8 @@ export default function Home() {
         },
         "aggregateRating": {
           "@type": "AggregateRating",
-          "ratingValue": "4.85",
-          "reviewCount": "1420",
+          "ratingValue": String(stats.averageRating),
+          "reviewCount": String(stats.totalReviews),
           "bestRating": "5",
           "worstRating": "1"
         }
@@ -153,9 +156,29 @@ export default function Home() {
             >
               Bangalore's Verified Handyman Network
             </span>
-            <span style={{ fontSize: "0.85rem", opacity: 0.75, fontWeight: 500 }}>
-              ★ 4.85/5 (1,420+ Reviews)
-            </span>
+            <Link
+              href="/testimonial"
+              style={{
+                fontSize: "0.85rem",
+                opacity: 0.9,
+                fontWeight: 600,
+                color: "inherit",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "5px",
+                padding: "0.25rem 0.65rem",
+                borderRadius: "20px",
+                background: "rgba(245, 158, 11, 0.12)",
+                border: "1px solid rgba(245, 158, 11, 0.3)",
+                transition: "all 0.2s ease"
+              }}
+              title="View genuine customer reviews on Google"
+            >
+              <span style={{ color: "#f59e0b" }}>★</span>
+              <span>{stats.averageRating}/5 ({stats.totalReviews.toLocaleString()}+ Reviews)</span>
+              <span style={{ fontSize: "0.75rem", opacity: 0.75 }}>→</span>
+            </Link>
           </div>
 
           {/* Display Headline */}
