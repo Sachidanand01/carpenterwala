@@ -27,6 +27,7 @@ const REJECTION_PRESETS = [
 export default function AdminDashboardClient() {
   const [adminToken, setAdminToken] = useState(null);
   const [passwordInput, setPasswordInput] = useState('');
+  const [twoFactorInput, setTwoFactorInput] = useState('');
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
 
@@ -153,7 +154,7 @@ export default function AdminDashboardClient() {
       const response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: passwordInput })
+        body: JSON.stringify({ password: passwordInput, twoFactorCode: twoFactorInput })
       });
       const result = await response.json();
       if (response.ok && result.success) {
@@ -176,6 +177,7 @@ export default function AdminDashboardClient() {
     setLeads([]);
     setProfiles([]);
     setPasswordInput('');
+    setTwoFactorInput('');
     setActiveTab('overview');
     setSelectedPro(null);
     setZoomedImage(null);
@@ -343,6 +345,41 @@ export default function AdminDashboardClient() {
                   color: 'var(--foreground)',
                   fontSize: '0.95rem',
                   outline: 'none',
+                  transition: 'all 0.2s',
+                  fontFamily: 'monospace'
+                }}
+                onFocus={(e) => e.target.style.border = '1px solid var(--primary)'}
+                onBlur={(e) => e.target.style.border = '1px solid var(--glass-border)'}
+              />
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--foreground)' }}>
+                  🔐 Microsoft Authenticator Code
+                </label>
+                <span style={{ fontSize: '0.72rem', opacity: 0.6, color: 'var(--foreground-muted)' }}>
+                  or Backup Code
+                </span>
+              </div>
+              <input
+                type="text"
+                value={twoFactorInput}
+                onChange={(e) => setTwoFactorInput(e.target.value)}
+                placeholder="6-digit code or backup"
+                maxLength={12}
+                autoComplete="one-time-code"
+                disabled={authLoading}
+                style={{
+                  width: '100%',
+                  padding: '0.85rem 1.1rem',
+                  borderRadius: '12px',
+                  border: '1px solid var(--glass-border)',
+                  background: 'var(--background, #FAF8F5)',
+                  color: 'var(--foreground)',
+                  fontSize: '0.95rem',
+                  outline: 'none',
+                  letterSpacing: '2px',
                   transition: 'all 0.2s',
                   fontFamily: 'monospace'
                 }}
