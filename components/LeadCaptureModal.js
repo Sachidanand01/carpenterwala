@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import TurnstileWidget from '@/components/TurnstileWidget';
 
 export default function LeadCaptureModal({ proName, proId, acceptingLeads = true }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +20,7 @@ export default function LeadCaptureModal({ proName, proId, acceptingLeads = true
   const [fetchedCustomer, setFetchedCustomer] = useState(null);
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState('');
 
   useEffect(() => {
     if (typeof window !== 'undefined' && isOpen) {
@@ -66,6 +68,7 @@ export default function LeadCaptureModal({ proName, proId, acceptingLeads = true
           name: finalName,
           phone: finalPhone,
           task: finalTask,
+          turnstileToken,
         })
       });
 
@@ -157,7 +160,7 @@ export default function LeadCaptureModal({ proName, proId, acceptingLeads = true
         const otpRes = await fetch('/api/customer/otp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'send', email: cleanEmail })
+          body: JSON.stringify({ action: 'send', email: cleanEmail, turnstileToken })
         });
         const otpData = await otpRes.json();
 
@@ -188,7 +191,7 @@ export default function LeadCaptureModal({ proName, proId, acceptingLeads = true
         const otpRes = await fetch('/api/customer/otp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'send', email: cleanEmail })
+          body: JSON.stringify({ action: 'send', email: cleanEmail, turnstileToken })
         });
         const otpData = await otpRes.json();
 
@@ -413,6 +416,8 @@ export default function LeadCaptureModal({ proName, proId, acceptingLeads = true
                         />
                       </div>
                       
+                      <TurnstileWidget onVerify={setTurnstileToken} onExpire={() => setTurnstileToken('')} />
+                      
                       <button type="submit" className="btn btn-primary" style={{ marginTop: "0.5rem" }}>
                         Send Request
                       </button>
@@ -452,6 +457,8 @@ export default function LeadCaptureModal({ proName, proId, acceptingLeads = true
                           }} 
                         />
                       </div>
+
+                      <TurnstileWidget onVerify={setTurnstileToken} onExpire={() => setTurnstileToken('')} />
 
                       <button type="submit" disabled={authLoading} className="btn btn-primary" style={{ marginTop: "0.5rem" }}>
                         {authLoading ? 'Verifying...' : 'Continue'}

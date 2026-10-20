@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { encryptToken, decryptToken } from '@/lib/crypto';
+import { verifyTurnstileToken } from '@/lib/verify-turnstile';
 
 const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder_key_for_build');
 
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { action, email, otp, otpToken } = body;
+    const { action, email, otp, otpToken, turnstileToken } = body;
 
     const cleanEmail = email?.trim().toLowerCase();
 
@@ -17,6 +18,12 @@ export async function POST(request) {
 
     // --- ACTION: SEND EMAIL OTP ---
     if (action === 'send') {
+      const clientIp = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+      const turnstile = await verifyTurnstileToken(turnstileToken, clientIp);
+      if (!turnstile.success) {
+        return NextResponse.json({ error: 'Bot security check failed. Please refresh and try again.' }, { status: 403 });
+      }
+
       const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
       const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes validity
 

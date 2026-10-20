@@ -1,13 +1,23 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { Resend } from 'resend';
+import { verifyTurnstileToken } from '@/lib/verify-turnstile';
 
 const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder_key_for_build');
 
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { proId, name, phone, task } = body;
+    const { proId, name, phone, task, turnstileToken } = body;
+
+    const clientIp = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+    const turnstile = await verifyTurnstileToken(turnstileToken, clientIp);
+    if (!turnstile.success) {
+      return NextResponse.json(
+        { success: false, error: 'Bot security verification failed. Please try again.' },
+        { status: 403 }
+      );
+    }
 
     // 1. Save this lead to Supabase database
     const { error } = await supabase.from('leads').insert([{ 
