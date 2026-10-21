@@ -1,7 +1,8 @@
 Contact: mailto:contact@carpenterwala.com
 Contact: https://carpenterwala.com/contact
-Expires: 2027-12-31T23:59:59.000Z
+Expires: 2027-10-15T00:00:00.000Z
 Preferred-Languages: en, hi, kn, ta, te
 Canonical: https://carpenterwala.com/.well-known/security.txt
 Policy: https://carpenterwala.com/privacy-policy
 Acknowledgments: https://carpenterwala.com/about
+Hiring: https://carpenterwala.com/pro/login

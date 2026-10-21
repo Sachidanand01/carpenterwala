@@ -49,9 +49,9 @@ export function proxy(request) {
   return response;
 }
 
-// Match all request paths including API routes, excluding static assets and public icons
+// Match all request paths including API routes, excluding static assets, public icons, and meta files
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|icon.svg|favicon.svg|images|globe.svg|window.svg|next.svg|vercel.svg).*)',
+    '/((?!_next/static|_next/image|favicon.ico|icon.svg|favicon.svg|images|globe.svg|window.svg|next.svg|vercel.svg|robots.txt|ads.txt|llms.txt|security.txt|\\.well-known).*)',
   ],
 };
