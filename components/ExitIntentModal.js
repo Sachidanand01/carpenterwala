@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 const MESSAGES = [
   {
@@ -58,9 +58,27 @@ export default function ExitIntentModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Exclude internal admin and professional workspace portals
+  const isExcluded = Boolean(
+    pathname && (
+      pathname.startsWith('/admin') ||
+      pathname.startsWith('/pro/dashboard') ||
+      pathname.startsWith('/pro/login')
+    )
+  );
+
+  // Auto-close modal if user navigates into an excluded dashboard
+  useEffect(() => {
+    if (isExcluded && isOpen) {
+      setIsOpen(false);
+    }
+  }, [isExcluded, isOpen]);
 
   const triggerModal = useCallback(() => {
     if (typeof window === 'undefined') return;
+    if (isExcluded) return;
 
     // Check if already shown during this session
     const alreadyShown = sessionStorage.getItem('exit_intent_modal_shown');
@@ -73,7 +91,7 @@ export default function ExitIntentModal() {
 
     // Save session flag so it displays at most once per session
     sessionStorage.setItem('exit_intent_modal_shown', 'true');
-  }, []);
+  }, [isExcluded]);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -97,6 +115,7 @@ export default function ExitIntentModal() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    if (isExcluded) return;
 
     // 1. Initialize session start time if not set
     if (!sessionStorage.getItem('session_start_time')) {
@@ -156,9 +175,9 @@ export default function ExitIntentModal() {
       window.removeEventListener('keydown', handleKeyDown);
       clearInterval(idleInterval);
     };
-  }, [triggerModal]);
+  }, [triggerModal, isExcluded]);
 
-  if (!isOpen || !selectedMessage) return null;
+  if (!isOpen || !selectedMessage || isExcluded) return null;
 
   return (
     <div 

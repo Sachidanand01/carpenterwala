@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 
 /**
  * Feature flag options:
@@ -14,6 +15,15 @@ export default function CursorConstruction({
   enabled = true,
   idleDelayMs = 2600, // 2.6 seconds of inactivity triggers the scene
 }) {
+  const pathname = usePathname();
+  const isExcluded = Boolean(
+    pathname && (
+      pathname.startsWith('/admin') ||
+      pathname.startsWith('/pro/dashboard') ||
+      pathname.startsWith('/pro/login')
+    )
+  );
+
   const canvasRef = useRef(null);
   const stateRef = useRef({
     active: false,
@@ -41,6 +51,11 @@ export default function CursorConstruction({
   const [isCursorHidden, setIsCursorHidden] = useState(false);
 
   useEffect(() => {
+    if (isExcluded) {
+      setIsCursorHidden(false);
+      return;
+    }
+
     // Check if disabled by env flag or user preference
     const envEnabled = process.env.NEXT_PUBLIC_ENABLE_IDLE_ANIMATION !== "false";
     if (!enabled || !envEnabled) return;
@@ -999,7 +1014,9 @@ export default function CursorConstruction({
       window.removeEventListener("scroll", onUserInteraction);
       window.removeEventListener("touchstart", onUserInteraction);
     };
-  }, [enabled, idleDelayMs]);
+  }, [enabled, idleDelayMs, isExcluded]);
+
+  if (isExcluded) return null;
 
   return (
     <>
