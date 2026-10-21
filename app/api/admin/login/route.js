@@ -24,7 +24,7 @@ export async function POST(request) {
     if (adminTotpSecret) {
       if (!twoFactorCode) {
         return NextResponse.json(
-          { error: 'Microsoft Authenticator 6-digit code is required.', requires2FA: true },
+          { error: 'Two-Factor Authenticator 6-digit code is required.', requires2FA: true },
           { status: 400 }
         );
       }
@@ -37,7 +37,7 @@ export async function POST(request) {
 
       if (!verification.success) {
         return NextResponse.json(
-          { error: 'Invalid 2FA code. Please enter the current code from Microsoft Authenticator or a backup code.' },
+          { error: 'Invalid 2FA code. Please enter the current code from your authenticator app or a backup code.' },
           { status: 401 }
         );
       }

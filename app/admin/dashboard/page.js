@@ -424,7 +424,7 @@ export default function AdminDashboardClient() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--foreground)' }}>
-                  🔐 Microsoft Authenticator Code
+                  🔐 Two-Factor Authenticator Code
                 </label>
                 <span style={{ fontSize: '0.72rem', opacity: 0.6, color: 'var(--foreground-muted)' }}>
                   or Backup Code
