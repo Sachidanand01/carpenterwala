@@ -34,6 +34,7 @@ export default function AdminDashboardClient() {
   const [activeTab, setActiveTab] = useState('overview'); // overview, pending, directory, leads, reels
   const [leads, setLeads] = useState([]);
   const [profiles, setProfiles] = useState([]);
+  const [expiringKycDocs, setExpiringKycDocs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // DIY Reels Admin State
@@ -87,6 +88,10 @@ export default function AdminDashboardClient() {
   const [rejectCustomMessage, setRejectCustomMessage] = useState('');
   const [rejectTargetStep, setRejectTargetStep] = useState(2);
 
+  // Missing Document Reminder State
+  const [sendingReminderId, setSendingReminderId] = useState(null);
+  const [reminderSentPros, setReminderSentPros] = useState({});
+
   useEffect(() => {
     const token = sessionStorage.getItem('admin_token');
     if (token) {
@@ -137,6 +142,19 @@ export default function AdminDashboardClient() {
         setAdminCategories(fetchedCats || []);
       } catch (err) {
         console.warn("Could not load reels into admin:", err);
+      }
+
+      // 4. Fetch 48-Hour Expiring KYC Documents
+      try {
+        const kycAlertRes = await fetch('/api/admin/kyc-purge-alert', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (kycAlertRes.ok) {
+          const kycData = await kycAlertRes.json();
+          setExpiringKycDocs(kycData.expiringProfiles || []);
+        }
+      } catch (e) {
+        // Silently skip if table or RPC not yet migrated
       }
     } catch (err) {
       console.error('Secure data sync failed:', err);
@@ -245,6 +263,56 @@ export default function AdminDashboardClient() {
     } finally {
       setProcessingId(null);
     }
+  };
+
+  // Handle email reminder for incomplete documents
+  const handleSendEmailReminder = async (pro) => {
+    if (!pro || !pro.id || sendingReminderId) return;
+    if (!pro.email) {
+      setActionStatus({ type: 'error', message: 'This professional does not have a registered email address.' });
+      return;
+    }
+    setSendingReminderId(pro.id);
+    setActionStatus({ type: 'info', message: `Dispatching reminder email to ${pro.email}…` });
+    try {
+      const res = await fetch('/api/admin/remind-pro', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${adminToken}`
+        },
+        body: JSON.stringify({ proId: pro.id })
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to dispatch reminder');
+
+      setReminderSentPros(prev => ({ ...prev, [pro.id]: true }));
+      setActionStatus({ type: 'success', message: `🚀 Reminder email successfully sent to ${pro.email}!` });
+      setTimeout(() => setActionStatus({ type: '', message: '' }), 6000);
+    } catch (err) {
+      setActionStatus({ type: 'error', message: err.message || 'Error sending reminder.' });
+    } finally {
+      setSendingReminderId(null);
+    }
+  };
+
+  // Handle WhatsApp reminder for incomplete documents
+  const handleOpenWhatsAppReminder = (pro) => {
+    if (!pro || !pro.phone) {
+      setActionStatus({ type: 'error', message: 'No phone number available for WhatsApp.' });
+      return;
+    }
+    let cleanPhone = String(pro.phone).replace(/[^0-9]/g, '');
+    if (cleanPhone.length === 10) {
+      cleanPhone = '91' + cleanPhone;
+    } else if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) {
+      cleanPhone = '91' + cleanPhone.substring(1);
+    }
+    const firstName = (pro.name || 'Pro').trim().split(' ')[0];
+    const message = `Hello ${firstName}, your profile on Carpenterwala is almost ready! To activate your public profile page and showcase your work, please upload your verification documents here: https://carpenterwala.com/pro/login`;
+    
+    const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
   };
 
   // Analytics calculations
@@ -573,6 +641,42 @@ export default function AdminDashboardClient() {
         }}>
           <span>{actionStatus.type === 'success' ? '✅' : '⚠️'}</span>
           <span style={{ fontWeight: 550 }}>{actionStatus.message}</span>
+        </div>
+      )}
+
+      {/* 48-Hour KYC Document Purge Alert Banner */}
+      {expiringKycDocs.length > 0 && (
+        <div style={{
+          background: 'rgba(239, 68, 68, 0.08)',
+          border: '1px solid rgba(239, 68, 68, 0.3)',
+          borderRadius: '14px',
+          padding: '1.1rem 1.4rem',
+          marginBottom: '1.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '1rem',
+          flexWrap: 'wrap',
+          boxShadow: '0 4px 15px rgba(239, 68, 68, 0.05)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+            <span style={{ fontSize: '1.8rem' }}>⏰</span>
+            <div>
+              <strong style={{ color: '#dc2626', fontSize: '0.95rem', display: 'block' }}>
+                48-Hour KYC Document Auto-Purge Alert ({expiringKycDocs.length} Profile{expiringKycDocs.length > 1 ? 's' : ''})
+              </strong>
+              <p style={{ margin: '0.2rem 0 0 0', opacity: 0.8, fontSize: '0.84rem', color: 'var(--foreground)' }}>
+                Digital copies of identity scans for {expiringKycDocs.map(p => p.name).slice(0, 3).join(', ')}{expiringKycDocs.length > 3 ? ` and ${expiringKycDocs.length - 3} more` : ''} are scheduled for permanent 90-day deletion within 48 hours.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setActiveTab('pending')}
+            className="btn btn-secondary"
+            style={{ padding: '0.45rem 1rem', fontSize: '0.82rem', border: '1px solid rgba(239, 68, 68, 0.4)', color: '#dc2626', fontWeight: 600 }}
+          >
+            Review Pending Audits
+          </button>
         </div>
       )}
 
@@ -1748,6 +1852,26 @@ export default function AdminDashboardClient() {
                   💳 Verification Documents
                 </h3>
 
+                {/* Helper notice if documents are missing */}
+                {(!selectedPro.voter_driving_front || !selectedPro.police_verification || !selectedPro.aadhaar_front) && (
+                  <div style={{
+                    background: 'rgba(245, 158, 11, 0.08)',
+                    border: '1px solid rgba(245, 158, 11, 0.3)',
+                    borderRadius: '10px',
+                    padding: '0.75rem 1rem',
+                    fontSize: '0.82rem',
+                    color: '#b45309',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.6rem'
+                  }}>
+                    <span style={{ fontSize: '1.2rem' }}>💡</span>
+                    <div>
+                      <strong>Pending Onboarding:</strong> Professional hasn't uploaded all verification scans yet. Use the friendly <strong>Email</strong> or <strong>WhatsApp</strong> reminder below to invite them to finish their profile.
+                    </div>
+                  </div>
+                )}
+
                 {/* 1. Aadhaar Card Card */}
                 <div>
                   <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -1943,7 +2067,59 @@ export default function AdminDashboardClient() {
                 )}
               </div>
               
-              <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', gap: '0.65rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                {/* 📩 Send Email Reminder */}
+                <button
+                  disabled={sendingReminderId === selectedPro.id || !selectedPro.email}
+                  onClick={() => handleSendEmailReminder(selectedPro)}
+                  className="btn btn-secondary"
+                  title={selectedPro.email ? `Send reminder email to ${selectedPro.email}` : 'No email address registered'}
+                  style={{
+                    padding: '0.6rem 1.15rem',
+                    fontSize: '0.85rem',
+                    fontWeight: 600,
+                    border: '1px solid #3b82f6',
+                    color: '#1d4ed8',
+                    background: reminderSentPros[selectedPro.id] ? 'rgba(34,197,94,0.1)' : 'rgba(59,130,246,0.08)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.45rem',
+                    cursor: (sendingReminderId === selectedPro.id || !selectedPro.email) ? 'not-allowed' : 'pointer',
+                    boxShadow: '0 2px 8px rgba(59,130,246,0.15)'
+                  }}
+                >
+                  {sendingReminderId === selectedPro.id ? (
+                    <>⏳ Sending Email…</>
+                  ) : reminderSentPros[selectedPro.id] ? (
+                    <>✅ Email Sent ✓</>
+                  ) : (
+                    <>📩 Send Email Reminder</>
+                  )}
+                </button>
+
+                {/* 📲 Remind via WhatsApp */}
+                <button
+                  disabled={!selectedPro.phone}
+                  onClick={() => handleOpenWhatsAppReminder(selectedPro)}
+                  className="btn btn-secondary"
+                  title={selectedPro.phone ? `Open WhatsApp to message ${selectedPro.phone}` : 'No phone number registered'}
+                  style={{
+                    padding: '0.6rem 1.15rem',
+                    fontSize: '0.85rem',
+                    fontWeight: 600,
+                    border: '1px solid #16a34a',
+                    color: '#15803d',
+                    background: 'rgba(22,163,74,0.08)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.45rem',
+                    cursor: !selectedPro.phone ? 'not-allowed' : 'pointer',
+                    boxShadow: '0 2px 8px rgba(22,163,74,0.15)'
+                  }}
+                >
+                  <span>📲</span> Remind via WhatsApp
+                </button>
+
                 <button
                   disabled={processingId !== null}
                   onClick={() => setRejectModalPro(selectedPro)}

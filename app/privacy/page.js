@@ -94,8 +94,21 @@ export default function PrivacyPolicy() {
           </p>
         </section>
 
+        <section style={{ marginBottom: "3rem" }}>
+          <h2 style={{ fontSize: "1.75rem", marginBottom: "1rem", color: "var(--primary)" }}>7. Service Professional Verification Data & 90-Day Auto-Purge Policy</h2>
+          <p>
+            Carpenterwala takes stringent technical and organizational measures to prevent identity theft and protect the personal data of independent service professionals joining our directory:
+          </p>
+          <ul style={{ paddingLeft: "1.5rem", marginTop: "0.5rem", display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+            <li><strong>Temporary Digital Processing:</strong> Verification documents (such as Voter ID, Driving License, Aadhaar, PAN, and Police Verification / Character Certificates) uploaded by professionals are retained solely for the purpose of validating their identity and trustworthiness.</li>
+            <li><strong>90-Day Auto-Purge:</strong> All digital copies of uploaded identification scans are strictly and permanently purged from our active databases and cloud storage within ninety (90) days of submission or upon successful account onboarding.</li>
+            <li><strong>No Hard Copies:</strong> Carpenterwala never generates, prints, or maintains physical hard-copy archives of government identity documents.</li>
+            <li><strong>Law Enforcement & Sovereign Records Disclaimer:</strong> Carpenterwala is a digital intermediary and not an official repository of government records. We do not retain historical copies of police verification certificates or identity proofs for secondary inquiries. Inquiries regarding official police clearances or verification records must be directed to the respective State Police Department or issuing authority.</li>
+          </ul>
+        </section>
+
         <section>
-          <h2 style={{ fontSize: "1.75rem", marginBottom: "1rem", color: "var(--primary)" }}>7. Privacy Contact Details</h2>
+          <h2 style={{ fontSize: "1.75rem", marginBottom: "1rem", color: "var(--primary)" }}>8. Privacy Contact Details</h2>
           <p>If you have any questions about this Privacy Policy, please contact us:</p>
           <ul style={{ listStyle: "none", marginTop: "0.5rem" }}>
             <li>By email: <strong>contact@carpenterwala.com</strong></li>
