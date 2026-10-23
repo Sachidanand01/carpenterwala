@@ -21,6 +21,18 @@ const AUTHORS_BY_CATEGORY = {
     bio: 'Wall-coating expert specializing in tropical humidity damp-proofing and premium interior color visualizers.',
     avatar: '/images/authors/amit.jpg'
   },
+  'Wallpaper': {
+    name: 'Amit Verma',
+    role: 'Lead Wall Finishing & Surface Decor Consultant',
+    bio: 'Wall surface finishing specialist with over 12 years of experience in interior wallpaper installations, peel-and-stick applications, and moisture diagnostics for Bangalore homes.',
+    avatar: '/images/authors/amit.jpg'
+  },
+  'Wall Paper': {
+    name: 'Amit Verma',
+    role: 'Lead Wall Finishing & Surface Decor Consultant',
+    bio: 'Wall surface finishing specialist with over 12 years of experience in interior wallpaper installations, peel-and-stick applications, and moisture diagnostics for Bangalore homes.',
+    avatar: '/images/authors/amit.jpg'
+  },
   'Plumbing': {
     name: 'Suresh Gowda',
     role: 'Senior Plumbing Engineer & Hydraulics Advisor',

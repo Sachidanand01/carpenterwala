@@ -41,7 +41,19 @@ const KNOWN_VALID_BASE_ROUTES = [
   '/services/electrical/thanisandra'
 ];
 
-const VALID_CATEGORIES = ['Carpentry', 'Painting', 'Plumbing', 'Electrical', 'Maintenance'];
+const VALID_CATEGORIES = [
+  'Carpentry',
+  'Painting',
+  'Plumbing',
+  'Electrical',
+  'Maintenance',
+  'Wallpaper',
+  'Wall Paper',
+  'How to',
+  'Pest Control',
+  'Bird Netting',
+  'Pro Guide'
+];
 
 const knownSlugs = new Set(BLOG_POSTS.map(p => p.slug));
 

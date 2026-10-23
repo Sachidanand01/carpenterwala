@@ -47,6 +47,16 @@ const CATEGORY_DESCRIPTIONS = {
     <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">How-To DIY Guides & Quick Home Repairs</h2>
     <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Practical, step-by-step DIY tutorials and quick fix guides crafted by Carpenterwala's master technicians. From fixing sagging doors and squeaky hinges to clearing minor drain clogs and tightening loose fixtures, learn how to handle everyday household maintenance with confidence.</p>
     <p style="opacity: 0.85; line-height: 1.7;">Save time and money with field-tested methods specifically tailored for Indian homes, apartments, and local hardware materials. Follow our illustrated safety checklists and expert pro-tips to execute clean, professional repairs yourself.</p>
+  `,
+  wallpaper: `
+    <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">Designer Wallpapers, Peel-and-Stick DIY Guides & Accent Wall Tips</h2>
+    <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Transform ordinary rooms into stylish spaces with our expert wallpaper and wall decor guides for Indian homes. Learn how to choose between peel-and-stick self-adhesive vinyl and traditional pasted wallpapers, calculate exact roll requirements, avoid pattern mismatching, and pick accent walls that elevate your interior aesthetic.</p>
+    <p style="opacity: 0.85; line-height: 1.7;">Bangalore's seasonal climate demands careful surface diagnostics before installation. Follow our professional checklists to treat underlying wall seepage, properly cure fresh paint before hanging wallpaper, and keep your feature walls pristine for years.</p>
+  `,
+  'wall-paper': `
+    <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">Designer Wallpapers, Peel-and-Stick DIY Guides & Accent Wall Tips</h2>
+    <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Transform ordinary rooms into stylish spaces with our expert wallpaper and wall decor guides for Indian homes. Learn how to choose between peel-and-stick self-adhesive vinyl and traditional pasted wallpapers, calculate exact roll requirements, avoid pattern mismatching, and pick accent walls that elevate your interior aesthetic.</p>
+    <p style="opacity: 0.85; line-height: 1.7;">Bangalore's seasonal climate demands careful surface diagnostics before installation. Follow our professional checklists to treat underlying wall seepage, properly cure fresh paint before hanging wallpaper, and keep your feature walls pristine for years.</p>
   `
 };
 
