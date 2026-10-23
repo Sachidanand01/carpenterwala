@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import FooterTrustStrip from './FooterTrustStrip';
 
 export default function Footer() {
   return (
@@ -91,8 +92,11 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Trust & Security Badges */}
+        <FooterTrustStrip />
+
         <div style={{
-          marginTop: "4rem",
+          marginTop: "2.5rem",
           paddingTop: "2rem",
           borderTop: "1px solid var(--glass-border)",
           display: "flex",
