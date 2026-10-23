@@ -114,7 +114,7 @@ export default function ProLogin({ lang, session, mode }) {
             if (data.data.phone) setRegPhone(data.data.phone);
             if (data.data.location) setRegLocation(data.data.location);
             if (data.data.trade) {
-              const standardTrades = ['Carpenter', 'Painter', 'Plumber', 'Electrician'];
+              const standardTrades = ['Carpenter', 'Painter', 'Plumber', 'Electrician', 'AC Technician', 'Mason', 'Welder', 'Gardener', 'Barber', 'Pest Control', 'Deep Cleaning', 'Roofer', 'Flooring Expert', 'Tank & Sump Cleaner'];
               const matched = standardTrades.find(t => t.toLowerCase() === data.data.trade.toLowerCase());
               if (matched) {
                 setRegTrade(matched);
@@ -1233,6 +1233,7 @@ export default function ProLogin({ lang, session, mode }) {
                           <option value="Deep Cleaning">{t.trades['Deep Cleaning']}</option>
                           <option value="Roofer">{t.trades.Roofer}</option>
                           <option value="Flooring Expert">{t.trades['Flooring Expert']}</option>
+                          <option value="Tank & Sump Cleaner">{t.trades['Tank & Sump Cleaner']}</option>
                           <option value="Other">✨ {t.trades.Other}</option>
                         </select>
                       </div>

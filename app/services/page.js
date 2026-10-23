@@ -19,6 +19,7 @@ const SERVICES_DATA = [
   { id: 'Gardener', name: 'Gardener', image: 'https://images.unsplash.com/photo-1416879598446-cc8b9fdf934f?w=500&q=80', desc: 'Lawn maintenance, planting, and landscape care.' },
   { id: 'Roofer', name: 'Roofer', image: 'https://images.unsplash.com/photo-1632154939737-25e2439a3f2b?w=500&q=80', desc: 'Roof repairs, waterproofing, and tile replacement.' },
   { id: 'Flooring', name: 'Flooring Expert', image: 'https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?w=500&q=80', desc: 'Tile laying, wooden flooring, and marble polishing.' },
+  { id: 'Tank & Sump Cleaner', name: 'Tank & Sump Cleaner', image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80', desc: 'Overhead tank cleaning, underground sump wash, and UV sanitization.' },
 ];
 
 const BATCH_SIZE = 4;

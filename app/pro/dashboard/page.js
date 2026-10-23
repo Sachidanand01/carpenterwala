@@ -519,6 +519,18 @@ export const TRADE_SKILL_PRESETS = {
     'Staircase Nosing Fitting',
     'Self-Leveling Floor Screed',
   ],
+  'Tank & Sump Cleaner': [
+    'Overhead PVC Tank Cleaning',
+    'Underground Concrete Sump Cleaning',
+    'High-Pressure Rotary Jet Wash',
+    'Sludge & Silt Dewatering Pump',
+    'UV Anti-Bacterial Disinfection',
+    'Chemical & Chlorine Sanitization',
+    'Sump Crack & Seepage Inspection',
+    'Foot Valve & Float Valve Check',
+    'Water TDS & Purity Testing',
+    'Apartment & Society AMC Maintenance',
+  ],
 };
 
 export const TRADE_ICONS = {
@@ -535,6 +547,7 @@ export const TRADE_ICONS = {
   'Deep Cleaning': '🧹',
   Roofer: '🏠',
   'Flooring Expert': '🪵',
+  'Tank & Sump Cleaner': '🧼',
 };
 
 export const TRADE_PLACEHOLDERS = {
@@ -551,6 +564,7 @@ export const TRADE_PLACEHOLDERS = {
   'Deep Cleaning': 'e.g. Full Home Deep Clean, Kitchen Chimney, Sofa Shampoo',
   Roofer: 'e.g. Terrace Waterproofing, Shed Fitting, Roof Leak Patch',
   'Flooring Expert': 'e.g. Marble Polishing, Wooden Flooring, Vinyl Laying',
+  'Tank & Sump Cleaner': 'e.g. Overhead Tank Cleaning, Sump Jet Wash, UV Disinfection',
 };
 
 export function normalizeTrade(trade) {
@@ -569,6 +583,7 @@ export function normalizeTrade(trade) {
   if (lower.includes('clean')) return 'Deep Cleaning';
   if (lower.includes('roof')) return 'Roofer';
   if (lower.includes('floor')) return 'Flooring Expert';
+  if (lower.includes('tank') || lower.includes('sump')) return 'Tank & Sump Cleaner';
   return trade;
 }
 

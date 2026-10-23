@@ -284,6 +284,7 @@ function CompleteProfileContent() {
                   <option value="Deep Cleaning">Deep Cleaning (डीप क्लीनिंग / ಡೀಪ್ ಕ್ಲೀನಿಂಗ್)</option>
                   <option value="Roofer">Roofer (रूफर / ಛಾವಣಿ)</option>
                   <option value="Flooring Expert">Flooring Expert (फ्लोरिंग एक्सपर्ट / ಫ್ಲೋರಿಂಗ್ ತಜ್ಞ)</option>
+                  <option value="Tank & Sump Cleaner">Tank & Sump Cleaner (टैंक और संप सफाई / ಟ್ಯಾಂಕ್ ಮತ್ತು ಸಂಪ್ ಕ್ಲೀನರ್)</option>
                   <option value="Other">✨ Other / Custom Trade</option>
                 </select>
               </div>
