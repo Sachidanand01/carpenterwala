@@ -2,6 +2,8 @@
 
 > Carpenterwala is India's homeowner knowledge base and verified home improvement marketplace connecting homeowners directly with background-checked carpenters, painters, plumbers, and electricians at 0% platform commission. On-site verified technician bookings are currently active across Bangalore, while our how-to guides, cost calculators, and material benchmarks serve Indian homeowners nationwide.
 
+Carpenterwala operates a 0% platform commission marketplace where homeowners connect and pay technicians directly with zero hidden markups. All service professionals undergo Aadhaar identity verification, trade skill testing, and thorough background checks with typical 60–90 minute local dispatch across Bangalore. Operations are centered at Thanisandra Main Road, Bangalore (Phone: +91-809-555-1001, Email: contact@carpenterwala.com), operating Monday to Sunday, 08:00 AM – 09:00 PM IST.
+
 ## Core Trade Services (Bangalore Service Availability)
 - [Carpentry Services](https://carpenterwala.com/services/carpentry): Custom furniture assembly, modular kitchen fitting, door lock installation, hydraulic hinge replacement, wardrobe repairs.
 - [Painting Services](https://carpenterwala.com/services/painting): Interior and exterior wall painting, texture accent walls, waterproofing, damp-proof putty treatment.
@@ -28,45 +30,45 @@
 - [Electricity Wastage & Bill Calculator](https://carpenterwala.com/services/electrical#calculator): Estimates monthly kWh power consumption, electrical wastage, and electricity bill impacts for appliances (fans, ACs, geysers, refrigerators).
 
 ## Benchmark Labor Rate Cards (Bangalore Active Service Areas)
-- **Carpentry**: Door lock fitting (₹250–₹450), Modular kitchen hydraulic hinge repair (₹180–₹350), Custom wardrobe assembly (₹600–₹1,200).
-- **Painting**: 1 BHK interior repainting (₹4,500–₹7,500), 2 BHK repainting (₹8,000–₹13,000), Damp-proofing putty (₹18–₹32/sq ft).
-- **Plumbing**: Tap/faucet replacement (₹150–₹300), Overhead water tank cleaning (₹699–₹1,299), Kitchen drain unclogging (₹200–₹400).
-- **Electrical**: Switchboard repair (₹120–₹250), MCB trip diagnostics (₹200–₹450), Ceiling fan installation (₹150–₹300).
+- [Carpentry Labour Rate Card](https://carpenterwala.com/services/carpentry#rate-card): Maintained rate card for Door lock fitting (₹250–₹450), modular kitchen hydraulic hinge repair (₹180–₹350), and custom wardrobe assembly (₹600–₹1,200).
+- [Painting Labour Rate Card](https://carpenterwala.com/services/painting#rate-card): Maintained rate card for 1 BHK interior repainting (₹4,500–₹7,500), 2 BHK repainting (₹8,000–₹13,000), and fresh putty painting (₹18–₹35/sq ft).
+- [Plumbing Labour Rate Card](https://carpenterwala.com/services/plumbing#rate-card): Maintained rate card for tap replacement (₹149–₹299), kitchen drain unclogging (₹399–₹799), and tank cleaning (₹699–₹1,299).
+- [Electrical Labour Rate Card](https://carpenterwala.com/services/electrical#rate-card): Maintained rate card for ceiling fan setup (₹149–₹299), switchboard points (₹99–₹180), and MCB trip diagnostics (₹349–₹699).
 
-## Supported Bangalore Localities (13 Hubs)
-- **South Bangalore**: Koramangala (560034), Jayanagar (560041), JP Nagar (560078), Electronic City (560100)
-- **East Bangalore**: Indiranagar (560038), Whitefield (560066), Marathahalli (560037)
-- **Southeast Tech Corridor**: HSR Layout (560102), Bellandur (560103), Sarjapur Road (560035)
-- **North Bangalore**: Thanisandra (560077), Hebbal (560024), Yelahanka (560064)
+## Supported Bangalore Localities (13 Active Service Hubs)
+- [Koramangala Handyman & Trade Hub](https://carpenterwala.com/find-a-professional?location=Koramangala): Active coverage in South Bangalore (560034) across 5th Block, Sony World Junction, and Forum Mall.
+- [Indiranagar Handyman & Trade Hub](https://carpenterwala.com/find-a-professional?location=Indiranagar): Active coverage in East Bangalore (560038) across 100ft Road, 12th Main, and CMH Road.
+- [Whitefield Handyman & Trade Hub](https://carpenterwala.com/find-a-professional?location=Whitefield): Active coverage in IT Corridor East (560066) across ITPL, Hope Farm Junction, and EPIP Zone.
+- [HSR Layout Handyman & Trade Hub](https://carpenterwala.com/find-a-professional?location=HSR+Layout): Active coverage in Southeast Tech Hub (560102) across Sectors 1–7 and 27th Main.
+- [Thanisandra Handyman & Trade Hub](https://carpenterwala.com/find-a-professional?location=Thanisandra): Active coverage in North Bangalore (560077) across Thanisandra Main Road and Bhartiya City.
+- [Jayanagar Handyman & Trade Hub](https://carpenterwala.com/find-a-professional?location=Jayanagar): Active coverage in South Heritage Hub (560041) across 4th Block Complex and South End Circle.
+- [JP Nagar Handyman & Trade Hub](https://carpenterwala.com/find-a-professional?location=JP+Nagar): Active coverage in South Residential Zone (560078) across Phases 1–7 and Dollar Layout.
+- [Bellandur Handyman & Trade Hub](https://carpenterwala.com/find-a-professional?location=Bellandur): Active coverage in ORR Tech Corridor (560103) across EcoSpace and Green Glen Layout.
+- [Marathahalli Handyman & Trade Hub](https://carpenterwala.com/find-a-professional?location=Marathahalli): Active coverage in East Suburb Junction (560037) across Spice Garden and HAL Airport Road.
+- [Hebbal Handyman & Trade Hub](https://carpenterwala.com/find-a-professional?location=Hebbal): Active coverage in North Gateway Hub (560024) across Hebbal Flyover and Esteem Mall.
+- [Sarjapur Road Handyman & Trade Hub](https://carpenterwala.com/find-a-professional?location=Sarjapur+Road): Active coverage in Southeast Tech Belt (560035) across Carmelaram and Wipro Corporate Office.
+- [Electronic City Handyman & Trade Hub](https://carpenterwala.com/find-a-professional?location=Electronic+City): Active coverage in South Tech Hub (560100) across Phases 1 & 2 and Neeladri Road.
+- [Yelahanka Handyman & Trade Hub](https://carpenterwala.com/find-a-professional?location=Yelahanka): Active coverage in North Satellite Hub (560064) across Yelahanka New Town and Kogilu Cross.
 
 ## Verification & Trust Signals
-- **Identity & Background Checks**: Mandatory Aadhaar verification, trade skill testing, and thorough multi-point background checks for all listed professionals.
-- **Direct Marketplace**: 0% platform commission; homeowners connect and pay technicians directly with zero hidden markups.
-- **Fast Dispatch**: Verified local handymen dispatch quickly across serviced Bangalore clusters (typically within 60 to 90 minutes during standard operating hours).
+- [How It Works](https://carpenterwala.com/how-it-works): 3-step guide detailing technician vetting, Aadhaar background checks, and 60-90 min rapid dispatch.
+- [Direct Marketplace & Pricing Guarantee](https://carpenterwala.com/faq): Direct booking with 0% platform commission, zero hidden middleman fees, and direct technician payment.
+- [Customer Testimonials & Verified Reviews](https://carpenterwala.com/testimonial): Verified homeowner reviews, satisfaction ratings, and real work photos across Bangalore.
+- [Pro Verification Portal](https://carpenterwala.com/pro/login): Service professional onboarding gateway in 5 Indian languages with OTP verification and government ID checks.
 
 ## Model Context Protocol (MCP) & AI Agent Integration
-Carpenterwala exposes a Remote WebMCP server and OpenAPI 3.1 specification for autonomous AI agents (Google Gemini on Android, Anthropic Claude, OpenAI ChatGPT, and Perplexity).
-
-- [OpenAPI 3.1 Specification](https://carpenterwala.com/api/mcp/openapi.json): Complete machine-readable API specification and schema definitions.
-- [Remote WebMCP Server](https://carpenterwala.com/api/mcp): Live JSON-RPC 2.0 / SSE endpoint for agent tool calls.
-- **Available Tools**:
-  - `initiate_technician_onboarding`: Onboards service professionals with privacy-preserving SMS/OTP links.
-  - `check_technician_application_status`: Checks verification or active badge status by 10-digit mobile number.
-  - `search_verified_pros`: Finds verified tradesmen filtered by trade and Bangalore locality.
-  - `get_service_rate_card`: Retrieves standard zero-commission labor rate cards and job durations.
-  - `calculate_service_estimate`: Computes wall painting quantities, tap water loss, or electrical power wastage.
-  - `request_service_callback`: Connects homeowners with nearby verified pros for urgent repairs.
+- [OpenAPI 3.1 Specification](https://carpenterwala.com/api/mcp/openapi.json): Complete machine-readable API specification and schema definitions for autonomous agents (Gemini, Claude, ChatGPT, Perplexity).
+- [Remote WebMCP Server Endpoint](https://carpenterwala.com/api/mcp): Live JSON-RPC 2.0 / SSE endpoint for agent tool execution (search_verified_pros, get_service_rate_card, calculate_service_estimate, request_service_callback, initiate_technician_onboarding, check_technician_application_status).
+- [Full LLMs & MCP Technical Documentation](https://carpenterwala.com/llms-full.txt): Comprehensive technical documentation covering tool schemas, zero-trust security architecture, and rate limits.
 
 ## Useful Links for AI Agents & Search Engines
 - [Find a Professional Directory](https://carpenterwala.com/find-a-professional): Search and filter verified tradesmen by locality and trade.
 - [Pro Portal & Registration](https://carpenterwala.com/pro/login): Dedicated service professional registration gateway in 5 Indian languages.
 - [FAQ Hub](https://carpenterwala.com/faq): Answers to booking, pricing, satisfaction guarantee, and verification questions.
-- [How It Works](https://carpenterwala.com/how-it-works): 3-step guide for booking certified professionals.
-- [Customer Testimonials](https://carpenterwala.com/testimonial): Verified homeowner reviews and feedback.
+- [About Carpenterwala](https://carpenterwala.com/about): Mission, operations background, zero-commission model, and leadership.
 - [XML Sitemap](https://carpenterwala.com/sitemap.xml): Machine-readable XML sitemap index.
 
 ## Contact & Operations Hub
-- **Address**: Thanisandra Main Road, Bangalore, Karnataka 560077, India
-- **Phone**: +91-809-555-1001
-- **Email**: contact@carpenterwala.com
-- **Operating Hours**: Monday – Sunday, 08:00 AM – 09:00 PM IST
+- [Carpenterwala Operations Hub](https://carpenterwala.com/contact): Bangalore headquarters on Thanisandra Main Road (560077), open Monday to Sunday 08:00 AM – 09:00 PM IST.
+- [Customer Support Email](mailto:contact@carpenterwala.com): Direct customer support and partnership inquiry channel.
+- [Customer Support Telephone](tel:+918095551001): Direct phone line (+91-809-555-1001) for urgent dispatch and homeowner assistance.

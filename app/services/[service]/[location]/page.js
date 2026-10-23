@@ -58,7 +58,7 @@ const RATE_CARDS = {
   'plumbing': [
     { task: 'Tap & Faucet Leak Repair / Replacement', price: '₹149 - ₹299', time: '20 - 30 mins' },
     { task: 'Flush Tank & Commode Leakage Fix', price: '₹349 - ₹699', time: '30 - 60 mins' },
-    { task: 'Kitchen Sink Drain Pipe Unclogging', price: '₹249 - ₹449', time: '25 - 45 mins' },
+    { task: 'Kitchen Sink Drain Pipe Unclogging', price: '₹399 - ₹799', time: '25 - 45 mins' },
     { task: 'Overhead Water Tank Deep Cleaning (500L-1000L)', price: '₹699 - ₹1,299', time: '1 - 2 hours' },
     { task: 'Bathroom Sanitary Fitting Installation', price: '₹349 - ₹749', time: '45 - 90 mins' },
   ],

@@ -35,11 +35,11 @@ Carpenterwala is Bangalore's premier verified home improvement and handyman mark
 
 ### Plumbing Services
 - Hub URL: https://carpenterwala.com/services/plumbing
-- Tasks & Pricing: Tap/faucet replacement (₹150–₹300), Flush tank leakage repair (₹250–₹500), Kitchen drain pipe unclogging (₹200–₹400), Overhead water tank deep cleaning (₹650–₹1,200), Bathroom sanitary fixture fitting (₹350–₹750).
+- Tasks & Pricing: Tap/faucet replacement (₹149–₹299), Flush tank leakage repair (₹349–₹699), Kitchen drain pipe unclogging (₹399–₹799), Overhead water tank deep cleaning (₹699–₹1,299), Bathroom sanitary fixture fitting (₹350–₹750).
 
 ### Electrical Services
 - Hub URL: https://carpenterwala.com/services/electrical
-- Tasks & Pricing: Switchboard repair & fitting (₹120–₹250), MCB trip diagnostics (₹200–₹450), Ceiling fan installation & balancing (₹150–₹300), Power socket wiring (₹180–₹350).
+- Tasks & Pricing: Switchboard repair & fitting (₹99–₹180), MCB trip diagnostics (₹349–₹699), Ceiling fan installation & balancing (₹149–₹299), Power socket wiring (₹180–₹350).
 
 ## 4. Supported Bangalore Localities (13 Hubs)
 1. Koramangala (560034 - South Bangalore)

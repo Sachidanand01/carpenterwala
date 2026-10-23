@@ -274,7 +274,7 @@ export default function ElectricalPage() {
       </section>
 
       {/* Standard Electrician Charges & Rate Card in India */}
-      <section className="container" style={{ marginBottom: '6rem' }}>
+      <section id="rate-card" className="container" style={{ marginBottom: '6rem' }}>
         <div className="glass" style={{ padding: '3rem', borderRadius: '16px' }}>
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
             <h2 style={{ fontSize: '2.25rem', marginBottom: '1rem', color: 'var(--primary)' }}>
