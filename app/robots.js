@@ -5,7 +5,10 @@ export default function robots() {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        allow: [
+          '/',
+          '/api/mcp',
+        ],
         disallow: [
           '/pro/dashboard',
           '/admin',
@@ -25,7 +28,10 @@ export default function robots() {
           'CCBot',
           'Bytespider',
         ],
-        allow: '/',
+        allow: [
+          '/',
+          '/api/mcp',
+        ],
         disallow: [
           '/pro/dashboard',
           '/admin',

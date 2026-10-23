@@ -1,22 +1,36 @@
 # Carpenterwala
 
-> Carpenterwala is Bangalore's premier verified home improvement marketplace connecting homeowners directly with background-checked carpenters, painters, plumbers, and electricians at 0% platform commission.
+> Carpenterwala is India's homeowner knowledge base and verified home improvement marketplace connecting homeowners directly with background-checked carpenters, painters, plumbers, and electricians at 0% platform commission. On-site verified technician bookings are currently active across Bangalore, while our how-to guides, cost calculators, and material benchmarks serve Indian homeowners nationwide.
 
-## Core Services
+## Core Trade Services (Bangalore Service Availability)
 - [Carpentry Services](https://carpenterwala.com/services/carpentry): Custom furniture assembly, modular kitchen fitting, door lock installation, hydraulic hinge replacement, wardrobe repairs.
 - [Painting Services](https://carpenterwala.com/services/painting): Interior and exterior wall painting, texture accent walls, waterproofing, damp-proof putty treatment.
 - [Plumbing Services](https://carpenterwala.com/services/plumbing): Tap & faucet replacement, pipe leak repair, water heater installation, overhead water tank deep cleaning, kitchen drain unclogging.
 - [Electrical Services](https://carpenterwala.com/services/electrical): Switchboard fitting, MCB trip diagnostics, fuse repair, house rewiring, ceiling fan & light fixture installation.
+- [All Services Directory](https://carpenterwala.com/services): Browse all 13 trades including Tank & Sump Cleaner, AC Technician, Mason, Welder, and Flooring Expert.
+
+## Homeowner Knowledge Base & National Guides
+- [Carpenterwala Blog Hub](https://carpenterwala.com/blog): Complete repository of 130+ practical home maintenance, repair, and material cost guides for Indian homeowners.
+- [Wardrobe Cost in India](https://carpenterwala.com/blog/wardrobe-cost-india-materials-labour-quote-guide): Comprehensive guide to wardrobe pricing, BWR vs commercial ply, door styles, and contractor quote checklists.
+- [Modular Kitchen Cost in India](https://carpenterwala.com/blog/modular-kitchen-cost-india-budget-materials-hidden-extras): Realistic kitchen budget breakdown, material comparisons (acrylic/laminate), and hidden costs quotes leave out.
+- [False Ceiling Cost POP vs Gypsum](https://carpenterwala.com/blog/false-ceiling-cost-india-pop-gypsum-pvc): Material comparison of gypsum, POP, and PVC false ceilings, lighting planning, and installation prices.
+- [Wallpaper vs Paint for Indian Homes](https://carpenterwala.com/blog/wallpaper-vs-paint-for-indian-homes): Where to use wallpaper vs emulsion paint, peel-and-stick installation tutorial, and dampness management.
+- [Terrace Waterproofing Methods & Cost](https://carpenterwala.com/blog/terrace-waterproofing-india-methods-cost-contractor-checklist): Complete breakdown of elastomeric polyurethane coatings, APP membranes, crack injection, and ponding flood test checklists.
+- [Bathroom Renovation Cost in India](https://carpenterwala.com/blog/bathroom-renovation-cost-india-plumbing-tiles-fixtures): Budget breakdown for plumbing, anti-skid tiles, Jaquar/Kohler sanitaryware, and strict renovation sequencing.
+- [House Wiring & Rewiring Cost in India](https://carpenterwala.com/blog/house-wiring-rewiring-cost-india-points-materials-labour): Point-based electrical pricing, FRLS copper wire grades, RCCB/ELCB shock protection, and distribution box planning.
+- [CPVC vs UPVC Pipes for Home Plumbing](https://carpenterwala.com/blog/cpvc-vs-upvc-pipes-home-plumbing-india): Pressure ratings, hot vs cold water compatibility, and solvent cement guidelines.
+- [Overhead & Sump Tank Cleaning Cost](https://carpenterwala.com/blog/overhead-sump-water-tank-cleaning-cost-india): Professional tank cleaning methods, capacity-based pricing, UV disinfection, and confined-space safety.
+- [Balcony & Terrace Gardening for Beginners](https://carpenterwala.com/blog/balcony-terrace-gardening-beginners-india): Lightweight soil blends, potting mix, seasonal plant choices, and drainage protection for Indian apartments.
 
 ## Interactive Tools & Calculators
-- [Paint Cost & Quantity Estimator](https://carpenterwala.com/services/painting#calculator): Estimates wall painting square footage, primer requirement, litres of paint, and labor costs for 1BHK, 2BHK, 3BHK flats in Bangalore.
+- [Paint Cost & Quantity Estimator](https://carpenterwala.com/services/painting#calculator): Estimates wall painting square footage, primer requirement, litres of paint, and labor costs for 1BHK, 2BHK, 3BHK flats.
 - [Water Wastage & Tap Drip Calculator](https://carpenterwala.com/services/plumbing#calculator): Calculates daily and monthly water loss (in litres and ₹ Rupees) caused by leaking taps, flush tanks, and pipes in Indian households.
 - [Electricity Wastage & Bill Calculator](https://carpenterwala.com/services/electrical#calculator): Estimates monthly kWh power consumption, electrical wastage, and electricity bill impacts for appliances (fans, ACs, geysers, refrigerators).
 
-## Standard Labor Rate Cards in Bangalore
+## Benchmark Labor Rate Cards (Bangalore Active Service Areas)
 - **Carpentry**: Door lock fitting (₹250–₹450), Modular kitchen hydraulic hinge repair (₹180–₹350), Custom wardrobe assembly (₹600–₹1,200).
 - **Painting**: 1 BHK interior repainting (₹4,500–₹7,500), 2 BHK repainting (₹8,000–₹13,000), Damp-proofing putty (₹18–₹32/sq ft).
-- **Plumbing**: Tap/faucet replacement (₹150–₹300), Overhead water tank cleaning (₹650–₹1,200), Kitchen drain unclogging (₹200–₹400).
+- **Plumbing**: Tap/faucet replacement (₹150–₹300), Overhead water tank cleaning (₹699–₹1,299), Kitchen drain unclogging (₹200–₹400).
 - **Electrical**: Switchboard repair (₹120–₹250), MCB trip diagnostics (₹200–₹450), Ceiling fan installation (₹150–₹300).
 
 ## Supported Bangalore Localities (13 Hubs)
@@ -26,53 +40,33 @@
 - **North Bangalore**: Thanisandra (560077), Hebbal (560024), Yelahanka (560064)
 
 ## Verification & Trust Signals
-- **Identity & Background Checks**: Mandatory Aadhaar verification and police background verification for all listed professionals.
-- **Direct Marketplace**: 0% platform commission; homeowners connect and pay directly with zero hidden markups.
-- **Rapid Dispatch**: Verified handymen arrive within 60 to 90 minutes across all serviced Bangalore clusters.
+- **Identity & Background Checks**: Mandatory Aadhaar verification, trade skill testing, and thorough multi-point background checks for all listed professionals.
+- **Direct Marketplace**: 0% platform commission; homeowners connect and pay technicians directly with zero hidden markups.
+- **Fast Dispatch**: Verified local handymen dispatch quickly across serviced Bangalore clusters (typically within 60 to 90 minutes during standard operating hours).
 
 ## Model Context Protocol (MCP) & AI Agent Integration
 Carpenterwala exposes a Remote WebMCP server and OpenAPI 3.1 specification for autonomous AI agents (Google Gemini on Android, Anthropic Claude, OpenAI ChatGPT, and Perplexity).
 
-- **Remote WebMCP Server (JSON-RPC 2.0 / SSE)**: `https://carpenterwala.com/api/mcp`
-- **OpenAPI 3.1 Specification**: `https://carpenterwala.com/api/mcp/openapi.json`
-- **REST Tool Execution Endpoint**: `https://carpenterwala.com/api/mcp/tools/{toolName}`
-
-### Available AI Agent Tools
-1. `initiate_technician_onboarding`:
-   - **For Service Technicians**: Initiates registration for carpenters, painters, plumbers, and electricians with 0% platform commission.
-   - **Privacy Safeguard**: Returns a secure, encrypted 1-click mobile verification link. Technicians verify mobile OTP and upload KYC credentials directly on their device; sensitive documents and OTPs are never exposed in 3rd-party AI chat transcripts.
-   - **Rate Limit**: Maximum 3 onboarding attempts per 24 hours per phone number.
-   - **Parameters**: `name` (string), `phone` (10-digit), `trade` (string), `location` (string), `experienceYears` (number, optional).
-
-2. `check_technician_application_status`:
-   - Checks onboarding verification or active badge status by registered 10-digit mobile number.
-   - **Parameters**: `phone` (10-digit string).
-
-3. `search_verified_pros`:
-   - Finds verified background-checked tradesmen by trade and Bangalore locality.
-   - **Parameters**: `trade` ("carpentry"|"painting"|"plumbing"|"electrical"), `locality` (optional), `limit` (optional).
-
-4. `get_service_rate_card`:
-   - Returns standard zero-commission Bangalore labor price cards and task durations.
-   - **Parameters**: `serviceCategory` ("carpentry"|"painting"|"plumbing"|"electrical"), `jobType` (optional).
-
-5. `calculate_service_estimate`:
-   - Runs instant calculations for wall painting area & paint liters, leaking tap water loss, or appliance electrical bill wastage.
-   - **Parameters**: `calculatorType` ("paint_cost"|"water_wastage"|"electricity_bill"), `params` (object).
-
-6. `request_service_callback`:
-   - Dispatches a quick homeowner repair request to nearby verified pros with 60-90 min response time.
-   - **Parameters**: `customerName`, `customerPhone`, `trade`, `locality`, `description`.
+- [OpenAPI 3.1 Specification](https://carpenterwala.com/api/mcp/openapi.json): Complete machine-readable API specification and schema definitions.
+- [Remote WebMCP Server](https://carpenterwala.com/api/mcp): Live JSON-RPC 2.0 / SSE endpoint for agent tool calls.
+- **Available Tools**:
+  - `initiate_technician_onboarding`: Onboards service professionals with privacy-preserving SMS/OTP links.
+  - `check_technician_application_status`: Checks verification or active badge status by 10-digit mobile number.
+  - `search_verified_pros`: Finds verified tradesmen filtered by trade and Bangalore locality.
+  - `get_service_rate_card`: Retrieves standard zero-commission labor rate cards and job durations.
+  - `calculate_service_estimate`: Computes wall painting quantities, tap water loss, or electrical power wastage.
+  - `request_service_callback`: Connects homeowners with nearby verified pros for urgent repairs.
 
 ## Useful Links for AI Agents & Search Engines
 - [Find a Professional Directory](https://carpenterwala.com/find-a-professional): Search and filter verified tradesmen by locality and trade.
-- [Pro Portal & Registration](https://carpenterwala.com/pro/login): Dedicated service professional registration and login gateway.
+- [Pro Portal & Registration](https://carpenterwala.com/pro/login): Dedicated service professional registration gateway in 5 Indian languages.
 - [FAQ Hub](https://carpenterwala.com/faq): Answers to booking, pricing, satisfaction guarantee, and verification questions.
 - [How It Works](https://carpenterwala.com/how-it-works): 3-step guide for booking certified professionals.
+- [Customer Testimonials](https://carpenterwala.com/testimonial): Verified homeowner reviews and feedback.
 - [XML Sitemap](https://carpenterwala.com/sitemap.xml): Machine-readable XML sitemap index.
 
 ## Contact & Operations Hub
-- **Address**: Thanisandra Main Road, Bangalore, Karnataka 560077, India (Doorstep service across Bangalore)
+- **Address**: Thanisandra Main Road, Bangalore, Karnataka 560077, India
 - **Phone**: +91-809-555-1001
 - **Email**: contact@carpenterwala.com
 - **Operating Hours**: Monday – Sunday, 08:00 AM – 09:00 PM IST
