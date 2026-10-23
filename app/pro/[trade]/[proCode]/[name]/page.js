@@ -25,8 +25,8 @@ export async function generateMetadata({ params }) {
   
   const siteUrl = 'https://carpenterwala.com';
   const canonicalUrl = `${siteUrl}${getProUrl(profile)}`;
-  const pageTitle = `${profile.name} (${profile.pro_code || 'Verified Pro'}) - Verified ${profile.trade} in ${profile.location} | Carpenterwala`;
-  const pageDescription = `Hire ${profile.name} (Pro ID: ${profile.pro_code || 'Verified'}), a trusted ${profile.trade} in ${profile.location} with ${profile.experience} of experience. Specializing in ${profile.skills ? profile.skills.slice(0, 3).join(', ') : ''}. Book directly on Carpenterwala.`;
+  const pageTitle = `${profile.name} - Verified ${profile.trade} in ${profile.location} | Carpenterwala`;
+  const pageDescription = `Hire ${profile.name}, a trusted ${profile.trade} in ${profile.location} with ${profile.experience} of experience. Specializing in ${profile.skills ? profile.skills.slice(0, 3).join(', ') : ''}. Book directly on Carpenterwala.`;
   
   const baseKeywords = ['carpenter', 'home services', 'handyman', 'Bangalore', 'verified professionals', profile.trade.toLowerCase()];
   const profileKeywords = [
@@ -272,31 +272,9 @@ export default async function CanonicalProProfile({ params }) {
                 )}
               </div>
 
-              <h1 style={{ fontSize: "1.75rem", fontWeight: 800, marginBottom: "0.25rem", color: "var(--foreground)" }}>
+              <h1 style={{ fontSize: "1.75rem", fontWeight: 800, marginBottom: "0.75rem", color: "var(--foreground)" }}>
                 {profile.name}
               </h1>
-              
-              {/* Pro Code Official Badge */}
-              {profile.pro_code && (
-                <div style={{ marginBottom: "0.75rem" }}>
-                  <span style={{ 
-                    display: "inline-flex", 
-                    alignItems: "center", 
-                    gap: "0.35rem",
-                    padding: "0.2rem 0.65rem", 
-                    background: "rgba(234, 88, 12, 0.12)", 
-                    border: "1px solid rgba(234, 88, 12, 0.35)",
-                    color: "var(--primary, #ea580c)",
-                    borderRadius: "6px", 
-                    fontSize: "0.8rem",
-                    fontFamily: "monospace",
-                    fontWeight: 700,
-                    letterSpacing: "0.5px"
-                  }}>
-                    ID: {profile.pro_code}
-                  </span>
-                </div>
-              )}
 
               <div className="flex gap-2 items-center justify-center" style={{ marginBottom: "1.25rem" }}>
                 <span style={{
@@ -455,29 +433,7 @@ export default async function CanonicalProProfile({ params }) {
                 unoptimized
                 style={{ width: "120px", height: "120px", borderRadius: "50%", objectFit: "cover", marginBottom: "1rem", border: "4px solid var(--primary)" }}
               />
-              <h1 style={{ fontSize: "1.75rem", marginBottom: "0.25rem" }}>{profile.name}</h1>
-              
-              {/* Pro Code Official Badge */}
-              {profile.pro_code && (
-                <div style={{ marginBottom: "0.75rem" }}>
-                  <span style={{ 
-                    display: "inline-flex", 
-                    alignItems: "center", 
-                    gap: "0.35rem",
-                    padding: "0.2rem 0.6rem", 
-                    background: "rgba(234, 88, 12, 0.15)", 
-                    border: "1px solid rgba(234, 88, 12, 0.4)",
-                    color: "var(--primary, #ea580c)",
-                    borderRadius: "6px", 
-                    fontSize: "0.8rem",
-                    fontFamily: "monospace",
-                    fontWeight: 600,
-                    letterSpacing: "0.5px"
-                  }}>
-                    ID: {profile.pro_code}
-                  </span>
-                </div>
-              )}
+              <h1 style={{ fontSize: "1.75rem", marginBottom: "0.75rem" }}>{profile.name}</h1>
 
               <div className="flex gap-2 items-center justify-center" style={{ marginBottom: "1.5rem" }}>
                 <span style={{ padding: "0.25rem 0.75rem", background: "rgba(255,255,255,0.1)", borderRadius: "20px", fontSize: "0.85rem" }}>
