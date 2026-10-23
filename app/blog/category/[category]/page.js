@@ -7,25 +7,34 @@ const slugify = (cat) => cat.toLowerCase().replace(/\s+/g, '-');
 
 export async function generateStaticParams() {
   const categories = await getBlogCategories();
-  return categories.map(cat => ({
+  const list = categories.map(cat => ({
     category: slugify(cat),
   }));
+  if (categories.some(c => c.toLowerCase().includes('maintenance'))) {
+    list.push({ category: 'home-maintenance' });
+  }
+  return list;
 }
 
 export async function generateMetadata({ params }) {
   const { category } = await params;
   const categories = await getBlogCategories();
   
-  const activeCategory = categories.find(
-    (cat) => slugify(cat) === category.toLowerCase()
+  const normalizedCategorySlug = category.toLowerCase() === 'home-maintenance' ? 'maintenance' : category.toLowerCase();
+  let activeCategory = categories.find(
+    (cat) => slugify(cat) === normalizedCategorySlug || (normalizedCategorySlug === 'maintenance' && cat.toLowerCase().includes('maintenance'))
   ) || 'Category';
+
+  if (activeCategory === 'Maintenance' || category.toLowerCase() === 'home-maintenance') {
+    activeCategory = 'Home Maintenance';
+  }
 
   const siteUrl = 'https://carpenterwala.com';
   const canonicalUrl = `${siteUrl}/blog/category/${category.toLowerCase()}`;
 
   return {
-    title: `${activeCategory} Blogs | Expert Handyman Tips | Carpenterwala`,
-    description: `Browse professional handymen guides, tutorials, and articles on ${activeCategory.toLowerCase()} in Bangalore from Carpenterwala.`,
+    title: `${activeCategory} Guides for Indian Homeowners | Carpenterwala`,
+    description: `Browse comprehensive ${activeCategory.toLowerCase()} guides, repair tutorials, and preventative checklists for Indian homeowners from Carpenterwala.`,
     alternates: {
       canonical: canonicalUrl,
     },
@@ -43,9 +52,14 @@ export default async function CategoryPage({ params, searchParams }) {
     getBlogCategories()
   ]);
   
-  const activeCategory = categories.find(
-    (cat) => slugify(cat) === category.toLowerCase()
+  const normalizedCategorySlug = category.toLowerCase() === 'home-maintenance' ? 'maintenance' : category.toLowerCase();
+  let activeCategory = categories.find(
+    (cat) => slugify(cat) === normalizedCategorySlug || (normalizedCategorySlug === 'maintenance' && cat.toLowerCase().includes('maintenance'))
   ) || 'Category';
+
+  if (activeCategory === 'Maintenance' || category.toLowerCase() === 'home-maintenance') {
+    activeCategory = 'Home Maintenance';
+  }
 
   const siteUrl = 'https://carpenterwala.com';
   const categoryUrl = `${siteUrl}/blog/category/${category.toLowerCase()}`;
@@ -58,7 +72,7 @@ export default async function CategoryPage({ params, searchParams }) {
         "@id": `${categoryUrl}#collection`,
         "url": categoryUrl,
         "name": `${activeCategory} Articles & Guides`,
-        "description": `Browse expert home improvement, maintenance, and ${activeCategory.toLowerCase()} guides for Bangalore homeowners.`,
+        "description": `Browse expert home improvement, preventative maintenance, and ${activeCategory.toLowerCase()} guides for Indian homeowners.`,
         "publisher": {
           "@type": "Organization",
           "name": "Carpenterwala",

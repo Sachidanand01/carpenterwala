@@ -47,6 +47,7 @@ const VALID_CATEGORIES = [
   'Plumbing',
   'Electrical',
   'Maintenance',
+  'Home Maintenance',
   'Wallpaper',
   'Wall Paper',
   'How to',

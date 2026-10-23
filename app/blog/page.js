@@ -4,14 +4,14 @@ import BlogListing from './BlogListing';
 export const revalidate = 3600;
 
 export const metadata = {
-  title: 'Home Improvement Blog | Expert Tips from Carpenterwala',
-  description: 'Expert advice on carpentry, painting, plumbing, and electrical work in Bangalore. Browse step-by-step tutorials and maintenance guides.',
+  title: 'Home Improvement & Repair Guides for Indian Homeowners | Carpenterwala',
+  description: 'Expert DIY guides, cost calculators, and maintenance tips for Indian homeowners. Practical advice covering carpentry, painting, plumbing, electrical, and wallpaper.',
   alternates: {
     canonical: 'https://carpenterwala.com/blog',
   },
   openGraph: {
-    title: 'Home Improvement Blog | Expert Tips from Carpenterwala',
-    description: 'Expert advice on carpentry, painting, plumbing, and electrical work in Bangalore.',
+    title: 'Home Improvement & Repair Guides for Indian Homeowners | Carpenterwala',
+    description: 'Expert DIY guides, cost calculators, and maintenance tips for Indian homeowners. Practical advice covering carpentry, painting, plumbing, electrical, and wallpaper.',
     url: 'https://carpenterwala.com/blog',
     siteName: 'Carpenterwala',
     locale: 'en_IN',
@@ -38,8 +38,8 @@ export default async function BlogLanding({ searchParams }) {
         "@type": "Blog",
         "@id": `${blogUrl}#blog`,
         "url": blogUrl,
-        "name": "Carpenterwala Home Improvement & Handyman Blog",
-        "description": "Expert home maintenance, carpentry, painting, plumbing, and electrical repair guides in Bangalore.",
+        "name": "Carpenterwala Home Improvement & Handyman Knowledge Base",
+        "description": "Expert home maintenance, carpentry, painting, plumbing, electrical, and wallpaper repair guides for Indian homeowners.",
         "publisher": {
           "@type": "Organization",
           "name": "Carpenterwala",

@@ -424,6 +424,23 @@ export default async function BlogPost({ params }) {
             >
               {post.category}
             </Link>
+            {Array.isArray(post.tags) && post.tags.map((t) => (
+              <span
+                key={t}
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  backdropFilter: 'blur(8px)',
+                  color: '#ffffff',
+                  border: '1px solid rgba(255, 255, 255, 0.25)',
+                  padding: '0.35rem 0.9rem',
+                  borderRadius: '20px',
+                  fontSize: '0.8rem',
+                  fontWeight: '600'
+                }}
+              >
+                🏷️ {t}
+              </span>
+            ))}
             {howToJsonLd && (
               <span style={{
                 backgroundColor: 'rgba(16, 185, 129, 0.2)',
@@ -651,6 +668,26 @@ export default async function BlogPost({ params }) {
               </nav>
             </details>
           )}
+
+          {/* National Editorial & Service Availability Callout Banner */}
+          <div style={{
+            background: 'rgba(37, 99, 235, 0.05)',
+            border: '1px solid rgba(37, 99, 235, 0.18)',
+            borderRadius: '10px',
+            padding: '0.85rem 1.25rem',
+            marginBottom: '2rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            fontSize: '0.88rem',
+            lineHeight: 1.5,
+            color: 'var(--foreground)'
+          }}>
+            <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>📍</span>
+            <div>
+              <strong>National Editorial Guide:</strong> Technical advice, material selections, and DIY checklists are tailored for homeowners across India. On-site verified technician bookings are currently active across <strong>Bangalore</strong>.
+            </div>
+          </div>
 
           {processedContent.includes('<!-- PRO_ONBOARDING_TOUR_WIDGET -->') ? (
             <>

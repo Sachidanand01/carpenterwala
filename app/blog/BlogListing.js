@@ -5,42 +5,56 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { BLOG_POSTS } from '@/lib/blog-data';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { INTENT_TAGS, getIntentTags } from '@/lib/blog-service';
 
 const POSTS_PER_PAGE = 8;
 
-const slugify = (cat) => cat.toLowerCase().replace(/\s+/g, '-');
+const slugify = (cat) => {
+  if (cat.toLowerCase() === 'home maintenance') return 'home-maintenance';
+  return cat.toLowerCase().replace(/\s+/g, '-');
+};
+
+const getCategoryDisplayName = (cat) => {
+  if (cat === 'Maintenance') return 'Home Maintenance';
+  return cat;
+};
 
 
 
 const CATEGORY_DESCRIPTIONS = {
   all: `
-    <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">Explore Expert Home Improvement Guides</h2>
-    <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Welcome to the Carpenterwala blog, your premium source for step-by-step tutorials, home repair guides, and trade insights in Bangalore. From simple DIY cabinet repairs to large-scale house painting and rewiring projects, our verified professionals share their industry expertise to help you maintain a safe, beautiful, and efficient home.</p>
-    <p style="opacity: 0.85; line-height: 1.7;">Whether you are looking to understand modular kitchen materials, plan bedroom wall painting colors, or avoid common repair service scams, our articles provide detailed checklists and practical tips. Browse our categories in the sidebar to find the exact help you need today.</p>
+    <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">Explore Expert Home Improvement Guides for Indian Homes</h2>
+    <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Welcome to the Carpenterwala knowledge base, your trusted national source for step-by-step DIY tutorials, repair guides, and trade insights across India. From modular kitchen materials and wardrobe ergonomics to interior painting formulas and electrical safety, our verified professionals share industry expertise to help you build and maintain a safe, durable home.</p>
+    <p style="opacity: 0.85; line-height: 1.7;">Whether you are calculating paint coverage, comparing plywood grades for humid coastal versus dry climates, or vetting local technicians, our articles provide unbiased checklists and practical benchmarks. (Note: On-site verified technician bookings are currently active across Bangalore).</p>
   `,
   carpentry: `
     <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">Professional Carpentry Guides & Woodwork Tips</h2>
     <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Explore our custom woodworking articles covering wardrobe ergonomics, structural furniture design, termite prevention, and door installations. Our master carpenters share insights into selecting durable materials like BWR plywood vs MDF and selecting the right finishes (laminate vs PU polish) for Indian households.</p>
-    <p style="opacity: 0.85; line-height: 1.7;">Maintaining high-quality teak wood furniture requires consistent care. Use our checklists to identify structural damage, prevent moisture warping during monsoons, and keep your home's custom woodwork in top-tier shape for generations.</p>
+    <p style="opacity: 0.85; line-height: 1.7;">Maintaining high-quality teak wood and engineered furniture requires consistent care. Use our checklists to identify structural damage, prevent moisture warping during monsoons, and keep your home's custom woodwork in top-tier shape for generations.</p>
   `,
   painting: `
     <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">Expert Painting Guides, Color Selection, & Exterior Waterproofing</h2>
-    <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Your home’s walls define its visual appeal and protect its structure. Read our professional guides on picking the best paint colors for bedrooms, managing external dampness during the Bangalore monsoons, and applying anti-algae elastomeric coatings.</p>
+    <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Your home’s walls define its visual appeal and protect its structure. Read our professional guides on picking the best paint colors for bedrooms, managing external dampness during heavy monsoon seasons, and applying anti-algae elastomeric coatings.</p>
     <p style="opacity: 0.85; line-height: 1.7;">We also cover modern paint choices like zero-VOC and low-VOC emulsions that protect your family’s respiratory health and improve indoor air quality. Get tips on how to prepare metal window grills before applying red-oxide rust-proofing primers.</p>
   `,
   plumbing: `
     <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">Plumber Repair Guides & Water Management Solutions</h2>
     <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Plumbing issues can cause massive structural damages if left unaddressed. Learn how to locate your home’s main water shut-off valve, execute temporary emergency pipe repairs during burst events, and check water meters for silent leaks.</p>
-    <p style="opacity: 0.85; line-height: 1.7;">We also specialize in resolving Bangalore-specific hard water challenges. Learn about ion-exchange softeners, magnetic descalers, and compact tap filters to lower TDS levels, protect bathroom geysers, and safeguard your skin.</p>
+    <p style="opacity: 0.85; line-height: 1.7;">We also specialize in resolving groundwater and hard water challenges common across Indian cities. Learn about ion-exchange softeners, magnetic descalers, and compact tap filters to lower TDS levels, protect bathroom geysers, and safeguard your plumbing fixtures.</p>
   `,
   electrical: `
     <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">Home Electrical Safety, Rewiring Guides, & Smart Upgrades</h2>
     <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Electricity is the heartbeat of the modern home, but safety must always come first. Read our comprehensive guides on understanding the difference between MCBs (Miniature Circuit Breakers) and ELCBs (Earth Leakage Circuit Breakers) to protect your appliances and family.</p>
-    <p style="opacity: 0.85; line-height: 1.7;">Identify the warning signs of deteriorating 90s copper/aluminum wiring, plan complete home rewiring projects, and prepare your distribution panel for hybrid solar energy integration. Keep your home secure and energy-efficient with our expert checklists.</p>
+    <p style="opacity: 0.85; line-height: 1.7;">Identify the warning signs of deteriorating wiring, plan complete home rewiring projects, and prepare your distribution panel for hybrid solar energy integration. Keep your home secure and energy-efficient with our expert checklists.</p>
   `,
   maintenance: `
-    <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">Seasonal Home Maintenance Checklists & Contractor Vetting</h2>
-    <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Prevention is always more cost-effective than emergency repair. Follow our year-round Bangalore home maintenance checklist, detailing roof waterproofing tasks in April, false ceiling repair guides, and prep work before the festive Diwali season.</p>
+    <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">Home Maintenance Checklists, Preventative Care & Contractor Vetting</h2>
+    <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Prevention is always more cost-effective than emergency repair. Follow our seasonal home maintenance checklists, detailing roof waterproofing tasks before monsoons, false ceiling inspection guides, and prep work before festive holidays.</p>
+    <p style="opacity: 0.85; line-height: 1.7;">We also provide practical tips on how to vet local handymen, listing the top screening questions to ask potential contractors about service warranties and material grades before you commit to booking.</p>
+  `,
+  'home-maintenance': `
+    <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">Home Maintenance Checklists, Preventative Care & Contractor Vetting</h2>
+    <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Prevention is always more cost-effective than emergency repair. Follow our seasonal home maintenance checklists, detailing roof waterproofing tasks before monsoons, false ceiling inspection guides, and prep work before festive holidays.</p>
     <p style="opacity: 0.85; line-height: 1.7;">We also provide practical tips on how to vet local handymen, listing the top screening questions to ask potential contractors about service warranties and material grades before you commit to booking.</p>
   `,
   'how-to': `
@@ -51,12 +65,12 @@ const CATEGORY_DESCRIPTIONS = {
   wallpaper: `
     <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">Designer Wallpapers, Peel-and-Stick DIY Guides & Accent Wall Tips</h2>
     <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Transform ordinary rooms into stylish spaces with our expert wallpaper and wall decor guides for Indian homes. Learn how to choose between peel-and-stick self-adhesive vinyl and traditional pasted wallpapers, calculate exact roll requirements, avoid pattern mismatching, and pick accent walls that elevate your interior aesthetic.</p>
-    <p style="opacity: 0.85; line-height: 1.7;">Bangalore's seasonal climate demands careful surface diagnostics before installation. Follow our professional checklists to treat underlying wall seepage, properly cure fresh paint before hanging wallpaper, and keep your feature walls pristine for years.</p>
+    <p style="opacity: 0.85; line-height: 1.7;">India's shifting regional climates demand careful surface diagnostics before installation. Follow our professional checklists to treat underlying wall seepage, properly cure fresh paint before hanging wallpaper, and keep your feature walls pristine for years.</p>
   `,
   'wall-paper': `
     <h2 style="margin-bottom: 1.2rem; font-size: 1.6rem; color: var(--foreground);">Designer Wallpapers, Peel-and-Stick DIY Guides & Accent Wall Tips</h2>
     <p style="margin-bottom: 1rem; opacity: 0.85; line-height: 1.7;">Transform ordinary rooms into stylish spaces with our expert wallpaper and wall decor guides for Indian homes. Learn how to choose between peel-and-stick self-adhesive vinyl and traditional pasted wallpapers, calculate exact roll requirements, avoid pattern mismatching, and pick accent walls that elevate your interior aesthetic.</p>
-    <p style="opacity: 0.85; line-height: 1.7;">Bangalore's seasonal climate demands careful surface diagnostics before installation. Follow our professional checklists to treat underlying wall seepage, properly cure fresh paint before hanging wallpaper, and keep your feature walls pristine for years.</p>
+    <p style="opacity: 0.85; line-height: 1.7;">India's shifting regional climates demand careful surface diagnostics before installation. Follow our professional checklists to treat underlying wall seepage, properly cure fresh paint before hanging wallpaper, and keep your feature walls pristine for years.</p>
   `
 };
 
@@ -65,6 +79,7 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts, initialP
   const gridTopRef = useRef(null);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTag, setSelectedTag] = useState('All');
   
   // Read initial page from server prop
   const [currentPage, setCurrentPage] = useState(initialPage);
@@ -98,8 +113,23 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts, initialP
     return counts;
   }, [sortedAllPosts]);
 
+  // Intent Tag Counts
+  const tagCounts = useMemo(() => {
+    const counts = { All: sortedAllPosts.length };
+    INTENT_TAGS.forEach(tag => {
+      counts[tag] = sortedAllPosts.filter(p => {
+        const pTags = p.tags || getIntentTags(p);
+        return pTags.includes(tag);
+      }).length;
+    });
+    return counts;
+  }, [sortedAllPosts]);
+
   // 3. Resolve active category from URL slug
   const activeCategory = useMemo(() => {
+    if (selectedCategorySlug.toLowerCase() === 'home-maintenance') {
+      return CATEGORIES.find(c => c === 'Maintenance' || c === 'Home Maintenance') || 'Maintenance';
+    }
     return CATEGORIES.find(
       (cat) => slugify(cat) === selectedCategorySlug.toLowerCase()
     ) || 'All';
@@ -110,22 +140,38 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts, initialP
     return sortedAllPosts.slice(0, 4);
   }, [sortedAllPosts]);
 
-  // 5. Filter posts by category and search query
+  // 5. Filter posts by category, intent tag, and search query
   const filteredPosts = useMemo(() => {
     let list = activeCategory === 'All' 
       ? sortedAllPosts 
-      : sortedAllPosts.filter(post => post.category === activeCategory);
+      : sortedAllPosts.filter(post => {
+          if (activeCategory === 'Maintenance' || activeCategory === 'Home Maintenance') {
+            return post.category === 'Maintenance' || post.category === 'Home Maintenance';
+          }
+          return post.category === activeCategory;
+        });
+
+    if (selectedTag && selectedTag !== 'All') {
+      list = list.filter(post => {
+        const pTags = post.tags || getIntentTags(post);
+        return pTags.includes(selectedTag);
+      });
+    }
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
-      list = list.filter(post => 
-        post.title.toLowerCase().includes(q) ||
-        (post.excerpt && post.excerpt.toLowerCase().includes(q)) ||
-        (post.category && post.category.toLowerCase().includes(q))
-      );
+      list = list.filter(post => {
+        const pTags = post.tags || getIntentTags(post);
+        return (
+          post.title.toLowerCase().includes(q) ||
+          (post.excerpt && post.excerpt.toLowerCase().includes(q)) ||
+          (post.category && post.category.toLowerCase().includes(q)) ||
+          pTags.some(t => t.toLowerCase().includes(q))
+        );
+      });
     }
     return list;
-  }, [sortedAllPosts, activeCategory, searchQuery]);
+  }, [sortedAllPosts, activeCategory, selectedTag, searchQuery]);
 
   // 6. Pagination calculations
   const totalPages = Math.max(1, Math.ceil(filteredPosts.length / POSTS_PER_PAGE));
@@ -210,16 +256,36 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts, initialP
         <div className="container" style={{ textAlign: 'center' }}>
           <div className="hero-pill-badge">
             <span className="live-dot" />
-            <span>Bangalore Homeowner Knowledge Base</span>
+            <span>India&apos;s Homeowner Knowledge Base</span>
           </div>
           <h1 className="hero-title">
-            {activeCategory === 'All' ? 'Expert Insights & Guides' : `${activeCategory} Insights & Guides`}
+            {activeCategory === 'All' ? 'Expert Insights & Guides' : `${getCategoryDisplayName(activeCategory)} Insights & Guides`}
           </h1>
           <p className="hero-subtitle">
             {activeCategory === 'All' 
-              ? "Step-by-step tutorials, material selection guides, and trade secrets from Bangalore's verified master handymen."
-              : `Professional checklists, repair techniques, and expert guides for ${activeCategory.toLowerCase()} in Bangalore homes.`}
+              ? "Step-by-step tutorials, material selection guides, and trade secrets from India's verified home improvement specialists."
+              : `Professional checklists, repair techniques, and expert guides for ${getCategoryDisplayName(activeCategory).toLowerCase()} in Indian homes.`}
           </p>
+
+          {/* National Editorial & Service Availability Callout Banner */}
+          <div style={{
+            maxWidth: '680px',
+            margin: '1.25rem auto 0 auto',
+            padding: '0.65rem 1.25rem',
+            borderRadius: '9999px',
+            background: 'rgba(37, 99, 235, 0.08)',
+            border: '1px solid rgba(37, 99, 235, 0.22)',
+            fontSize: '0.85rem',
+            color: 'var(--foreground)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.5rem',
+            lineHeight: 1.45
+          }}>
+            <span style={{ fontSize: '1rem', flexShrink: 0 }}>📍</span>
+            <span><strong>National Editorial:</strong> Guides apply to homes across India. On-site verified technician bookings are currently active across <strong>Bangalore</strong>.</span>
+          </div>
         </div>
       </section>
 
@@ -238,7 +304,7 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts, initialP
                 href={href}
                 className={`mobile-cat-pill ${isActive ? 'active' : ''}`}
               >
-                <span>{cat}</span>
+                <span>{getCategoryDisplayName(cat)}</span>
                 <span className="pill-count">({count})</span>
               </Link>
             );
@@ -257,7 +323,7 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts, initialP
             <div className="listing-status-bar glass">
               <div>
                 <h2 className="feed-title">
-                  {activeCategory === 'All' ? 'All Handyman Articles' : `${activeCategory} Guides`}
+                  {activeCategory === 'All' ? 'All Handyman Articles' : `${getCategoryDisplayName(activeCategory)} Guides`}
                 </h2>
                 <p className="feed-counter">
                   {filteredPosts.length > 0 ? (
@@ -278,6 +344,53 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts, initialP
               )}
             </div>
 
+            {/* Intent Tags Filter Bar */}
+            <div className="intent-tags-bar glass" style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              flexWrap: 'wrap',
+              padding: '0.85rem 1.25rem',
+              marginBottom: '1.5rem',
+              borderRadius: '12px',
+              border: '1px solid var(--glass-border)'
+            }}>
+              <span style={{ fontSize: '0.82rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--foreground)', opacity: 0.7, marginRight: '0.25rem' }}>
+                Filter by Intent:
+              </span>
+              {['All', ...INTENT_TAGS].map(tag => {
+                const isTagActive = selectedTag === tag;
+                const count = tagCounts[tag] || 0;
+                return (
+                  <button
+                    key={tag}
+                    onClick={() => {
+                      setSelectedTag(tag);
+                      setCurrentPage(1);
+                    }}
+                    className={`tag-pill-btn ${isTagActive ? 'active' : ''}`}
+                    style={{
+                      border: isTagActive ? '1px solid var(--primary)' : '1px solid rgba(255, 255, 255, 0.12)',
+                      backgroundColor: isTagActive ? 'var(--primary)' : 'rgba(255, 255, 255, 0.04)',
+                      color: isTagActive ? '#ffffff' : 'var(--foreground)',
+                      padding: '0.35rem 0.85rem',
+                      borderRadius: '9999px',
+                      fontSize: '0.82rem',
+                      fontWeight: isTagActive ? '600' : '500',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem'
+                    }}
+                  >
+                    <span>{tag === 'All' ? 'All Formats' : tag}</span>
+                    <span style={{ opacity: isTagActive ? 0.9 : 0.6, fontSize: '0.75rem' }}>({count})</span>
+                  </button>
+                );
+              })}
+            </div>
+
             {/* Post Cards Grid (Max 8 cards) */}
             {currentPosts.length > 0 ? (
               <div className="posts-cards-grid">
@@ -292,7 +405,7 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts, initialP
                           className="card-image" 
                         />
                         <div className="category-tag">
-                          {post.category}
+                          {getCategoryDisplayName(post.category)}
                         </div>
                       </div>
 
@@ -301,6 +414,22 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts, initialP
                           <span className="card-date">{post.date}</span>
                           <span className="meta-sep">•</span>
                           <span className="card-readtime">{post.readTime}</span>
+                          {Array.isArray(post.tags || getIntentTags(post)) && (
+                            <span style={{ marginLeft: 'auto', display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
+                              {(post.tags || getIntentTags(post)).slice(0, 2).map(tag => (
+                                <span key={tag} style={{
+                                  fontSize: '0.72rem',
+                                  padding: '0.15rem 0.5rem',
+                                  borderRadius: '6px',
+                                  background: 'rgba(37, 99, 235, 0.1)',
+                                  color: 'var(--primary)',
+                                  fontWeight: '600'
+                                }}>
+                                  {tag}
+                                </span>
+                              ))}
+                            </span>
+                          )}
                         </div>
 
                         <h3 className="card-title">{post.title}</h3>
@@ -463,12 +592,54 @@ function BlogListingInner({ selectedCategorySlug = 'all', initialPosts, initialP
                         className={`category-item-row ${isActive ? 'active' : ''}`}
                       >
                         <span className="cat-name">
-                          {cat} <span className="cat-count">({count})</span>
+                          {getCategoryDisplayName(cat)} <span className="cat-count">({count})</span>
                         </span>
                       </Link>
                     );
                   })}
                 </nav>
+              </div>
+
+              {/* Widget 2B: Filter by Topic Intent */}
+              <div className="glass sidebar-widget">
+                <div className="widget-header-row">
+                  <h3 className="widget-title">
+                    <span>🎯</span> Browse by Intent
+                  </h3>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginTop: '0.75rem' }}>
+                  {['All', ...INTENT_TAGS].map(tag => {
+                    const isTagActive = selectedTag === tag;
+                    const count = tagCounts[tag] || 0;
+                    return (
+                      <button
+                        key={tag}
+                        onClick={() => {
+                          setSelectedTag(tag);
+                          setCurrentPage(1);
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '0.55rem 0.85rem',
+                          borderRadius: '8px',
+                          border: isTagActive ? '1px solid var(--primary)' : '1px solid transparent',
+                          background: isTagActive ? 'rgba(37, 99, 235, 0.12)' : 'rgba(255, 255, 255, 0.03)',
+                          color: isTagActive ? 'var(--primary)' : 'var(--foreground)',
+                          fontWeight: isTagActive ? '600' : '400',
+                          fontSize: '0.88rem',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          textAlign: 'left'
+                        }}
+                      >
+                        <span>{tag === 'All' ? 'All Guides' : tag}</span>
+                        <span style={{ fontSize: '0.78rem', opacity: 0.75 }}>({count})</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Widget 3: Bangalore Handyman Booking CTA */}
