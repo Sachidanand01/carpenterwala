@@ -15,7 +15,7 @@ const contactJsonLd = {
   "@id": "https://carpenterwala.com/contact#webpage",
   "name": "Contact Carpenterwala",
   "url": "https://carpenterwala.com/contact",
-  "description": "Contact Carpenterwala customer support and head office in Bangalore.",
+  "description": "Contact Carpenterwala customer support and operations hub in Bangalore.",
   "mainEntity": {
     "@type": "LocalBusiness",
     "name": "Carpenterwala",
@@ -68,10 +68,10 @@ export default function ContactUs() {
         </div>
 
         <div className="glass" style={{ padding: "2.5rem", textAlign: "center" }}>
-          <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>🏢</div>
-          <h2 style={{ marginBottom: "0.5rem", fontSize: "1.5rem" }}>Head Office</h2>
-          <p style={{ opacity: 0.7, marginBottom: "1.5rem", fontSize: "0.95rem" }}>Visit us for corporate inquiries.</p>
-          <p style={{ fontSize: "0.9rem" }}>Thanisandra, Bangalore, KA, India</p>
+          <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>📞</div>
+          <h2 style={{ marginBottom: "0.5rem", fontSize: "1.5rem" }}>Call Support</h2>
+          <p style={{ opacity: 0.7, marginBottom: "1.5rem", fontSize: "0.95rem" }}>Mon – Sun: 8:00 AM – 8:00 PM</p>
+          <a href="tel:+918095551001" style={{ color: "var(--primary)", fontWeight: "bold" }}>+91-809-555-1001</a>
         </div>
 
         <div className="glass" style={{ padding: "2.5rem", textAlign: "center" }}>
@@ -127,16 +127,19 @@ export default function ContactUs() {
           </form>
         </div>
 
-        {/* Office Info */}
+        {/* Operational Hub & Coverage */}
         <div className="flex flex-col gap-8">
           <div>
-            <h2 style={{ marginBottom: "1.5rem", fontSize: "1.5rem" }}>Our Regional Offices</h2>
+            <h2 style={{ marginBottom: "1.5rem", fontSize: "1.5rem" }}>Operational Hub & Service Areas</h2>
             <div className="flex flex-col gap-6" style={{ marginBottom: "1.5rem" }}>
               <div className="glass" style={{ padding: "1.5rem" }}>
-                <h3 style={{ color: "var(--primary)", marginBottom: "0.25rem", fontSize: "1.1rem" }}>Bangalore (Head Office)</h3>
-                <p style={{ opacity: 0.7, fontSize: "0.9rem", marginBottom: "0.5rem" }}>Thanisandra, Bangalore, Karnataka, India.</p>
+                <h3 style={{ color: "var(--primary)", marginBottom: "0.25rem", fontSize: "1.1rem" }}>Bangalore Operations Hub</h3>
+                <p style={{ opacity: 0.7, fontSize: "0.9rem", marginBottom: "0.4rem" }}>Thanisandra, Bangalore, Karnataka, India.</p>
+                <p style={{ fontSize: "0.85rem", color: "var(--accent)", fontWeight: 600, marginBottom: "0.6rem" }}>
+                  📍 Doorstep service across Bangalore — no walk-in visits.
+                </p>
                 <p style={{ fontSize: "0.9rem" }}>
-                  📞 Support: <a href="tel:+918095551001" style={{ color: "var(--accent)", fontWeight: "bold", textDecoration: "none" }}>+91-809-555-1001</a>
+                  📞 Support: <a href="tel:+918095551001" style={{ color: "var(--primary)", fontWeight: "bold", textDecoration: "none" }}>+91-809-555-1001</a>
                 </p>
               </div>
             </div>
@@ -173,7 +176,7 @@ export default function ContactUs() {
           At Carpenterwala, we are dedicated to providing the highest standards of customer care. When you <strong>contact Carpenterwala</strong>, your request is routed directly to our centralized support team in Bangalore. We specialize in matching homeowners with vetted professionals for custom carpentry, interior painting, household plumbing, and electrical installations.
         </p>
         <p style={{ marginBottom: "1.2rem" }}>
-          Need to report a booking issue, request an estimate for a large-scale commercial project, or ask about our partner program? Our local team handles standard support tickets within 24 hours. For businesses looking to establish regional partnerships, our corporate office provides bespoke service contracts tailored to real estate managers and office fit-outs.
+          Need to report a booking issue, request an estimate for a large-scale commercial project, or ask about our partner program? Our local team handles standard support tickets within 24 hours. For businesses looking to establish regional partnerships, our corporate team provides bespoke service contracts tailored to real estate managers and office fit-outs.
         </p>
         <p>
           We physically verify all our local service providers, ensuring that every professional is vetted for both skill and safety. Reach out to our team today to get your home renovation projects started with peace of mind.

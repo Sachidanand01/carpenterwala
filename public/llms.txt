@@ -71,8 +71,8 @@ Carpenterwala exposes a Remote WebMCP server and OpenAPI 3.1 specification for a
 - [How It Works](https://carpenterwala.com/how-it-works): 3-step guide for booking certified professionals.
 - [XML Sitemap](https://carpenterwala.com/sitemap.xml): Machine-readable XML sitemap index.
 
-## Contact & Head Office
-- **Address**: Thanisandra Main Road, Bangalore, Karnataka 560077, India
+## Contact & Operations Hub
+- **Address**: Thanisandra Main Road, Bangalore, Karnataka 560077, India (Doorstep service across Bangalore)
 - **Phone**: +91-809-555-1001
 - **Email**: contact@carpenterwala.com
 - **Operating Hours**: Monday – Sunday, 08:00 AM – 09:00 PM IST
