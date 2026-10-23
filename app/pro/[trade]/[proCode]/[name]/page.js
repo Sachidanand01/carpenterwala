@@ -14,6 +14,8 @@ import { getAllBlogPosts } from '@/lib/blog-service';
 
 // Reversible Feature Flag: toggle to false anytime to revert to legacy layout
 const USE_ENHANCED_LAYOUT = true;
+// Feature Flag: toggle to true when ready to re-enable the interactive project estimator in the future
+const SHOW_PROJECT_ESTIMATOR = false;
 
 export async function generateMetadata({ params }) {
   const { trade, proCode, name } = await params;
@@ -353,8 +355,10 @@ export default async function CanonicalProProfile({ params }) {
               </div>
             </section>
 
-            {/* Embedded Interactive Trade Estimator */}
-            <ProTradeEstimator trade={profile.trade} proName={profile.name} />
+            {/* Embedded Interactive Trade Estimator (Set SHOW_PROJECT_ESTIMATOR = true to enable) */}
+            {SHOW_PROJECT_ESTIMATOR && (
+              <ProTradeEstimator trade={profile.trade} proName={profile.name} />
+            )}
 
             {/* Interactive Portfolio Gallery with Lightbox Zoom */}
             <ProPortfolioGallery portfolio={profile.portfolio} trade={profile.trade} proName={profile.name} />
