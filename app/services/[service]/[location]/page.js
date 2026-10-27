@@ -403,21 +403,12 @@ export default async function ServiceLocationPage({ params }) {
             We are actively working to onboard the best verified {srv.type}s in {loc.name} for you!
           </h2>
           <p style={{ opacity: 0.85, fontSize: '0.95rem', maxWidth: '620px', margin: '0 auto 1.5rem auto', lineHeight: '1.6' }}>
-            To guarantee zero compromises on home safety and craft quality, all professionals undergo mandatory identity verification and quality screening before going live. Need urgent assistance in {loc.name} today? Our direct support desk is ready.
+            To guarantee zero compromises on home safety and craft quality, all professionals undergo mandatory identity verification and quality screening before going live.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a
-              href={`https://api.whatsapp.com/send?phone=918095551001&text=${encodeURIComponent(`Hi Carpenterwala, I need an emergency verified ${srv.type} in ${loc.name}. Please connect me with available options.`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-primary"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.8rem 1.6rem', fontSize: '0.95rem' }}
-            >
-              <span>💬</span> Priority WhatsApp Dispatch
-            </a>
             <Link
               href="/pro/login"
-              className="btn btn-secondary"
+              className="btn btn-primary"
               style={{ padding: '0.8rem 1.6rem', fontSize: '0.95rem' }}
             >
               🛠️ Are you a {srv.type}? Join as a Pro

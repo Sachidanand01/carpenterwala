@@ -421,18 +421,6 @@ function DirectoryContent() {
               </p>
 
               <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "1.5rem" }}>
-                <a
-                  href={`https://api.whatsapp.com/send?phone=918095551001&text=${encodeURIComponent(
-                    `Hi Carpenterwala, I need a verified professional${category !== 'All' ? ` for ${category}` : ''}${detectedCity ? ` in ${detectedCity}` : ''}. Can you please assist me?`
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary"
-                  style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.85rem 1.6rem", fontSize: "0.95rem" }}
-                >
-                  <span>💬</span> Need Urgent Help? WhatsApp Support
-                </a>
-
                 {category !== "All" || maxDistance !== "Any" || selectedLanguages.length > 0 ? (
                   <button
                     type="button"
@@ -449,8 +437,8 @@ function DirectoryContent() {
                 ) : (
                   <Link
                     href="/pro/login"
-                    className="btn btn-secondary"
-                    style={{ padding: "0.85rem 1.4rem", fontSize: "0.95rem" }}
+                    className="btn btn-primary"
+                    style={{ padding: "0.85rem 1.6rem", fontSize: "0.95rem" }}
                   >
                     🛠️ Join as a Verified Pro
                   </Link>
