@@ -386,9 +386,84 @@ function DirectoryContent() {
           {loading ? (
             <p>Loading professionals...</p>
           ) : filteredProfiles.length === 0 ? (
-            <div className="glass" style={{ padding: "3rem", textAlign: "center" }}>
-              <h2>No professionals found</h2>
-              <p style={{ opacity: 0.7 }}>Try adjusting your filters.</p>
+            <div 
+              className="glass animate-fade-in" 
+              style={{ 
+                padding: "3.5rem 2rem", 
+                textAlign: "center", 
+                borderRadius: "20px",
+                border: "1px solid var(--glass-border)",
+                background: "var(--glass-bg)",
+                backdropFilter: "blur(12px)"
+              }}
+            >
+              <div 
+                style={{ 
+                  width: "72px", 
+                  height: "72px", 
+                  borderRadius: "50%", 
+                  background: "var(--primary-light)", 
+                  display: "inline-flex", 
+                  alignItems: "center", 
+                  justifyContent: "center", 
+                  fontSize: "2.2rem",
+                  marginBottom: "1.25rem",
+                  boxShadow: "0 8px 24px rgba(194, 65, 12, 0.15)"
+                }}
+              >
+                👷‍♂️
+              </div>
+              <h2 style={{ fontSize: "1.6rem", fontWeight: 700, marginBottom: "0.6rem", color: "var(--foreground)" }}>
+                We are actively working to onboard the best verified professionals for you!
+              </h2>
+              <p style={{ opacity: 0.85, fontSize: "1rem", maxWidth: "580px", margin: "0 auto 1.75rem auto", lineHeight: "1.6" }}>
+                Every craftsman on Carpenterwala undergoes strict identity checks, background verification, and quality screening to ensure you get trusted, top-tier service.
+              </p>
+
+              <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "1.5rem" }}>
+                <a
+                  href={`https://api.whatsapp.com/send?phone=918095551001&text=${encodeURIComponent(
+                    `Hi Carpenterwala, I need a verified professional${category !== 'All' ? ` for ${category}` : ''}${detectedCity ? ` in ${detectedCity}` : ''}. Can you please assist me?`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary"
+                  style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.85rem 1.6rem", fontSize: "0.95rem" }}
+                >
+                  <span>💬</span> Need Urgent Help? WhatsApp Support
+                </a>
+
+                {category !== "All" || maxDistance !== "Any" || selectedLanguages.length > 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCategory("All");
+                      setMaxDistance("Any");
+                      setSelectedLanguages([]);
+                    }}
+                    className="btn btn-secondary"
+                    style={{ padding: "0.85rem 1.4rem", fontSize: "0.95rem" }}
+                  >
+                    Reset Filters
+                  </button>
+                ) : (
+                  <Link
+                    href="/pro/login"
+                    className="btn btn-secondary"
+                    style={{ padding: "0.85rem 1.4rem", fontSize: "0.95rem" }}
+                  >
+                    🛠️ Join as a Verified Pro
+                  </Link>
+                )}
+              </div>
+
+              <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", fontSize: "0.82rem", opacity: 0.75, background: "rgba(0,0,0,0.03)", padding: "0.4rem 0.9rem", borderRadius: "100px", flexWrap: "wrap", justifyContent: "center" }}>
+                <span>🔒 100% Free Platform</span>
+                <span>•</span>
+                <span>Zero Commission</span>
+                <span>•</span>
+                <span>Strict KYC Verification</span>
+              </div>
             </div>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.5rem" }}>

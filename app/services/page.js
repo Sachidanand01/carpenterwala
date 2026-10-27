@@ -193,9 +193,22 @@ export default function ServicesPage() {
                       Pick Service Professional
                     </Link>
                   ) : (
-                    <div style={{ textAlign: "center", padding: "0.8rem", backgroundColor: "rgba(255,255,255,0.05)", borderRadius: "8px", color: "var(--foreground-muted)" }}>
-                      Pros are getting added
-                    </div>
+                    <Link
+                      href={`/find-a-professional?category=${service.id}`}
+                      style={{ 
+                        textAlign: "center", 
+                        padding: "0.85rem 1rem", 
+                        backgroundColor: "var(--primary-light)", 
+                        borderRadius: "10px", 
+                        color: "var(--primary)", 
+                        fontSize: "0.88rem", 
+                        fontWeight: 600,
+                        textDecoration: "none",
+                        display: "block"
+                      }}
+                    >
+                      ✨ Onboarding Best Pros for You →
+                    </Link>
                   )}
                 </div>
               </div>

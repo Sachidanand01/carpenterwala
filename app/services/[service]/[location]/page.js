@@ -316,7 +316,7 @@ export default async function ServiceLocationPage({ params }) {
       </div>
 
       {/* Verified Professionals Directory View */}
-      {verifiedPros.length > 0 && (
+      {verifiedPros.length > 0 ? (
         <div style={{ marginBottom: '4rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
@@ -384,6 +384,44 @@ export default async function ServiceLocationPage({ params }) {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      ) : (
+        <div 
+          className="glass animate-fade-in" 
+          style={{ 
+            marginBottom: '4rem', 
+            padding: '2.5rem 1.75rem', 
+            borderRadius: '16px', 
+            textAlign: 'center', 
+            border: '1px solid var(--glass-border)',
+            background: 'var(--glass-bg)'
+          }}
+        >
+          <div style={{ fontSize: '2.5rem', marginBottom: '0.6rem' }}>👷‍♂️✨</div>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--foreground)' }}>
+            We are actively working to onboard the best verified {srv.type}s in {loc.name} for you!
+          </h2>
+          <p style={{ opacity: 0.85, fontSize: '0.95rem', maxWidth: '620px', margin: '0 auto 1.5rem auto', lineHeight: '1.6' }}>
+            To guarantee zero compromises on home safety and craft quality, all professionals undergo mandatory identity verification and quality screening before going live. Need urgent assistance in {loc.name} today? Our direct support desk is ready.
+          </p>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a
+              href={`https://api.whatsapp.com/send?phone=918095551001&text=${encodeURIComponent(`Hi Carpenterwala, I need an emergency verified ${srv.type} in ${loc.name}. Please connect me with available options.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.8rem 1.6rem', fontSize: '0.95rem' }}
+            >
+              <span>💬</span> Priority WhatsApp Dispatch
+            </a>
+            <Link
+              href="/pro/login"
+              className="btn btn-secondary"
+              style={{ padding: '0.8rem 1.6rem', fontSize: '0.95rem' }}
+            >
+              🛠️ Are you a {srv.type}? Join as a Pro
+            </Link>
           </div>
         </div>
       )}
