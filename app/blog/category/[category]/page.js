@@ -47,10 +47,8 @@ export default async function CategoryPage({ params, searchParams }) {
   const pageParam = parseInt(resolvedSearchParams?.page || '1', 10);
   const currentPage = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
 
-  const [posts, categories] = await Promise.all([
-    getAllBlogPosts(),
-    getBlogCategories()
-  ]);
+  const posts = await getAllBlogPosts();
+  const categories = Array.from(new Set(posts.map((p) => p.category).filter(Boolean)));
   
   const normalizedCategorySlug = category.toLowerCase() === 'home-maintenance' ? 'maintenance' : category.toLowerCase();
   let activeCategory = categories.find(

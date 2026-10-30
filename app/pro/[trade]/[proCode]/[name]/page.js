@@ -10,7 +10,10 @@ import ProLocalNewsCard from '@/components/pro-profile/ProLocalNewsCard';
 import ProPortfolioGallery from '@/components/pro-profile/ProPortfolioGallery';
 import ProTradeEstimator from '@/components/pro-profile/ProTradeEstimator';
 import ProTradeBlogs from '@/components/pro-profile/ProTradeBlogs';
-import { getAllBlogPosts } from '@/lib/blog-service';
+import { getRelatedBlogsForTrade } from '@/lib/blog-service';
+
+// Cache Pro profile pages with Incremental Static Regeneration (24-hour refresh) to prevent repeated live DB egress
+export const revalidate = 86400;
 
 // Reversible Feature Flag: toggle to false anytime to revert to legacy layout
 const USE_ENHANCED_LAYOUT = true;
@@ -204,22 +207,10 @@ export default async function CanonicalProProfile({ params }) {
     ]
   };
 
-  // 3. Fetch trade-specific blog guides for related reading
+  // 3. Fetch trade-specific blog guides for related reading (cached, lightweight)
   let tradeBlogs = [];
   try {
-    const allPosts = await getAllBlogPosts();
-    const tradeLower = (profile.trade || '').toLowerCase();
-    tradeBlogs = allPosts.filter(p => {
-      const titleLower = (p.title || '').toLowerCase();
-      const catLower = (p.category || '').toLowerCase();
-      const slugLower = (p.slug || '').toLowerCase();
-      return titleLower.includes(tradeLower) || catLower.includes(tradeLower) || slugLower.includes(tradeLower);
-    });
-    if (tradeBlogs.length === 0) {
-      tradeBlogs = allPosts.slice(0, 3);
-    } else {
-      tradeBlogs = tradeBlogs.slice(0, 3);
-    }
+    tradeBlogs = await getRelatedBlogsForTrade(profile.trade, 3);
   } catch (err) {
     console.warn("Could not load blogs for pro profile:", err);
   }

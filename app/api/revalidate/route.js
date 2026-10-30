@@ -2,7 +2,7 @@
 // Next.js App Router On-Demand Revalidation Webhook
 // Example: POST /api/revalidate?secret=YOUR_SECRET&slug=how-to-fix-a-kitchen-drawer
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
@@ -17,11 +17,20 @@ export async function POST(request) {
   }
 
   try {
-    // Revalidate main blog listing and sitemap
+    // Purge Data Cache tags immediately
+    try {
+      revalidateTag('blogs', { expire: 0 });
+      if (slug) {
+        revalidateTag(`blog-${slug}`, { expire: 0 });
+      }
+    } catch (tagErr) {
+      console.warn('[revalidate] tag error:', tagErr.message);
+    }
+
+    // Revalidate page paths
     revalidatePath('/blog');
     revalidatePath('/sitemap.xml');
 
-    // Revalidate specific post page if slug provided
     if (slug) {
       revalidatePath(`/blog/${slug}`);
     }
