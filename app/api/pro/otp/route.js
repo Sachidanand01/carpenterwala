@@ -284,9 +284,17 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Failed to create professional profile. Please try again.' }, { status: 500 });
       }
 
+      const sessionToken = encryptToken({
+        type: 'pro_session',
+        proId: newProfile.id,
+        email: newProfile.email,
+        expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000 // 30 days
+      });
+
       return NextResponse.json({
         success: true,
-        profiles: [newProfile]
+        profiles: [newProfile],
+        proToken: sessionToken
       });
     }
 
@@ -429,9 +437,17 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Invalid OTP. Please try again.' }, { status: 400 });
       }
 
+      const sessionToken = encryptToken({
+        type: 'pro_session',
+        proId: profile.id,
+        email: profile.email,
+        expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000 // 30 days
+      });
+
       return NextResponse.json({
         success: true,
-        profiles: [profile]
+        profiles: [profile],
+        proToken: sessionToken
       });
     }
 

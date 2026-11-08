@@ -1,9 +1,46 @@
 import { NextResponse } from 'next/server';
 
+// In-memory sliding window rate limiter for anti-scraping protection
+// Tracks request timestamps per client IP for protected pro directory & profile routes
+const scraperTracker = new Map();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 60 seconds
+const MAX_REQUESTS_PER_WINDOW = 40; // Max 40 profile/directory views per minute per IP
+
+// Periodically purge entries older than window
+if (typeof setInterval !== 'undefined') {
+  const cleanup = setInterval(() => {
+    const now = Date.now();
+    for (const [ip, timestamps] of scraperTracker.entries()) {
+      const active = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS);
+      if (active.length === 0) {
+        scraperTracker.delete(ip);
+      } else {
+        scraperTracker.set(ip, active);
+      }
+    }
+  }, 5 * 60 * 1000);
+  if (cleanup.unref) cleanup.unref();
+}
+
+function checkScraperRateLimit(ip) {
+  const now = Date.now();
+  const timestamps = scraperTracker.get(ip) || [];
+  const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS);
+
+  if (recent.length >= MAX_REQUESTS_PER_WINDOW) {
+    return { limited: true, retryAfter: Math.ceil((recent[0] + RATE_LIMIT_WINDOW_MS - now) / 1000) };
+  }
+
+  recent.push(now);
+  scraperTracker.set(ip, recent);
+  return { limited: false };
+}
+
 export function proxy(request) {
   const host = request.headers.get('host') || '';
   const proto = request.headers.get('x-forwarded-proto');
   const isLocal = host.includes('localhost') || host.includes('127.0.0.1');
+  const pathname = request.nextUrl.pathname;
 
   // 1. Origin Cloaking / Direct Access Protection
   // If ORIGIN_SECRET is configured, ensure request originated from Cloudflare edge
@@ -18,7 +55,38 @@ export function proxy(request) {
     }
   }
 
-  // 2. 301 Permanent Redirect for www to root domain
+  // 2. Anti-Scraping Rate Limiting on Pro Profiles, Directory & Pro API routes
+  const isProtectedPath = pathname.startsWith('/pro/') || 
+                          pathname === '/find-a-professional' || 
+                          pathname.startsWith('/api/pro/');
+
+  if (isProtectedPath && !isLocal) {
+    const clientIp = request.headers.get('cf-connecting-ip') || 
+                     request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
+                     '127.0.0.1';
+
+    const check = checkScraperRateLimit(clientIp);
+    if (check.limited) {
+      if (pathname.startsWith('/api/')) {
+        return NextResponse.json(
+          { error: 'RATE_LIMIT_EXCEEDED', message: 'Too many requests. Automated crawling is prohibited. Please slow down.' },
+          { status: 429, headers: { 'Retry-After': String(check.retryAfter || 60) } }
+        );
+      }
+      return new NextResponse(
+        'Too Many Requests: High-frequency automated crawling detected. Please wait a minute and refresh.',
+        {
+          status: 429,
+          headers: {
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Retry-After': String(check.retryAfter || 60),
+          },
+        }
+      );
+    }
+  }
+
+  // 3. 301 Permanent Redirect for www to root domain
   if (host.startsWith('www.')) {
     const cleanHost = host.replace(/^www\./, '');
     const url = new URL(request.url);
@@ -27,7 +95,7 @@ export function proxy(request) {
     return NextResponse.redirect(url.toString(), 301);
   }
 
-  // 3. 301 Permanent Redirect for HTTP to HTTPS in production
+  // 4. 301 Permanent Redirect for HTTP to HTTPS in production
   if (proto === 'http' && !isLocal) {
     const url = new URL(request.url);
     url.protocol = 'https:';

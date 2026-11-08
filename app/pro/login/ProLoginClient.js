@@ -196,8 +196,9 @@ export default function ProLogin({ lang, session, mode }) {
       }
       
       if (data.profiles && data.profiles.length === 1) {
-        loginAsPro(data.profiles[0]);
+        loginAsPro(data.profiles[0], data.proToken);
       } else if (data.profiles && data.profiles.length > 1) {
+        if (data.proToken) sessionStorage.setItem('pending_pro_token', data.proToken);
         setMatchedProfiles(data.profiles);
         setStep(3);
         setLoading(false);
@@ -315,7 +316,7 @@ export default function ProLogin({ lang, session, mode }) {
       }
       
       if (data.profiles && data.profiles.length > 0) {
-        loginAsPro(data.profiles[0]);
+        loginAsPro(data.profiles[0], data.proToken);
       } else {
         setError('Failed to create account.');
         setLoading(false);
@@ -338,11 +339,16 @@ export default function ProLogin({ lang, session, mode }) {
     }
   };
 
-  const loginAsPro = (pro) => {
+  const loginAsPro = (pro, token = null) => {
     localStorage.setItem('pro_id', pro.id);
     localStorage.setItem('pro_slug', pro.slug);
     localStorage.setItem('pro_name', pro.name);
     localStorage.setItem('pro_trade', pro.trade);
+    const resolvedToken = token || sessionStorage.getItem('pending_pro_token');
+    if (resolvedToken) {
+      localStorage.setItem('pro_token', resolvedToken);
+      sessionStorage.removeItem('pending_pro_token');
+    }
     window.dispatchEvent(new Event('pro-login-changed'));
     router.push('/pro/dashboard');
   };

@@ -1,5 +1,6 @@
 import { getProfileByProCode, getProfileBySlug } from '@/lib/supabase';
 import { getProUrl, toTradeSlug, toUrlSlug } from '@/lib/pro-slug';
+import { maskPhone, scramblePhone } from '@/lib/phone-obfuscation';
 import { notFound, redirect } from 'next/navigation';
 import Image from 'next/image';
 import VerifiedBadge from '@/components/VerifiedBadge';
@@ -96,6 +97,10 @@ export default async function CanonicalProProfile({ params }) {
     redirect(canonicalPath);
   }
 
+  // Anti-Scraping: Compute masked phone and scrambled token for interactive reveal
+  profile.maskedPhone = maskPhone(profile.phone);
+  profile.scrambledPhone = scramblePhone(profile.phone);
+
   // Map trade to Schema.org LocalBusiness sub-types
   let schemaType = "ProfessionalService";
   if (profile.trade === "Plumber") {
@@ -152,11 +157,11 @@ export default async function CanonicalProProfile({ params }) {
     "identifier": profile.pro_code,
     "image": profile.avatar || `${siteUrl}/images/about-us-hero.png`,
     "description": profile.about || `Verified ${profile.trade} in ${profile.location} with ${profile.experience} of experience.`,
-    "telephone": profile.phone || "+91-809-555-1001",
+    "telephone": "+91-809-555-1001",
     "url": proCanonicalUrl,
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": profile.full_address || profile.location || "Bangalore",
+      "streetAddress": profile.location || "Bangalore",
       "addressLocality": "Bangalore",
       "addressRegion": "Karnataka",
       "postalCode": "560077",

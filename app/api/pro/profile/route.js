@@ -1,6 +1,31 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { generateProCode } from '@/lib/pro-slug';
+import { decryptToken } from '@/lib/crypto';
+
+/**
+ * Checks whether the incoming request is authorized to view or edit full KYC and private details
+ */
+function isAuthorizedPro(request, targetProId) {
+  if (!targetProId) return false;
+  const authHeader = request.headers.get('authorization') || '';
+  const token = authHeader.replace(/^Bearer\s+/i, '') || 
+                request.headers.get('x-pro-token') || 
+                new URL(request.url).searchParams.get('token');
+
+  if (!token) return false;
+
+  const decrypted = decryptToken(token);
+  if (!decrypted) return false;
+
+  if (decrypted.type === 'pro_session' && String(decrypted.proId) === String(targetProId)) {
+    return true;
+  }
+  if (decrypted.role === 'admin' || decrypted.type === 'admin_session') {
+    return true;
+  }
+  return false;
+}
 
 // GET /api/pro/profile?id=1
 export async function GET(request) {
@@ -8,6 +33,8 @@ export async function GET(request) {
   const id = searchParams.get('id');
 
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 });
+
+  const authorized = isAuthorizedPro(request, id);
 
   try {
     let { data: profile, error } = await supabase
@@ -57,6 +84,21 @@ export async function GET(request) {
       }
       if (!profile.latitude) profile.latitude = 12.9716;
       if (!profile.longitude) profile.longitude = 77.5946;
+
+      // ANTI-SCRAPING SHIELD: Strip sensitive KYC documents and private PII if caller is not authorized
+      if (!authorized) {
+        delete profile.aadhaar_front;
+        delete profile.aadhaar_back;
+        delete profile.pan_front;
+        delete profile.pan_back;
+        delete profile.voter_driving_front;
+        delete profile.voter_driving_back;
+        delete profile.police_verification;
+        delete profile.full_address;
+        delete profile.rejection_reason;
+        delete profile.phone;
+        delete profile.email;
+      }
     }
 
     return NextResponse.json({ profile });

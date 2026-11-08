@@ -49,17 +49,30 @@ function DirectoryContent() {
   
   // Sort state (Rating by default)
   const [sortBy, setSortBy] = useState("rating");
+  // Anti-Scraping & Performance: Paginate visible pros (16 per page)
+  const [displayCount, setDisplayCount] = useState(16);
 
   useEffect(() => {
     async function loadDirectory() {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("verified", true);
-      if (error) {
-        console.error("Error loading profiles", error);
+      // Query secure public columns only — completely prevents scraping of Aadhaar, PAN, KYC or private phone numbers
+      const safeFields = 'id, pro_code, slug, name, trade, experience, location, latitude, longitude, about, skills, portfolio, avatar, languages, verified, accepting_leads, service_radius_km, average_rating, created_at';
+      
+      let res = await supabase
+        .from("public_profiles")
+        .select(safeFields);
+
+      // Graceful fallback to base profiles table with safe columns if view migration hasn't been executed
+      if (res.error) {
+        res = await supabase
+          .from("profiles")
+          .select(safeFields)
+          .eq("verified", true);
+      }
+
+      if (res.error) {
+        console.error("Error loading profiles", res.error);
       } else {
-        setAllProfiles(data || []);
+        setAllProfiles(res.data || []);
       }
       setLoading(false);
     }
@@ -185,6 +198,7 @@ function DirectoryContent() {
     });
 
     setFilteredProfiles(result);
+    setDisplayCount(16);
   }, [allProfiles, category, maxDistance, selectedLanguages, sortBy, userLocation]);
 
   return (
@@ -454,65 +468,80 @@ function DirectoryContent() {
               </div>
             </div>
           ) : (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.5rem" }}>
-              {filteredProfiles.map((pro) => (
-                <Link href={getProUrl(pro)} key={pro.id} style={{ textDecoration: "none", color: "inherit" }}>
-                  <div className="glass" style={{ padding: "1.5rem", transition: "transform 0.2s", cursor: "pointer", height: "100%", display: "flex", flexDirection: "column" }} 
-                       onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-5px)"}
-                       onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0px)"}>
-                    
-                    <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
-                      {pro.avatar ? (
-                        <img src={pro.avatar} alt={pro.name} width={60} height={60} style={{ width: "60px", height: "60px", borderRadius: "50%", objectFit: "cover" }} />
-                      ) : (
-                        <div style={{ width: "60px", height: "60px", borderRadius: "50%", backgroundColor: "var(--primary-light)", color: "var(--primary)", fontWeight: "bold", fontSize: "1.2rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          {pro.name[0]}
+            <>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.5rem" }}>
+                {filteredProfiles.slice(0, displayCount).map((pro) => (
+                  <Link href={getProUrl(pro)} key={pro.id} style={{ textDecoration: "none", color: "inherit" }}>
+                    <div className="glass" style={{ padding: "1.5rem", transition: "transform 0.2s", cursor: "pointer", height: "100%", display: "flex", flexDirection: "column" }} 
+                         onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-5px)"}
+                         onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0px)"}>
+                      
+                      <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
+                        {pro.avatar ? (
+                          <img src={pro.avatar} alt={pro.name} width={60} height={60} style={{ width: "60px", height: "60px", borderRadius: "50%", objectFit: "cover" }} />
+                        ) : (
+                          <div style={{ width: "60px", height: "60px", borderRadius: "50%", backgroundColor: "var(--primary-light)", color: "var(--primary)", fontWeight: "bold", fontSize: "1.2rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            {pro.name[0]}
+                          </div>
+                        )}
+                        <div>
+                          <h3 style={{ fontSize: "1.1rem", margin: 0, display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                            {pro.name} {pro.verified && <VerifiedBadge />}
+                          </h3>
+                          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.2rem" }}>
+                            <span style={{ margin: 0, opacity: 0.75, fontSize: "0.85rem", color: "var(--foreground-muted)" }}>{pro.trade}</span>
+                            {pro.pro_code && (
+                              <span style={{ fontSize: "0.75rem", fontFamily: "monospace", padding: "0.1rem 0.4rem", borderRadius: "4px", background: "rgba(234, 88, 12, 0.12)", color: "var(--primary)" }}>
+                                {pro.pro_code}
+                              </span>
+                            )}
+                          </div>
                         </div>
-                      )}
-                      <div>
-                        <h3 style={{ fontSize: "1.1rem", margin: 0, display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                          {pro.name} {pro.verified && <VerifiedBadge />}
-                        </h3>
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.2rem" }}>
-                          <span style={{ margin: 0, opacity: 0.75, fontSize: "0.85rem", color: "var(--foreground-muted)" }}>{pro.trade}</span>
-                          {pro.pro_code && (
-                            <span style={{ fontSize: "0.75rem", fontFamily: "monospace", padding: "0.1rem 0.4rem", borderRadius: "4px", background: "rgba(234, 88, 12, 0.12)", color: "var(--primary)" }}>
-                              {pro.pro_code}
+                      </div>
+
+                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem", fontSize: "0.9rem" }}>
+                        <span style={{ display: "flex", alignItems: "center", gap: "0.2rem" }}>
+                          ⭐ {pro.average_rating ? pro.average_rating.toFixed(1) : "New"}
+                        </span>
+                        <span style={{ opacity: 0.75 }}>📍 {pro.location}</span>
+                      </div>
+
+                      <div style={{ marginBottom: "1rem", flex: 1 }}>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                          {(pro.skills || []).slice(0, 3).map(skill => (
+                            <span key={skill} style={{ backgroundColor: "var(--primary-light)", color: "var(--primary)", padding: "0.2rem 0.6rem", borderRadius: "12px", fontSize: "0.8rem", fontWeight: 500 }}>
+                              {skill}
                             </span>
+                          ))}
+                          {(pro.skills || []).length > 3 && (
+                            <span style={{ fontSize: "0.8rem", opacity: 0.7 }}>+{pro.skills.length - 3} more</span>
                           )}
                         </div>
                       </div>
-                    </div>
 
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem", fontSize: "0.9rem" }}>
-                      <span style={{ display: "flex", alignItems: "center", gap: "0.2rem" }}>
-                        ⭐ {pro.average_rating ? pro.average_rating.toFixed(1) : "New"}
-                      </span>
-                      <span style={{ opacity: 0.75 }}>📍 {pro.location}</span>
+                      {pro.languages && pro.languages.length > 0 && (
+                        <div style={{ fontSize: "0.8rem", opacity: 0.75, borderTop: "1px solid var(--glass-border)", paddingTop: "0.8rem", color: "var(--foreground-muted)" }}>
+                          🗣️ {pro.languages.join(", ")}
+                        </div>
+                      )}
                     </div>
+                  </Link>
+                ))}
+              </div>
 
-                    <div style={{ marginBottom: "1rem", flex: 1 }}>
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
-                        {(pro.skills || []).slice(0, 3).map(skill => (
-                          <span key={skill} style={{ backgroundColor: "var(--primary-light)", color: "var(--primary)", padding: "0.2rem 0.6rem", borderRadius: "12px", fontSize: "0.8rem", fontWeight: 500 }}>
-                            {skill}
-                          </span>
-                        ))}
-                        {(pro.skills || []).length > 3 && (
-                          <span style={{ fontSize: "0.8rem", opacity: 0.7 }}>+{pro.skills.length - 3} more</span>
-                        )}
-                      </div>
-                    </div>
-
-                    {pro.languages && pro.languages.length > 0 && (
-                      <div style={{ fontSize: "0.8rem", opacity: 0.75, borderTop: "1px solid var(--glass-border)", paddingTop: "0.8rem", color: "var(--foreground-muted)" }}>
-                        🗣️ {pro.languages.join(", ")}
-                      </div>
-                    )}
-                  </div>
-                </Link>
-              ))}
-            </div>
+              {filteredProfiles.length > displayCount && (
+                <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
+                  <button
+                    type="button"
+                    onClick={() => setDisplayCount(prev => prev + 16)}
+                    className="btn btn-primary"
+                    style={{ padding: "0.85rem 2rem", fontSize: "0.95rem", fontWeight: 650, borderRadius: "12px" }}
+                  >
+                    Load More Verified Pros ({displayCount} of {filteredProfiles.length})
+                  </button>
+                </div>
+              )}
+            </>
           )}
 
           {/* Dynamic Search Engine Information Block */}

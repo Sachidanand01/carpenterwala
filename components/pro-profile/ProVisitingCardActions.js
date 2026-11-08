@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import ObfuscatedPhoneCallButton from '@/components/ObfuscatedPhoneCallButton';
 
 export default function ProVisitingCardActions({ profile, canonicalUrl }) {
   const [copied, setCopied] = useState(false);
@@ -77,6 +78,15 @@ export default function ProVisitingCardActions({ profile, canonicalUrl }) {
 
       {/* Action Buttons for Pros and Customers */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+        {profile?.scrambledPhone && (
+          <ObfuscatedPhoneCallButton
+            scrambledToken={profile.scrambledPhone}
+            maskedDisplay={profile.maskedPhone}
+            proName={cleanName}
+            trade={cleanTrade}
+          />
+        )}
+
         <button
           type="button"
           onClick={handleWhatsAppShare}

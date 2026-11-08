@@ -1048,9 +1048,11 @@ export default function ProDashboard() {
   const fetchData = async (id) => {
     setLoadingProfile(true);
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('pro_token') : '';
+      const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
       const [profRes, leadsRes] = await Promise.all([
-        fetch(`/api/pro/profile?id=${id}`),
-        fetch(`/api/pro/leads?pro_id=${id}`),
+        fetch(`/api/pro/profile?id=${id}`, { headers: authHeaders }),
+        fetch(`/api/pro/leads?pro_id=${id}`, { headers: authHeaders }),
       ]);
       const profData = await profRes.json();
       const leadsData = await leadsRes.json();
@@ -1123,9 +1125,13 @@ export default function ProDashboard() {
     }
     setSaveStatus('saving');
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('pro_token') : '';
       const res = await fetch('/api/pro/profile', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({ id: proInfo.id, ...form }),
       });
       if (res.ok) {
@@ -1249,9 +1255,13 @@ export default function ProDashboard() {
   const handleSavePortfolio = async () => {
     setPortfolioStatus('saving');
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('pro_token') : '';
       const res = await fetch('/api/pro/profile', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({ id: proInfo.id, portfolio }),
       });
       if (res.ok) { setPortfolioStatus('saved'); setTimeout(() => setPortfolioStatus(''), 4000); }
@@ -1413,9 +1423,13 @@ export default function ProDashboard() {
         payload.onboarding_completed = true;
       }
 
+      const token = typeof window !== 'undefined' ? localStorage.getItem('pro_token') : '';
       const res = await fetch('/api/pro/profile', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify(payload),
       });
 

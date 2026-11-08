@@ -119,11 +119,11 @@ export default async function ProProfile({ params }) {
     "name": profile.name,
     "image": profile.avatar || "https://carpenterwala.com/images/about-us-hero.png",
     "description": profile.about || `Verified ${profile.trade} in ${profile.location} with ${profile.experience} of experience.`,
-    "telephone": profile.phone || "+91-809-555-1001",
+    "telephone": "+91-809-555-1001",
     "url": `https://carpenterwala.com/${profile.slug}`,
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": profile.full_address || profile.location || "Bangalore",
+      "streetAddress": profile.location || "Bangalore",
       "addressLocality": "Bangalore",
       "addressRegion": "Karnataka",
       "postalCode": "560077",
