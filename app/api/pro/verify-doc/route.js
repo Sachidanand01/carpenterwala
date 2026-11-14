@@ -69,8 +69,7 @@ export async function POST(req) {
 
     const apiKey =
       process.env.GEMINI_API_KEY ||
-      process.env.GOOGLE_API_KEY ||
-      process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+      process.env.GOOGLE_API_KEY;
 
     // Clean base64 header if present
     const base64Data = imageBase64.replace(/^data:(image\/\w+|application\/pdf);base64,/, '');

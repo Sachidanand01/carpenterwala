@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase, supabaseAdmin } from '@/lib/supabase';
 import crypto from 'crypto';
 
 // GET /api/admin/leads
@@ -20,7 +20,8 @@ export async function GET(request) {
     }
 
     // 2. Fetch Leads with Profile Trade/Name info from Supabase
-    const { data: leads, error } = await supabase
+    const client = supabaseAdmin || supabase;
+    const { data: leads, error } = await client
       .from('leads')
       .select(`
         id,

@@ -974,7 +974,10 @@ export default function ProDashboard() {
       return;
     }
     try {
-      const res = await fetch(`/api/docs/signed-url?path=${encodeURIComponent(src)}`);
+      const token = typeof window !== 'undefined' ? localStorage.getItem('pro_token') : '';
+      const res = await fetch(`/api/docs/signed-url?path=${encodeURIComponent(src)}`, {
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
       const data = await res.json();
       if (data?.signedUrl) {
         setPreviewDocModal({ title, src: data.signedUrl, isPdf: detectedPdf });

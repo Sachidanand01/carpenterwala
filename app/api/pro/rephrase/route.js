@@ -69,11 +69,10 @@ ${tradeHint}${expHint}
 Input:
 ${trimmedInput}`;
 
-    // ── Tier 1: Google Gemini Flash (if API key available) ──
+    // ── Tier 1: Google Gemini Flash (server-side only) ──
     const geminiKey =
       process.env.GEMINI_API_KEY ||
-      process.env.GOOGLE_API_KEY ||
-      process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+      process.env.GOOGLE_API_KEY;
 
     if (geminiKey) {
       try {

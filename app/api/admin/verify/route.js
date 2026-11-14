@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase, supabaseAdmin } from '@/lib/supabase';
 import { Resend } from 'resend';
 import crypto from 'crypto';
 
@@ -11,7 +11,7 @@ export async function POST(request) {
     // 1. Verify Authorization
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
-    
+
     const expectedPassword = process.env.ADMIN_PASSWORD || 'CarpenterwalaAdmin2026';
     const expectedToken = crypto
       .createHash('sha256')
@@ -30,8 +30,10 @@ export async function POST(request) {
       return NextResponse.json({ error: 'proId is required' }, { status: 400 });
     }
 
+    const client = supabaseAdmin || supabase;
+
     // Fetch the current profile
-    const { data: profile, error: getErr } = await supabase
+    const { data: profile, error: getErr } = await client
       .from('profiles')
       .select('id, name, email, phone, trade, pending_avatar')
       .eq('id', proId)
@@ -83,7 +85,7 @@ export async function POST(request) {
     }
 
     // Attempt update
-    let { error } = await supabase
+    let { error } = await client
       .from('profiles')
       .update(updateData)
       .eq('id', proId);
@@ -93,7 +95,7 @@ export async function POST(request) {
       console.warn('Supabase profiles table missing rejection_reason column. Retrying update without rejection_reason:', error);
       const fallbackData = { ...updateData };
       delete fallbackData.rejection_reason;
-      const retry = await supabase
+      const retry = await client
         .from('profiles')
         .update(fallbackData)
         .eq('id', proId);
@@ -102,9 +104,9 @@ export async function POST(request) {
 
     if (error) {
       console.error('Supabase update failed in /api/admin/verify:', error);
-      return NextResponse.json({ 
+      return NextResponse.json({
         error: error.message || 'Failed to update professional verification status',
-        details: error.details || error.hint || error.code 
+        details: error.details || error.hint || error.code
       }, { status: 500 });
     }
 
@@ -209,7 +211,7 @@ export async function POST(request) {
     });
   } catch (err) {
     console.error('Error verifying profile securely:', err);
-    return NextResponse.json({ 
+    return NextResponse.json({
       error: err?.message || 'Failed to update professional verification status',
       details: err?.details || err?.hint || String(err)
     }, { status: 500 });

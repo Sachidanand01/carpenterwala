@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import crypto from 'crypto';
+import { supabase, supabaseAdmin } from '@/lib/supabase';
 import { generateProCode } from '@/lib/pro-slug';
 import { decryptToken } from '@/lib/crypto';
 
@@ -9,11 +10,21 @@ import { decryptToken } from '@/lib/crypto';
 function isAuthorizedPro(request, targetProId) {
   if (!targetProId) return false;
   const authHeader = request.headers.get('authorization') || '';
-  const token = authHeader.replace(/^Bearer\s+/i, '') || 
+  const token = authHeader.replace(/^Bearer\s+/i, '').trim() || 
                 request.headers.get('x-pro-token') || 
                 new URL(request.url).searchParams.get('token');
 
   if (!token) return false;
+
+  // Support Admin authorization
+  const expectedPassword = process.env.ADMIN_PASSWORD || 'CarpenterwalaAdmin2026';
+  const expectedAdminToken = crypto
+    .createHash('sha256')
+    .update(expectedPassword + 'carpenterwala-salt-2026')
+    .digest('hex');
+  if (token === expectedAdminToken || token === expectedPassword) {
+    return true;
+  }
 
   const decrypted = decryptToken(token);
   if (!decrypted) return false;
@@ -121,8 +132,15 @@ export async function PUT(request) {
 
     if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 });
 
+    // Authorization Shield: Only the pro owning this profile (or an admin) may update it
+    if (!isAuthorizedPro(request, id)) {
+      return NextResponse.json({ error: 'Unauthorized: You do not have permission to modify this profile.' }, { status: 401 });
+    }
+
+    const client = supabaseAdmin || supabase;
+
     // Fetch existing profile to check previous state for 24h radius cooldown
-    const { data: existingProfile } = await supabase
+    const { data: existingProfile } = await client
       .from('profiles')
       .select('id, onboarding_completed, latitude, longitude, languages')
       .eq('id', id)
@@ -224,7 +242,7 @@ export async function PUT(request) {
     if (pending_avatar !== undefined) updateData.pending_avatar = pending_avatar;
     if (rejection_reason !== undefined) updateData.rejection_reason = rejection_reason;
 
-    let { error } = await supabase.from('profiles').update(updateData).eq('id', id);
+    let { error } = await client.from('profiles').update(updateData).eq('id', id);
 
     // If update fails because dedicated columns don't exist yet, retry with fallbackData
     if (error && (error.code === '42703' || error.message?.includes('service_radius_km') || error.message?.includes('rejection_reason') || error.code === 'PGRST204')) {
@@ -232,7 +250,7 @@ export async function PUT(request) {
       delete fallbackData.service_radius_km;
       delete fallbackData.radius_updated_at;
       delete fallbackData.rejection_reason;
-      const retry = await supabase.from('profiles').update(fallbackData).eq('id', id);
+      const retry = await client.from('profiles').update(fallbackData).eq('id', id);
       error = retry.error;
     }
 

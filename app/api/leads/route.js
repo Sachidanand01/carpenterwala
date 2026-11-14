@@ -5,6 +5,16 @@ import { verifyTurnstileToken } from '@/lib/verify-turnstile';
 
 const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder_key_for_build');
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 export async function POST(request) {
   try {
     const body = await request.json();
@@ -36,20 +46,25 @@ export async function POST(request) {
     const { data: pro } = await supabase.from('profiles').select('name').eq('id', proId).single();
     const proName = pro?.name || 'Unknown Professional';
 
+    const safeName = escapeHtml(name);
+    const safePhone = escapeHtml(phone);
+    const safeTask = escapeHtml(task);
+    const safeProName = escapeHtml(proName);
+
     // 3. Trigger an email via Resend
     // Important: While in the Resend free tier, you can only send emails TO the email address you verified on Resend.
     // Replace 'onboarding@resend.dev' with your domain if you add it, but for testing, use 'onboarding@resend.dev' to send to your registered email.
     await resend.emails.send({
       from: 'Carpenterwala Leads <onboarding@resend.dev>',
       to: 'contact@carpenterwala.com', // NOTE: Resend free tier requires you to change this to the email you signed up with if you haven't verified a domain!
-      subject: `New Lead for ${proName}`,
+      subject: `New Lead for ${safeProName}`,
       html: `
         <h2>New Lead Received!</h2>
-        <p>A homeowner has requested a quote for <strong>${proName}</strong>.</p>
+        <p>A homeowner has requested a quote for <strong>${safeProName}</strong>.</p>
         <ul>
-          <li><strong>Customer Name:</strong> ${name}</li>
-          <li><strong>Phone Number:</strong> ${phone}</li>
-          <li><strong>Task Description:</strong> ${task}</li>
+          <li><strong>Customer Name:</strong> ${safeName}</li>
+          <li><strong>Phone Number:</strong> ${safePhone}</li>
+          <li><strong>Task Description:</strong> ${safeTask}</li>
         </ul>
         <p>Log in to your Admin Dashboard to view more details.</p>
       `

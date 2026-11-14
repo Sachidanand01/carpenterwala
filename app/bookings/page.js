@@ -735,7 +735,10 @@ function ViewWarrantyDocumentModal({ title, base64Data, onClose }) {
 
     let isMounted = true;
     setLoading(true);
-    fetch(`/api/docs/signed-url?path=${encodeURIComponent(base64Data)}`)
+    const customerAuth = typeof window !== 'undefined' ? (localStorage.getItem('customer_token') || localStorage.getItem('customer_phone') || '') : '';
+    fetch(`/api/docs/signed-url?path=${encodeURIComponent(base64Data)}`, {
+      headers: customerAuth ? { 'x-customer-auth': customerAuth, 'Authorization': `Bearer ${customerAuth}` } : {}
+    })
       .then(res => res.json())
       .then(data => {
         if (isMounted && data?.signedUrl) {

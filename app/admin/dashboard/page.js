@@ -70,7 +70,10 @@ export default function AdminDashboardClient() {
       return;
     }
     try {
-      const res = await fetch(`/api/docs/signed-url?path=${encodeURIComponent(url)}`);
+      const token = adminToken || (typeof window !== 'undefined' ? sessionStorage.getItem('admin_token') : '');
+      const res = await fetch(`/api/docs/signed-url?path=${encodeURIComponent(url)}`, {
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
       const data = await res.json();
       if (data?.signedUrl) {
         setZoomedImage({ title, url: data.signedUrl, isPdf });

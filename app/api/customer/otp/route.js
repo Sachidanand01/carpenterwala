@@ -118,10 +118,16 @@ export async function POST(request) {
         console.warn('Resend failed for customer OTP, falling back to simulated OTP banner:', emailError);
       }
 
+      if (process.env.NODE_ENV === 'production' && !sentRealEmail) {
+        return NextResponse.json({
+          error: 'Unable to deliver verification email. Please check your email address or try again shortly.'
+        }, { status: 502 });
+      }
+
       return NextResponse.json({
         success: true,
         simulated: !sentRealEmail,
-        otp: !sentRealEmail ? generatedCode : null, // Send the code to frontend ONLY for simulation fallback
+        otp: (process.env.NODE_ENV !== 'production' && !sentRealEmail) ? generatedCode : null,
         otpToken: otpTokenStr,
         message: sentRealEmail 
           ? 'OTP sent to your email address.' 
@@ -153,9 +159,16 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Invalid OTP. Please try again.' }, { status: 400 });
       }
 
+      const customerToken = encryptToken({
+        type: 'customer_session',
+        email: cleanEmail,
+        expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000 // 30 days
+      });
+
       return NextResponse.json({
         success: true,
-        message: 'OTP verified successfully.'
+        message: 'OTP verified successfully.',
+        customerToken
       });
     }
 

@@ -173,10 +173,16 @@ export async function POST(request) {
         }
       }
 
+      if (process.env.NODE_ENV === 'production' && !sentRealEmail) {
+        return NextResponse.json({
+          error: 'Unable to deliver verification email. Please check your email address or try again shortly.'
+        }, { status: 502 });
+      }
+
       return NextResponse.json({
         success: true,
         simulated: !sentRealEmail,
-        otp: !sentRealEmail ? generatedCode : null,
+        otp: (process.env.NODE_ENV !== 'production' && !sentRealEmail) ? generatedCode : null,
         otpToken: otpTokenStr,
         message: sentRealEmail 
           ? 'OTP sent to your registered email address.' 
@@ -402,10 +408,16 @@ export async function POST(request) {
         }
       }
 
+      if (process.env.NODE_ENV === 'production' && !sentRealEmail) {
+        return NextResponse.json({
+          error: 'Unable to deliver verification email. Please check your email address or try again shortly.'
+        }, { status: 502 });
+      }
+
       return NextResponse.json({
         success: true,
         simulated: !sentRealEmail,
-        otp: !sentRealEmail ? generatedCode : null,
+        otp: (process.env.NODE_ENV !== 'production' && !sentRealEmail) ? generatedCode : null,
         otpToken: otpTokenStr,
         message: sentRealEmail 
           ? 'OTP sent to your registered email address.' 

@@ -2,6 +2,7 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
 
 function CompleteProfileContent() {
   const router = useRouter();
@@ -77,9 +78,18 @@ function CompleteProfileContent() {
         avatar: role === 'pro' ? avatar : undefined
       };
 
+      let authToken = '';
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        authToken = session?.access_token || '';
+      } catch (_) {}
+
       const res = await fetch('/api/auth/social-complete', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+        },
         body: JSON.stringify(payload)
       });
 

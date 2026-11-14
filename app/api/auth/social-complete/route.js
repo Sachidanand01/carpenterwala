@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase, supabaseAdmin } from '@/lib/supabase';
 import { generateProCode, toUrlSlug } from '@/lib/pro-slug';
 
 export async function POST(request) {
@@ -18,6 +18,21 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Please provide a valid 10-digit Indian mobile number.' }, { status: 400 });
     }
 
+    // Verify social session ownership to prevent account takeover by email guessing
+    const authHeader = request.headers.get('authorization') || '';
+    const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+
+    if (token) {
+      const { data: { user }, error: userError } = await supabase.auth.getUser(token);
+      if (userError || !user || user.email?.toLowerCase() !== cleanEmail) {
+        return NextResponse.json({ error: 'Unauthorized: Social session does not match provided email.' }, { status: 401 });
+      }
+    } else if (process.env.NODE_ENV === 'production') {
+      return NextResponse.json({ error: 'Unauthorized: Social authentication token is required.' }, { status: 401 });
+    }
+
+    const client = supabaseAdmin || supabase;
+
     // ==========================================
     // 1. CUSTOMER PROFILE COMPLETION
     // ==========================================
@@ -25,7 +40,7 @@ export async function POST(request) {
       const trimmedName = (name || '').trim() || 'Valued Customer';
 
       // Check if email already exists
-      const { data: existingEmailCustomer } = await supabase
+      const { data: existingEmailCustomer } = await client
         .from('customers')
         .select('id, first_name, last_name, phone, email')
         .eq('email', cleanEmail)
@@ -45,7 +60,7 @@ export async function POST(request) {
       }
 
       // Check if phone already exists
-      const { data: existingPhoneCustomer } = await supabase
+      const { data: existingPhoneCustomer } = await client
         .from('customers')
         .select('id, first_name, last_name, phone, email')
         .eq('phone', cleanPhone)
@@ -69,7 +84,7 @@ export async function POST(request) {
         lastName = '';
       }
 
-      const { data: newCustomer, error: insertErr } = await supabase
+      const { data: newCustomer, error: insertErr } = await client
         .from('customers')
         .insert([{
           first_name: firstName,
@@ -116,7 +131,7 @@ export async function POST(request) {
       }
 
       // Check if email already exists
-      const { data: existingProfile } = await supabase
+      const { data: existingProfile } = await client
         .from('profiles')
         .select('id, slug, name, trade, location, email, phone')
         .eq('email', cleanEmail)
@@ -130,7 +145,7 @@ export async function POST(request) {
       }
 
       // Check if phone already exists
-      const { data: existingPhoneProfile } = await supabase
+      const { data: existingPhoneProfile } = await client
         .from('profiles')
         .select('id')
         .eq('phone', cleanPhone)
@@ -145,7 +160,7 @@ export async function POST(request) {
       // Generate unique Pro Code & slug
       let proCode = generateProCode();
       for (let attempt = 0; attempt < 5; attempt++) {
-        const { data: existingCode } = await supabase.from('profiles').select('id').eq('pro_code', proCode).maybeSingle();
+        const { data: existingCode } = await client.from('profiles').select('id').eq('pro_code', proCode).maybeSingle();
         if (!existingCode) break;
         proCode = generateProCode();
       }
@@ -166,7 +181,7 @@ export async function POST(request) {
         onboarding_step: 1
       };
 
-      let { data: newProfile, error: insertErr } = await supabase
+      let { data: newProfile, error: insertErr } = await client
         .from('profiles')
         .insert([proPayload])
         .select('*')
@@ -174,7 +189,7 @@ export async function POST(request) {
 
       if (insertErr && (insertErr.message?.includes('pro_code') || insertErr.code === '42703')) {
         delete proPayload.pro_code;
-        const retry = await supabase
+        const retry = await client
           .from('profiles')
           .insert([proPayload])
           .select('*')

@@ -23,7 +23,6 @@ export async function POST(request) {
     const isAuthorized = 
       token === expectedHashedToken ||
       token === adminPassword || 
-      token === 'BangaloreCW2026!' ||
       token === revalSecret || 
       querySecret === revalSecret || 
       querySecret === adminPassword;
