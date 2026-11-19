@@ -104,6 +104,21 @@ export function proxy(request) {
 
   const response = NextResponse.next();
 
+  // Ensure CORS headers for ChatGPT App Directory & Remote MCP clients on /api/mcp
+  if (pathname.startsWith('/api/mcp')) {
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, DELETE, HEAD, OPTIONS');
+    response.headers.set(
+      'Access-Control-Allow-Headers',
+      'Content-Type, Accept, Authorization, x-api-key, mcp-session-id, Mcp-Session-Id, Last-Event-ID, X-Requested-With, OpenAI-Conversation-Id, OpenAI-Ephemeral-User-Id, X-OpenAI-Client-User-Agent'
+    );
+    response.headers.set(
+      'Access-Control-Expose-Headers',
+      'Content-Type, mcp-session-id, Mcp-Session-Id, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, Retry-After'
+    );
+    response.headers.set('Access-Control-Max-Age', '86400');
+  }
+
   // Add security headers to all matched responses
   response.headers.set('X-Frame-Options', 'SAMEORIGIN');
   response.headers.set('X-Content-Type-Options', 'nosniff');
@@ -111,7 +126,7 @@ export function proxy(request) {
   response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
   response.headers.set(
     'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://pagead2.googlesyndication.com https://adservice.google.com https://*.google.com https://*.googletagmanager.com https://*.google-analytics.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://images.unsplash.com https://*.supabase.co https://*.googleusercontent.com https://lh3.googleusercontent.com https://pagead2.googlesyndication.com https://adservice.google.com https://*.doubleclick.net https://www.facebook.com https://*.googletagmanager.com https://*.google-analytics.com https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://*.basemaps.cartocdn.com https://basemaps.cartocdn.com; connect-src 'self' https://challenges.cloudflare.com https://*.supabase.co https://pagead2.googlesyndication.com https://adservice.google.com https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://*.adtrafficquality.google https://*.doubleclick.net https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://*.basemaps.cartocdn.com https://basemaps.cartocdn.com; frame-src 'self' blob: data: https://challenges.cloudflare.com https://*.supabase.co https://googleads.g.doubleclick.net https://*.google.com https://pagead2.googlesyndication.com https://adservice.google.com; object-src 'none';"
+    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://pagead2.googlesyndication.com https://adservice.google.com https://*.google.com https://*.googletagmanager.com https://*.google-analytics.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://api.qrserver.com https://images.unsplash.com https://*.supabase.co https://*.googleusercontent.com https://lh3.googleusercontent.com https://pagead2.googlesyndication.com https://adservice.google.com https://*.doubleclick.net https://www.facebook.com https://*.googletagmanager.com https://*.google-analytics.com https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://*.basemaps.cartocdn.com https://basemaps.cartocdn.com; connect-src 'self' https://challenges.cloudflare.com https://*.supabase.co https://pagead2.googlesyndication.com https://adservice.google.com https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://*.adtrafficquality.google https://*.doubleclick.net https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://*.basemaps.cartocdn.com https://basemaps.cartocdn.com; frame-src 'self' blob: data: https://challenges.cloudflare.com https://*.supabase.co https://googleads.g.doubleclick.net https://*.google.com https://pagead2.googlesyndication.com https://adservice.google.com; object-src 'none';"
   );
 
   return response;

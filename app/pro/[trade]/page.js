@@ -2,8 +2,10 @@ import { getProfileByProCode } from '@/lib/supabase';
 import { getProUrl } from '@/lib/pro-slug';
 import { redirect, notFound } from 'next/navigation';
 
+// Segment uses [trade] so Next.js App Router matches the sibling [trade]/[proCode]/[name] dynamic folder name;
+// for single-segment /pro/<proCode> short links, `params.trade` holds the proCode.
 export async function generateMetadata({ params }) {
-  const { proCode } = await params;
+  const { trade: proCode } = await params;
   const reserved = ['dashboard', 'hindi', 'login'];
   if (reserved.includes(proCode?.toLowerCase())) return {};
 
@@ -19,8 +21,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ProShortLinkPage({ params }) {
-  const { proCode } = await params;
-  
+  const { trade: proCode } = await params;
+
   const reserved = ['dashboard', 'hindi', 'login'];
   if (reserved.includes(proCode?.toLowerCase())) {
     notFound();

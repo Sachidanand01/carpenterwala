@@ -19,7 +19,7 @@ export async function GET(request) {
   const paths = {};
 
   for (const tool of MCP_TOOLS) {
-    const isGetFriendly = ['search_verified_pros', 'get_service_rate_card'].includes(tool.name);
+    const isGetFriendly = ['search_verified_pros', 'get_service_rate_card', 'check_onboarding_status'].includes(tool.name);
 
     paths[`/api/mcp/tools/${tool.name}`] = {
       post: {

@@ -57,6 +57,31 @@ const nextConfig = {
         ],
       },
       {
+        source: '/api/mcp',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: '*',
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET, POST, DELETE, HEAD, OPTIONS',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: 'Content-Type, Accept, Authorization, x-api-key, mcp-session-id, Mcp-Session-Id, Last-Event-ID, X-Requested-With, OpenAI-Conversation-Id, OpenAI-Ephemeral-User-Id, X-OpenAI-Client-User-Agent',
+          },
+          {
+            key: 'Access-Control-Expose-Headers',
+            value: 'Content-Type, mcp-session-id, Mcp-Session-Id, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, Retry-After',
+          },
+          {
+            key: 'Access-Control-Max-Age',
+            value: '86400',
+          },
+        ],
+      },
+      {
         source: '/:path*',
         headers: [
           {
@@ -65,7 +90,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://pagead2.googlesyndication.com https://adservice.google.com https://*.google.com https://*.googletagmanager.com https://*.google-analytics.com https://connect.facebook.net https://*.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://images.unsplash.com https://*.supabase.co https://*.googleusercontent.com https://lh3.googleusercontent.com https://pagead2.googlesyndication.com https://adservice.google.com https://*.doubleclick.net https://www.facebook.com https://*.googletagmanager.com https://*.google-analytics.com https://i.pravatar.cc https://*.clarity.ms https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://*.basemaps.cartocdn.com https://basemaps.cartocdn.com; connect-src 'self' https://challenges.cloudflare.com https://*.supabase.co https://pagead2.googlesyndication.com https://adservice.google.com https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://*.adtrafficquality.google https://*.doubleclick.net https://*.clarity.ms https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://*.basemaps.cartocdn.com https://basemaps.cartocdn.com; frame-src 'self' blob: data: https://challenges.cloudflare.com https://*.supabase.co https://googleads.g.doubleclick.net https://*.google.com https://pagead2.googlesyndication.com https://adservice.google.com; object-src 'none';",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://pagead2.googlesyndication.com https://adservice.google.com https://*.google.com https://*.googletagmanager.com https://*.google-analytics.com https://connect.facebook.net https://*.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://api.qrserver.com https://images.unsplash.com https://*.supabase.co https://*.googleusercontent.com https://lh3.googleusercontent.com https://pagead2.googlesyndication.com https://adservice.google.com https://*.doubleclick.net https://www.facebook.com https://*.googletagmanager.com https://*.google-analytics.com https://i.pravatar.cc https://*.clarity.ms https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://*.basemaps.cartocdn.com https://basemaps.cartocdn.com; connect-src 'self' https://challenges.cloudflare.com https://*.supabase.co https://pagead2.googlesyndication.com https://adservice.google.com https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://*.adtrafficquality.google https://*.doubleclick.net https://*.clarity.ms https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://*.basemaps.cartocdn.com https://basemaps.cartocdn.com; frame-src 'self' blob: data: https://challenges.cloudflare.com https://*.supabase.co https://googleads.g.doubleclick.net https://*.google.com https://pagead2.googlesyndication.com https://adservice.google.com; object-src 'none';",
           },
           {
             key: 'X-Content-Type-Options',
@@ -81,7 +106,7 @@ const nextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(self), microphone=(), geolocation=(self)',
+            value: 'camera=(self), microphone=(self), geolocation=(self)',
           },
           {
             key: 'X-DNS-Prefetch-Control',
@@ -96,6 +121,11 @@ const nextConfig = {
       {
         source: '/security.txt',
         destination: '/.well-known/security.txt',
+        permanent: true,
+      },
+      {
+        source: '/privacy-policy',
+        destination: '/privacy',
         permanent: true,
       },
       {

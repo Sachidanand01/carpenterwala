@@ -6,8 +6,8 @@ import { decryptToken } from '../lib/crypto.js';
 async function runTests() {
   console.log('=== 1. Validating MCP Tool Definitions ===');
   console.log(`Found ${MCP_TOOLS.length} declared tools.`);
-  if (MCP_TOOLS.length !== 6) {
-    throw new Error(`Expected 6 tools, found ${MCP_TOOLS.length}`);
+  if (MCP_TOOLS.length !== 8) {
+    throw new Error(`Expected 8 tools, found ${MCP_TOOLS.length}`);
   }
   console.log(' Tools:', MCP_TOOLS.map(t => t.name).join(', '));
 

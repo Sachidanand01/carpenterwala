@@ -30,7 +30,8 @@ ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
 -- Exposes ONLY public marketing and presentation fields.
 -- Completely omits: aadhaar_front, aadhaar_back, pan_front, pan_back, 
 -- voter_driving_front, voter_driving_back, police_verification, full_address, rejection_reason, email.
-CREATE OR REPLACE VIEW public.public_profiles AS
+CREATE OR REPLACE VIEW public.public_profiles
+WITH (security_invoker = true) AS
 SELECT 
   id,
   pro_code,
@@ -103,3 +104,112 @@ FOR INSERT
 WITH CHECK (true);
 
 -- (Note: Reading, updating, and deleting leads is restricted to authenticated Pros & Admins via Next.js backend API routes)
+
+-- =========================================================================
+-- 8. PHASE 6: STORAGE BUCKETS & PRIVATE KYC RLS POLICIES
+-- Enforces JPEG/PNG/WebP only, max 2MB (2,097,152 bytes), and Admin-Only
+-- access to Aadhaar & KYC documents in the private 'kyc-documents' bucket.
+-- =========================================================================
+
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+  'public-assets',
+  'public-assets',
+  true,
+  2097152, -- Strict 2MB limit
+  ARRAY['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+)
+ON CONFLICT (id) DO UPDATE SET
+  public = true,
+  file_size_limit = 2097152,
+  allowed_mime_types = ARRAY['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+  'kyc-documents',
+  'kyc-documents',
+  false, -- Strictly Private bucket for Aadhaar & KYC documents
+  2097152, -- Strict 2MB limit
+  ARRAY['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+)
+ON CONFLICT (id) DO UPDATE SET
+  public = false,
+  file_size_limit = 2097152,
+  allowed_mime_types = ARRAY['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+
+-- Public Assets Storage Policies (JPEG/PNG/WebP only)
+DROP POLICY IF EXISTS "Public Assets Are Viewable By Everyone" ON storage.objects;
+CREATE POLICY "Public Assets Are Viewable By Everyone"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'public-assets');
+
+DROP POLICY IF EXISTS "Allow Public Assets Uploads" ON storage.objects;
+CREATE POLICY "Allow Public Assets Uploads"
+ON storage.objects FOR INSERT
+WITH CHECK (
+  bucket_id = 'public-assets'
+  AND LOWER(storage.extension(name)) IN ('jpg', 'jpeg', 'png', 'webp')
+);
+
+DROP POLICY IF EXISTS "Allow Public Assets Updates" ON storage.objects;
+CREATE POLICY "Allow Public Assets Updates"
+ON storage.objects FOR UPDATE
+USING (bucket_id = 'public-assets')
+WITH CHECK (
+  bucket_id = 'public-assets'
+  AND LOWER(storage.extension(name)) IN ('jpg', 'jpeg', 'png', 'webp')
+);
+
+-- Private KYC Documents Storage Policies (Aadhaar accessible ONLY to Admins / Service Role)
+DROP POLICY IF EXISTS "Allow KYC Documents Uploads" ON storage.objects;
+CREATE POLICY "Allow KYC Documents Uploads"
+ON storage.objects FOR INSERT
+WITH CHECK (
+  bucket_id = 'kyc-documents'
+  AND LOWER(storage.extension(name)) IN ('jpg', 'jpeg', 'png', 'webp')
+);
+
+DROP POLICY IF EXISTS "Admins Only Read KYC Documents" ON storage.objects;
+CREATE POLICY "Admins Only Read KYC Documents"
+ON storage.objects FOR SELECT
+TO authenticated
+USING (
+  bucket_id = 'kyc-documents'
+  AND COALESCE(auth.jwt() -> 'app_metadata' ->> 'role', '') = 'admin'
+);
+
+DROP POLICY IF EXISTS "Admins Only Modify KYC Documents" ON storage.objects;
+CREATE POLICY "Admins Only Modify KYC Documents"
+ON storage.objects FOR UPDATE
+TO authenticated
+USING (
+  bucket_id = 'kyc-documents'
+  AND COALESCE(auth.jwt() -> 'app_metadata' ->> 'role', '') = 'admin'
+);
+
+DROP POLICY IF EXISTS "Admins Only Delete KYC Documents" ON storage.objects;
+CREATE POLICY "Admins Only Delete KYC Documents"
+ON storage.objects FOR DELETE
+TO authenticated
+USING (
+  bucket_id = 'kyc-documents'
+  AND COALESCE(auth.jwt() -> 'app_metadata' ->> 'role', '') = 'admin'
+);
+
+-- =========================================================================
+-- 9. PHASE 6: HARDEN 'pro_onboarding_sessions' CONSTRAINTS & RLS
+-- =========================================================================
+
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.tables
+    WHERE table_schema = 'public' AND table_name = 'pro_onboarding_sessions'
+  ) THEN
+    ALTER TABLE public.pro_onboarding_sessions ENABLE ROW LEVEL SECURITY;
+    ALTER TABLE public.pro_onboarding_sessions
+      ALTER COLUMN expires_at SET DEFAULT (NOW() + INTERVAL '60 minutes');
+    CREATE INDEX IF NOT EXISTS idx_pro_onboarding_sessions_phone_created
+      ON public.pro_onboarding_sessions(phone_number, created_at DESC);
+  END IF;
+END $$;

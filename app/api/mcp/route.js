@@ -1,19 +1,23 @@
 import { NextResponse } from 'next/server';
 import { MCP_TOOLS } from '@/lib/mcp/tool-definitions';
 import { executeTool } from '@/lib/mcp/tool-handlers';
+import { checkWindowRateLimit, getClientIp, buildRateLimitHeaders } from '@/lib/rate-limiter';
 
 const PROTOCOL_VERSION = '2024-11-05';
 const SERVER_INFO = {
   name: 'carpenterwala-mcp-server',
   version: '1.0.0',
-  description: 'Carpenterwala Bangalore Home Improvement Marketplace WebMCP Server (0% Commission)'
+  description: 'Carpenterwala Pan-India Home Improvement Marketplace & AI Pro Onboarding Remote MCP Server (0% Commission)'
 };
 
-const CORS_HEADERS = {
+export const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-api-key, mcp-session-id',
-  'Access-Control-Expose-Headers': 'Content-Type, mcp-session-id'
+  'Access-Control-Allow-Methods': 'GET, POST, DELETE, HEAD, OPTIONS',
+  'Access-Control-Allow-Headers':
+    'Content-Type, Accept, Authorization, x-api-key, mcp-session-id, Mcp-Session-Id, Last-Event-ID, X-Requested-With, OpenAI-Conversation-Id, OpenAI-Ephemeral-User-Id, X-OpenAI-Client-User-Agent',
+  'Access-Control-Expose-Headers':
+    'Content-Type, mcp-session-id, Mcp-Session-Id, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, Retry-After',
+  'Access-Control-Max-Age': '86400'
 };
 
 export async function OPTIONS() {
@@ -23,13 +27,40 @@ export async function OPTIONS() {
   });
 }
 
+export async function HEAD() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: CORS_HEADERS
+  });
+}
+
+export async function DELETE() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: CORS_HEADERS
+  });
+}
+
 function getClientContext(request) {
-  const forwarded = request.headers.get('x-forwarded-for');
-  const ip = forwarded ? forwarded.split(',')[0].trim() : request.headers.get('x-real-ip') || '127.0.0.1';
-  const host = request.headers.get('host') || 'carpenterwala.com';
-  const proto = request.headers.get('x-forwarded-proto') || 'https';
-  const origin = `${proto}://${host}`;
-  return { ip, origin };
+  const ip = getClientIp(request);
+
+  const host = request.headers.get('x-forwarded-host') || request.headers.get('host');
+  if (host) {
+    const defaultProto = host.includes('localhost') || host.includes('127.0.0.1') ? 'http' : 'https';
+    const proto = request.headers.get('x-forwarded-proto') || defaultProto;
+    return { ip, origin: `${proto}://${host}` };
+  }
+
+  try {
+    const urlOrigin = new URL(request.url).origin;
+    if (urlOrigin && urlOrigin !== 'null') {
+      return { ip, origin: urlOrigin };
+    }
+  } catch {
+    // Fallback to default origin
+  }
+
+  return { ip, origin: process.env.NEXT_PUBLIC_SITE_URL || 'https://carpenterwala.com' };
 }
 
 // GET /api/mcp — Server discovery or SSE stream
@@ -82,6 +113,33 @@ export async function GET(request) {
 export async function POST(request) {
   const context = getClientContext(request);
 
+  // IP-based rate limit: Max 60 MCP JSON-RPC calls per hour per IP
+  const ipRate = checkWindowRateLimit({
+    key: `mcp-rpc-ip:${context.ip}`,
+    maxAttempts: 60,
+    windowMs: 60 * 60 * 1000
+  });
+
+  if (!ipRate.allowed) {
+    return NextResponse.json(
+      {
+        jsonrpc: '2.0',
+        id: null,
+        error: {
+          code: -32029,
+          message: 'Rate limit exceeded: Too many MCP requests from this IP address. Please retry later.'
+        }
+      },
+      {
+        status: 429,
+        headers: {
+          ...CORS_HEADERS,
+          ...buildRateLimitHeaders(ipRate, 60)
+        }
+      }
+    );
+  }
+
   let body;
   try {
     body = await request.json();
@@ -105,20 +163,29 @@ export async function POST(request) {
 
     const { id, method, params } = msg;
 
-    // Handle notifications (no id)
-    if (id === undefined || id === null) {
-      if (method === 'notifications/initialized') {
-        return null; // No response needed for notification
-      }
+    // Handle MCP notifications (which have no id and start with "notifications/")
+    if ((id === undefined || id === null) && typeof method === 'string' && method.startsWith('notifications/')) {
       return null;
     }
 
+    // Support direct tool invocation shorthand: { tool: "...", arguments: {...} } or { name: "...", arguments: {...} }
+    const effectiveMethod = method || (msg.tool || msg.name ? 'tools/call' : undefined);
+    const effectiveParams =
+      params ||
+      (msg.tool || msg.name
+        ? {
+            name: msg.tool || msg.name,
+            arguments: msg.arguments || msg.input || msg.params || {}
+          }
+        : {});
+    const rpcId = id !== undefined ? id : 1;
+
     try {
-      switch (method) {
+      switch (effectiveMethod) {
         case 'initialize': {
           return {
             jsonrpc: '2.0',
-            id,
+            id: rpcId,
             result: {
               protocolVersion: PROTOCOL_VERSION,
               capabilities: {
@@ -132,7 +199,7 @@ export async function POST(request) {
         case 'ping': {
           return {
             jsonrpc: '2.0',
-            id,
+            id: rpcId,
             result: {}
           };
         }
@@ -140,7 +207,7 @@ export async function POST(request) {
         case 'tools/list': {
           return {
             jsonrpc: '2.0',
-            id,
+            id: rpcId,
             result: {
               tools: MCP_TOOLS
             }
@@ -148,36 +215,46 @@ export async function POST(request) {
         }
 
         case 'tools/call': {
-          const toolName = params?.name;
-          const toolArgs = params?.arguments || {};
+          const toolName = effectiveParams?.name || effectiveParams?.tool;
+          const toolArgs = effectiveParams?.arguments || effectiveParams?.input || {};
 
           if (!toolName) {
             return {
               jsonrpc: '2.0',
-              id,
+              id: rpcId,
               error: { code: -32602, message: 'Missing tool name in params' }
             };
           }
 
           try {
             const toolResult = await executeTool(toolName, toolArgs, context);
+            const contentBlocks = [
+              {
+                type: 'text',
+                text: typeof toolResult === 'string' ? toolResult : JSON.stringify(toolResult, null, 2)
+              }
+            ];
+
+            if (toolResult && typeof toolResult === 'object' && typeof toolResult.markdown === 'string') {
+              contentBlocks.push({
+                type: 'text',
+                text: toolResult.markdown
+              });
+            }
+
             return {
               jsonrpc: '2.0',
-              id,
+              id: rpcId,
               result: {
-                content: [
-                  {
-                    type: 'text',
-                    text: typeof toolResult === 'string' ? toolResult : JSON.stringify(toolResult, null, 2)
-                  }
-                ],
+                content: contentBlocks,
+                structuredContent: typeof toolResult === 'object' && toolResult !== null ? toolResult : undefined,
                 isError: false
               }
             };
           } catch (toolErr) {
             return {
               jsonrpc: '2.0',
-              id,
+              id: rpcId,
               result: {
                 content: [
                   {
@@ -194,8 +271,8 @@ export async function POST(request) {
         default: {
           return {
             jsonrpc: '2.0',
-            id,
-            error: { code: -32601, message: `Method "${method}" not found` }
+            id: rpcId,
+            error: { code: -32601, message: `Method "${effectiveMethod}" not found` }
           };
         }
       }
@@ -203,7 +280,7 @@ export async function POST(request) {
       console.error('MCP internal execution error:', err);
       return {
         jsonrpc: '2.0',
-        id,
+        id: rpcId,
         error: { code: -32603, message: 'Internal server error: ' + err.message }
       };
     }
