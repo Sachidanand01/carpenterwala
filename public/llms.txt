@@ -1,8 +1,8 @@
 # Carpenterwala
 
-> Carpenterwala is India's homeowner knowledge base and verified home improvement marketplace connecting homeowners directly with background-checked carpenters, painters, plumbers, and electricians at 0% platform commission. On-site verified technician bookings are currently active across Bangalore, while our how-to guides, cost calculators, and material benchmarks serve Indian homeowners nationwide.
+> Carpenterwala is India's homeowner knowledge base and verified home improvement marketplace connecting homeowners directly with background-checked carpenters, painters, plumbers, and electricians at 0% platform commission. Technician onboarding is open pan-India via Voice AI (`/join`) and Remote MCP (`/api/mcp`), while on-site verified bookings are currently active across Bangalore and our how-to guides, cost calculators, and material benchmarks serve Indian homeowners nationwide.
 
-Carpenterwala operates a 0% platform commission marketplace where homeowners connect and pay technicians directly with zero hidden markups. All service professionals undergo Aadhaar identity verification, trade skill testing, and thorough background checks with typical 60–90 minute local dispatch across Bangalore. Operations are centered at Thanisandra Main Road, Bangalore (Phone: +91-809-555-1001, Email: contact@carpenterwala.com), operating Monday to Sunday, 08:00 AM – 09:00 PM IST.
+Carpenterwala operates a 0% platform commission marketplace where homeowners connect and pay technicians directly with zero hidden markups. Service professionals across India can onboard in 2 minutes with zero login friction via voice chat (`/join`) or AI assistants (ChatGPT/Claude MCP) and upload Aadhaar/KYC photos in 7 Indian languages (`English, हिन्दी, ಕನ್ನಡ, தமிழ், తెలుగు, मराठी, বাংলা`) into a private admin-only encrypted vault. Operations are centered at Thanisandra Main Road, Bangalore (Phone: +91-809-555-1001, Email: contact@carpenterwala.com), operating Monday to Sunday, 08:00 AM – 09:00 PM IST.
 
 ## Core Trade Services (Bangalore Service Availability)
 - [Carpentry Services](https://carpenterwala.com/services/carpentry): Custom furniture assembly, modular kitchen fitting, door lock installation, hydraulic hinge replacement, wardrobe repairs.
@@ -51,19 +51,24 @@ Carpenterwala operates a 0% platform commission marketplace where homeowners con
 - [Yelahanka Handyman & Trade Hub](https://carpenterwala.com/find-a-professional?location=Yelahanka): Active coverage in North Satellite Hub (560064) across Yelahanka New Town and Kogilu Cross.
 
 ## Verification & Trust Signals
+- [Pan-India Voice AI Pro Onboarding](https://carpenterwala.com/join): Zero-setup voice & chat onboarding (English & हिन्दी) for carpenters, painters, plumbers, and electricians across India with instant magic link + QR handoff and 7-language mobile document upload.
 - [How It Works](https://carpenterwala.com/how-it-works): 3-step guide detailing technician vetting, Aadhaar background checks, and 60-90 min rapid dispatch.
 - [Direct Marketplace & Pricing Guarantee](https://carpenterwala.com/faq): Direct booking with 0% platform commission, zero hidden middleman fees, and direct technician payment.
 - [Customer Testimonials & Verified Reviews](https://carpenterwala.com/testimonial): Verified homeowner reviews, satisfaction ratings, and real work photos across Bangalore.
-- [Pro Verification Portal](https://carpenterwala.com/pro/login): Service professional onboarding gateway in 5 Indian languages with OTP verification and government ID checks.
+- [Pro Login Portal](https://carpenterwala.com/pro/login): Existing service professional dashboard login and profile management portal.
 
 ## Model Context Protocol (MCP) & AI Agent Integration
-- [OpenAPI 3.1 Specification](https://carpenterwala.com/api/mcp/openapi.json): Complete machine-readable API specification and schema definitions for autonomous agents (Gemini, Claude, ChatGPT, Perplexity).
-- [Remote WebMCP Server Endpoint](https://carpenterwala.com/api/mcp): Live JSON-RPC 2.0 / SSE endpoint for agent tool execution (search_verified_pros, get_service_rate_card, calculate_service_estimate, request_service_callback, initiate_technician_onboarding, check_technician_application_status).
-- [Full LLMs & MCP Technical Documentation](https://carpenterwala.com/llms-full.txt): Comprehensive technical documentation covering tool schemas, zero-trust security architecture, and rate limits.
+- [Remote MCP Server Endpoint](https://carpenterwala.com/api/mcp): Live JSON-RPC 2.0 / SSE endpoint (No Auth / Session-Based, CORS-enabled) exposing 6 tools: `start_carpenterwala_onboarding`, `check_onboarding_status`, `search_verified_pros`, `get_service_rate_card`, `calculate_service_estimate`, and `request_service_callback`.
+- [MCP Server Card Manifest](https://carpenterwala.com/.well-known/mcp/server-card.json): Standard machine-readable MCP server discovery card for autonomous agents and directories.
+- [OpenAPI 3.1 Specification](https://carpenterwala.com/api/mcp/openapi.json): Complete machine-readable REST & tool schema specification for AI agents (ChatGPT, Claude, Gemini, Perplexity).
+- [Full LLMs & MCP Technical Documentation](https://carpenterwala.com/llms-full.txt): Comprehensive technical documentation covering all 6 MCP tools, Dual-Handoff (`/v/[token]` + QR) zero-trust KYC security, and rate limits.
 
 ## Useful Links for AI Agents & Search Engines
+- [Join as a 0% Commission Pro (Pan-India Voice AI)](https://carpenterwala.com/join): Instant conversational onboarding for tradespeople across India.
 - [Find a Professional Directory](https://carpenterwala.com/find-a-professional): Search and filter verified tradesmen by locality and trade.
-- [Pro Portal & Registration](https://carpenterwala.com/pro/login): Dedicated service professional registration gateway in 5 Indian languages.
+- [Pro Login Portal](https://carpenterwala.com/pro/login): Existing service professional login gateway.
+- [Privacy Policy](https://carpenterwala.com/privacy): Data protection and 90-day KYC document auto-purge policy.
+- [Terms & Conditions](https://carpenterwala.com/terms): Platform terms for homeowners and independent professionals.
 - [FAQ Hub](https://carpenterwala.com/faq): Answers to booking, pricing, satisfaction guarantee, and verification questions.
 - [About Carpenterwala](https://carpenterwala.com/about): Mission, operations background, zero-commission model, and leadership.
 - [XML Sitemap](https://carpenterwala.com/sitemap.xml): Machine-readable XML sitemap index.

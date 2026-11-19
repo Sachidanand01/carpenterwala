@@ -54,7 +54,7 @@ export async function GET(request) {
             description: 'Validation error or invalid input parameters'
           },
           '429': {
-            description: 'Rate limit exceeded (max 3/day per phone)'
+            description: 'Rate limit exceeded (max 5 onboarding sessions/24h per phone, 60 MCP requests/hr per IP)'
           }
         }
       }
@@ -100,7 +100,7 @@ export async function GET(request) {
     info: {
       title: 'Carpenterwala AI Agent & MCP Tool API',
       version: '1.0.0',
-      description: 'Official API and Model Context Protocol tools for Carpenterwala Bangalore marketplace. Connects homeowners and service technicians (carpenters, painters, plumbers, electricians) at 0% platform commission.',
+      description: 'Official API and Model Context Protocol (MCP) tools for Carpenterwala — Pan-India 0% commission technician onboarding and Bangalore verified homeowner marketplace (carpenters, painters, plumbers, electricians).',
       contact: {
         name: 'Carpenterwala Support',
         email: 'contact@carpenterwala.com',

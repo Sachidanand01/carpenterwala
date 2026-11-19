@@ -1,7 +1,7 @@
 # Carpenterwala - Comprehensive Knowledge Base & Technical Services Overview
 
 ## 1. About Carpenterwala
-Carpenterwala is Bangalore's premier verified home improvement and handyman marketplace connecting homeowners directly with background-checked carpenters, painters, plumbers, and electricians at 0% platform commission. All service providers undergo police background checks, Aadhaar identity verification, and trade skill assessments.
+Carpenterwala is India's verified home improvement marketplace connecting homeowners directly with background-checked carpenters, painters, plumbers, and electricians at 0% platform commission. Technician onboarding is open pan-India via Voice AI (`https://carpenterwala.com/join`) and Remote MCP (`https://carpenterwala.com/api/mcp`), while on-site verified homeowner bookings are currently active across Bangalore. All service providers undergo Aadhaar identity verification and background checks, with uploaded KYC documents stored in a strictly private admin-only bucket and auto-purged within 90 days.
 
 - Website: https://carpenterwala.com
 - Operations Hub: Thanisandra Main Road, Bangalore, Karnataka 560077, India (Doorstep service across Bangalore)
@@ -57,42 +57,50 @@ Carpenterwala is Bangalore's premier verified home improvement and handyman mark
 13. Yelahanka (560064 - North Satellite Hub)
 
 ## 5. Model Context Protocol (MCP) & AI Agent Integration
-Carpenterwala implements the Anthropic Model Context Protocol (MCP) and OpenAPI 3.1 specification for autonomous AI agent discovery and tool execution across Google Gemini (Android Mobile), Anthropic Claude, OpenAI ChatGPT, and Perplexity AI.
+Carpenterwala implements the Model Context Protocol (MCP) and OpenAPI 3.1 specification for autonomous AI agent discovery and tool execution across OpenAI ChatGPT, Anthropic Claude, Google Gemini, and Perplexity AI.
 
 ### Protocol Endpoints
-- Remote WebMCP Server (JSON-RPC 2.0 / SSE): `https://carpenterwala.com/api/mcp`
-- OpenAPI 3.1 Spec for Gemini & Custom GPT Actions: `https://carpenterwala.com/api/mcp/openapi.json`
+- Remote MCP Server (JSON-RPC 2.0 / SSE, No Auth / Session-Based, CORS-enabled): `https://carpenterwala.com/api/mcp`
+- MCP Server Card Manifest: `https://carpenterwala.com/.well-known/mcp/server-card.json`
+- OpenAPI 3.1 Spec for Custom GPT & Agent Actions: `https://carpenterwala.com/api/mcp/openapi.json`
 - REST Tool Route: `https://carpenterwala.com/api/mcp/tools/{toolName}`
+- Zero-Setup Voice AI Onboarding Web App: `https://carpenterwala.com/join`
 
 ### JSON-RPC 2.0 Discovery Methods
 - `initialize`: Returns protocol version (`2024-11-05`), server name (`carpenterwala-mcp-server`), and tool capabilities.
-- `tools/list`: Lists all available tools and parameter JSON Schemas.
-- `tools/call`: Executes a tool with provided arguments and returns standard MCP text content.
+- `tools/list`: Lists all 6 active tools and their JSON Schemas.
+- `tools/call`: Executes a tool with provided arguments and returns standard MCP text + structuredContent payloads.
 
-### Tool Registry & Purpose
-1. `initiate_technician_onboarding`:
-   - Pre-registers service technicians (carpenters, painters, plumbers, electricians).
-   - Generates an encrypted, stateless 1-click mobile verification link (`https://carpenterwala.com/pro/login?session={token}`).
-   - **Zero-Trust Security Flow**: Technicians verify mobile OTP and upload Government ID (Aadhaar / Driving License / Selfie) inside the secure browser session. No raw OTPs or unmasked Aadhaar documents are ever ingested by 3rd-party LLM chat transcripts.
-   - **Abuse Prevention**: Strict rate-limit capped at 3 onboarding attempts per 24 hours per phone number and IP address.
-2. `check_technician_application_status`:
-   - Checks onboarding verification, active pro badges, or pending review steps by 10-digit mobile number.
+### Tool Registry & Purpose (6 Active Tools)
+1. `start_carpenterwala_onboarding`:
+   - Starts Pan-India 0% commission onboarding for carpenters, painters, plumbers, and electricians (`phone_number`, `full_name`, `trade`, `city`, `locality`, optional `pincode`, `experience_years`, `email`).
+   - Generates a short `session_token` and magic upload link (`https://carpenterwala.com/v/{token}`) valid for **60 minutes**.
+   - **Dual-Handoff Response**: Returns both a mobile-first clickable magic link (`"Tap Here to Upload"`) for Android/mobile users (no login required, 7 Indian languages: English, हिन्दी, ಕನ್ನಡ, தமிழ், తెలుగు, मराठी, বাংলা, auto-compressed `<600KB` camera uploads) AND a desktop-friendly QR code of `verify_url`.
+   - **Zero-Trust Security Flow**: Aadhaar, PAN, Voter ID/DL, and Police Verification photos are uploaded directly from the technician's phone into a strictly private admin-only Supabase Storage bucket (`kyc-documents`, JPEG/PNG/WebP only, max 2MB). Sensitive government IDs never enter 3rd-party LLM chat transcripts.
+   - **Abuse Prevention**: Strict 10-digit Indian mobile validation (`^[6-9][0-9]{9}$`), 60-minute token expiry with localized `"Link Expired"` messaging, IP rate limiting (60 MCP requests/hr per IP), and persistent 24-hour DB-backed rate limiting (max 5 sessions per 24 hours per mobile number).
+2. `check_onboarding_status`:
+   - Polls the onboarding session state (`PENDING_UPLOAD`, `VERIFIED`, or `EXPIRED`) by `session_token` or 10-digit Indian `phone_number`.
+   - Returns a welcome message and live public profile URL once the technician completes document upload and reaches `VERIFIED`.
 3. `search_verified_pros`:
-   - Queries background-checked verified pros in Bangalore filtered by trade and locality.
+   - Queries background-checked verified pros filtered by trade and locality.
 4. `get_service_rate_card`:
-   - Returns official Bangalore standard labor rates in INR (₹) at 0% platform commission.
+   - Returns official standard labor rates in INR (₹) at 0% platform commission.
 5. `calculate_service_estimate`:
-   - Computes wall painting square footage, tap drip water wastage (litres/₹), or appliance power consumption.
+   - Computes wall painting square footage & paint liters, tap drip water wastage (litres/₹), or appliance power consumption.
 6. `request_service_callback`:
    - Logs customer service inquiries and dispatches direct leads to local handymen with 60-90 min response time.
 
 ## 6. Machine-Readable Knowledge Endpoints
-- WebMCP Server: https://carpenterwala.com/api/mcp
+- Remote MCP Server: https://carpenterwala.com/api/mcp
+- MCP Server Card: https://carpenterwala.com/.well-known/mcp/server-card.json
 - OpenAPI 3.1 Spec: https://carpenterwala.com/api/mcp/openapi.json
 - LLMs Text: https://carpenterwala.com/llms.txt
 - Full LLMs Documentation: https://carpenterwala.com/llms-full.txt
-- Pro Portal: https://carpenterwala.com/pro/login
+- Pan-India Voice AI Onboarding: https://carpenterwala.com/join
+- Existing Pro Portal: https://carpenterwala.com/pro/login
 - Find a Professional: https://carpenterwala.com/find-a-professional
+- Privacy Policy: https://carpenterwala.com/privacy
+- Terms & Conditions: https://carpenterwala.com/terms
 - XML Sitemap: https://carpenterwala.com/sitemap.xml
 - FAQ Knowledge Base: https://carpenterwala.com/faq
 - How It Works: https://carpenterwala.com/how-it-works

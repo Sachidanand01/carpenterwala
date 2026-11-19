@@ -1,0 +1,62 @@
+{
+  "serverInfo": {
+    "name": "carpenterwala-mcp-server",
+    "title": "Carpenterwala Pan-India Home Services & AI Pro Onboarding",
+    "version": "1.0.0",
+    "description": "Carpenterwala Pan-India Home Improvement Marketplace & 0% Commission AI Pro Onboarding Remote MCP Server for carpenters, painters, plumbers, and electricians."
+  },
+  "protocolVersion": "2024-11-05",
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://carpenterwala.com/api/mcp"
+  },
+  "authentication": {
+    "type": "none",
+    "notes": "Public session-based MCP server. KYC document uploads happen on an expiring 60-minute mobile upload link (/v/[token]) directly to private admin-only storage."
+  },
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    }
+  },
+  "tools": [
+    {
+      "name": "start_carpenterwala_onboarding",
+      "title": "Start Carpenterwala Pro Onboarding (Pan-India 0% Commission)"
+    },
+    {
+      "name": "check_onboarding_status",
+      "title": "Check Carpenterwala Pro Onboarding Status"
+    },
+    {
+      "name": "search_verified_pros",
+      "title": "Search Verified Professionals in Bangalore"
+    },
+    {
+      "name": "get_service_rate_card",
+      "title": "Get Standard Labor Rate Card"
+    },
+    {
+      "name": "calculate_service_estimate",
+      "title": "Calculate Service Cost & Wastage Estimate"
+    },
+    {
+      "name": "request_service_callback",
+      "title": "Request Verified Service Callback / Lead"
+    }
+  ],
+  "documentation": {
+    "homepage": "https://carpenterwala.com",
+    "onboardingWeb": "https://carpenterwala.com/join",
+    "llmsTxt": "https://carpenterwala.com/llms.txt",
+    "llmsFullTxt": "https://carpenterwala.com/llms-full.txt",
+    "openApiSpec": "https://carpenterwala.com/api/mcp/openapi.json",
+    "privacyPolicy": "https://carpenterwala.com/privacy",
+    "termsOfService": "https://carpenterwala.com/terms"
+  },
+  "contact": {
+    "name": "Carpenterwala Support",
+    "email": "contact@carpenterwala.com",
+    "url": "https://carpenterwala.com/contact"
+  }
+}

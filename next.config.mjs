@@ -57,6 +57,23 @@ const nextConfig = {
         ],
       },
       {
+        source: '/.well-known/mcp/:path*',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/json; charset=utf-8',
+          },
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: '*',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, stale-while-revalidate=86400',
+          },
+        ],
+      },
+      {
         source: '/api/mcp',
         headers: [
           {
