@@ -1,21 +1,13 @@
 import { NextResponse } from 'next/server';
 import { supabase, supabaseAdmin } from '@/lib/supabase';
-import crypto from 'crypto';
+import { isValidAdminToken } from '@/lib/admin-auth';
 
 // GET /api/admin/leads
 export async function GET(request) {
   try {
     // 1. Verify Authorization
     const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    const expectedPassword = process.env.ADMIN_PASSWORD || 'CarpenterwalaAdmin2026';
-    const expectedToken = crypto
-      .createHash('sha256')
-      .update(expectedPassword + 'carpenterwala-salt-2026')
-      .digest('hex');
-
-    if (!token || token !== expectedToken) {
+    if (!isValidAdminToken(authHeader)) {
       return NextResponse.json({ error: 'Unauthorized admin access' }, { status: 401 });
     }
 

@@ -85,7 +85,8 @@ function CustomerLoginContent() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect');
+  const rawRedirect = searchParams.get('redirect');
+  const redirect = rawRedirect && /^\/(?!\/)/.test(rawRedirect) ? rawRedirect : '/bookings';
 
   useEffect(() => {
     // If already logged in, redirect to bookings page or target redirect

@@ -1,26 +1,12 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { Resend } from 'resend';
-import crypto from 'crypto';
+import { isValidAdminOrCron } from '@/lib/admin-auth';
 
 const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder_key_for_build');
 
 function verifyAdminToken(request) {
-  const authHeader = request.headers.get('authorization');
-  const token = authHeader?.replace(/^Bearer\s+/i, '').trim();
-
-  // Also support cron secret if invoked by automated scheduler
-  if (process.env.CRON_SECRET && token === process.env.CRON_SECRET) {
-    return true;
-  }
-
-  const expectedPassword = process.env.ADMIN_PASSWORD || 'CarpenterwalaAdmin2026';
-  const expectedToken = crypto
-    .createHash('sha256')
-    .update(expectedPassword + 'carpenterwala-salt-2026')
-    .digest('hex');
-
-  return token === expectedToken;
+  return isValidAdminOrCron(request);
 }
 
 function buildReminderEmailHtml({ name, trade, location }) {

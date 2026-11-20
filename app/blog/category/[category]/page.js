@@ -1,5 +1,6 @@
 import { getAllBlogPosts, getBlogCategories } from '@/lib/blog-service';
 import BlogListing from '../../BlogListing';
+import { safeJsonLd } from '@/lib/sanitize';
 
 export const revalidate = 3600;
 
@@ -108,7 +109,7 @@ export default async function CategoryPage({ params, searchParams }) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(categorySchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(categorySchema) }}
       />
       <BlogListing selectedCategorySlug={category} initialPosts={posts} initialPage={currentPage} />
     </>

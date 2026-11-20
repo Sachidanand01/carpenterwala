@@ -8,7 +8,9 @@ function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const role = searchParams.get('role') || 'customer'; // 'customer' or 'pro'
-  const redirectTarget = searchParams.get('redirect') || (role === 'pro' ? '/pro/dashboard' : '/bookings');
+  const rawRedirect = searchParams.get('redirect');
+  const defaultRedirect = role === 'pro' ? '/pro/dashboard' : '/bookings';
+  const redirectTarget = rawRedirect && /^\/(?!\/)/.test(rawRedirect) ? rawRedirect : defaultRedirect;
 
   const [status, setStatus] = useState('Authenticating with Google...');
   const [error, setError] = useState(null);

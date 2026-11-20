@@ -1,3 +1,5 @@
+import { safeJsonLd } from '@/lib/sanitize';
+
 export const metadata = {
   title: "How It Works - Handyman Booking Process | Carpenterwala",
   description: "Learn how easy it is to find, book, and review verified professionals on Carpenterwala.",
@@ -43,7 +45,7 @@ export default function HowItWorksLayout({ children }) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(howItWorksJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(howItWorksJsonLd) }}
       />
       {children}
     </>

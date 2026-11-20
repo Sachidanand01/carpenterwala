@@ -2,6 +2,7 @@ import Link from 'next/link';
 import MagneticCTA from "@/components/MagneticCTA";
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
+import { safeJsonLd } from '@/lib/sanitize';
 
 export function generateMetadata() {
   const currentYear = new Date().getFullYear();
@@ -173,7 +174,7 @@ export default function CarpentryPage() {
       </div>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(serviceJsonLd) }}
       />
       {/* Hero Section */}
       <section style={{

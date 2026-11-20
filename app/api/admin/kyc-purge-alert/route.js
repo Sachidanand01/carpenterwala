@@ -1,32 +1,14 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin as supabase } from '@/lib/supabase';
 import { Resend } from 'resend';
-import crypto from 'crypto';
+import { isValidAdminOrCron } from '@/lib/admin-auth';
 
 const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder_key_for_build');
-
-function verifyAdminOrCron(request) {
-  const authHeader = request.headers.get('authorization') || '';
-  const token = authHeader.replace(/^Bearer\s+/i, '').trim();
-
-  // 1. Allow CRON secret
-  const cronSecret = process.env.CRON_SECRET;
-  if (cronSecret && token === cronSecret) return true;
-
-  // 2. Allow Admin Session Token
-  const expectedPassword = process.env.ADMIN_PASSWORD || 'CarpenterwalaAdmin2026';
-  const expectedToken = crypto
-    .createHash('sha256')
-    .update(expectedPassword + 'carpenterwala-salt-2026')
-    .digest('hex');
-
-  return token === expectedToken;
-}
 
 // GET /api/admin/kyc-purge-alert - Check expiring documents (for Admin UI badges)
 export async function GET(request) {
   try {
-    if (!verifyAdminOrCron(request)) {
+    if (!isValidAdminOrCron(request)) {
       return NextResponse.json({ error: 'Unauthorized admin access' }, { status: 401 });
     }
 

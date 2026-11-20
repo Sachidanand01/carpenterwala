@@ -4,6 +4,7 @@ import ColorVisualizer from '@/components/ColorVisualizer';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
 import PaintCalculator from '@/components/PaintCalculator';
+import { safeJsonLd } from '@/lib/sanitize';
 
 export const metadata = {
   title: 'House Painting Services in Bangalore [2026 Per Sq Ft & Daily Rates]',
@@ -183,7 +184,7 @@ export default function PaintingPage() {
       </div>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(serviceJsonLd) }}
       />
       {/* Hero Section */}
       <section style={{

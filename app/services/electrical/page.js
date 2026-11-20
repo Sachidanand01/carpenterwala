@@ -3,6 +3,7 @@ import MagneticCTA from "@/components/MagneticCTA";
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
 import ElectricityCalculator from '@/components/ElectricityCalculator';
+import { safeJsonLd } from '@/lib/sanitize';
 
 export const metadata = {
   title: 'Verified Electrician Services for Home & Office | CarpenterWala',
@@ -166,7 +167,7 @@ export default function ElectricalPage() {
       </div>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(serviceJsonLd) }}
       />
       {/* Hero Section */}
       <section style={{

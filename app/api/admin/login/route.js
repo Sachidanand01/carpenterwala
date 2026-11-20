@@ -24,12 +24,22 @@ export async function POST(request) {
     const body = await request.json();
     const { password, twoFactorCode } = body;
 
-    const expectedPassword = process.env.ADMIN_PASSWORD || 'CarpenterwalaAdmin2026';
+    const isProd = process.env.NODE_ENV === 'production';
+    const configuredPassword = process.env.ADMIN_PASSWORD;
+
+    if (!configuredPassword && isProd) {
+      return NextResponse.json({ error: 'Admin authentication is not configured on production' }, { status: 500 });
+    }
+
+    const expectedPassword = configuredPassword || 'CarpenterwalaAdmin2026';
     const adminTotpSecret = process.env.ADMIN_TOTP_SECRET;
     
-    // Parse backup codes from environment variable (comma-separated), with built-in fallbacks if configured
-    const backupCodesStr = process.env.ADMIN_BACKUP_CODES || 'FCBC-ADE5,D69D-8D6C,D6E7-D022';
-    const backupCodes = backupCodesStr.split(',').map((c) => c.trim()).filter(Boolean);
+    // Parse backup codes from environment variable (comma-separated), fail closed on prod if unset
+    const backupCodesStr = process.env.ADMIN_BACKUP_CODES;
+    const backupCodes = (backupCodesStr || (isProd ? '' : 'FCBC-ADE5,D69D-8D6C,D6E7-D022'))
+      .split(',')
+      .map((c) => c.trim())
+      .filter(Boolean);
 
     // 1. Primary Credential Check with Timing-Safe Comparison
     const passwordBuffer = Buffer.from(password || '');

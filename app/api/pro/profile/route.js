@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import crypto from 'crypto';
 import { supabase, supabaseAdmin } from '@/lib/supabase';
 import { generateProCode } from '@/lib/pro-slug';
 import { decryptToken } from '@/lib/crypto';
+import { isValidAdminToken } from '@/lib/admin-auth';
 
 /**
  * Checks whether the incoming request is authorized to view or edit full KYC and private details
@@ -17,12 +17,7 @@ function isAuthorizedPro(request, targetProId) {
   if (!token) return false;
 
   // Support Admin authorization
-  const expectedPassword = process.env.ADMIN_PASSWORD || 'CarpenterwalaAdmin2026';
-  const expectedAdminToken = crypto
-    .createHash('sha256')
-    .update(expectedPassword + 'carpenterwala-salt-2026')
-    .digest('hex');
-  if (token === expectedAdminToken || token === expectedPassword) {
+  if (isValidAdminToken(token)) {
     return true;
   }
 

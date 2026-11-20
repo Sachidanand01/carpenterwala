@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { safeJsonLd } from '@/lib/sanitize';
 
 export const metadata = {
   title: 'बैंगलोर में कारीगर बनें: 0% कमीशन पर कारपेंटर, पेंटर, प्लंबर, इलेक्ट्रीशियन काम पाएं | Carpenterwala',
@@ -74,7 +75,7 @@ export default function HindiProPage() {
     <div style={{ background: '#0B1120', color: '#F8FAFC', minHeight: '100vh', paddingBottom: '5rem' }}>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(faqSchema) }}
       />
 
       {/* Hero Banner Section */}

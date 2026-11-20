@@ -1,3 +1,5 @@
+import { safeJsonLd } from '@/lib/sanitize';
+
 export const metadata = {
   title: "About Us - Verified Handyman Marketplace | Carpenterwala",
   description: "Learn more about Carpenterwala, India's premier digital marketplace for professional handymen.",
@@ -36,7 +38,7 @@ export default function AboutLayout({ children }) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(aboutJsonLd) }}
       />
       {children}
     </>

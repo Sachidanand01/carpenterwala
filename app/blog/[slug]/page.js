@@ -5,6 +5,7 @@ import AdSenseContainer from '@/components/AdSenseContainer';
 import BlogComments from '@/components/BlogComments';
 import ProOnboardingVisualTour from '@/components/ProOnboardingVisualTour';
 import BlogActionBar from '@/components/BlogActionBar';
+import { safeJsonLd } from '@/lib/sanitize';
 
 const slugify = (cat) => cat.toLowerCase().replace(/\s+/g, '-');
 
@@ -382,7 +383,7 @@ export default async function BlogPost({ params }) {
     <div className="animate-fade-in">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredDataGraph) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(structuredDataGraph) }}
       />
       <div className="container" style={{ paddingTop: "1.5rem", marginBottom: "-1.5rem", position: "relative", zIndex: 10 }}>
         <Breadcrumbs items={breadcrumbItems} />

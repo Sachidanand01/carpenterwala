@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
+import crypto from 'crypto';
+import { supabase, supabaseAdmin } from '@/lib/supabase';
 import { Resend } from 'resend';
 import { encryptToken, decryptToken } from '@/lib/crypto';
 import { verifyTurnstileToken } from '@/lib/verify-turnstile';
+import { checkWindowRateLimit, getClientIp } from '@/lib/rate-limiter';
 
 const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder_key_for_build');
 
@@ -24,7 +27,7 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Bot security check failed. Please refresh and try again.' }, { status: 403 });
       }
 
-      const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const generatedCode = crypto.randomInt(100000, 1000000).toString();
       const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes validity
 
       // Generate secure, stateless token for customer OTP
@@ -137,6 +140,19 @@ export async function POST(request) {
 
     // --- ACTION: VERIFY EMAIL OTP ---
     if (action === 'verify') {
+      const clientIp = getClientIp(request);
+      const verifyCheck = checkWindowRateLimit({
+        key: `cust-otp-verify:${clientIp}:${cleanEmail}`,
+        maxAttempts: 5,
+        windowMs: 15 * 60 * 1000
+      });
+      if (!verifyCheck.allowed) {
+        return NextResponse.json(
+          { error: 'Too many verification attempts. Please wait 15 minutes before trying again.' },
+          { status: 429 }
+        );
+      }
+
       if (!otp || otp.length !== 6) {
         return NextResponse.json({ error: 'Please enter a 6-digit OTP.' }, { status: 400 });
       }

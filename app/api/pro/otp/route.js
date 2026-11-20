@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import crypto from 'crypto';
+import { supabase, supabaseAdmin } from '@/lib/supabase';
 import { Resend } from 'resend';
 import { encryptToken, decryptToken } from '@/lib/crypto';
 import { generateProCode, toUrlSlug } from '@/lib/pro-slug';
 import { verifyTurnstileToken } from '@/lib/verify-turnstile';
+import { checkWindowRateLimit, getClientIp } from '@/lib/rate-limiter';
+import { escapeHtml } from '@/lib/sanitize';
 
 const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder_key_for_build');
 
@@ -81,7 +84,7 @@ export async function POST(request) {
         }, { status: 400 });
       }
 
-      const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const generatedCode = crypto.randomInt(100000, 1000000).toString();
       const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes validity
 
       // Generate a secure, stateless verification token
@@ -114,7 +117,7 @@ export async function POST(request) {
                   <span style="font-size: 40px;">🔧</span>
                   <h1 style="color: #2563eb; margin: 10px 0 0 0; font-size: 24px;">Welcome to Carpenterwala Pro!</h1>
                 </div>
-                <p>Hello <strong>${name.trim()}</strong>,</p>
+                <p>Hello <strong>${escapeHtml(name.trim())}</strong>,</p>
                 <p>Thank you for signing up as a Service Professional. To complete your registration and start your onboarding, please use the verification code below:</p>
                 <div style="text-align: center; margin: 30px 0; padding: 15px; background-color: #f3f4f6; border-radius: 8px;">
                   <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #1e3a8a;">${generatedCode}</span>
@@ -145,7 +148,7 @@ export async function POST(request) {
                     <span style="font-size: 40px;">🔧</span>
                     <h1 style="color: #2563eb; margin: 10px 0 0 0; font-size: 24px;">Welcome to Carpenterwala Pro!</h1>
                   </div>
-                  <p>Hello <strong>${name.trim()}</strong>,</p>
+                  <p>Hello <strong>${escapeHtml(name.trim())}</strong>,</p>
                   <p>Thank you for signing up as a Service Professional. To complete your registration and start your onboarding, please use the verification code below:</p>
                   <div style="text-align: center; margin: 30px 0; padding: 15px; background-color: #f3f4f6; border-radius: 8px;">
                     <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #1e3a8a;">${generatedCode}</span>
@@ -192,6 +195,19 @@ export async function POST(request) {
 
     // --- ACTION: VERIFY REGISTER OTP ---
     if (action === 'register_verify') {
+      const clientIp = getClientIp(request);
+      const verifyCheck = checkWindowRateLimit({
+        key: `pro-reg-verify:${clientIp}:${cleanEmail}`,
+        maxAttempts: 5,
+        windowMs: 15 * 60 * 1000
+      });
+      if (!verifyCheck.allowed) {
+        return NextResponse.json(
+          { error: 'Too many verification attempts. Please wait 15 minutes before trying again.' },
+          { status: 429 }
+        );
+      }
+
       if (!otp || otp.length !== 6) {
         return NextResponse.json({ error: 'Please enter a 6-digit OTP.' }, { status: 400 });
       }
@@ -320,7 +336,7 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Bot security verification failed. Please try again.' }, { status: 403 });
       }
 
-      const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const generatedCode = crypto.randomInt(100000, 1000000).toString();
       const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes validity
 
       // Generate a secure, stateless verification token for login
@@ -381,7 +397,7 @@ export async function POST(request) {
                     <span style="font-size: 40px;">🔧</span>
                     <h1 style="color: #2563eb; margin: 10px 0 0 0; font-size: 24px;">Carpenterwala Pro Portal</h1>
                   </div>
-                  <p>Hello <strong>${profile.name}</strong>,</p>
+                  <p>Hello <strong>${escapeHtml(profile.name)}</strong>,</p>
                   <p>You requested a One-Time Password (OTP) to log in to your Pro Portal. Please use the verification code below:</p>
                   <div style="text-align: center; margin: 30px 0; padding: 15px; background-color: #f3f4f6; border-radius: 8px;">
                     <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #1e3a8a;">${generatedCode}</span>
@@ -428,6 +444,19 @@ export async function POST(request) {
 
     // --- ACTION: VERIFY EMAIL OTP ---
     if (action === 'verify') {
+      const clientIp = getClientIp(request);
+      const verifyCheck = checkWindowRateLimit({
+        key: `pro-login-verify:${clientIp}:${cleanEmail}`,
+        maxAttempts: 5,
+        windowMs: 15 * 60 * 1000
+      });
+      if (!verifyCheck.allowed) {
+        return NextResponse.json(
+          { error: 'Too many verification attempts. Please wait 15 minutes before trying again.' },
+          { status: 429 }
+        );
+      }
+
       if (!otp || otp.length !== 6) {
         return NextResponse.json({ error: 'Please enter a 6-digit OTP.' }, { status: 400 });
       }

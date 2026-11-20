@@ -3,6 +3,7 @@ import MagneticCTA from "@/components/MagneticCTA";
 import HeroLiveProCard from "@/components/HeroLiveProCard";
 import LandingFAQAccordion from "@/components/LandingFAQAccordion";
 import { getLiveReviewStats } from "@/lib/reviews";
+import { safeJsonLd } from "@/lib/sanitize";
 
 export const metadata = {
   title: "Carpenterwala | Professional Handyman Marketplace",
@@ -131,7 +132,7 @@ export default async function Home() {
     <div className="container flex flex-col justify-center" style={{ minHeight: "calc(100vh - var(--navbar-height))" }}>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(homeJsonLd) }}
       />
       
       {/* ════════════════════════════════════════

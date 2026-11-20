@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import crypto from 'crypto';
 import { supabase, supabaseAdmin } from '@/lib/supabase';
 import { decryptToken } from '@/lib/crypto';
+import { isValidAdminToken } from '@/lib/admin-auth';
 
 function getAuthorizedCustomer(request) {
   const authHeader = request.headers.get('authorization') || '';
@@ -12,12 +12,7 @@ function getAuthorizedCustomer(request) {
   if (!token) return null;
 
   // 1. Admin token check
-  const expectedPassword = process.env.ADMIN_PASSWORD || 'CarpenterwalaAdmin2026';
-  const expectedAdminToken = crypto
-    .createHash('sha256')
-    .update(expectedPassword + 'carpenterwala-salt-2026')
-    .digest('hex');
-  if (token === expectedAdminToken || token === expectedPassword) {
+  if (isValidAdminToken(token)) {
     return { isAdmin: true };
   }
 

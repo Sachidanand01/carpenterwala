@@ -1,24 +1,9 @@
 import { NextResponse } from 'next/server';
-import crypto from 'crypto';
 import { syncYouTubeChannelToDatabase } from '@/lib/reels';
+import { isValidAdminOrCron } from '@/lib/admin-auth';
 
 function isAuthorizedSync(req) {
-  const authHeader = req.headers.get('authorization') || '';
-  const token = authHeader.replace(/^Bearer\s+/i, '').trim();
-  const cronSecret = req.headers.get('x-cron-secret');
-
-  const expectedCron = process.env.CRON_SECRET;
-  if (expectedCron && cronSecret === expectedCron) {
-    return true;
-  }
-
-  const expectedPassword = process.env.ADMIN_PASSWORD || 'CarpenterwalaAdmin2026';
-  const expectedAdminToken = crypto
-    .createHash('sha256')
-    .update(expectedPassword + 'carpenterwala-salt-2026')
-    .digest('hex');
-
-  return token === expectedAdminToken || token === expectedPassword;
+  return isValidAdminOrCron(req);
 }
 
 export async function POST(req) {

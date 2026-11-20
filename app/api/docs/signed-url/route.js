@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import crypto from 'crypto';
 import { getSignedDocumentUrl, STORAGE_BUCKETS } from '@/lib/storage';
 import { decryptToken } from '@/lib/crypto';
 import { supabase, supabaseAdmin } from '@/lib/supabase';
+import { isValidAdminToken } from '@/lib/admin-auth';
 
 const ALLOWED_PRIVATE_BUCKETS = new Set([
   STORAGE_BUCKETS.KYC,
@@ -31,12 +31,7 @@ async function isAuthorizedForDocument(request, path, bucket) {
   if (!token) return false;
 
   // 1. Check Admin token
-  const expectedPassword = process.env.ADMIN_PASSWORD || 'CarpenterwalaAdmin2026';
-  const expectedAdminToken = crypto
-    .createHash('sha256')
-    .update(expectedPassword + 'carpenterwala-salt-2026')
-    .digest('hex');
-  if (token === expectedAdminToken || token === expectedPassword) {
+  if (isValidAdminToken(token)) {
     return true;
   }
 

@@ -12,9 +12,13 @@ export async function OPTIONS() {
 }
 
 export async function GET(request) {
-  const host = request.headers.get('host') || 'carpenterwala.com';
-  const proto = request.headers.get('x-forwarded-proto') || 'https';
-  const serverUrl = `${proto}://${host}`;
+  const isProd = process.env.NODE_ENV === 'production';
+  let serverUrl = 'https://carpenterwala.com';
+  if (!isProd) {
+    const host = request.headers.get('host') || 'localhost:3000';
+    const proto = host.includes('localhost') || host.includes('127.0.0.1') ? 'http' : 'https';
+    serverUrl = `${proto}://${host}`;
+  }
 
   const paths = {};
 

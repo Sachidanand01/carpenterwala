@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AffiliateToolsWidget from '@/components/AffiliateToolsWidget';
+import { safeJsonLd } from '@/lib/sanitize';
 
 export default function DripCalculator() {
   const calcJsonLd = {
@@ -73,7 +74,7 @@ export default function DripCalculator() {
     }} className="glass animate-fade-in">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(calcJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(calcJsonLd) }}
       />
       <style dangerouslySetInnerHTML={{ __html: `
         .slider-input::-webkit-slider-thumb {

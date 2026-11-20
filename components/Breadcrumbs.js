@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { safeJsonLd } from '@/lib/sanitize';
 
 export default function Breadcrumbs({ items }) {
   if (!items || items.length === 0) return null;
@@ -18,7 +19,7 @@ export default function Breadcrumbs({ items }) {
     <nav aria-label="Breadcrumb" className="breadcrumbs-container">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
       />
       <ol style={{ 
         display: 'flex', 

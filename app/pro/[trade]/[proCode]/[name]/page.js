@@ -12,6 +12,7 @@ import ProPortfolioGallery from '@/components/pro-profile/ProPortfolioGallery';
 import ProTradeEstimator from '@/components/pro-profile/ProTradeEstimator';
 import ProTradeBlogs from '@/components/pro-profile/ProTradeBlogs';
 import { getRelatedBlogsForTrade } from '@/lib/blog-service';
+import { safeJsonLd } from '@/lib/sanitize';
 
 // Cache Pro profile pages with Incremental Static Regeneration (24-hour refresh) to prevent repeated live DB egress
 export const revalidate = 86400;
@@ -226,11 +227,11 @@ export default async function CanonicalProProfile({ params }) {
     <div className="container" style={{ padding: "2rem 2rem 4rem 2rem" }}>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(proJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(proJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbsJsonLd) }}
       />
       
       <Breadcrumbs items={[

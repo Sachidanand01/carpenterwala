@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { safeJsonLd } from '@/lib/sanitize';
 
 const faqs = [
   {
@@ -145,7 +146,7 @@ export default function FAQPage() {
       ]} />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(faqSchema) }}
       />
       <div style={{ textAlign: "center", marginBottom: "4rem" }}>
         <h1 className="text-gradient" style={{ fontSize: "3.5rem", marginBottom: "1rem" }}>Frequently Asked Questions</h1>

@@ -5,6 +5,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import { supabase } from '@/lib/supabase';
 import VerifiedBadge from '@/components/VerifiedBadge';
 import { getProUrl } from '@/lib/pro-slug';
+import { safeJsonLd } from '@/lib/sanitize';
 
 export const dynamicParams = true;
 
@@ -282,7 +283,7 @@ export default async function ServiceLocationPage({ params }) {
 
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(localJsonLd) }}
       />
 
       {/* Hero Header */}

@@ -39,11 +39,12 @@ function checkScraperRateLimit(ip) {
 export function proxy(request) {
   const host = request.headers.get('host') || '';
   const proto = request.headers.get('x-forwarded-proto');
-  const isLocal = host.includes('localhost') || host.includes('127.0.0.1');
+  // Security Hardening (F-06): Strict localhost matching, preventing Host: localhost.evil.com bypass
+  const isLocal = /^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(host);
   const pathname = request.nextUrl.pathname;
 
   // 1. Origin Cloaking / Direct Access Protection
-  // If ORIGIN_SECRET is configured, ensure request originated from Cloudflare edge
+  // In production with ORIGIN_SECRET configured, require x-carpenterwala-origin-secret on all non-local requests
   const originSecret = process.env.ORIGIN_SECRET;
   if (process.env.NODE_ENV === 'production' && originSecret && !isLocal) {
     const incomingSecret = request.headers.get('x-carpenterwala-origin-secret');

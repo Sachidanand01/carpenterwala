@@ -4,15 +4,14 @@
 
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
+import { isValidRevalidationSecret } from '@/lib/admin-auth';
 
 export async function POST(request) {
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret');
   const slug = searchParams.get('slug');
 
-  const configuredSecret = process.env.REVALIDATION_SECRET || 'carpenterwala-secret-reval-2026';
-
-  if (secret !== configuredSecret) {
+  if (!isValidRevalidationSecret(secret)) {
     return NextResponse.json({ message: 'Invalid or missing revalidation secret' }, { status: 401 });
   }
 

@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import DiyReelsClient from './DiyReelsClient';
 import { getDiyReels, getDiyCategories } from '@/lib/reels';
+import { safeJsonLd } from '@/lib/sanitize';
 
 export const metadata = {
   title: "DIY Reels - Carpentry Hacks & Woodworking Shorts | Carpenterwala",
@@ -63,7 +64,7 @@ export default async function DiyReelsPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
       <Suspense fallback={
         <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

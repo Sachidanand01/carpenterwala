@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { safeJsonLd } from '@/lib/sanitize';
 
 export const metadata = {
   title: "Contact Us - Customer Care & Support | Carpenterwala",
@@ -43,7 +44,7 @@ export default function ContactUs() {
     <div className="container animate-fade-in" style={{ padding: "2rem 2rem 4rem 2rem" }}>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(contactJsonLd) }}
       />
       <Breadcrumbs items={[
         { name: "Home", url: "/" },

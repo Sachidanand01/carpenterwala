@@ -3,6 +3,7 @@ import MagneticCTA from "@/components/MagneticCTA";
 import Breadcrumbs from '@/components/Breadcrumbs';
 import AdSenseContainer from '@/components/AdSenseContainer';
 import DripCalculator from '@/components/DripCalculator';
+import { safeJsonLd } from '@/lib/sanitize';
 
 export const metadata = {
   title: 'Professional Plumber Services & Leak Repair | CarpenterWala',
@@ -166,7 +167,7 @@ export default function PlumbingPage() {
       </div>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(serviceJsonLd) }}
       />
       {/* Hero Section */}
       <section style={{

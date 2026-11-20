@@ -12,7 +12,9 @@ function CompleteProfileContent() {
   const initialEmail = searchParams.get('email') || '';
   const initialName = searchParams.get('name') || '';
   const avatar = searchParams.get('avatar') || '';
-  const redirectTarget = searchParams.get('redirect') || (role === 'pro' ? '/pro/dashboard' : '/bookings');
+  const rawRedirect = searchParams.get('redirect');
+  const defaultRedirect = role === 'pro' ? '/pro/dashboard' : '/bookings';
+  const redirectTarget = rawRedirect && /^\/(?!\/)/.test(rawRedirect) ? rawRedirect : defaultRedirect;
 
   const [name, setName] = useState(initialName);
   const [email] = useState(initialEmail);

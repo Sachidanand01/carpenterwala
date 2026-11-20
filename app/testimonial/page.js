@@ -1,5 +1,6 @@
 import { getBusinessReviews, getLiveReviewStats } from '@/lib/reviews';
 import TestimonialClient from './TestimonialClient';
+import { safeJsonLd } from '@/lib/sanitize';
 
 export const revalidate = 3600; // Revalidate every hour for fresh Google reviews
 
@@ -70,7 +71,7 @@ export default async function TestimonialsPage() {
     <div className="container" style={{ padding: '2rem 1rem 4rem 1rem' }}>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
       <TestimonialClient
         initialReviews={reviewsData.reviews}

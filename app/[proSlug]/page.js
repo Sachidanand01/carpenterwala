@@ -4,6 +4,7 @@ import { notFound, redirect } from 'next/navigation';
 import VerifiedBadge from '@/components/VerifiedBadge';
 import LeadCaptureModal from '@/components/LeadCaptureModal';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { safeJsonLd } from '@/lib/sanitize';
 
 export async function generateMetadata({ params }) {
   const { proSlug } = await params;
@@ -147,7 +148,7 @@ export default async function ProProfile({ params }) {
     <div className="container" style={{ padding: "2rem 2rem 4rem 2rem" }}>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(proJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(proJsonLd) }}
       />
       <Breadcrumbs items={[
         { name: "Home", url: "/" },

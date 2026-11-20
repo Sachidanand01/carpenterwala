@@ -287,6 +287,16 @@ export async function POST(request) {
   };
 
   if (Array.isArray(body)) {
+    if (body.length > 10) {
+      return NextResponse.json(
+        {
+          jsonrpc: '2.0',
+          id: null,
+          error: { code: -32600, message: 'Batch limit exceeded: Maximum 10 requests allowed per batch.' }
+        },
+        { status: 400, headers: CORS_HEADERS }
+      );
+    }
     const responses = (await Promise.all(body.map(handleSingleMessage))).filter(Boolean);
     return NextResponse.json(responses, { headers: CORS_HEADERS });
   }

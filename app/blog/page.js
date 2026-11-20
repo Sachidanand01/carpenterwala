@@ -1,5 +1,6 @@
 import { getAllBlogPosts } from '@/lib/blog-service';
 import BlogListing from './BlogListing';
+import { safeJsonLd } from '@/lib/sanitize';
 
 export const revalidate = 3600;
 
@@ -64,7 +65,7 @@ export default async function BlogLanding({ searchParams }) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(blogSchema) }}
       />
       <BlogListing selectedCategorySlug="all" initialPosts={posts} initialPage={currentPage} />
     </>

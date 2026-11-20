@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import FloatingBackground from "@/components/FloatingBackground";
 import ExitIntentModal from "@/components/ExitIntentModal";
 import CursorConstruction from "@/components/CursorConstruction";
+import { safeJsonLd } from "@/lib/sanitize";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -129,7 +130,7 @@ export default function RootLayout({ children }) {
 
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
         />
 
         {/* Meta Pixel Code */}

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import crypto from 'crypto';
 import { syncGoogleReviews, getLiveReviewStats, FALLBACK_REVIEWS } from '@/lib/reviews';
 import { supabase } from '@/lib/supabase';
+import { isValidAdminToken, isValidRevalidationSecret } from '@/lib/admin-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,19 +13,11 @@ export async function POST(request) {
     const url = new URL(request.url);
     const querySecret = url.searchParams.get('secret');
 
-    const adminPassword = process.env.ADMIN_PASSWORD || 'CarpenterwalaAdmin2026';
-    const expectedHashedToken = crypto
-      .createHash('sha256')
-      .update(adminPassword + 'carpenterwala-salt-2026')
-      .digest('hex');
-    const revalSecret = process.env.REVALIDATION_SECRET || 'carpenterwala-secret-reval-2026';
-
     const isAuthorized = 
-      token === expectedHashedToken ||
-      token === adminPassword || 
-      token === revalSecret || 
-      querySecret === revalSecret || 
-      querySecret === adminPassword;
+      isValidAdminToken(token) ||
+      isValidRevalidationSecret(token) ||
+      isValidRevalidationSecret(querySecret) ||
+      isValidAdminToken(querySecret);
 
     if (!isAuthorized) {
       return NextResponse.json(
