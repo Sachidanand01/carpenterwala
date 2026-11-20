@@ -21,16 +21,16 @@ export default function Breadcrumbs({ items }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
       />
-      <ol style={{ 
-        display: 'flex', 
-        flexWrap: 'wrap', 
-        listStyle: 'none', 
-        padding: 0, 
-        margin: 0, 
-        alignItems: 'center', 
-        gap: '0.5rem', 
-        fontSize: '0.9rem', 
-        fontWeight: '500' 
+      <ol style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        listStyle: 'none',
+        padding: 0,
+        margin: 0,
+        alignItems: 'center',
+        gap: '0.5rem',
+        fontSize: '0.9rem',
+        fontWeight: '500'
       }}>
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
