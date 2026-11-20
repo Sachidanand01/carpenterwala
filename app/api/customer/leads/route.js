@@ -1,7 +1,39 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import crypto from 'crypto';
+import { supabase, supabaseAdmin } from '@/lib/supabase';
+import { decryptToken } from '@/lib/crypto';
+
+function getAuthorizedCustomer(request) {
+  const authHeader = request.headers.get('authorization') || '';
+  const token = authHeader.replace(/^Bearer\s+/i, '').trim() ||
+                request.headers.get('x-customer-auth') ||
+                new URL(request.url).searchParams.get('token');
+
+  if (!token) return null;
+
+  const expectedPassword = process.env.ADMIN_PASSWORD || 'CarpenterwalaAdmin2026';
+  const expectedAdminToken = crypto
+    .createHash('sha256')
+    .update(expectedPassword + 'carpenterwala-salt-2026')
+    .digest('hex');
+  if (token === expectedAdminToken || token === expectedPassword) {
+    return { isAdmin: true };
+  }
+
+  const decrypted = decryptToken(token);
+  if (!decrypted) return null;
+  if (decrypted.expiresAt && decrypted.expiresAt < Date.now()) return null;
+  if (decrypted.type !== 'customer_session' && decrypted.type !== 'customer_otp') return null;
+
+  return decrypted;
+}
 
 export async function GET(request) {
+  const auth = getAuthorizedCustomer(request);
+  if (!auth) {
+    return NextResponse.json({ error: 'Unauthorized: Valid customer session required' }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const phone = searchParams.get('phone');
 
@@ -9,8 +41,26 @@ export async function GET(request) {
     return NextResponse.json({ error: 'Phone number is required' }, { status: 400 });
   }
 
+  const client = supabaseAdmin || supabase;
+
   try {
-    const { data: leads, error } = await supabase
+    if (!auth.isAdmin) {
+      let authorizedPhone = auth.phone ? String(auth.phone).trim() : null;
+      if (!authorizedPhone && auth.email) {
+        const { data: cust } = await client
+          .from('customers')
+          .select('phone')
+          .eq('email', String(auth.email).toLowerCase().trim())
+          .maybeSingle();
+        authorizedPhone = cust?.phone || null;
+      }
+
+      if (!authorizedPhone || authorizedPhone !== phone.trim()) {
+        return NextResponse.json({ error: 'Forbidden: Cannot view leads for another customer' }, { status: 403 });
+      }
+    }
+
+    const { data: leads, error } = await client
       .from('leads')
       .select(`
         id,
@@ -20,7 +70,7 @@ export async function GET(request) {
         created_at,
         profiles ( id, pro_code, slug, name, trade, avatar, location )
       `)
-      .eq('phone', phone)
+      .eq('phone', phone.trim())
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -28,7 +78,7 @@ export async function GET(request) {
       throw error;
     }
 
-    return NextResponse.json({ leads }, { status: 200 });
+    return NextResponse.json({ leads: leads || [] }, { status: 200 });
   } catch (error) {
     console.error("Error fetching customer leads:", error);
     return NextResponse.json({ error: 'Failed to fetch customer leads' }, { status: 500 });

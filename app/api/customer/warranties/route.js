@@ -1,22 +1,79 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import crypto from 'crypto';
+import { supabase, supabaseAdmin } from '@/lib/supabase';
+import { decryptToken } from '@/lib/crypto';
 
-// GET all warranties for a customer phone number
-export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  const phone = searchParams.get('phone');
+function getAuthorizedCustomer(request) {
+  const authHeader = request.headers.get('authorization') || '';
+  const token = authHeader.replace(/^Bearer\s+/i, '').trim() ||
+                request.headers.get('x-customer-auth') ||
+                new URL(request.url).searchParams.get('token');
 
-  if (!phone) {
-    return NextResponse.json({ error: 'Phone number is required' }, { status: 400 });
+  if (!token) return null;
+
+  // 1. Admin token check
+  const expectedPassword = process.env.ADMIN_PASSWORD || 'CarpenterwalaAdmin2026';
+  const expectedAdminToken = crypto
+    .createHash('sha256')
+    .update(expectedPassword + 'carpenterwala-salt-2026')
+    .digest('hex');
+  if (token === expectedAdminToken || token === expectedPassword) {
+    return { isAdmin: true };
   }
 
-  try {
-    const { data: warranties, error } = await supabase
-      .from('warranties')
-      .select('*')
-      .eq('customer_phone', phone)
-      .order('created_at', { ascending: false });
+  // 2. Customer token check
+  const decrypted = decryptToken(token);
+  if (!decrypted) return null;
+  if (decrypted.expiresAt && decrypted.expiresAt < Date.now()) return null;
+  if (decrypted.type !== 'customer_session' && decrypted.type !== 'customer_otp') return null;
 
+  return decrypted;
+}
+
+async function resolveCustomerPhone(auth) {
+  if (auth.isAdmin) return null;
+  if (auth.phone) return String(auth.phone).trim();
+
+  if (auth.email) {
+    const client = supabaseAdmin || supabase;
+    const { data: customer } = await client
+      .from('customers')
+      .select('phone')
+      .eq('email', String(auth.email).toLowerCase().trim())
+      .maybeSingle();
+    return customer?.phone || null;
+  }
+  return null;
+}
+
+// GET all warranties for an authenticated customer
+export async function GET(request) {
+  const auth = getAuthorizedCustomer(request);
+  if (!auth) {
+    return NextResponse.json({ error: 'Unauthorized: Valid customer session required' }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(request.url);
+  const requestedPhone = searchParams.get('phone');
+  const client = supabaseAdmin || supabase;
+
+  try {
+    let query = client.from('warranties').select('*').order('created_at', { ascending: false });
+
+    if (!auth.isAdmin) {
+      const customerPhone = await resolveCustomerPhone(auth);
+      if (!customerPhone) {
+        return NextResponse.json({ error: 'Customer account not found' }, { status: 403 });
+      }
+      if (requestedPhone && requestedPhone !== customerPhone) {
+        return NextResponse.json({ error: 'Forbidden: Cannot view warranties of another account' }, { status: 403 });
+      }
+      query = query.eq('customer_phone', customerPhone);
+    } else if (requestedPhone) {
+      query = query.eq('customer_phone', requestedPhone);
+    }
+
+    const { data: warranties, error } = await query;
     if (error) {
       console.error("Supabase GET error:", error);
       throw error;
@@ -31,6 +88,11 @@ export async function GET(request) {
 
 // POST: Add a new warranty
 export async function POST(request) {
+  const auth = getAuthorizedCustomer(request);
+  if (!auth) {
+    return NextResponse.json({ error: 'Unauthorized: Valid customer session required' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const {
@@ -46,14 +108,24 @@ export async function POST(request) {
       notes
     } = body;
 
-    if (!customer_phone || !category || !appliance_name) {
-      return NextResponse.json({ error: 'Required fields: customer_phone, category, and appliance_name are mandatory' }, { status: 400 });
+    let targetPhone = customer_phone;
+    if (!auth.isAdmin) {
+      const customerPhone = await resolveCustomerPhone(auth);
+      if (!customerPhone) {
+        return NextResponse.json({ error: 'Customer account not found' }, { status: 403 });
+      }
+      targetPhone = customerPhone;
     }
 
-    const { data, error } = await supabase
+    if (!targetPhone || !category || !appliance_name) {
+      return NextResponse.json({ error: 'Required fields: category and appliance_name are mandatory' }, { status: 400 });
+    }
+
+    const client = supabaseAdmin || supabase;
+    const { data, error } = await client
       .from('warranties')
       .insert([{
-        customer_phone,
+        customer_phone: targetPhone,
         category,
         appliance_name,
         purchase_date: purchase_date || null,
@@ -81,6 +153,11 @@ export async function POST(request) {
 
 // DELETE: Remove a warranty record
 export async function DELETE(request) {
+  const auth = getAuthorizedCustomer(request);
+  if (!auth) {
+    return NextResponse.json({ error: 'Unauthorized: Valid customer session required' }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id');
 
@@ -88,8 +165,27 @@ export async function DELETE(request) {
     return NextResponse.json({ error: 'Warranty ID is required' }, { status: 400 });
   }
 
+  const client = supabaseAdmin || supabase;
+
   try {
-    const { error } = await supabase
+    if (!auth.isAdmin) {
+      const customerPhone = await resolveCustomerPhone(auth);
+      if (!customerPhone) {
+        return NextResponse.json({ error: 'Customer account not found' }, { status: 403 });
+      }
+      // Ensure the warranty belongs to the customer
+      const { data: existing } = await client
+        .from('warranties')
+        .select('customer_phone')
+        .eq('id', id)
+        .maybeSingle();
+
+      if (!existing || existing.customer_phone !== customerPhone) {
+        return NextResponse.json({ error: 'Forbidden: Cannot delete warranty of another customer' }, { status: 403 });
+      }
+    }
+
+    const { error } = await client
       .from('warranties')
       .delete()
       .eq('id', id);
@@ -108,6 +204,11 @@ export async function DELETE(request) {
 
 // PUT: Update an existing warranty
 export async function PUT(request) {
+  const auth = getAuthorizedCustomer(request);
+  if (!auth) {
+    return NextResponse.json({ error: 'Unauthorized: Valid customer session required' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const {
@@ -127,7 +228,25 @@ export async function PUT(request) {
       return NextResponse.json({ error: 'Warranty ID is required for update' }, { status: 400 });
     }
 
-    const { data, error } = await supabase
+    const client = supabaseAdmin || supabase;
+
+    if (!auth.isAdmin) {
+      const customerPhone = await resolveCustomerPhone(auth);
+      if (!customerPhone) {
+        return NextResponse.json({ error: 'Customer account not found' }, { status: 403 });
+      }
+      const { data: existing } = await client
+        .from('warranties')
+        .select('customer_phone')
+        .eq('id', id)
+        .maybeSingle();
+
+      if (!existing || existing.customer_phone !== customerPhone) {
+        return NextResponse.json({ error: 'Forbidden: Cannot update warranty of another customer' }, { status: 403 });
+      }
+    }
+
+    const { data, error } = await client
       .from('warranties')
       .update({
         category,

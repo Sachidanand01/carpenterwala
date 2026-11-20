@@ -8,5 +8,8 @@ export async function resolve(specifier, context, nextResolve) {
     const fileUrl = new URL('../' + withExt, import.meta.url).href;
     return nextResolve(fileUrl, context);
   }
+  if ((specifier.startsWith('./') || specifier.startsWith('../')) && !/\.[a-z0-9]+$/i.test(specifier)) {
+    return nextResolve(`${specifier}.js`, context);
+  }
   return nextResolve(specifier, context);
 }

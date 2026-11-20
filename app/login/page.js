@@ -300,6 +300,9 @@ function CustomerLoginContent() {
 
         // Save new user profile to localStorage
         if (typeof window !== 'undefined') {
+          if (regData.customerToken || verifyData.customerToken) {
+            localStorage.setItem('customer_token', regData.customerToken || verifyData.customerToken);
+          }
           localStorage.setItem('customer_phone', regData.customer.phone);
           localStorage.setItem('customer_name', regData.customer.name);
           localStorage.setItem('customer_email', regData.customer.email);
@@ -307,11 +310,15 @@ function CustomerLoginContent() {
           router.push(redirect || '/bookings');
         }
       } else {
-        // activeTab === 'login' - save fetched customer details
-        if (typeof window !== 'undefined' && fetchedCustomer) {
-          localStorage.setItem('customer_phone', fetchedCustomer.phone);
-          localStorage.setItem('customer_name', fetchedCustomer.name);
-          localStorage.setItem('customer_email', fetchedCustomer.email);
+        // activeTab === 'login' - save customer details
+        const resolvedCustomer = verifyData.customer || fetchedCustomer;
+        if (typeof window !== 'undefined' && resolvedCustomer) {
+          if (verifyData.customerToken) {
+            localStorage.setItem('customer_token', verifyData.customerToken);
+          }
+          localStorage.setItem('customer_phone', resolvedCustomer.phone);
+          localStorage.setItem('customer_name', resolvedCustomer.name);
+          localStorage.setItem('customer_email', resolvedCustomer.email);
           window.dispatchEvent(new Event('customer-login-changed'));
           router.push(redirect || '/bookings');
         }

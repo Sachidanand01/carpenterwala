@@ -16,10 +16,39 @@ GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
 GRANT ALL ON ALL TABLES IN SCHEMA public TO service_role;
 GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO service_role;
 
--- Grant standard public client access
+-- Grant standard public client access (Reviews & Leads)
 GRANT SELECT, INSERT ON public.reviews TO anon, authenticated;
 GRANT INSERT ON public.leads TO anon, authenticated;
-GRANT SELECT ON public.profiles TO anon, authenticated;
+
+-- F-03 Hardening: Revoke table-level ALL on profiles from public roles
+REVOKE ALL ON public.profiles FROM anon, authenticated;
+
+-- Column-level SELECT on non-sensitive columns only
+GRANT SELECT (
+  id,
+  pro_code,
+  slug,
+  name,
+  trade,
+  experience,
+  location,
+  latitude,
+  longitude,
+  about,
+  skills,
+  portfolio,
+  avatar,
+  languages,
+  verified,
+  accepting_leads,
+  service_radius_km,
+  average_rating,
+  created_at,
+  city,
+  locality,
+  pincode,
+  experience_years
+) ON public.profiles TO anon, authenticated;
 
 -- 3. Enable Row Level Security (RLS) on core tables
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
@@ -29,7 +58,7 @@ ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
 -- 4. Create secure 'public_profiles' view for public frontend directory queries
 -- Exposes ONLY public marketing and presentation fields.
 -- Completely omits: aadhaar_front, aadhaar_back, pan_front, pan_back, 
--- voter_driving_front, voter_driving_back, police_verification, full_address, rejection_reason, email.
+-- voter_driving_front, voter_driving_back, police_verification, full_address, rejection_reason, email, phone.
 CREATE OR REPLACE VIEW public.public_profiles
 WITH (security_invoker = true) AS
 SELECT 
@@ -69,13 +98,7 @@ ON public.profiles
 FOR SELECT 
 USING (verified = true);
 
--- Allow new service professionals to register initial profile record
-CREATE POLICY "Allow public insert profiles" 
-ON public.profiles 
-FOR INSERT 
-WITH CHECK (true);
-
--- (Note: Profile updates and sensitive KYC access are performed server-side via Next.js API routes using the Service Role)
+-- (Note: Profile creation, KYC verification, and sensitive updates are strictly performed server-side via Next.js API routes using the Service Role)
 
 -- 6. POLICIES FOR 'reviews'
 DROP POLICY IF EXISTS "Allow public read reviews" ON public.reviews;

@@ -268,7 +268,8 @@ export async function POST(request) {
         onboarding_step: 1
       };
 
-      let { data: newProfile, error: insertError } = await supabase
+      const client = supabaseAdmin || supabase;
+      let { data: newProfile, error: insertError } = await client
         .from('profiles')
         .insert(profilePayload)
         .select()
@@ -276,7 +277,7 @@ export async function POST(request) {
 
       if (insertError && (insertError.message?.includes('pro_code') || insertError.code === '42703')) {
         delete profilePayload.pro_code;
-        const retry = await supabase
+        const retry = await client
           .from('profiles')
           .insert(profilePayload)
           .select()

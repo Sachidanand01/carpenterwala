@@ -97,17 +97,11 @@ function AuthCallbackContent() {
       } else if (role === 'pro') {
         if (isMounted) setStatus('Checking Professional account...');
         try {
-          const { data: profile, error: proErr } = await supabase
-            .from('profiles')
-            .select('id, slug, name, trade, location, email, phone')
-            .eq('email', email.toLowerCase())
-            .maybeSingle();
+          const res = await fetch(`/api/pro/check?email=${encodeURIComponent(email.toLowerCase())}`);
+          const data = await res.json();
 
-          if (proErr) {
-            console.error('Pro lookup error:', proErr);
-          }
-
-          if (profile) {
+          if (res.ok && data.registered && data.pro) {
+            const profile = data.pro;
             // Existing Pro found
             if (typeof window !== 'undefined') {
               localStorage.setItem('pro_id', profile.id);

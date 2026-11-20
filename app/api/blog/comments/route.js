@@ -42,15 +42,17 @@ export async function GET(request) {
 
     const commentReactions = reactions || [];
 
-    // 3. Map reactions to each comment
+    // 3. Map reactions to each comment, stripping private author_email (F-04 remediation)
     const commentsWithReactions = comments.map((comment) => {
       const reactionsForComment = commentReactions.filter((r) => r.comment_id === comment.id);
       const likes = reactionsForComment.filter((r) => r.reaction_type === 'like').length;
       const dislikes = reactionsForComment.filter((r) => r.reaction_type === 'dislike').length;
       const userReaction = reactionsForComment.find((r) => r.user_email === userEmail)?.reaction_type || null;
 
+      const { author_email, ...safeComment } = comment;
+
       return {
-        ...comment,
+        ...safeComment,
         likes,
         dislikes,
         userReaction,

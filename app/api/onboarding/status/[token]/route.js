@@ -111,6 +111,42 @@ export async function GET(request, { params }) {
     const isExpired = session.status === 'EXPIRED';
     const profile = session.status === 'VERIFIED' ? await getOnboardingSessionProfile(session) : null;
 
+    // Security Hardening (F-01): Redact sensitive tokens and private KYC documents when queried by phone number
+    if (looksLikePhone) {
+      return NextResponse.json({
+        success: true,
+        status: session.status,
+        is_expired: isExpired,
+        expired_title: isExpired ? localizedExpired.title : null,
+        expired_message: isExpired ? localizedExpired.message : null,
+        localized_expired: isExpired ? LOCALIZED_EXPIRED_MESSAGES : undefined,
+        profile,
+        session: {
+          pro_id: session.pro_id || null,
+          phone_number: session.phone_number,
+          email: session.email ? session.email.replace(/(?<=.).(?=[^@]*?@)/g, '*') : null,
+          full_name: session.full_name,
+          trade: session.trade,
+          city: session.city,
+          locality: session.locality,
+          pincode: session.pincode,
+          experience_years: session.experience_years,
+          aadhaar_front_url: Boolean(session.aadhaar_front_url) ? '[UPLOADED]' : null,
+          aadhaar_back_url: Boolean(session.aadhaar_back_url) ? '[UPLOADED]' : null,
+          pan_front_url: Boolean(session.pan_front_url) ? '[UPLOADED]' : null,
+          pan_back_url: Boolean(session.pan_back_url) ? '[UPLOADED]' : null,
+          voter_driving_front_url: Boolean(session.voter_driving_front_url) ? '[UPLOADED]' : null,
+          voter_driving_back_url: Boolean(session.voter_driving_back_url) ? '[UPLOADED]' : null,
+          police_verification_url: Boolean(session.police_verification_url) ? '[UPLOADED]' : null,
+          portfolio_urls: session.portfolio_urls || [],
+          status: session.status,
+          expires_at: session.expires_at,
+          verified_at: session.verified_at || null,
+          created_at: session.created_at
+        }
+      });
+    }
+
     return NextResponse.json({
       success: true,
       session_token: session.session_token,

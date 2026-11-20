@@ -159,16 +159,32 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Invalid OTP. Please try again.' }, { status: 400 });
       }
 
+      const client = supabaseAdmin || supabase;
+      const { data: customer } = await client
+        .from('customers')
+        .select('id, first_name, last_name, phone, email')
+        .eq('email', cleanEmail)
+        .maybeSingle();
+
       const customerToken = encryptToken({
         type: 'customer_session',
         email: cleanEmail,
+        phone: customer?.phone || null,
+        customerId: customer?.id || null,
         expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000 // 30 days
       });
+
+      const fullName = customer ? `${customer.first_name} ${customer.last_name || ''}`.trim() : '';
 
       return NextResponse.json({
         success: true,
         message: 'OTP verified successfully.',
-        customerToken
+        customerToken,
+        customer: customer ? {
+          name: fullName,
+          phone: customer.phone,
+          email: customer.email
+        } : null
       });
     }
 

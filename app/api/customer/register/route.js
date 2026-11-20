@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase, supabaseAdmin } from '@/lib/supabase';
+import { encryptToken } from '@/lib/crypto';
 
 export async function POST(request) {
   try {
@@ -46,8 +47,10 @@ export async function POST(request) {
       lastName = '';
     }
 
+    const client = supabaseAdmin || supabase;
+
     // 6. DB Uniqueness Checks (Phone & Email)
-    const { data: existingPhone, error: phoneErr } = await supabase
+    const { data: existingPhone, error: phoneErr } = await client
       .from('customers')
       .select('phone')
       .eq('phone', cleanPhone)
@@ -61,7 +64,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'This mobile number is already registered.' }, { status: 400 });
     }
 
-    const { data: existingEmail, error: emailErr } = await supabase
+    const { data: existingEmail, error: emailErr } = await client
       .from('customers')
       .select('email')
       .eq('email', trimmedEmail.toLowerCase())
@@ -76,7 +79,7 @@ export async function POST(request) {
     }
 
     // 7. Store the Customer Details in DB
-    const { data: customer, error: insertError } = await supabase
+    const { data: customer, error: insertError } = await client
       .from('customers')
       .insert([{
         first_name: firstName,
@@ -93,10 +96,18 @@ export async function POST(request) {
     }
 
     const fullName = `${customer.first_name} ${customer.last_name || ''}`.trim();
+    const customerToken = encryptToken({
+      type: 'customer_session',
+      email: customer.email,
+      phone: customer.phone,
+      customerId: customer.id,
+      expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000 // 30 days
+    });
 
     return NextResponse.json({
       success: true,
       message: 'Account created successfully!',
+      customerToken,
       customer: {
         id: customer.id,
         name: fullName,
