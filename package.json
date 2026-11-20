@@ -18,13 +18,11 @@
     "gsc:analyze": "node scripts/analyze-gsc-export.mjs"
   },
   "dependencies": {
-    "@remotion/cli": "^4.0.512",
     "@supabase/supabase-js": "^2.105.4",
     "leaflet": "^1.9.4",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "remotion": "^4.0.512",
     "resend": "^6.12.3"
   },
   "devDependencies": {
