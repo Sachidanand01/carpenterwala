@@ -14,11 +14,9 @@ function AuthorizeForm() {
   const codeChallengeMethod = searchParams.get('code_challenge_method') || 'S256';
   const scope = searchParams.get('scope') || 'customer pro';
 
-  const [authMode, setAuthMode] = useState('email'); // 'email' or 'phone'
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
-  const [step, setStep] = useState(1); // 1: Enter email/phone, 2: Enter OTP & Consent
+  const [step, setStep] = useState(1); // 1: Enter email, 2: Enter OTP & Consent
   const [otpToken, setOtpToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -38,28 +36,16 @@ function AuthorizeForm() {
     }
   }, [redirectUri]);
 
-  // Step 1: Request OTP
+  // Step 1: Request Email OTP
   const handleSendOtp = async (e) => {
     e.preventDefault();
     setError('');
     setInfoMessage('');
 
-    const payload = { action: 'send' };
-
-    if (authMode === 'email') {
-      const cleanEmail = email.trim().toLowerCase();
-      if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
-        setError('Please enter a valid email address.');
-        return;
-      }
-      payload.email = cleanEmail;
-    } else {
-      const cleanPhone = phone.replace(/[^0-9]/g, '');
-      if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
-        setError('Please enter a valid 10-digit Indian mobile number.');
-        return;
-      }
-      payload.phone = cleanPhone;
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      setError('Please enter a valid email address.');
+      return;
     }
 
     setLoading(true);
@@ -67,7 +53,10 @@ function AuthorizeForm() {
       const res = await fetch('/api/oauth/otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          action: 'send',
+          email: cleanEmail
+        })
       });
 
       const data = await res.json();
@@ -104,6 +93,7 @@ function AuthorizeForm() {
     try {
       const payload = {
         action: 'verify',
+        email: email.trim().toLowerCase(),
         otp: otp.trim(),
         otpToken,
         clientId,
@@ -112,12 +102,6 @@ function AuthorizeForm() {
         codeChallengeMethod,
         scopes: scope.split(' ').filter(Boolean)
       };
-
-      if (authMode === 'email') {
-        payload.email = email.trim().toLowerCase();
-      } else {
-        payload.phone = phone.replace(/[^0-9]/g, '');
-      }
 
       const res = await fetch('/api/oauth/otp', {
         method: 'POST',
@@ -251,137 +235,51 @@ function AuthorizeForm() {
 
       {step === 1 ? (
         <form onSubmit={handleSendOtp}>
-          {/* Method Switcher Tabs */}
-          <div style={{
-            display: 'flex',
-            background: 'rgba(255, 255, 255, 0.06)',
-            borderRadius: '10px',
-            padding: '4px',
-            marginBottom: '1.25rem'
-          }}>
-            <button
-              type="button"
-              onClick={() => { setAuthMode('email'); setError(''); }}
+          <div style={{ marginBottom: '1.25rem' }}>
+            <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: '500', marginBottom: '0.5rem', color: '#e2e8f0' }}>
+              Your Email Address
+            </label>
+            <input
+              type="email"
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoFocus
+              required
               style={{
-                flex: 1,
-                padding: '0.6rem',
-                borderRadius: '8px',
-                border: 'none',
-                background: authMode === 'email' ? '#FF6B00' : 'transparent',
+                width: '100%',
+                background: 'rgba(255, 255, 255, 0.06)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                borderRadius: '12px',
+                padding: '0.85rem 1rem',
+                fontSize: '1rem',
                 color: '#fff',
-                fontSize: '0.85rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
+                outline: 'none',
+                boxSizing: 'border-box'
               }}
-            >
-              ✉️ Email (Instant)
-            </button>
-            <button
-              type="button"
-              onClick={() => { setAuthMode('phone'); setError(''); }}
-              style={{
-                flex: 1,
-                padding: '0.6rem',
-                borderRadius: '8px',
-                border: 'none',
-                background: authMode === 'phone' ? '#FF6B00' : 'transparent',
-                color: '#fff',
-                fontSize: '0.85rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-            >
-              📱 Mobile SMS
-            </button>
+            />
+            <p style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '0.4rem' }}>
+              We'll send a 6-digit verification code to your email. Works for all users instantly.
+            </p>
           </div>
-
-          {authMode === 'email' ? (
-            <div style={{ marginBottom: '1.25rem' }}>
-              <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: '500', marginBottom: '0.5rem', color: '#e2e8f0' }}>
-                Your Email Address
-              </label>
-              <input
-                type="email"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                autoFocus
-                required
-                style={{
-                  width: '100%',
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  borderRadius: '12px',
-                  padding: '0.85rem 1rem',
-                  fontSize: '1rem',
-                  color: '#fff',
-                  outline: 'none',
-                  boxSizing: 'border-box'
-                }}
-              />
-              <p style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '0.4rem' }}>
-                We'll email you a 6-digit login code. Works for all users (no SMS regulations).
-              </p>
-            </div>
-          ) : (
-            <div style={{ marginBottom: '1.25rem' }}>
-              <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: '500', marginBottom: '0.5rem', color: '#e2e8f0' }}>
-                Your Mobile Number
-              </label>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <div style={{
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  borderRadius: '12px',
-                  padding: '0.85rem 1rem',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  color: '#cbd5e1'
-                }}>
-                  +91
-                </div>
-                <input
-                  type="tel"
-                  placeholder="Enter 10-digit mobile"
-                  maxLength={10}
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
-                  autoFocus
-                  required
-                  style={{
-                    flex: 1,
-                    background: 'rgba(255, 255, 255, 0.06)',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    borderRadius: '12px',
-                    padding: '0.85rem 1rem',
-                    fontSize: '1rem',
-                    color: '#fff',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-            </div>
-          )}
 
           <button
             type="submit"
-            disabled={loading || (authMode === 'email' ? !email.trim() : phone.length !== 10)}
+            disabled={loading || !email.trim()}
             style={{
               width: '100%',
               padding: '0.9rem',
               borderRadius: '12px',
-              background: loading ? '#475569' : 'linear-gradient(135deg, #FF6B00 0%, #EA580C 100%)',
+              background: loading || !email.trim() ? '#475569' : 'linear-gradient(135deg, #FF6B00 0%, #EA580C 100%)',
               color: '#fff',
               fontSize: '1rem',
               fontWeight: '600',
               border: 'none',
-              cursor: loading ? 'not-allowed' : 'pointer',
+              cursor: loading || !email.trim() ? 'not-allowed' : 'pointer',
               boxShadow: '0 4px 15px rgba(255, 107, 0, 0.3)'
             }}
           >
-            {loading ? 'Sending Code...' : `Send Verification Code`}
+            {loading ? 'Sending Code...' : 'Send Verification Code'}
           </button>
         </form>
       ) : (
@@ -389,14 +287,14 @@ function AuthorizeForm() {
           <div style={{ marginBottom: '1.25rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
               <label style={{ fontSize: '0.88rem', fontWeight: '500', color: '#e2e8f0' }}>
-                Enter 6-Digit Code sent to {authMode === 'email' ? email : `+91 ${phone}`}
+                Enter 6-Digit Code sent to {email}
               </label>
               <button
                 type="button"
                 onClick={() => setStep(1)}
                 style={{ background: 'none', border: 'none', color: '#FF6B00', fontSize: '0.82rem', cursor: 'pointer', textDecoration: 'underline' }}
               >
-                Change
+                Change Email
               </button>
             </div>
             <input
@@ -464,7 +362,7 @@ function AuthorizeForm() {
                 boxShadow: '0 4px 15px rgba(16, 185, 129, 0.3)'
               }}
             >
-              {loading ? 'Authorizing...' : `Approve & Connect`}
+              {loading ? 'Authorizing...' : 'Approve & Connect'}
             </button>
           </div>
         </form>
