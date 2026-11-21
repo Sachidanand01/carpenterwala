@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { translations } from './translations';
@@ -26,15 +26,15 @@ export default function ProLogin({ lang, session, mode }) {
   const [turnstileToken, setTurnstileToken] = useState('');
   const turnstileTokenRef = useRef('');
 
-  const handleTurnstileVerify = (token) => {
+  const handleTurnstileVerify = useCallback((token) => {
     turnstileTokenRef.current = token;
     setTurnstileToken(token);
-  };
+  }, []);
 
-  const handleTurnstileExpire = () => {
+  const handleTurnstileExpire = useCallback(() => {
     turnstileTokenRef.current = '';
     setTurnstileToken('');
-  };
+  }, []);
 
   // Registration Fields
   const [regName, setRegName] = useState('');

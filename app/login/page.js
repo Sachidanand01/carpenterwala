@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef, Suspense } from 'react';
+import { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
@@ -88,15 +88,15 @@ function CustomerLoginContent() {
   const [turnstileToken, setTurnstileToken] = useState('');
   const turnstileTokenRef = useRef('');
 
-  const handleTurnstileVerify = (token) => {
+  const handleTurnstileVerify = useCallback((token) => {
     turnstileTokenRef.current = token;
     setTurnstileToken(token);
-  };
+  }, []);
 
-  const handleTurnstileExpire = () => {
+  const handleTurnstileExpire = useCallback(() => {
     turnstileTokenRef.current = '';
     setTurnstileToken('');
-  };
+  }, []);
 
   const router = useRouter();
   const searchParams = useSearchParams();
