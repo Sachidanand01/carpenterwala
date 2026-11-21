@@ -1,10 +1,11 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { translations } from './translations';
 import { supabase } from '@/lib/supabase';
 import { PRO_TSHIRT_CAMPAIGN } from '@/lib/proCampaign';
+import TurnstileWidget from '@/components/TurnstileWidget';
 
 export default function ProLogin({ lang, session, mode }) {
   const [currentLang, setCurrentLang] = useState(lang || 'en');
@@ -20,6 +21,20 @@ export default function ProLogin({ lang, session, mode }) {
   const [error, setError] = useState('');
   const [errorCode, setErrorCode] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Cloudflare Turnstile bot protection
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const turnstileTokenRef = useRef('');
+
+  const handleTurnstileVerify = (token) => {
+    turnstileTokenRef.current = token;
+    setTurnstileToken(token);
+  };
+
+  const handleTurnstileExpire = () => {
+    turnstileTokenRef.current = '';
+    setTurnstileToken('');
+  };
 
   // Registration Fields
   const [regName, setRegName] = useState('');
@@ -144,10 +159,26 @@ export default function ProLogin({ lang, session, mode }) {
     setError('');
     setLoading(true);
     try {
+      let currentToken = turnstileTokenRef.current || turnstileToken;
+      if (!currentToken) {
+        // Wait briefly (up to 1.5s) if user submitted before turnstile finished rendering
+        for (let i = 0; i < 6; i++) {
+          await new Promise(r => setTimeout(r, 250));
+          if (turnstileTokenRef.current) {
+            currentToken = turnstileTokenRef.current;
+            break;
+          }
+        }
+      }
+
       const res = await fetch('/api/pro/otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'send', email: email.trim().toLowerCase() })
+        body: JSON.stringify({
+          action: 'send',
+          email: email.trim().toLowerCase(),
+          turnstileToken: currentToken
+        })
       });
       const data = await res.json();
       if (!res.ok) {
@@ -241,6 +272,18 @@ export default function ProLogin({ lang, session, mode }) {
     setError('');
     setLoading(true);
     try {
+      let currentToken = turnstileTokenRef.current || turnstileToken;
+      if (!currentToken) {
+        // Wait briefly (up to 1.5s) if user submitted before turnstile finished rendering
+        for (let i = 0; i < 6; i++) {
+          await new Promise(r => setTimeout(r, 250));
+          if (turnstileTokenRef.current) {
+            currentToken = turnstileTokenRef.current;
+            break;
+          }
+        }
+      }
+
       const res = await fetch('/api/pro/otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -250,7 +293,8 @@ export default function ProLogin({ lang, session, mode }) {
           email: regEmail.trim().toLowerCase(),
           phone: regPhone.trim(),
           trade: finalTrade,
-          location: regLocation.trim()
+          location: regLocation.trim(),
+          turnstileToken: currentToken
         })
       });
       const data = await res.json();
@@ -1197,6 +1241,15 @@ export default function ProLogin({ lang, session, mode }) {
                         onChange={(e) => setEmail(e.target.value)} style={inputStyle} />
                       <span style={{ fontSize: '0.75rem', opacity: 0.55 }}>{t.help_email}</span>
                     </div>
+
+                    <div style={{ marginTop: '0.25rem' }}>
+                      <TurnstileWidget
+                        theme="dark"
+                        onVerify={handleTurnstileVerify}
+                        onExpire={handleTurnstileExpire}
+                      />
+                    </div>
+
                     <button type="submit" disabled={loading} className="btn btn-primary"
                       style={{ marginTop: '0.5rem', width: '100%' }}>
                       {loading ? t.btn_sending_otp : t.btn_send_otp}
@@ -1266,6 +1319,15 @@ export default function ProLogin({ lang, session, mode }) {
                         />
                       </div>
                     )}
+
+                    <div style={{ marginTop: '0.25rem' }}>
+                      <TurnstileWidget
+                        theme="dark"
+                        onVerify={handleTurnstileVerify}
+                        onExpire={handleTurnstileExpire}
+                      />
+                    </div>
+
                     <button type="submit" disabled={loading} className="btn btn-primary"
                       style={{ marginTop: '0.75rem', width: '100%' }}>
                       {loading ? t.btn_sending_otp : t.btn_register_verify}

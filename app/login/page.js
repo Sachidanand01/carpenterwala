@@ -1,8 +1,9 @@
 'use client';
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import TurnstileWidget from '@/components/TurnstileWidget';
 
 function PromoVideo({ src, title, description }) {
   const [videoError, setVideoError] = useState(false);
@@ -82,6 +83,20 @@ function CustomerLoginContent() {
 
   // Track existing customer details fetched on successful login-check
   const [fetchedCustomer, setFetchedCustomer] = useState(null);
+
+  // Cloudflare Turnstile bot protection
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const turnstileTokenRef = useRef('');
+
+  const handleTurnstileVerify = (token) => {
+    turnstileTokenRef.current = token;
+    setTurnstileToken(token);
+  };
+
+  const handleTurnstileExpire = () => {
+    turnstileTokenRef.current = '';
+    setTurnstileToken('');
+  };
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -221,10 +236,26 @@ function CustomerLoginContent() {
 
     // Call customer OTP API to trigger real email OTP in production or simulated OTP banner
     try {
+      let currentToken = turnstileTokenRef.current || turnstileToken;
+      if (!currentToken) {
+        // Wait briefly (up to 1.5s) if user submitted before turnstile finished rendering
+        for (let i = 0; i < 6; i++) {
+          await new Promise(r => setTimeout(r, 250));
+          if (turnstileTokenRef.current) {
+            currentToken = turnstileTokenRef.current;
+            break;
+          }
+        }
+      }
+
       const otpRes = await fetch('/api/customer/otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'send', email: email.trim().toLowerCase() })
+        body: JSON.stringify({
+          action: 'send',
+          email: email.trim().toLowerCase(),
+          turnstileToken: currentToken
+        })
       });
       const otpData = await otpRes.json();
 
@@ -344,6 +375,8 @@ function CustomerLoginContent() {
     setOtp('');
     setGeneratedOtp('');
     setOtpToken('');
+    turnstileTokenRef.current = '';
+    setTurnstileToken('');
     setOtpSentAlert(false);
     setError('');
     setInfoMessage('');
@@ -668,11 +701,19 @@ function CustomerLoginContent() {
                   </>
                 )}
 
+                <div style={{ marginTop: "0.5rem" }}>
+                  <TurnstileWidget
+                    theme="dark"
+                    onVerify={handleTurnstileVerify}
+                    onExpire={handleTurnstileExpire}
+                  />
+                </div>
+
                 <button
                   type="submit"
                   disabled={loading}
                   className="btn btn-primary"
-                  style={{ marginTop: "1rem", width: "100%", padding: "0.8rem", fontSize: "0.95rem" }}
+                  style={{ marginTop: "0.5rem", width: "100%", padding: "0.8rem", fontSize: "0.95rem" }}
                 >
                   {loading ? 'Processing...' : activeTab === 'register' ? 'Register & Send OTP' : 'Send OTP'}
                 </button>
