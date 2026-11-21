@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { executeTool } from '@/lib/mcp/tool-handlers';
 import { MCP_TOOLS } from '@/lib/mcp/tool-definitions';
 import { checkWindowRateLimit, getClientIp, buildRateLimitHeaders } from '@/lib/rate-limiter';
+import { verifyOAuthAccessToken } from '@/lib/oauth';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -13,7 +14,11 @@ const READ_ONLY_TOOLS = new Set([
   'search_verified_pros',
   'get_service_rate_card',
   'calculate_service_estimate',
-  'check_onboarding_status'
+  'check_onboarding_status',
+  'get_my_warranties',
+  'get_my_bookings',
+  'get_my_assigned_jobs',
+  'get_my_pro_dashboard'
 ]);
 
 export async function OPTIONS() {
@@ -22,10 +27,12 @@ export async function OPTIONS() {
 
 function getClientContext(request) {
   const ip = getClientIp(request);
+  const authHeader = request.headers.get('authorization') || '';
+  const auth = verifyOAuthAccessToken(authHeader);
   const host = request.headers.get('host') || 'carpenterwala.com';
   const proto = request.headers.get('x-forwarded-proto') || 'https';
   const origin = `${proto}://${host}`;
-  return { ip, origin };
+  return { ip, origin, auth };
 }
 
 // GET /api/mcp/tools/[toolName] — Support GET queries for read-only tools only

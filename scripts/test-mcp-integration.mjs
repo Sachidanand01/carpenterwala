@@ -5,8 +5,8 @@ import { checkRateLimit } from '../lib/rate-limiter.js';
 async function runTests() {
   console.log('=== 1. Validating MCP Tool Definitions ===');
   console.log(`Found ${MCP_TOOLS.length} declared tools.`);
-  if (MCP_TOOLS.length !== 6) {
-    throw new Error(`Expected 6 tools, found ${MCP_TOOLS.length}`);
+  if (MCP_TOOLS.length !== 13) {
+    throw new Error(`Expected 13 tools, found ${MCP_TOOLS.length}`);
   }
   const names = MCP_TOOLS.map(t => t.name);
   console.log(' Tools:', names.join(', '));

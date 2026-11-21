@@ -1,9 +1,9 @@
 {
   "serverInfo": {
     "name": "carpenterwala-mcp-server",
-    "title": "Carpenterwala Pan-India Home Services & AI Pro Onboarding",
+    "title": "Carpenterwala Pan-India Home Services, AI Pro Onboarding & Customer Portal",
     "version": "1.0.0",
-    "description": "Carpenterwala Pan-India Home Improvement Marketplace & 0% Commission AI Pro Onboarding Remote MCP Server for carpenters, painters, plumbers, and electricians."
+    "description": "Carpenterwala Pan-India Home Improvement Marketplace, 0% Commission AI Pro Onboarding, and Customer/Pro OAuth 2.1 self-service portals."
   },
   "protocolVersion": "2024-11-05",
   "transport": {
@@ -11,8 +11,15 @@
     "endpoint": "https://carpenterwala.com/api/mcp"
   },
   "authentication": {
-    "type": "none",
-    "notes": "Public session-based MCP server. KYC document uploads happen on an expiring 60-minute mobile upload link (/v/[token]) directly to private admin-only storage."
+    "type": "oauth2",
+    "authorizationUrl": "https://carpenterwala.com/oauth/authorize",
+    "tokenUrl": "https://carpenterwala.com/api/oauth/token",
+    "discoveryUrl": "https://carpenterwala.com/.well-known/oauth-authorization-server",
+    "scopes": {
+      "customer": "Access appliance warranties and repair bookings",
+      "pro": "Access assigned leads and job management"
+    },
+    "notes": "Public discovery and marketplace inquiry tools require no authentication. Customer and Pro authenticated tools require OAuth 2.1 Authorization Code grant with PKCE (S256) via mobile OTP."
   },
   "capabilities": {
     "tools": {
@@ -43,6 +50,34 @@
     {
       "name": "request_service_callback",
       "title": "Request Verified Service Callback / Lead"
+    },
+    {
+      "name": "get_my_warranties",
+      "title": "Get My Appliance Warranties & Invoices (Customer Auth)"
+    },
+    {
+      "name": "get_my_bookings",
+      "title": "Get My Repair Bookings & Status (Customer Auth)"
+    },
+    {
+      "name": "book_service_job",
+      "title": "Book Verified Home Repair Service (Customer Auth)"
+    },
+    {
+      "name": "get_my_assigned_jobs",
+      "title": "Get My Assigned Leads & Active Jobs (Pro Auth)"
+    },
+    {
+      "name": "update_job_status",
+      "title": "Update Job Lifecycle Status (Pro Auth)"
+    },
+    {
+      "name": "get_my_pro_dashboard",
+      "title": "Get My Technician Performance Dashboard (Pro Auth)"
+    },
+    {
+      "name": "set_my_availability",
+      "title": "Toggle Lead Acceptance & Working Hours (Pro Auth)"
     }
   ],
   "documentation": {

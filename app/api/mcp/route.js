@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { MCP_TOOLS } from '@/lib/mcp/tool-definitions';
 import { executeTool } from '@/lib/mcp/tool-handlers';
 import { checkWindowRateLimit, getClientIp, buildRateLimitHeaders } from '@/lib/rate-limiter';
+import { verifyOAuthAccessToken } from '@/lib/oauth';
 
 const PROTOCOL_VERSION = '2024-11-05';
 const SERVER_INFO = {
@@ -43,24 +44,26 @@ export async function DELETE() {
 
 function getClientContext(request) {
   const ip = getClientIp(request);
+  const authHeader = request.headers.get('authorization') || '';
+  const auth = verifyOAuthAccessToken(authHeader);
 
   const host = request.headers.get('x-forwarded-host') || request.headers.get('host');
   if (host) {
     const defaultProto = host.includes('localhost') || host.includes('127.0.0.1') ? 'http' : 'https';
     const proto = request.headers.get('x-forwarded-proto') || defaultProto;
-    return { ip, origin: `${proto}://${host}` };
+    return { ip, origin: `${proto}://${host}`, auth };
   }
 
   try {
     const urlOrigin = new URL(request.url).origin;
     if (urlOrigin && urlOrigin !== 'null') {
-      return { ip, origin: urlOrigin };
+      return { ip, origin: urlOrigin, auth };
     }
   } catch {
     // Fallback to default origin
   }
 
-  return { ip, origin: process.env.NEXT_PUBLIC_SITE_URL || 'https://carpenterwala.com' };
+  return { ip, origin: process.env.NEXT_PUBLIC_SITE_URL || 'https://carpenterwala.com', auth };
 }
 
 // GET /api/mcp — Server discovery or SSE stream

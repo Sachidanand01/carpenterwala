@@ -22,50 +22,78 @@ export async function GET(request) {
 
   const paths = {};
 
-  for (const tool of MCP_TOOLS) {
-    const isGetFriendly = ['search_verified_pros', 'get_service_rate_card', 'check_onboarding_status'].includes(tool.name);
+  const CUSTOMER_TOOLS = new Set(['get_my_warranties', 'get_my_bookings', 'book_service_job']);
+  const PRO_TOOLS = new Set(['get_my_assigned_jobs', 'update_job_status', 'get_my_pro_dashboard', 'set_my_availability']);
 
-    paths[`/api/mcp/tools/${tool.name}`] = {
-      post: {
-        summary: tool.title,
-        description: tool.description,
-        operationId: tool.name,
-        requestBody: {
-          required: true,
+  for (const tool of MCP_TOOLS) {
+    const isGetFriendly = [
+      'search_verified_pros',
+      'get_service_rate_card',
+      'calculate_service_estimate',
+      'check_onboarding_status',
+      'get_my_warranties',
+      'get_my_bookings',
+      'get_my_assigned_jobs',
+      'get_my_pro_dashboard'
+    ].includes(tool.name);
+
+    let securityRequirement = [];
+    if (CUSTOMER_TOOLS.has(tool.name)) {
+      securityRequirement = [{ oauth2: ['customer'] }];
+    } else if (PRO_TOOLS.has(tool.name)) {
+      securityRequirement = [{ oauth2: ['pro'] }];
+    }
+
+    const postOp = {
+      summary: tool.title,
+      description: tool.description,
+      operationId: tool.name,
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: tool.inputSchema
+          }
+        }
+      },
+      responses: {
+        '200': {
+          description: 'Successful execution',
           content: {
             'application/json': {
-              schema: tool.inputSchema
-            }
-          }
-        },
-        responses: {
-          '200': {
-            description: 'Successful execution',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    success: { type: 'boolean' },
-                    tool: { type: 'string' },
-                    result: { type: 'object' }
-                  }
+              schema: {
+                type: 'object',
+                properties: {
+                  success: { type: 'boolean' },
+                  tool: { type: 'string' },
+                  result: { type: 'object' }
                 }
               }
             }
-          },
-          '400': {
-            description: 'Validation error or invalid input parameters'
-          },
-          '429': {
-            description: 'Rate limit exceeded (max 5 onboarding sessions/24h per phone, 60 MCP requests/hr per IP)'
           }
+        },
+        '400': {
+          description: 'Validation error or invalid input parameters'
+        },
+        '401': {
+          description: 'OAuth 2.1 authentication required (valid Bearer token missing)'
+        },
+        '429': {
+          description: 'Rate limit exceeded (max 5 onboarding sessions/24h per phone, 60 MCP requests/hr per IP)'
         }
       }
     };
 
+    if (securityRequirement.length > 0) {
+      postOp.security = securityRequirement;
+    }
+
+    paths[`/api/mcp/tools/${tool.name}`] = {
+      post: postOp
+    };
+
     if (isGetFriendly) {
-      paths[`/api/mcp/tools/${tool.name}`].get = {
+      const getOp = {
         summary: `${tool.title} (Query)`,
         description: tool.description,
         operationId: `${tool.name}_get`,
@@ -93,9 +121,18 @@ export async function GET(request) {
                 }
               }
             }
+          },
+          '401': {
+            description: 'OAuth 2.1 authentication required'
           }
         }
       };
+
+      if (securityRequirement.length > 0) {
+        getOp.security = securityRequirement;
+      }
+
+      paths[`/api/mcp/tools/${tool.name}`].get = getOp;
     }
   }
 
@@ -104,7 +141,7 @@ export async function GET(request) {
     info: {
       title: 'Carpenterwala AI Agent & MCP Tool API',
       version: '1.0.0',
-      description: 'Official API and Model Context Protocol (MCP) tools for Carpenterwala — Pan-India 0% commission technician onboarding and Bangalore verified homeowner marketplace (carpenters, painters, plumbers, electricians).',
+      description: 'Official API and Model Context Protocol (MCP) tools for Carpenterwala — Pan-India 0% commission technician onboarding, Bangalore verified marketplace, and Customer/Pro OAuth 2.1 self-service portals.',
       contact: {
         name: 'Carpenterwala Support',
         email: 'contact@carpenterwala.com',
@@ -123,7 +160,22 @@ export async function GET(request) {
     ],
     paths,
     components: {
-      securitySchemes: {}
+      securitySchemes: {
+        oauth2: {
+          type: 'oauth2',
+          description: 'Carpenterwala OAuth 2.1 Authorization Code Grant with PKCE',
+          flows: {
+            authorizationCode: {
+              authorizationUrl: `${serverUrl}/oauth/authorize`,
+              tokenUrl: `${serverUrl}/api/oauth/token`,
+              scopes: {
+                customer: 'Access appliance warranties and repair bookings',
+                pro: 'Access assigned leads and job management'
+              }
+            }
+          }
+        }
+      }
     }
   };
 

@@ -12,8 +12,8 @@ async function testRoutes() {
   const res1 = await mcpGet(req1);
   const data1 = await res1.json();
   console.log('Status:', res1.status, 'Server name:', data1.server?.name, 'Tools count:', data1.toolsCount);
-  if (data1.status !== 'online' || data1.toolsCount !== 6) {
-    throw new Error('GET /api/mcp returned invalid discovery response');
+  if (data1.status !== 'online' || data1.toolsCount !== 13) {
+    throw new Error(`GET /api/mcp returned invalid discovery response (toolsCount: ${data1.toolsCount})`);
   }
 
   console.log('\n=== 2. Testing POST /api/mcp (JSON-RPC initialize) ===');
@@ -47,8 +47,8 @@ async function testRoutes() {
   const resList = await mcpPost(reqList);
   const dataList = await resList.json();
   console.log('Tools listed:', dataList.result?.tools?.length);
-  if (dataList.result?.tools?.length !== 6) {
-    throw new Error('tools/list did not return 6 tools');
+  if (dataList.result?.tools?.length !== 13) {
+    throw new Error(`tools/list did not return 13 tools (got ${dataList.result?.tools?.length})`);
   }
 
   console.log('\n=== 4. Testing POST /api/mcp (JSON-RPC tools/call for rate card) ===');
