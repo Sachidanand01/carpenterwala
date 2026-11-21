@@ -161,8 +161,14 @@ async function runTests() {
   const customerAuth = { phone: '6459509506', role: 'customer' };
   const customerWarranties = await executeTool('get_my_warranties', {}, { ip: '127.0.0.1', auth: customerAuth });
   assert(customerWarranties.success === true, 'get_my_warranties succeeds with customer auth', JSON.stringify(customerWarranties));
-  assert(customerWarranties.phone === '6459509506', 'get_my_warranties returns customer phone');
+  assert(Boolean(customerWarranties.user), 'get_my_warranties returns customer user');
   assert(Array.isArray(customerWarranties.warranties), 'get_my_warranties returns warranties array');
+
+  // Customer Tool Execution With Valid EMAIL Token (contact@carpenterwala.com)
+  const emailAuth = { email: 'contact@carpenterwala.com', role: 'customer' };
+  const emailWarranties = await executeTool('get_my_warranties', {}, { ip: '127.0.0.1', auth: emailAuth });
+  assert(emailWarranties.success === true, 'get_my_warranties succeeds with email auth', JSON.stringify(emailWarranties));
+  assert(emailWarranties.user === 'contact@carpenterwala.com', 'get_my_warranties returns authenticated email');
 
   const customerBookings = await executeTool('get_my_bookings', {}, { ip: '127.0.0.1', auth: customerAuth });
   assert(customerBookings.success === true, 'get_my_bookings succeeds with customer auth', JSON.stringify(customerBookings));

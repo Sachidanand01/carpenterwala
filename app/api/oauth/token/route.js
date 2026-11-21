@@ -130,6 +130,7 @@ export async function POST(request) {
     // 4. Issue OAuth 2.1 Access Token (30 days TTL)
     const accessToken = createOAuthAccessToken({
       phone: authCode.phone,
+      email: authCode.email,
       role: authCode.role,
       proId: authCode.proId,
       clientId: clientId || authCode.clientId || 'unknown',
@@ -143,6 +144,7 @@ export async function POST(request) {
       scope: (authCode.scopes || ['customer']).join(' '),
       user: {
         phone: authCode.phone,
+        email: authCode.email,
         role: authCode.role,
         proId: authCode.proId
       }
