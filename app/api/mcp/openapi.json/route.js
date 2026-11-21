@@ -22,7 +22,14 @@ export async function GET(request) {
 
   const paths = {};
 
-  const CUSTOMER_TOOLS = new Set(['get_my_warranties', 'get_my_bookings', 'book_service_job']);
+  const CUSTOMER_TOOLS = new Set([
+    'get_my_warranties',
+    'get_my_bookings',
+    'book_service_job',
+    'get_warranty_upload_ticket',
+    'register_warranty',
+    'submit_pro_review'
+  ]);
   const PRO_TOOLS = new Set(['get_my_assigned_jobs', 'update_job_status', 'get_my_pro_dashboard', 'set_my_availability']);
 
   for (const tool of MCP_TOOLS) {
