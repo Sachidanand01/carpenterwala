@@ -56,12 +56,24 @@
       "title": "Get My Appliance Warranties & Invoices (Customer Auth)"
     },
     {
+      "name": "get_warranty_upload_ticket",
+      "title": "Get Warranty Receipt Upload URL (Customer Auth)"
+    },
+    {
+      "name": "register_warranty",
+      "title": "Register Appliance Warranty & Receipt (Customer Auth)"
+    },
+    {
       "name": "get_my_bookings",
       "title": "Get My Repair Bookings & Status (Customer Auth)"
     },
     {
       "name": "book_service_job",
       "title": "Book Verified Home Repair Service (Customer Auth)"
+    },
+    {
+      "name": "submit_pro_review",
+      "title": "Submit Review for Service Professional (Customer Auth)"
     },
     {
       "name": "get_my_assigned_jobs",

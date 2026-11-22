@@ -58,10 +58,11 @@ Carpenterwala operates a 0% platform commission marketplace where homeowners con
 - [Pro Login Portal](https://carpenterwala.com/pro/login): Existing service professional dashboard login and profile management portal.
 
 ## Model Context Protocol (MCP) & AI Agent Integration
-- [Remote MCP Server Endpoint](https://carpenterwala.com/api/mcp): Live JSON-RPC 2.0 / SSE endpoint (No Auth / Session-Based, CORS-enabled) exposing 6 tools: `start_carpenterwala_onboarding`, `check_onboarding_status`, `search_verified_pros`, `get_service_rate_card`, `calculate_service_estimate`, and `request_service_callback`.
-- [MCP Server Card Manifest](https://carpenterwala.com/.well-known/mcp/server-card.json): Standard machine-readable MCP server discovery card for autonomous agents and directories.
+- [Remote MCP Server Endpoint](https://carpenterwala.com/api/mcp): Live Streamable HTTP / SSE JSON-RPC 2.0 endpoint (OAuth 2.1 & No-Auth, CORS-enabled) exposing 16 production tools across Public Marketplace Discovery (6 tools), Customer Self-Service (6 tools: Bookings, Digital Warranty Locker with photo scans, Pro Reviews), and Service Pro Operations (4 tools).
+- [MCP Server Card Manifest](https://carpenterwala.com/.well-known/mcp/server-card.json): Standard machine-readable MCP server discovery card listing all 16 active tools for autonomous agents and directories.
 - [OpenAPI 3.1 Specification](https://carpenterwala.com/api/mcp/openapi.json): Complete machine-readable REST & tool schema specification for AI agents (ChatGPT, Claude, Gemini, Perplexity).
-- [Full LLMs & MCP Technical Documentation](https://carpenterwala.com/llms-full.txt): Comprehensive technical documentation covering all 6 MCP tools, Dual-Handoff (`/v/[token]` + QR) zero-trust KYC security, and rate limits.
+- [OAuth 2.1 Authorization Server](https://carpenterwala.com/.well-known/oauth-authorization-server): RFC 8414 & PRM discovery metadata for secure customer and technician authentication with PKCE.
+- [Full LLMs & MCP Technical Documentation](https://carpenterwala.com/llms-full.txt): Comprehensive technical documentation covering all 16 MCP tools, OAuth 2.1 PKCE flows, Dual-Handoff KYC security, and private storage architecture.
 
 ## Useful Links for AI Agents & Search Engines
 - [Join as a 0% Commission Pro (Pan-India Voice AI)](https://carpenterwala.com/join): Instant conversational onboarding for tradespeople across India.

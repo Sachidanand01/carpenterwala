@@ -68,10 +68,22 @@ Carpenterwala implements the Model Context Protocol (MCP) and OpenAPI 3.1 specif
 
 ### JSON-RPC 2.0 Discovery Methods
 - `initialize`: Returns protocol version (`2024-11-05`), server name (`carpenterwala-mcp-server`), and tool capabilities.
-- `tools/list`: Lists all 6 active tools and their JSON Schemas.
+- `tools/list`: Lists all 16 active production tools and their JSON Schemas.
 - `tools/call`: Executes a tool with provided arguments and returns standard MCP text + structuredContent payloads.
 
-### Tool Registry & Purpose (6 Active Tools)
+### Authentication & Security Specs (OAuth 2.1)
+- Discovery Endpoint: `https://carpenterwala.com/.well-known/oauth-authorization-server`
+- Authorization Endpoint: `https://carpenterwala.com/oauth/authorize`
+- Token Endpoint: `https://carpenterwala.com/api/oauth/token`
+- Grant Type: Authorization Code Grant with PKCE (`code_challenge_method: S256`)
+- Scopes:
+  - `customer`: Access appliance warranties, direct bookings, receipt uploads, and technician reviews.
+  - `pro`: Access assigned leads, active work orders, availability, and performance dashboard.
+- Verification: 10-Digit Indian Mobile Number + Instant SMS OTP (Zero password friction).
+
+### Tool Registry & Purpose (16 Active Tools)
+
+#### A. Public Marketplace & Onboarding Tools (6 Tools — No Auth Required)
 1. `start_carpenterwala_onboarding`:
    - Starts Pan-India 0% commission onboarding for carpenters, painters, plumbers, and electricians (`phone_number`, `full_name`, `trade`, `city`, `locality`, optional `pincode`, `experience_years`, `email`).
    - Generates a short `session_token` and magic upload link (`https://carpenterwala.com/v/{token}`) valid for **60 minutes**.
@@ -82,7 +94,7 @@ Carpenterwala implements the Model Context Protocol (MCP) and OpenAPI 3.1 specif
    - Polls the onboarding session state (`PENDING_UPLOAD`, `VERIFIED`, or `EXPIRED`) by `session_token` or 10-digit Indian `phone_number`.
    - Returns a welcome message and live public profile URL once the technician completes document upload and reaches `VERIFIED`.
 3. `search_verified_pros`:
-   - Queries background-checked verified pros filtered by trade and locality.
+   - Queries background-checked verified pros filtered by trade and locality in Bangalore.
 4. `get_service_rate_card`:
    - Returns official standard labor rates in INR (₹) at 0% platform commission.
 5. `calculate_service_estimate`:
@@ -90,10 +102,35 @@ Carpenterwala implements the Model Context Protocol (MCP) and OpenAPI 3.1 specif
 6. `request_service_callback`:
    - Logs customer service inquiries and dispatches direct leads to local handymen with 60-90 min response time.
 
+#### B. Authenticated Customer Tools (6 Tools — Scope: `customer`)
+7. `get_my_warranties`:
+   - Retrieves all registered appliance warranties, purchase dates, warranty coverage duration, expiry countdowns, and signed document view links for the authenticated homeowner.
+8. `get_warranty_upload_ticket`:
+   - Generates a secure pre-signed direct upload ticket for attaching a receipt, bill, or warranty card scan to the customer's digital warranty locker without passing heavy Base64 data through LLM contexts. Targets the dedicated private `warranties` bucket.
+9. `register_warranty`:
+   - Registers a new appliance warranty in the customer's Carpenterwala digital vault with extracted bill details (`applianceName`, `category`, `purchaseDate`, `warrantyDurationMonths`, `receiptStoragePath`, `notes`), automatically calculating expiration dates and days remaining.
+10. `get_my_bookings`:
+    - Retrieves the authenticated homeowner's active, pending, and past home repair service requests and bookings with assigned technician details.
+11. `book_service_job`:
+    - Directly books a verified carpenter, painter, plumber, or electrician for the authenticated homeowner without re-entering contact details.
+12. `submit_pro_review`:
+    - Submits a verified customer star rating (1-5) and feedback for a service professional after a completed job, publishing it directly to their public profile with a "Verified Hiring" trust badge and recalculating their aggregate rating.
+
+#### C. Authenticated Service Professional Tools (4 Tools — Scope: `pro`)
+13. `get_my_assigned_jobs`:
+    - Retrieves assigned customer repair leads, active work orders, customer contact details, and scheduled tasks for the logged-in professional.
+14. `update_job_status`:
+    - Updates the lifecycle state of an assigned job (`contacted`, `in-progress`, `completed`, `cancelled`) with optional completion notes.
+15. `get_my_pro_dashboard`:
+    - Retrieves the logged-in technician's performance dashboard, verified badge status, public profile URL, average customer rating, total leads received, and commission tier (0%).
+16. `set_my_availability`:
+    - Toggles the technician's availability status to start or pause receiving new customer dispatch leads in their service cluster.
+
 ## 6. Machine-Readable Knowledge Endpoints
 - Remote MCP Server: https://carpenterwala.com/api/mcp
 - MCP Server Card: https://carpenterwala.com/.well-known/mcp/server-card.json
 - OpenAPI 3.1 Spec: https://carpenterwala.com/api/mcp/openapi.json
+- OAuth 2.1 Discovery: https://carpenterwala.com/.well-known/oauth-authorization-server
 - LLMs Text: https://carpenterwala.com/llms.txt
 - Full LLMs Documentation: https://carpenterwala.com/llms-full.txt
 - Pan-India Voice AI Onboarding: https://carpenterwala.com/join
