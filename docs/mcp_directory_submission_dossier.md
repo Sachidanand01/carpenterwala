@@ -27,7 +27,9 @@
 | **Remote MCP Endpoint (JSON-RPC / SSE)** | `https://carpenterwala.com/api/mcp` |
 | **Supported Transports** | HTTP POST (Streamable HTTP / JSON-RPC 2.0) and Server-Sent Events (SSE) via `Accept: text/event-stream` |
 | **OpenAPI 3.1 Specification URL** | `https://carpenterwala.com/api/mcp/openapi.json` |
-| **Discovery Manifest** | `https://carpenterwala.com/.well-known/mcp/server-card.json` |
+| **Official Registry Manifest (`server.json`)** | `https://carpenterwala.com/server.json` (also at repository root `server.json`) |
+| **Well-Known Discovery Card** | `https://carpenterwala.com/.well-known/mcp/server-card.json` |
+| **Public GitHub Repository** | `https://github.com/Sachidanand01/carpenterwala` |
 | **OAuth 2.1 Discovery (RFC 8414 & PRM)** | `https://carpenterwala.com/.well-known/oauth-authorization-server` |
 | **OAuth Authorization Endpoint** | `https://carpenterwala.com/oauth/authorize` |
 | **OAuth Token Endpoint** | `https://carpenterwala.com/api/oauth/token` |
@@ -209,6 +211,55 @@ Per OpenAI's updated troubleshooting & publishing policies (Help Article `113253
   }
 }
 ```
+
+---
+
+### Pathway 4: Glama.ai, Smithery & Official MCP Registry Submission
+
+#### 1. Glama.ai Listing Submission
+- **Portal URL:** [glama.ai/mcp/servers](https://glama.ai/mcp/servers)
+- **GitHub Repository URL Field:** `https://github.com/Sachidanand01/carpenterwala` *(Note: Must be the public GitHub repository link, not the API URL).*
+- **Short Description:**
+  > `Carpenterwala Pan-India Home Improvement Marketplace: 16 production tools for booking certified carpenters, instant custom furniture quoting, job lifecycle tracking, digital appliance warranty management, and verified customer reviews.`
+- **Live Server Endpoint (when prompted):** `https://carpenterwala.com/api/mcp`
+
+#### 2. Official Registry Manifest (`server.json`)
+The root of the repository includes `server.json` (also served at `https://carpenterwala.com/server.json`), which conforms to the official Linux Foundation schema (`https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json`):
+```json
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Sachidanand01/carpenterwala",
+  "title": "Carpenterwala MCP Server",
+  "description": "Carpenterwala Pan-India Home Improvement Marketplace: 16 production tools for booking certified carpenters, instant custom furniture quoting, job lifecycle tracking, digital appliance warranty management, and verified customer reviews.",
+  "version": "1.0.0",
+  "repository": {
+    "url": "https://github.com/Sachidanand01/carpenterwala",
+    "source": "github"
+  },
+  "homepage": "https://carpenterwala.com",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://carpenterwala.com/api/mcp"
+    }
+  ],
+  "categories": [
+    "home-services",
+    "e-commerce",
+    "local-business",
+    "customer-support"
+  ],
+  "authentication": {
+    "type": "oauth2",
+    "authorizationUrl": "https://carpenterwala.com/oauth/authorize",
+    "tokenUrl": "https://carpenterwala.com/api/oauth/token"
+  }
+}
+```
+
+#### 3. Smithery & PulseMCP
+- **Smithery:** Run `npx -y @smithery/cli init` in the repo root or submit `https://github.com/Sachidanand01/carpenterwala`.
+- **PulseMCP:** Submit `https://github.com/Sachidanand01/carpenterwala`. Tools are automatically discovered via `public/llms.txt`.
 
 ---
 

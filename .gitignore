@@ -49,6 +49,8 @@ next-env.d.ts
 # Google API and Service Account Keys
 .agents/*.json
 .agents/skills/claude-ai-mcp
+.agents/skills/mcp-servers
+.agents/skills/modelcontextprotocol-servers
 *service_account*.json
 *service-account*.json
 google-api*.json

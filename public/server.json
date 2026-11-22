@@ -1,0 +1,29 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Sachidanand01/carpenterwala",
+  "title": "Carpenterwala MCP Server",
+  "description": "Carpenterwala Pan-India Home Improvement Marketplace: 16 production tools for booking certified carpenters, instant custom furniture quoting, job lifecycle tracking, digital appliance warranty management, and verified customer reviews.",
+  "version": "1.0.0",
+  "repository": {
+    "url": "https://github.com/Sachidanand01/carpenterwala",
+    "source": "github"
+  },
+  "homepage": "https://carpenterwala.com",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://carpenterwala.com/api/mcp"
+    }
+  ],
+  "categories": [
+    "home-services",
+    "e-commerce",
+    "local-business",
+    "customer-support"
+  ],
+  "authentication": {
+    "type": "oauth2",
+    "authorizationUrl": "https://carpenterwala.com/oauth/authorize",
+    "tokenUrl": "https://carpenterwala.com/api/oauth/token"
+  }
+}
