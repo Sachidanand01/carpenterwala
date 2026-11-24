@@ -30,6 +30,8 @@ function AuthorizeForm() {
         setClientDisplayName('ChatGPT');
       } else if (redirectUri.includes('claude.ai') || redirectUri.includes('anthropic.com')) {
         setClientDisplayName('Claude');
+      } else if (redirectUri.includes('glama.ai')) {
+        setClientDisplayName('Glama');
       } else if (redirectUri.includes('localhost')) {
         setClientDisplayName('Local MCP Tool');
       }

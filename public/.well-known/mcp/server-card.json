@@ -14,6 +14,7 @@
     "type": "oauth2",
     "authorizationUrl": "https://carpenterwala.com/oauth/authorize",
     "tokenUrl": "https://carpenterwala.com/api/oauth/token",
+    "registrationUrl": "https://carpenterwala.com/api/oauth/register",
     "discoveryUrl": "https://carpenterwala.com/.well-known/oauth-authorization-server",
     "scopes": {
       "customer": "Access appliance warranties and repair bookings",

@@ -24,6 +24,7 @@
   "authentication": {
     "type": "oauth2",
     "authorizationUrl": "https://carpenterwala.com/oauth/authorize",
-    "tokenUrl": "https://carpenterwala.com/api/oauth/token"
+    "tokenUrl": "https://carpenterwala.com/api/oauth/token",
+    "registrationUrl": "https://carpenterwala.com/api/oauth/register"
   }
 }

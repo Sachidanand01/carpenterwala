@@ -33,6 +33,7 @@
 | **OAuth 2.1 Discovery (RFC 8414 & PRM)** | `https://carpenterwala.com/.well-known/oauth-authorization-server` |
 | **OAuth Authorization Endpoint** | `https://carpenterwala.com/oauth/authorize` |
 | **OAuth Token Endpoint** | `https://carpenterwala.com/api/oauth/token` |
+| **OAuth Dynamic Client Registration (RFC 7591)** | `https://carpenterwala.com/api/oauth/register` |
 | **OAuth Grant & Proof** | Authorization Code Grant with PKCE (`code_challenge_method: S256`) |
 | **OAuth Scopes** | `customer` (Appliance warranties & repair bookings), `pro` (Technician jobs & availability) |
 | **User Authentication Method** | 10-Digit Indian Mobile Number + Instant SMS OTP (Zero password friction) |
