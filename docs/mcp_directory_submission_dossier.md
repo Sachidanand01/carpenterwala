@@ -264,7 +264,47 @@ The root of the repository includes `server.json` (also served at `https://carpe
 
 ---
 
-## 5. Reviewer Demo Script & Test Cases
+## 5. Dedicated Directory Reviewer Credentials & Sandbox Test Accounts
+
+For automated platform evaluators and human app directory reviewers (Glama.ai, OpenAI ChatGPT App Directory, Anthropic Claude, Smithery), the following pre-configured, sandboxed accounts are available. Both accounts bypass live SMS delivery using the universal fixed OTP `999999`.
+
+### Account A: Verified Homeowner (Customer Scope)
+- **Role / Scope:** `customer` (Appliance warranties, warranty upload tickets, service job bookings, pro reviews)
+- **Email:** `test.customer@carpenterwala.com`
+- **Indian Mobile Number:** `+91-9800000001` (or enter `9800000001`)
+- **Name:** `Aditi Sharma`
+- **Universal Bypass OTP:** `999999` *(always valid, bypasses SMS delivery)*
+- **Pre-Seeded Baseline Data:**
+  - 2 Active Appliance Warranties (Godrej Pentacool 260L Refrigerator, Havells 25L Geyser)
+  - 1 Completed Booking (Godrej Rim Lock Installation & Wood Planing)
+- **Anti-Abuse Sandbox Isolation:**
+  - Bookings and callbacks created by this account are tagged `is_test: true` and automatically routed exclusively to Demo Pro `TEST001`.
+  - Pro reviews are strictly constrained to `TEST001`, completely preventing accidental rating contamination of real Bangalore tradesmen.
+  - No external SMS, WhatsApp, or telephone dispatches are made to real professionals.
+
+### Account B: Master Carpenter (Service Pro Scope)
+- **Role / Scope:** `pro` (Assigned lead tracking, job status updates, pro dashboard, availability toggle)
+- **Email:** `test.pro@carpenterwala.com`
+- **Indian Mobile Number:** `+91-9800000002` (or enter `9800000002`)
+- **Name:** `Vikram Sharma`
+- **Professional Code:** `TEST001`
+- **Universal Bypass OTP:** `999999` *(always valid, bypasses SMS delivery)*
+- **Pre-Seeded Baseline Data:**
+  - 3 Assigned Leads (Modular kitchen hinge replacement, dining table scratch polish, completed rim lock fitting)
+  - 4.9 Average Rating with 3 verified customer reviews
+  - Profile URL: `https://carpenterwala.com/pro/carpentry/TEST001/vikram-sharma`
+- **Directory Exclusion & Demo Banner:**
+  - 100% excluded from the public "Find a Professional" directory, local cluster searches, and `search_verified_pros` tool.
+  - Direct profile visits display a prominent amber sandbox disclaimer banner and carry `robots: noindex, nofollow`.
+
+### Administrative Baseline Reset
+If evaluator tests mutate leads, warranties, or reviews, the entire test baseline can be restored in 1 second via:
+- **Endpoint:** `POST https://carpenterwala.com/api/admin/reset-test-accounts`
+- **Header:** `Authorization: Bearer <ADMIN_PASSWORD>` or `x-admin-secret: <SUPABASE_SERVICE_ROLE_KEY>`
+
+---
+
+## 6. Reviewer Demo Script & Test Cases
 
 ### Test Case 1: Photo/Invoice Warranty Scan & Registration (Multimodal + MCP Tool Calling)
 - **Prompt:**
@@ -322,7 +362,7 @@ The root of the repository includes `server.json` (also served at `https://carpe
 
 ---
 
-## 6. Security & Privacy Guarantees for Reviewers
+## 7. Security & Privacy Guarantees for Reviewers
 
 - **Zero-Password OTP Security:** Homeowners and tradesmen log in via ephemeral 6-digit SMS OTPs; no sensitive passwords are stored or transmitted.
 - **Cryptographic PKCE Protection:** Strict RFC 7636 PKCE validation prevents authorization code interception and token replay attacks.

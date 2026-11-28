@@ -49,6 +49,7 @@ export async function generateMetadata({ params }) {
     title: pageTitle,
     description: pageDescription,
     keywords,
+    robots: profile.is_test ? { index: false, follow: false, nocache: true } : undefined,
     alternates: {
       canonical: canonicalUrl,
     },
@@ -240,6 +241,31 @@ export default async function CanonicalProProfile({ params }) {
         { name: profile.trade, url: "/services" },
         { name: profile.name, url: canonicalPath }
       ]} />
+
+      {profile.is_test && (
+        <div style={{
+          background: "#fffbeb",
+          border: "2px solid #f59e0b",
+          color: "#92400e",
+          borderRadius: "14px",
+          padding: "1rem 1.5rem",
+          marginBottom: "1.75rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "1rem",
+          boxShadow: "0 4px 16px rgba(245, 158, 11, 0.12)"
+        }}>
+          <span style={{ fontSize: "2rem" }}>🧪</span>
+          <div>
+            <div style={{ fontWeight: 800, fontSize: "1rem", letterSpacing: "0.02em" }}>
+              DEMO / TEST SERVICE PROFESSIONAL (ISOLATED SANDBOX)
+            </div>
+            <div style={{ fontSize: "0.88rem", opacity: 0.9, marginTop: "0.25rem" }}>
+              This profile is an isolated test account (Pro Code: <strong>{profile.pro_code || 'TEST001'}</strong>) used exclusively for AI platform evaluations and MCP server health checks. This profile is not visible in public search results and does not dispatch jobs to real technicians.
+            </div>
+          </div>
+        </div>
+      )}
 
       {USE_ENHANCED_LAYOUT ? (
         /* ── ENHANCED HIGH-ENGAGEMENT LAYOUT ── */

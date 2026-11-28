@@ -14,6 +14,15 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization'
 };
 
+// Universal Multi-Platform Test Accounts (Claude, ChatGPT, Gemini, Glama, Cursor)
+export const TEST_ACCOUNTS = {
+  'test.customer@carpenterwala.com': { role: 'customer', phone: '9800000001', name: 'Aditi Sharma (Demo Customer)' },
+  'test.pro@carpenterwala.com': { role: 'pro', phone: '9800000002', name: 'Vikram Sharma (Demo Master Carpenter)', proCode: 'TEST001' },
+  '9800000001': { role: 'customer', email: 'test.customer@carpenterwala.com', name: 'Aditi Sharma (Demo Customer)' },
+  '9800000002': { role: 'pro', email: 'test.pro@carpenterwala.com', name: 'Vikram Sharma (Demo Master Carpenter)', proCode: 'TEST001' }
+};
+export const FIXED_TEST_OTP = '999999';
+
 export async function OPTIONS() {
   return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
 }
@@ -54,6 +63,8 @@ export async function POST(request) {
       );
     }
 
+    const isTestAccount = Boolean(TEST_ACCOUNTS[identifier]);
+
     if (cleanEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
       return NextResponse.json(
         { error: 'Please enter a valid email address.' },
@@ -72,26 +83,28 @@ export async function POST(request) {
     // 1. ACTION: SEND OTP
     // ─────────────────────────────────────────────────────────────
     if (action === 'send') {
-      const rateCheck = checkWindowRateLimit({
-        key: `oauth-otp-send:${ip}:${identifier}`,
-        maxAttempts: 6,
-        windowMs: 15 * 60 * 1000
-      });
+      if (!isTestAccount) {
+        const rateCheck = checkWindowRateLimit({
+          key: `oauth-otp-send:${ip}:${identifier}`,
+          maxAttempts: 6,
+          windowMs: 15 * 60 * 1000
+        });
 
-      if (!rateCheck.allowed) {
-        return NextResponse.json(
-          { error: 'Too many OTP requests. Please wait a few minutes before trying again.' },
-          { status: 429, headers: CORS_HEADERS }
-        );
+        if (!rateCheck.allowed) {
+          return NextResponse.json(
+            { error: 'Too many OTP requests. Please wait a few minutes before trying again.' },
+            { status: 429, headers: CORS_HEADERS }
+          );
+        }
       }
 
-      const generatedOtp = String(crypto.randomInt(100000, 1000000));
+      const generatedOtp = isTestAccount ? FIXED_TEST_OTP : String(crypto.randomInt(100000, 1000000));
       const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
 
       console.log(`[OAuth OTP] Generated OTP for ${identifier}: ${generatedOtp}`);
 
-      // If email, send transactional email via Resend
-      if (cleanEmail && process.env.RESEND_API_KEY) {
+      // If email, send transactional email via Resend (skipped for demo test accounts)
+      if (!isTestAccount && cleanEmail && process.env.RESEND_API_KEY) {
         try {
           const emailHtml = `
             <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 540px; margin: 0 auto; padding: 32px 24px; background: #ffffff; color: #1e293b; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
@@ -148,12 +161,11 @@ export async function POST(request) {
 
       return NextResponse.json({
         success: true,
-        message: cleanEmail 
-          ? `Verification code sent to ${cleanEmail}. Please check your inbox.`
-          : `Verification code sent to +91 ${mobileNumber}.`,
+        message: isTestAccount
+          ? 'Platform Demo Mode: Use verification code 999999.'
+          : (cleanEmail ? `Verification code sent to ${cleanEmail}. Please check your inbox.` : `Verification code sent to +91 ${mobileNumber}.`),
         otpToken: signedToken,
-        // In local/test environments provide dev convenience
-        debugOtp: process.env.NODE_ENV !== 'production' ? generatedOtp : undefined
+        debugOtp: isTestAccount ? FIXED_TEST_OTP : (process.env.NODE_ENV !== 'production' ? generatedOtp : undefined)
       }, { headers: CORS_HEADERS });
     }
 
@@ -161,46 +173,53 @@ export async function POST(request) {
     // 2. ACTION: VERIFY OTP & MINT AUTHORIZATION CODE
     // ─────────────────────────────────────────────────────────────
     if (action === 'verify') {
-      const verifyRate = checkWindowRateLimit({
-        key: `oauth-otp-verify:${ip}:${identifier}`,
-        maxAttempts: 5,
-        windowMs: 15 * 60 * 1000
-      });
+      if (!isTestAccount) {
+        const verifyRate = checkWindowRateLimit({
+          key: `oauth-otp-verify:${ip}:${identifier}`,
+          maxAttempts: 5,
+          windowMs: 15 * 60 * 1000
+        });
 
-      if (!verifyRate.allowed) {
-        return NextResponse.json(
-          { error: 'Too many invalid attempts. Please wait 15 minutes before trying again.' },
-          { status: 429, headers: CORS_HEADERS }
-        );
+        if (!verifyRate.allowed) {
+          return NextResponse.json(
+            { error: 'Too many invalid attempts. Please wait 15 minutes before trying again.' },
+            { status: 429, headers: CORS_HEADERS }
+          );
+        }
       }
 
-      if (!otpToken) {
-        return NextResponse.json(
-          { error: 'Session expired. Please request a new verification code.' },
-          { status: 400, headers: CORS_HEADERS }
-        );
-      }
+      // Check OTP: Test accounts accept universal test code 999999
+      if (isTestAccount && String(otp).trim() === FIXED_TEST_OTP) {
+        // Test account bypass verified
+      } else {
+        if (!otpToken) {
+          return NextResponse.json(
+            { error: 'Session expired. Please request a new verification code.' },
+            { status: 400, headers: CORS_HEADERS }
+          );
+        }
 
-      const decrypted = decryptToken(otpToken);
-      if (!decrypted || decrypted.type !== 'oauth_otp' || decrypted.identifier !== identifier) {
-        return NextResponse.json(
-          { error: 'Invalid or expired session. Please request a new verification code.' },
-          { status: 400, headers: CORS_HEADERS }
-        );
-      }
+        const decrypted = decryptToken(otpToken);
+        if (!decrypted || decrypted.type !== 'oauth_otp' || decrypted.identifier !== identifier) {
+          return NextResponse.json(
+            { error: 'Invalid or expired session. Please request a new verification code.' },
+            { status: 400, headers: CORS_HEADERS }
+          );
+        }
 
-      if (decrypted.expiresAt && decrypted.expiresAt < Date.now()) {
-        return NextResponse.json(
-          { error: 'Verification code has expired. Please request a fresh one.' },
-          { status: 400, headers: CORS_HEADERS }
-        );
-      }
+        if (decrypted.expiresAt && decrypted.expiresAt < Date.now()) {
+          return NextResponse.json(
+            { error: 'Verification code has expired. Please request a fresh one.' },
+            { status: 400, headers: CORS_HEADERS }
+          );
+        }
 
-      if (String(decrypted.otp).trim() !== String(otp).trim()) {
-        return NextResponse.json(
-          { error: 'Incorrect code. Please enter the 6-digit verification code.' },
-          { status: 400, headers: CORS_HEADERS }
-        );
+        if (String(decrypted.otp).trim() !== String(otp).trim()) {
+          return NextResponse.json(
+            { error: 'Incorrect code. Please enter the 6-digit verification code.' },
+            { status: 400, headers: CORS_HEADERS }
+          );
+        }
       }
 
       if (redirectUri && !isValidRedirectUri(redirectUri)) {
@@ -265,6 +284,15 @@ export async function POST(request) {
             } catch (createErr) {
               console.warn('[OAuth] Auto-create customer record notice:', createErr.message);
             }
+          }
+        }
+
+        if (isTestAccount) {
+          role = TEST_ACCOUNTS[identifier].role;
+          userName = userName || TEST_ACCOUNTS[identifier].name;
+          if (role === 'pro' && !proId && supabaseAdmin) {
+            const { data: testPro } = await supabaseAdmin.from('profiles').select('id').eq('pro_code', 'TEST001').maybeSingle();
+            if (testPro) proId = testPro.id;
           }
         }
       } catch (dbErr) {

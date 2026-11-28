@@ -55,7 +55,7 @@ function DirectoryContent() {
   useEffect(() => {
     async function loadDirectory() {
       // Query secure public columns only — completely prevents scraping of Aadhaar, PAN, KYC or private phone numbers
-      const safeFields = 'id, pro_code, slug, name, trade, experience, location, latitude, longitude, about, skills, portfolio, avatar, languages, verified, accepting_leads, service_radius_km, average_rating, created_at';
+      const safeFields = 'id, pro_code, slug, name, trade, experience, location, latitude, longitude, about, skills, portfolio, avatar, languages, verified, accepting_leads, service_radius_km, average_rating, created_at, is_test';
       
       let res = await supabase
         .from("public_profiles")
@@ -66,13 +66,16 @@ function DirectoryContent() {
         res = await supabase
           .from("profiles")
           .select(safeFields)
-          .eq("verified", true);
+          .eq("verified", true)
+          .or("is_test.is.null,is_test.eq.false");
       }
 
       if (res.error) {
         console.error("Error loading profiles", res.error);
       } else {
-        setAllProfiles(res.data || []);
+        // Defensive filter: Never show test/demo profiles in public directory
+        const activePros = (res.data || []).filter(p => !p.is_test);
+        setAllProfiles(activePros);
       }
       setLoading(false);
     }

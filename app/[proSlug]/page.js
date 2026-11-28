@@ -29,6 +29,7 @@ export async function generateMetadata({ params }) {
     title: pageTitle,
     description: pageDescription,
     keywords,
+    robots: profile.is_test ? { index: false, follow: false, nocache: true } : undefined,
     alternates: {
       canonical: canonicalUrl,
     },
